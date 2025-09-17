@@ -1,5 +1,7 @@
 package kr.co.dreamstart;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
@@ -39,8 +41,10 @@ public class MybatisTest {
 	public void selectTest() {
 		try(SqlSession session = sqlFactory.openSession()){
 			UserMapper mapper = session.getMapper(UserMapper.class);
-			UserDTO user = mapper.selectAll();
-			System.out.println(user);
+			List<UserDTO> list= mapper.selectAll();
+			for(UserDTO user : list) {
+				System.out.println(user);
+			}
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
