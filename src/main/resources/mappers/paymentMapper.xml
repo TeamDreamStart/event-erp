@@ -3,23 +3,24 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.dreamstart.mapper.PaymentMapper">
-	<resultMap type="UserDTO" id="userMap">
-		<id column="user_id" property="userId" />
-		<result column="user_name" property="userName" />
-		<result column="password" property="password" />
-		<result column="name" property="name" />
-		<result column="email" property="email" />
-		<result column="phone" property="phone" />
+	<resultMap type="PaymentDTO" id="paymentMap">
+		<id column="user_id" property="paymentId" />
+		<result column="reservation_id" property="reservationId" />
+		<result column="amount" property="amount" />
+		<result column="method" property="method" />
 		<result column="status" property="status" />
-		<result column="last_login_at" property="lastLoginAt" />
+		<result column="paid_at" property="paidAt" />
+		<result column="cancelled_at" property="cancelledAt" />
+		<result column="refund_amount" property="refundAmount" />
+		<result column="approve_no" property="approveNo" />
+		<result column="pg_tid" property="pgTid" />
+		<result column="memo" property="memo" />
 		<result column="created_at" property="createdAt" />
-		<result column="updated_at" property="updatedAt" />
-		<result column="is_active" property="isActive" />
 	</resultMap>
 
-	<select id="selectAll" resultMap="userMap">
-		select * from user
+	<select id="paymentSelectAll" resultMap="paymentMap">
+		select * from payment
 	</select>
-	
-	
+
+
 </mapper>
