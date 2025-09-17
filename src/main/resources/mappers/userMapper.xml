@@ -17,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="is_active" property="isActive" />
 	</resultMap>
 
-	<select id="selectAll" resultMap="userMap">
+	<select id="userSelectAll" resultMap="userMap">
 		select * from user
 	</select>
 	

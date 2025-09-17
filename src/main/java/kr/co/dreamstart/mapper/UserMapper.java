@@ -8,7 +8,7 @@ import kr.co.dreamstart.dto.UserDTO;
 
 @Mapper
 public interface UserMapper {
-	public List<UserDTO> selectAll();
+	public List<UserDTO> userSelectAll();
 }
 
 

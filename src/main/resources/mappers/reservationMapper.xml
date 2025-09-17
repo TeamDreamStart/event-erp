@@ -3,22 +3,23 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.dreamstart.mapper.ReservationMapper">
-	<resultMap type="UserDTO" id="userMap">
-		<id column="user_id" property="userId" />
-		<result column="user_name" property="userName" />
-		<result column="password" property="password" />
-		<result column="name" property="name" />
-		<result column="email" property="email" />
-		<result column="phone" property="phone" />
-		<result column="status" property="status" />
-		<result column="last_login_at" property="lastLoginAt" />
-		<result column="created_at" property="createdAt" />
-		<result column="updated_at" property="updatedAt" />
-		<result column="is_active" property="isActive" />
+
+	<resultMap type="ReservationDTO" id="reservationMap">
+		<id column="reservation_id" property="reservationId" />
+		<result column="user_id" property="userId" />
+		<result column="event_id" property="eventId"/>
+		<result column="reservation_date" property="reservationDate"/>
+		<result column="status" property="status"/>
+		<result column="qr_code" property="qrCode"/>
+		<result column="headcount" property="headCount"/>
+		<result column="cancel_reason" property="cancelReason"/>
+		<result column="cancelled_at" property="cancelledAt"/>
 	</resultMap>
 
-	<select id="selectAll" resultMap="userMap">
-		select * from user
+
+
+	<select id="reservationSelectAll" resultMap="reservationMap">
+		select * from reservation
 	</select>
 	
 	
