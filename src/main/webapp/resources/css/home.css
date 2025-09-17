@@ -1,1 +1,61 @@
-@charset "UTF-8";
+    @font-face {
+  font-family: 'Peristiwa';
+  src: url('/resources/css/font/Peristiwa.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+    figcaption {
+      display: none;
+    }
+    body{
+      background-color: #e5e2db;
+      color:#000;
+      font-family:'Montserrat';
+    }
+    header{
+    }
+    header .user-actions{
+      text-align: right;
+    }
+    .user-actions ul {
+      list-style: none; 
+    }
+    .header-container .logo{
+      font-family:'Peristiwa';
+    }
+    .logo a{
+      color: olive;
+    }
+    header .main-nav ul{   
+      list-style: none;   
+      display: flex;
+      gap: 20px;
+    }
+    header .main-nav li{
+      text-align: left;
+    }
+    header .main-nav a{
+      text-decoration: none;
+      color: #000;
+
+    }
+
+    main .museum-status{
+      text-align: right;
+    }
+
+    .swiper {
+      width: 100%;
+      height: 100%;
+    }
+      .swiper-slide img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .swiper {
+      width: 100%;
+      height: 300px;
+      margin: 20px auto;
+    }
