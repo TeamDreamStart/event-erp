@@ -1,4 +1,4 @@
-package kr.co.dreamstart;
+package kr.co.dreamstart.controller;
 
 import java.text.DateFormat;
 import java.util.Date;

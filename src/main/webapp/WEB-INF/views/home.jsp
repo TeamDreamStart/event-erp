@@ -15,7 +15,7 @@
 		<h1>Hello world!</h1>
 
 		<P>The time on the server is ${serverTime}.</P>
-
+		<img src="${pageContext.request.contextPath}/resources/img/cute-hamtaro.gif">
 	</article>
 
 	<footer> </footer>
