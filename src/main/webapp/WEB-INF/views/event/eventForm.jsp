@@ -5,7 +5,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>관리자페이지용 이벤트 등록/수정/삭제 폼</title>
+<!-- 단순 페이지 이동은 get, 등록/수정/삭제시 post -->
 </head>
 <body>
 

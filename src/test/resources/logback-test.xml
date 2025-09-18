@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="STDOUT"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%-5level %logger{20} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 시끄러운 로그 얌전히 -->
+	<logger name="org.springframework" level="WARN" />
+	<logger name="org.mybatis" level="WARN" />
+	<logger name="org.apache.ibatis" level="WARN" />
+	<logger name="org.mybatis.spring.mapper.ClassPathMapperScanner"
+		level="WARN" />
+	<logger name="java.sql" level="ERROR" />
+
+	<!-- 우리 코드만 info 이상 보여줘 -->
+	<logger name="kr.co.dreamstart" level="INFO" />
+
+	<!-- 그 외 루트는 최소화 -->
+	<root level="WARN">
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>

@@ -3,23 +3,78 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.dreamstart.mapper.SurveyMapper">
-	<resultMap type="UserDTO" id="userMap">
-		<id column="user_id" property="userId" />
-		<result column="user_name" property="userName" />
-		<result column="password" property="password" />
-		<result column="name" property="name" />
-		<result column="email" property="email" />
-		<result column="phone" property="phone" />
-		<result column="status" property="status" />
-		<result column="last_login_at" property="lastLoginAt" />
-		<result column="created_at" property="createdAt" />
-		<result column="updated_at" property="updatedAt" />
-		<result column="is_active" property="isActive" />
+<!-- 설문조사 메타 (제목, 설명, 익명여부 등) -->
+	<resultMap type="SurveyDTO" id="surveyMap">
+		<id column="servey_id" property="surveyId" />
+		<result column="event_id" property="eventId" />
+		<result column="title" property="title" />
+		<result column="description" property="dascription" />
+		<result column="is_anonymous" property="isAnonymous" />
+		<result column="open_from" property="openFrom" />
+		<result column="open_to" property="openTo" />
+		<result column="created_at" property="createAt" />
 	</resultMap>
 
-	<select id="selectAll" resultMap="userMap">
-		select * from user
+<!-- 응답 결과 -->
+	<resultMap type="SurveyAnswerDTO" id="answerMap">
+		<id column="answer_id" property="answerId" />
+		<result column="response_id" property="responseId" />
+		<result column="question_id" property="questionId" />
+		<result column="option_id" property="optionId" />
+		<result column="answer_text" property="answerText" />
+	</resultMap>
+	
+	
+<!-- 객관식 보기 -->
+	<resultMap type="SurveyOptionDTO" id="optionMap">
+		<id column="option_id" property="optionId" />
+		<result column="question_id" property="questionId" />
+		<result column="label" property="label" />
+		<result column="opt_value" property="optValue" />
+		<result column="sort_order" property="sortOrder" />
+	</resultMap>
+	
+<!-- 문항 리스트 -->
+	<resultMap type="SurveyQuestionDTO" id="questionMap">
+		<id column="question_id" property="questionId" />
+		<result column="survey_id" property="surveyId" />
+		<result column="question" property="question" />
+		<result column="type" property="type" />
+		<result column="sort_order" property="sortOrder" />
+	</resultMap>
+
+<!-- 응답 이력 -->
+	<resultMap type="SurveyResponseDTO" id="responseMap">
+		<id column="response_id" property="responseId" />
+		<result column="survey_id" property="surveyId" />
+		<result column="user_id" property="userId" />
+		<result column="responded_at" property="respondedAt" />
+	</resultMap>
+	
+<!-- 테스트 -->
+	<!-- 설문조사 메타 조회 -->
+	<select id="surveyAll" resultMap="surveyMap">
+		select * from `survey` limit 3
 	</select>
 	
+	<!-- 결과 카운팅 -->
+	<select id="answerAll" resultMap="answerMap">
+		select * from `survey_answer` limit 3
+	</select>
+	
+	<!-- 객관식 카운팅 -->
+	<select id="optionAll" resultMap="optionMap">
+		select * from `survey_option` limit 3
+	</select>
+	
+	<!-- 문항 리스트 카운팅 -->
+	<select id="questionAll" resultMap="questionMap">
+		select * from `survey_question` limit 3
+	</select>
+	
+	<!-- 응답 이력 카운팅 -->
+	<select id="responseAll" resultMap="responseMap">
+		select * from `survey_response` limit 3
+	</select>
 	
 </mapper>
