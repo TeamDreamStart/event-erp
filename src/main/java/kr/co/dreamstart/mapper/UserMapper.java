@@ -1,10 +1,14 @@
 package kr.co.dreamstart.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
 import kr.co.dreamstart.dto.UserDTO;
 
-@org.apache.ibatis.annotations.Mapper
+@Mapper
 public interface UserMapper {
-	public UserDTO selectAll();
+	public List<UserDTO> userSelectAll();
 }
 
 

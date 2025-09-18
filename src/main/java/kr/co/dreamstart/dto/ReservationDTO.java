@@ -10,7 +10,7 @@ public class ReservationDTO {
     private String reservationDate;
     private String status;      // PENDING, CONFIRMED, CANCELLED
     private String qrCode;
-    private int headcount;
+    private int headCount;
     private String cancelReason;
     private String cancelledAt;
 }

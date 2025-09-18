@@ -16,6 +16,10 @@
 
 		<P>The time on the server is ${serverTime}.</P>
 		<img src="${pageContext.request.contextPath}/resources/img/cute-hamtaro.gif">
+
+		
+		<p>헤헤헤헤!!!</p>
+
 		<p>유리언니 바보</p>
 	</article>
 
