@@ -19,7 +19,9 @@ import kr.co.dreamstart.mapper.BoardMapper;
 import kr.co.dreamstart.mapper.PaymentMapper;
 import kr.co.dreamstart.mapper.ReservationMapper;
 import kr.co.dreamstart.mapper.UserMapper;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations= {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
 public class MybatisTest {
@@ -52,6 +54,18 @@ public class MybatisTest {
 			for(UserDTO user : list) {
 				System.out.println(user);
 			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@Test
+	public void userCountTest() {
+		try(SqlSession session = sqlFactory.openSession()){
+			UserMapper mapper = session.getMapper(UserMapper.class);
+			int userCount = mapper.userCount();
+			System.out.println("현재 총 회원 : "+userCount+"명");
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

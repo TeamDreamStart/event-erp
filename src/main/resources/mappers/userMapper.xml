@@ -3,6 +3,8 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.dreamstart.mapper.UserMapper">
+	<!-- UserDTO UserRoleDTO RoleDTO AdminActionLogDTO OauthProviderDTO EmailVErificationTokenDTO -->
+	<!-- 회원 정보 -->
 	<resultMap type="UserDTO" id="userMap">
 		<id column="user_id" property="userId" />
 		<result column="user_name" property="userName" />
@@ -17,7 +19,62 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="id_active" property="isActive" />
 	</resultMap>
 
+	<!-- 회원권한 -->
+	<resultMap type="UserRoleDTO" id="userRoleMap">
+		<id column="user_id" property="userId" />
+		<id column="role_id" property="roleId" />
+		<result column="assigned_at" property="assignedAt" />
+	</resultMap>
+
+	<!-- 권한 -->
+	<resultMap type="RoleDTO" id="roleMap">
+		<id column="role_id" property="roleId" />
+		<result column="role_name" property="roleName" />
+	</resultMap>
+
+	<!-- 관리자 활동 로그 -->
+	<resultMap type="AdminActionLogDTO" id="adminActionLogMap">
+		<id column="log_id" property="logId" />
+		<result column="admin_id" property="adminId" />
+		<result column="target_type" property="targetType" />
+		<result column="target_id" property="targetId" />
+		<result column="action" property="action" />
+		<result column="reason" property="reason" />
+		<result column="created_at" property="createdAt" />
+	</resultMap>
+
+	<!-- 사용자 권한 / 인증 토큰 -->
+	<resultMap type="OauthProviderDTO" id="oauthProviderMap">
+		<id column="provider_id" property="providerId" />
+		<result column="provider_key" property="providerKey" />
+		<result column="display_mame" property="displayName" />
+	</resultMap>
+	<!-- 이메일 인증 토큰 -->
+	<resultMap type="EmailVerificationTokenDTO"
+		id="emailVerificationTokenMap">
+		<id column="token_id" property="tokenId" />
+		<result column="user_id" property="userId" />
+		<result column="token" property="token" />
+		<result column="expires_at" property="expiresAt" />
+		<result column="verified_at" property="verifiedAt" />
+		<result column="created_at" property="createdAt" />
+	</resultMap>
+
 	<select id="userSelectAll" resultMap="userMap">
-		select * from user
+		select * from `user`
 	</select>
+
+	<select id="userCount" resultType="int">
+		select count(*) from `user`
+	</select>
+
+	<select id="userPagingList" resultMap="userMap">
+		select *
+		from user
+		limit #{page},#{perPageNum}
+	</select>
+	<!-- <select id="userRoleSelectAll" resultMap="userMap"> select * from `user_role` 
+		</select> <select id="roleSelectAll" resultMap="roleMap"> select * from `role` 
+		</select> <select id="adminActionAll" resultMap="adminActionLogMap"> select 
+		* from `admin_action_log` </select> -->
 </mapper>

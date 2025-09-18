@@ -14,5 +14,5 @@ public class UserDTO {
 	private String lastLoginAt;
 	private String createdAt;
 	private String updatedAt;
-	private boolean isActive;
+	private int isActive;
 }
