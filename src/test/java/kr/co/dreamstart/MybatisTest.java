@@ -1,5 +1,7 @@
 package kr.co.dreamstart;
 
+
+import static org.junit.Assert.*; // ¿⁄¡÷ ªÁøÎ«“∞≈∂Ûº≠ staticº±æ
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -10,133 +12,119 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import kr.co.dreamstart.dto.BoardCommentDTO;
-import kr.co.dreamstart.dto.BoardPostDTO;
-import kr.co.dreamstart.dto.PaymentDTO;
-import kr.co.dreamstart.dto.ReservationDTO;
+import kr.co.dreamstart.dto.EventDTO;
+import kr.co.dreamstart.dto.SurveyAnswerDTO;
+import kr.co.dreamstart.dto.SurveyDTO;
+import kr.co.dreamstart.dto.SurveyOptionDTO;
+import kr.co.dreamstart.dto.SurveyQuestionDTO;
+import kr.co.dreamstart.dto.SurveyResponseDTO;
 import kr.co.dreamstart.dto.UserDTO;
-import kr.co.dreamstart.mapper.BoardMapper;
-import kr.co.dreamstart.mapper.PaymentMapper;
-import kr.co.dreamstart.mapper.ReservationMapper;
 import kr.co.dreamstart.mapper.UserMapper;
-import lombok.extern.slf4j.Slf4j;
+//import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import kr.co.dreamstart.mapper.EventMapper;
+import kr.co.dreamstart.mapper.SurveyMapper;
 
-@Slf4j
+
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations= {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
+//@Slf4j
 public class MybatisTest {
+	private static final Logger log = LoggerFactory.getLogger(MybatisTest.class);
 	
 	@Autowired
 	private SqlSessionFactory sqlFactory;
 	
 	@Test
 	public void testFactory() {
-		System.out.println(sqlFactory);
-		System.out.println("Factory Test Success");
+		assertNotNull("sqlFactory is Null", sqlFactory); // ∆«¡§
+//		log.info("SqlSessionFactory={}");
+//		System.out.println(sqlFactory);
+//		System.out.println("Factory Test Success");
 	}
 	
 	@Test
 	public void testSession() {
 		try(SqlSession session = sqlFactory.openSession()){
-			System.out.println(session);
-			System.out.println("Session Test Success");
+			assertNotNull("session is null", session);
+			log.info("SqlSession opened : {}", session);
+			
+//			System.out.println(session);
+//			System.out.println("Session Test Success");
 		}catch(Exception e) {
-			e.printStackTrace();
+			log.error("testSession Error", e);
+			fail(e.getMessage());
 		}
 		
 	}
 	
 	@Test
-	public void userSelectTest() {
+	public void selectTest() {
 		try(SqlSession session = sqlFactory.openSession()){
 			UserMapper mapper = session.getMapper(UserMapper.class);
-			List<UserDTO> list= mapper.userSelectAll();
+			List<UserDTO> list= mapper.selectAll();
+			
+//			assertNotNull("list is Null", list); // null ¿Œ¡ˆ »Æ¿Œ
+//			assertFalse("list is empty", list.isEmpty()); // ∫ÒæÓ ¿÷¥¬¡ˆ »Æ¿Œ
+			log.info("select rows={}", list.size());
+			
 			for(UserDTO user : list) {
-				System.out.println(user);
+				log.info("user={}", user);
 			}
 		}catch(Exception e) {
-			e.printStackTrace();
+			log.error("selectTest Error", e);
+			fail(e.getMessage());
 		}
 	}
 	
+	@Test
+	public void eventAllTest() {
+		try(SqlSession session = sqlFactory.openSession()) {
+//			System.out.println(session.getConfiguration().hasStatement("kr.co.dreamstart.mapper.EventMapper.eventAll")); 
+			EventMapper mapper = session.getMapper(EventMapper.class);
+			List<EventDTO> list = mapper.eventAll();
+//			System.out.println("rows : " + list.size());
+			
+//			assertNotNull("list is Null", list);
+//			assertFalse("list is empty", list.isEmpty());
+			log.info("event rows={}", list.size());
+		} catch (Exception e) {
+			log.error("eventAllTest Error", e);
+			fail(e.getMessage());
+		}
+	}
 	
 	@Test
-	public void userCountTest() {
-		try(SqlSession session = sqlFactory.openSession()){
-			UserMapper mapper = session.getMapper(UserMapper.class);
-			int userCount = mapper.userCount();
-			System.out.println("ÌòÑÏû¨ Ï¥ù ÌöåÏõê : "+userCount+"Î™Ö");
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+	public void surveySmokeTest() {
+	  try (SqlSession session = sqlFactory.openSession()) {
+		SurveyMapper mapper = session.getMapper(SurveyMapper.class);  
+		
+		
+		List<SurveyDTO> surveyList = mapper.surveyAll();
+		log.info("survey row={}", surveyList.size());
+		
+		List<SurveyAnswerDTO> answerList = mapper.answerAll();
+		log.info("answer row={}", answerList.size());
+		
+		List<SurveyOptionDTO> optionList = mapper.optionAll();
+		log.info("option row={}", optionList.size());
+		
+		List<SurveyQuestionDTO> questList = mapper.questionAll();
+		log.info("quest row={}", questList.size());
+		
+		List<SurveyResponseDTO> responceList = mapper.responseAll();
+		log.info("responce row={}", responceList.size());
+		
+	    
+	  } catch (Exception e) {
+	    log.error("surveySmokeTest error", e);
+	    fail(e.getMessage());
+	  }
 	}
-	@Test
-	public void boardPostTest() {
-		try(SqlSession session = sqlFactory.openSession()){
-			BoardMapper mapper = session.getMapper(BoardMapper.class);
-			List<BoardPostDTO> list = mapper.boardPostAll();
-			if(list.size()==0) {
-				System.out.println("Îç∞Ïù¥ÌÑ∞Í∞Ä ÏóÜÏäµÎãàÎã§.");
-			}else {
-				for(BoardPostDTO bpDTO : list) {
-					System.out.println(bpDTO);
-				}
-				System.out.println("Ï∂úÎ†•ÏôÑÎ£å");
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	@Test
-	public void boardCommentTest() {
-		try(SqlSession session = sqlFactory.openSession()){
-			BoardMapper mapper = session.getMapper(BoardMapper.class);
-			List<BoardCommentDTO> list = mapper.boardCommentAll();
-			if(list.size()==0) {
-				System.out.println("Îç∞Ïù¥ÌÑ∞Í∞Ä ÏóÜÏäµÎãàÎã§.");
-			}else {
-				for(BoardCommentDTO bcDTO : list) {
-					System.out.println(bcDTO);
-				}
-				System.out.println("Ï∂úÎ†•ÏôÑÎ£å");
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	@Test
-	public void resSelectTest() {
-		try(SqlSession session = sqlFactory.openSession()){
-			ReservationMapper mapper = session.getMapper(ReservationMapper.class);
-			List<ReservationDTO> list = mapper.reservationSelectAll();
-			if(list.size()==0) {
-				System.out.println("Îç∞Ïù¥ÌÑ∞Í∞Ä ÏóÜÏäµÎãàÎã§.");
-			}else {
-				for(ReservationDTO rDTO : list) {
-					System.out.println(rDTO);
-				}
-				System.out.println("Ï∂úÎ†•ÏôÑÎ£å");
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	@Test
-	public void paymentSelectTest() {
-		try(SqlSession session = sqlFactory.openSession()){
-			PaymentMapper mapper = session.getMapper(PaymentMapper.class);
-			List<PaymentDTO> list = mapper.paymentSelectAll();
-			if(list.size()==0) {
-				System.out.println("Îç∞Ïù¥ÌÑ∞Í∞Ä ÏóÜÏäµÎãàÎã§.");
-			}else {
-				for(PaymentDTO DTO : list) {
-					System.out.println(DTO);
-				}
-				System.out.println("Ï∂úÎ†•ÏôÑÎ£å");
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
+
+	
+	
 	
 }

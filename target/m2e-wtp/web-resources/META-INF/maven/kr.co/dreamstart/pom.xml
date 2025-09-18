@@ -14,7 +14,7 @@
 		<java-version>1.11</java-version>
 		<org.springframework-version>5.2.6.RELEASE</org.springframework-version>
 		<org.aspectj-version>1.8.9</org.aspectj-version>
-		<org.slf4j-version>1.6.6</org.slf4j-version>
+		<org.slf4j-version>1.7.36</org.slf4j-version> <!-- 1.6.6 -> 1.7.36 -->
 	</properties>
 	<dependencies>
 		<!-- Spring -->
@@ -55,12 +55,23 @@
 			<version>${org.slf4j-version}</version>
 			<scope>runtime</scope>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
 		<dependency>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-classic</artifactId>
+		    <version>1.2.13</version>
+		    <scope>runtime</scope>
+		</dependency>
+		
+		
+		
+		<!-- <dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>${org.slf4j-version}</version>
 			<scope>runtime</scope>
-		</dependency>
+		</dependency> -->
 		<!-- <dependency> <groupId>log4j</groupId> <artifactId>log4j</artifactId> 
 			<version>1.2.15</version> <exclusions> <exclusion> <groupId>javax.mail</groupId> 
 			<artifactId>mail</artifactId> </exclusion> <exclusion> <groupId>javax.jms</groupId> 
@@ -144,6 +155,7 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.30</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>

@@ -5,10 +5,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>상세조회</title>
+<!-- get -->
 </head>
 <body>
-
+	
 	<header> </header>
 
 	<nav></nav>
