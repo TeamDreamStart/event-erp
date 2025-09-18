@@ -1,0 +1,13 @@
+package kr.co.dreamstart.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import kr.co.dreamstart.dto.ReservationDTO;
+
+@Mapper
+public interface ReservationMapper {
+
+	public List<ReservationDTO> reservationSelectAll();
+}
