@@ -5,7 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="kr.co.dreamstart.mapper.UserMapper">
 	<resultMap type="UserDTO" id="userMap">
 		<id column="user_id" property="userId" />
-		<result column="username" property="userName" />
+		<result column="user_name" property="userName" />
 		<result column="password" property="password" />
 		<result column="name" property="name" />
 		<result column="email" property="email" />
@@ -14,12 +14,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="last_login_at" property="lastLoginAt" />
 		<result column="created_at" property="createdAt" />
 		<result column="updated_at" property="updatedAt" />
-		<result column="is_active" property="isActive" />
+		<result column="id_active" property="isActive" />
 	</resultMap>
 
 	<select id="selectAll" resultMap="userMap">
 		select * from user
 	</select>
-	
-	
 </mapper>
