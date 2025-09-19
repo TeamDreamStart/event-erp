@@ -8,8 +8,28 @@
 <title>Insert title here</title>
 </head>
 <body>
-
-	<header> </header>
+	<header class="header">
+		<span class="header-left">
+			<span class="logo">D</span>
+				<nav class="header-nav">
+					<a href="#">Visit</a>
+					<a href="#">Exhibitions</a>
+					<a href="#">Store</a>
+				</nav>
+			</span>
+		<span class="header-right">
+			<span class="user-actions">
+				<button class="membership">Membership
+					<li>
+						<a href="#">로그인</a>
+						<a href="#">로그아웃</a>
+						<a href="#">회원가입</a>
+					</li>
+				</button>
+				<a href="#">Tickets</a>
+			</span>
+		</span>
+	</header>
 
 	<nav></nav>
 

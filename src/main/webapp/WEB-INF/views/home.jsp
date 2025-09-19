@@ -16,13 +16,6 @@
 	<header>
 		<div class="header-container">
 			<h1 class="logo"><a href="/">D</a></h1>
-			<nav class="main-nav">
-				<ul>
-					<li><a href="#">Visit</a></li>
-					<li><a href="#">Exhibitions</a></li>
-					<li><a href="#">Store</a></li>
-				</ul>
-			</nav>
 			<div class="user-actions">
 				<div>
 					<div href="#">Membership</div>
@@ -34,14 +27,22 @@
 				</div>
 				<a href="#">Tickets</a>
 			</div>
+			<nav class="main-nav">
+				<ul>
+					<li><a href="#">Visit</a></li>
+					<li><a href="#">Exhibitions</a></li>
+					<li><a href="#">Store</a></li>
+				</ul>
+			</nav>
 		</div>
 	</header>
 	<main>
 		<section class="main-visual">
+			<hr><br><br>
 			<figure>
 				<img src="<c:url value='/resources/img/grand.jpg'/>" alt="메인 베너입니다." class="visual-image"/>
 				<figcaption class="hidden">할아버지 할머니가 미술관 구경하는 배너</figcaption>
-			</figure>
+			</figure><br><br> <hr>
 			<div class="museum-status">
 				<p>open 10:30 a.m.</p>
 				<p>close 18:00 p.m.</p>
@@ -106,7 +107,7 @@
   </div>
 
   <!-- <p class="append-buttons">
-    <button class="prepend-2-slides">Prepend 2 Slides</button>
+		<button class="prepend-2-slides">Prepend 2 Slides</button>
     <button class="prepend-slide">Prepend Slide</button>
     <button class="append-slide">Append Slide</button>
     <button class="append-2-slides">Append 2 Slides</button>
@@ -118,13 +119,59 @@
 		<section class="calendar-section">
 			<div class="section-header">
 				<h2>Calendar</h2>
+				<div id="calendar"></div>
+	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
+			<script>
+					document.addEventListener('DOMContentLoaded', function() {
+			const rawEvents = [
+									{title: '회의A', start: '2025-09-17', order: 1, allDay: true },
+					{title: '회의B', start: '2025-09-17', order: 2, allDay: true },
+					{title: '회의C', start: '2025-09-18', order: 3, allDay: true },
+					{title: '점심약속', start: '2025-09-22', order: 1, allDay: true }
+							];
+						var calendarEl = document.getElementById('calendar');
+						var calendar = new FullCalendar.Calendar(calendarEl, {
+				
+							locale: 'ko', // 한국어 세팅
+							initialView: 'dayGridMonth',
+							eventOrder: 'order', // 정렬 기준 필드
+							eventOrderStrict: true, // 순서 강제 적용
+							fixedWeekCount: false, 
+							headerToolbar: { // 버튼 위치
+									left: 'prev', 
+									center: 'title',
+									right: 'next',
+							},
+							height: 'auto', // 높이 자동 조절
+							dayCellContent: function(arg) { // 셀(일자) 텍스트 정의
+									return {
+									html: arg.date.getDate().toString() // '1일' → '1'로 표시
+									};
+							},
+				events: rawEvents, // 이벤트 정의
+							dateClick : function(info) { // 날짜 클릭 이벤트
+					alert("선택하신 날짜에 일정이 없습니다.");
+				},
+				eventClick : function(info) { // 이벤트 클릭 이벤트
+					alert("선택하신 날짜에 이벤트가 있습니다.");
+				}
+						});
+						calendar.render();
+					});
+		
+			</script>
 				<span class="calendar-add">더보기</span>
 				<span class="notice-label">Notic</span>
 			</div>
 		</section>
 	</main>
 	<footer>
-		<p>Copyright © 2025</p>
+		<h1>Contacts</h1>
+		<address>
+			Exhibition Hall. <a href=""/><br>
+			Phone Call.
+			<a href="tel.031-420-4204">031-420-4204</a>
+		</address>
 	</footer>
 
  <!-- Initialize Swiper -->
