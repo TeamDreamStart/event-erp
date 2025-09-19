@@ -1,7 +1,7 @@
 package kr.co.dreamstart;
 
 
-import static org.junit.Assert.*; // ÀÚÁÖ »ç¿ëÇÒ°Å¶ó¼­ static¼±¾ð
+import static org.junit.Assert.*; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ò°Å¶ï¿½ staticï¿½ï¿½ï¿½ï¿½
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -39,7 +39,7 @@ public class MybatisTest {
 	
 	@Test
 	public void testFactory() {
-		assertNotNull("sqlFactory is Null", sqlFactory); // ÆÇÁ¤
+		assertNotNull("sqlFactory is Null", sqlFactory); // ï¿½ï¿½ï¿½ï¿½
 //		log.info("SqlSessionFactory={}");
 //		System.out.println(sqlFactory);
 //		System.out.println("Factory Test Success");
@@ -64,10 +64,10 @@ public class MybatisTest {
 	public void selectTest() {
 		try(SqlSession session = sqlFactory.openSession()){
 			UserMapper mapper = session.getMapper(UserMapper.class);
-			List<UserDTO> list= mapper.selectAll();
+			List<UserDTO> list= mapper.userSelectAll();
 			
-//			assertNotNull("list is Null", list); // null ÀÎÁö È®ÀÎ
-//			assertFalse("list is empty", list.isEmpty()); // ºñ¾î ÀÖ´ÂÁö È®ÀÎ
+//			assertNotNull("list is Null", list); // null ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+//			assertFalse("list is empty", list.isEmpty()); // ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 			log.info("select rows={}", list.size());
 			
 			for(UserDTO user : list) {
