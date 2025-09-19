@@ -1,7 +1,7 @@
 package kr.co.dreamstart;
 
 
-import static org.junit.Assert.*; // ÀÚÁÖ »ç¿ëÇÒ°Å¶ó¼­ static¼±¾ð
+import static org.junit.Assert.*; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ò°Å¶ï¿½ staticï¿½ï¿½ï¿½ï¿½
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -20,9 +20,9 @@ import kr.co.dreamstart.dto.SurveyQuestionDTO;
 import kr.co.dreamstart.dto.SurveyResponseDTO;
 import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.mapper.UserMapper;
-//import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 import kr.co.dreamstart.mapper.EventMapper;
 import kr.co.dreamstart.mapper.SurveyMapper;
 
@@ -30,16 +30,16 @@ import kr.co.dreamstart.mapper.SurveyMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations= {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
-//@Slf4j
+@Slf4j
 public class MybatisTest {
-	private static final Logger log = LoggerFactory.getLogger(MybatisTest.class);
+//	private static final Logger log = LoggerFactory.getLogger(MybatisTest.class);
 	
 	@Autowired
 	private SqlSessionFactory sqlFactory;
 	
 	@Test
 	public void testFactory() {
-		assertNotNull("sqlFactory is Null", sqlFactory); // ÆÇÁ¤
+		assertNotNull("sqlFactory is Null", sqlFactory); // ï¿½ï¿½ï¿½ï¿½
 //		log.info("SqlSessionFactory={}");
 //		System.out.println(sqlFactory);
 //		System.out.println("Factory Test Success");
@@ -64,10 +64,10 @@ public class MybatisTest {
 	public void selectTest() {
 		try(SqlSession session = sqlFactory.openSession()){
 			UserMapper mapper = session.getMapper(UserMapper.class);
-			List<UserDTO> list= mapper.selectAll();
+			List<UserDTO> list= mapper.userSelectAll();
 			
-//			assertNotNull("list is Null", list); // null ÀÎÁö È®ÀÎ
-//			assertFalse("list is empty", list.isEmpty()); // ºñ¾î ÀÖ´ÂÁö È®ÀÎ
+//			assertNotNull("list is Null", list); // null ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+//			assertFalse("list is empty", list.isEmpty()); // ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 			log.info("select rows={}", list.size());
 			
 			for(UserDTO user : list) {
