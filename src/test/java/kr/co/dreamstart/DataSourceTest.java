@@ -12,24 +12,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations= {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
+@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
 public class DataSourceTest {
 
 	@Autowired
 	private DataSource dataSource;
 	
+//	@Test
+//	public void testConnection() {
+//		try {
+//			Connection conn = dataSource.getConnection();
+//			System.out.println(conn);
+//			System.out.println("DB Connection Test Success");
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
+	
 	@Test
 	public void testConnection() {
-		try {
-			Connection conn = dataSource.getConnection();
-			System.out.println(conn);
-			System.out.println("DB Connection Test Success");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	    try (Connection conn = dataSource.getConnection()) {
+	        // ✅ syso 대신 log
+	        log.info("[datasource:connect] success=true, connClass={}, autoCommit={}",
+	                 conn.getClass().getName(), conn.getAutoCommit());
+	    } catch (SQLException e) {
+	        log.error("[datasource:connect] success=false", e);
+	    }
 	}
 	
-
 }

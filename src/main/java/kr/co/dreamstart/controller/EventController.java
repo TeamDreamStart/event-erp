@@ -1,37 +1,38 @@
 package kr.co.dreamstart.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
-@RequestMapping("/event") // °øÅë url
+@RequestMapping("/event") // ê³µí†µ url
+@Slf4j
 public class EventController {
-	private static final Logger log = LoggerFactory.getLogger(EventController.class);
 
 	@GetMapping("/main")
 	public String main() {
-		log.info("GET event/main ¿äÃ»");
+		log.info("GET event/main í˜¸ì¶œ");
+		log.warn("ê²½ê³ !");
 		return "redirect:/event/eventMain";
 	}
 	
 	@GetMapping("/datail")
 	public String detail() {
-		log.info("GET event/detail ¿äÃ»");
+		log.info("GET event/detail í˜¸ì¶œ");
 		return "event/eventDetail";
 	}
 	
 	@GetMapping("/list")
 	public String list() {
-		log.info("GET event/list ¿äÃ»");
+		log.info("GET event/list í˜¸ì¶œ");
 		return "event/eventList";
 	}
 	
 	@GetMapping("/form")
 	public String form() {
-		log.info("GET event/form ¿äÃ»");
+		log.info("GET event/form í˜¸ì¶œ");
 		return "event/eventForm";
 	}
 	
