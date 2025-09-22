@@ -9,8 +9,11 @@ import kr.co.dreamstart.dto.BoardPostDTO;
 
 @Mapper
 public interface BoardMapper {
-	//게시물 전체 조회
-	public List<BoardPostDTO> boardPostAll();
-	//댓글 전체 조회
-	public List<BoardCommentDTO> boardCommentAll();
+	// 공지사항 / Q&A 전체 목록 조회
+	public List<BoardPostDTO> boardList(String category);
+	
+	// 관리자 - 공지사항 작성
+	
+	//일반회원 - Q(질문) 작성
+	
 }

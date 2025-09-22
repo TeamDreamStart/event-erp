@@ -157,7 +157,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
-			<version>5.2.6.RELEASE</version>
+			<version>${org.springframework-version}</version>
 		</dependency>
 
 		<!-- 이미지 파일 업로드 -->
@@ -172,7 +172,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
-			<version>5.2.6.RELEASE</version>
+			<version>${org.springframework-version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.sun.mail/javax.mail -->

@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 
 	<!-- 권한 -->
-	<resultMap type="RoleDTO" id="roleMap">
+	<resultMap type="RoleVO" id="roleMap">
 		<id column="role_id" property="roleId" />
 		<result column="role_name" property="roleName" />
 	</resultMap>
@@ -40,23 +40,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="target_id" property="targetId" />
 		<result column="action" property="action" />
 		<result column="reason" property="reason" />
-		<result column="created_at" property="createdAt" />
-	</resultMap>
-
-	<!-- 사용자 권한 / 인증 토큰 -->
-	<resultMap type="OauthProviderDTO" id="oauthProviderMap">
-		<id column="provider_id" property="providerId" />
-		<result column="provider_key" property="providerKey" />
-		<result column="display_mame" property="displayName" />
-	</resultMap>
-	<!-- 이메일 인증 토큰 -->
-	<resultMap type="EmailVerificationTokenDTO"
-		id="emailVerificationTokenMap">
-		<id column="token_id" property="tokenId" />
-		<result column="user_id" property="userId" />
-		<result column="token" property="token" />
-		<result column="expires_at" property="expiresAt" />
-		<result column="verified_at" property="verifiedAt" />
 		<result column="created_at" property="createdAt" />
 	</resultMap>
 

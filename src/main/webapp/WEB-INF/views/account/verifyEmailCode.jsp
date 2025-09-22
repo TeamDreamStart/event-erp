@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>이메일 인증</title>
 </head>
 <body>
 
@@ -14,7 +14,6 @@
 	<nav></nav>
 
 	<article>
-
 	</article>
 
 	<footer> </footer>

@@ -3,7 +3,7 @@ package kr.co.dreamstart.dto;
 import lombok.Data;
 
 @Data
-public class RoleDTO {
+public class RoleVO {
 	private int roleId;
 	private String roleName;
 }

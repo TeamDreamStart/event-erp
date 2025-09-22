@@ -14,6 +14,9 @@
 	<nav></nav>
 
 	<article>
+		<h1>Hello world!</h1>
+	<a href="${location }
+	"><img style="height: 20px" alt="카카오로그인버튼" src="../resources/img/kakao.png"></a>
 
 	</article>
 
