@@ -5,15 +5,19 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>상세조회</title>
+<!-- get -->
 </head>
 <body>
-
+	
 	<header> </header>
 
 	<nav></nav>
 
 	<article>
+		<h1>Hello world!</h1>
+
+		<P>The time on the server is serverTime.</P>
 
 	</article>
 

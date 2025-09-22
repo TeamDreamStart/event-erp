@@ -21,6 +21,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	<typeAlias type="kr.co.dreamstart.dto.SurveyResponseDTO" alias="SurveyResponseDTO"/>
 	<typeAlias type="kr.co.dreamstart.dto.UserDTO" alias="UserDTO"/>
 	<typeAlias type="kr.co.dreamstart.dto.UserRoleDTO" alias="UserRoleDTO"/>
-	<typeAlias type="kr.co.dreamstart.dto.RoleDTO" alias="RoleDTO"/>
+	<typeAlias type="kr.co.dreamstart.dto.RoleVO" alias="RoleVO"/>
 </typeAliases>
 </configuration>

@@ -97,8 +97,8 @@
 			<div class="text-center">
 				<ul class="pagination">
 					<c:if test="${pageVO.prev }">
-						<li><a href="test?page=${pageVO.startPage-1}">&laquo;&laquo;</a></li>
-						<li><a href="test?page=${pageVO.startPage-1}">&laquo;</a></li>
+						<li><a href="list-test?page=${pageVO.startPage-1}">&laquo;&laquo;</a></li>
+						<li><a href="list-test?page=${pageVO.startPage-1}">&laquo;</a></li>
 					</c:if>
 					<c:choose>
 						<c:when test="${empty userList || userList.size()==1}">
@@ -107,14 +107,14 @@
 							<c:forEach begin="${pageVO.startPage }" end="${pageVO.endPage }"
 								var="idx">
 								<li class=<c:out value="${pageVO.cri.page==idx? 'active':''}"/>>
-									<a href="test?page=${idx }">${idx }</a>
+									<a href="list-test?page=${idx }">${idx }</a>
 								</li>
 							</c:forEach>
 						</c:otherwise>
 					</c:choose>
 					<c:if test="${pageVO.next && pageVO.endPage > 0 }">
-						<li><a href="test?page=${pageVO.endPage+1 }">&raquo;</a></li>
-						<li><a href="test?page=${pageVO.endPage+1 }">&raquo;&raquo;</a></li>
+						<li><a href="list-test?page=${pageVO.endPage+1 }">&raquo;</a></li>
+						<li><a href="list-test?page=${pageVO.endPage+1 }">&raquo;&raquo;</a></li>
 					</c:if>
 
 				</ul>

@@ -5,7 +5,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>전체조회</title>
+<!-- get -->
 </head>
 <body>
 
@@ -14,6 +15,9 @@
 	<nav></nav>
 
 	<article>
+		<h1>Hello world!</h1>
+
+		<P>The time on the server is serverTime.</P>
 
 	</article>
 

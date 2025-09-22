@@ -106,6 +106,20 @@ public class TestController {
 		return "payTest";
 	}
 	
+	@GetMapping("/kakao-test")
+	public String kakaoTest(Model model) {
+		String location="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=e1dafd936102e43b285b3a9893988593&redirect_uri=http://localhost:8080/map-test";
+		model.addAttribute("location", location);
+
+		return "kakaoTest";
+	}
+	
+	@PostMapping("https://kauth.kakao.com/oauth/token")
+	public String kakaoTokenTest() {
+		
+		return "map-test";
+	}
+	
 	
 
 }
