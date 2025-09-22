@@ -32,9 +32,9 @@ import kr.co.dreamstart.dto.SurveyQuestionDTO;
 import kr.co.dreamstart.dto.SurveyResponseDTO;
 import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.mapper.UserMapper;
-//import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 import kr.co.dreamstart.mapper.EventMapper;
 import kr.co.dreamstart.mapper.SurveyMapper;
 
@@ -42,9 +42,9 @@ import kr.co.dreamstart.mapper.SurveyMapper;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations= {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
-//@Slf4j
+@Slf4j
 public class MybatisTest {
-	private static final Logger log = LoggerFactory.getLogger(MybatisTest.class);
+//	private static final Logger log = LoggerFactory.getLogger(MybatisTest.class);
 	
 	@Autowired
 	private SqlSessionFactory sqlFactory;
