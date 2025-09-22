@@ -1,0 +1,12 @@
+[2025-09-19 10:56:43:32959][http-nio-8080-exec-3] WARN 
+				k.c.d.controller.LogTestController - WARN 파일 생성 테스트
+[2025-09-19 11:00:22:252533][http-nio-8080-exec-7] WARN 
+				o.s.web.servlet.PageNotFound - No mapping for GET /user/detail/
+[2025-09-19 11:05:14:544539][http-nio-8080-exec-10] WARN 
+				o.s.web.servlet.PageNotFound - No mapping for GET /event/eventMain
+[2025-09-19 11:06:16:606514][http-nio-8080-exec-2] WARN 
+				o.s.web.servlet.PageNotFound - No mapping for GET /event/eventMain
+[2025-09-19 11:09:24:25137][http-nio-8080-exec-4] WARN 
+				k.c.d.controller.EventController - 경고!
+[2025-09-19 11:09:24:25162][http-nio-8080-exec-5] WARN 
+				o.s.web.servlet.PageNotFound - No mapping for GET /event/eventMain
