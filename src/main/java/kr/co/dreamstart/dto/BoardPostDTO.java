@@ -14,4 +14,5 @@ public class BoardPostDTO {
     private int viewCount;
     private String createdAt;
     private String updatedAt;
+    private String publishedAt;
 }

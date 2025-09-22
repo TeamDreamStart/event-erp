@@ -99,7 +99,7 @@ public class MybatisTest {
 		try(SqlSession session = sqlFactory.openSession()) {
 //			System.out.println(session.getConfiguration().hasStatement("kr.co.dreamstart.mapper.EventMapper.eventAll")); 
 			EventMapper mapper = session.getMapper(EventMapper.class);
-			List<EventDTO> list = mapper.eventAll();
+			List<EventDTO> list = mapper.eventList("SHOW");//SHOW,SPEACH,WORKSHOP,MARKET
 //			System.out.println("rows : " + list.size());
 			
 //			assertNotNull("list is Null", list);
@@ -140,35 +140,6 @@ public class MybatisTest {
 	}
 	
 	@Test
-	public void emailTest() {
-		Random r = new Random();
-        int num = r.nextInt(999999); //랜덤 난수 
-        
-        StringBuilder sb = new StringBuilder();
-        
-        String setFrom = "test@naver.com";//발신자 이메일
-        String tomail = "yje_515@naver.com";//수신자 이메일
-        String title = "[TEKA] 비밀번호 변경 인증 이메일입니다.";
-        sb.append(String.format("안녕하세요 %s님\n","지은"));
-        sb.append(String.format("비밀번호 찾기(변경) 인증번호는 %d입니다.", num));
-        String content = sb.toString();
-        
-		/*
-		 * try { SimpleMailMessage msg = ((Object) mailSender).createMimeMessage();
-		 * //true-> 첨부파일 기능 MimeMessageHelper msgHelper = new MimeMessageHelper(msg,
-		 * false, "utf-8");
-		 * 
-		 * msgHelper.setFrom(setFrom); msgHelper.setTo(tomail);
-		 * msgHelper.setSubject(title); msgHelper.setText(content);
-		 * 
-		 * //메일 전송 mailSender.send(msg);
-		 * 
-		 * }catch (Exception e) { // TODO: handle exception
-		 * System.out.println(e.getMessage()); }
-		 */
-	}
-	
-	@Test
 	public void mailtrapQuickTest() {
 	    // JavaMailSenderImpl을 직접 만들어서 사용 (Spring Bean 없이)
 	    org.springframework.mail.javamail.JavaMailSenderImpl mailSender = new org.springframework.mail.javamail.JavaMailSenderImpl();
@@ -184,13 +155,13 @@ public class MybatisTest {
 	    props.put("mail.debug", "true");
 
 	    UUID uuid = UUID.randomUUID();
-	    String tmpPass = uuid.toString();
+	    String tmpPass = uuid.toString();// 임시 비밀번호? 인증번호?
 	    try {
 	        MimeMessage msg = mailSender.createMimeMessage();
 	        MimeMessageHelper helper = new MimeMessageHelper(msg, false, "UTF-8");
 	        helper.setFrom("from@example.com"); // 임의 주소(받는사람이 Mailtrap에서 확인)
-	        helper.setTo("to@example.com");
-	        helper.setSubject("[테스트] Mailtrap JUnit 연동 - 임시 비밀번호 발송");
+	        helper.setTo("to@example.com"); // 임의 주소 (메일 트랩에서 수신)
+	        helper.setSubject("[테스트] Mailtrap +Email Api 테스트- 임시 비밀번호 발송");
 	        helper.setText("임시 비밀번호는 ["+tmpPass+"]입니다.", false);
 
 	        mailSender.send(msg);

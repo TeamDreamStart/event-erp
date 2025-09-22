@@ -9,7 +9,11 @@ public class SurveyDTO {
     private String title;
     private String description;
     private boolean isAnonymous;
-    private String openFrom;
-    private String openTo;
+    private String openAt;
+    private String closeAt;
+    private long createdBy;
     private String createdAt;
+    private String updateAt;
+    private int isTemplate;
+    private String templateKey;
 }

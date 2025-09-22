@@ -9,5 +9,5 @@ import kr.co.dreamstart.dto.ReservationDTO;
 @Mapper
 public interface ReservationMapper {
 
-	public List<ReservationDTO> reservationSelectAll();
+	public List<ReservationDTO> reservationList();
 }

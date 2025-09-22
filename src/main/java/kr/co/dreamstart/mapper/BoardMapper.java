@@ -9,7 +9,7 @@ import kr.co.dreamstart.dto.BoardPostDTO;
 
 @Mapper
 public interface BoardMapper {
-	// 공지사항 / Q&A 전체 목록 조회
+	// (NOTICE / QNA ) 전체 목록 조회 내림차순
 	public List<BoardPostDTO> boardList(String category);
 	
 	// 관리자 - 공지사항 작성

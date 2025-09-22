@@ -8,5 +8,4 @@ public class SurveyQuestionDTO {
     private long surveyId;
     private String question;
     private String type;      // TEXT, MULTIPLE, SINGLE
-    private int sortOrder;
 }

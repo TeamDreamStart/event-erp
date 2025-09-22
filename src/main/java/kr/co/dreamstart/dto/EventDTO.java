@@ -1,5 +1,7 @@
 package kr.co.dreamstart.dto;
 
+import java.math.BigDecimal;
+
 import lombok.Data;
 
 @Data
@@ -17,4 +19,8 @@ public class EventDTO {
     private long createdBy;
     private String createdAt;
     private String updatedAt;
+    private int isPaid;
+    private BigDecimal price;
+    private String currency;
+    private String category;
 }

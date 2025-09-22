@@ -7,5 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface EventMapper {
-	public List<EventDTO> eventAll();
+	// 이벤트 카테고리별 전체 목록 조회 내림차순
+	public List<EventDTO> eventList(String category);
 }

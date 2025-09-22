@@ -18,8 +18,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="created_at" property="createdAt" />
 	</resultMap>
 
-	<select id="paymentSelectAll" resultMap="paymentMap">
-		select * from payment
+	<select id="paymentList" resultMap="paymentMap">
+		select * from `payment`
 	</select>
 
 

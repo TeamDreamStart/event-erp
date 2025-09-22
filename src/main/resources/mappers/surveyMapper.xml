@@ -8,11 +8,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<id column="servey_id" property="surveyId" />
 		<result column="event_id" property="eventId" />
 		<result column="title" property="title" />
-		<result column="description" property="dascription" />
+		<result column="description" property="description" />
 		<result column="is_anonymous" property="isAnonymous" />
-		<result column="open_from" property="openFrom" />
-		<result column="open_to" property="openTo" />
-		<result column="created_at" property="createAt" />
+		<result column="open_at" property="openAt"/>
+		<result column="close_at" property="closeAt"/>
+		<result column="created_by" property="createdBy"/>
+		<result column="created_at" property="createdAt"/>
+		<result column="update_at" property="updateAt"/>
+		<result column="is_template" property="isTemplate"/>
+		<result column="template_key" property="templateKey"/>
 	</resultMap>
 
 <!-- 응답 결과 -->
@@ -31,7 +35,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="question_id" property="questionId" />
 		<result column="label" property="label" />
 		<result column="opt_value" property="optValue" />
-		<result column="sort_order" property="sortOrder" />
 	</resultMap>
 	
 <!-- 문항 리스트 -->
@@ -40,7 +43,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="survey_id" property="surveyId" />
 		<result column="question" property="question" />
 		<result column="type" property="type" />
-		<result column="sort_order" property="sortOrder" />
 	</resultMap>
 
 <!-- 응답 이력 -->

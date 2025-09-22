@@ -7,11 +7,8 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	<typeAlias type="kr.co.dreamstart.dto.AdminActionLogDTO" alias="AdminActionLogDTO"/>
 	<typeAlias type="kr.co.dreamstart.dto.BoardCommentDTO" alias="BoardCommentDTO"/>
 	<typeAlias type="kr.co.dreamstart.dto.BoardPostDTO" alias="BoardPostDTO"/>
-	<typeAlias type="kr.co.dreamstart.dto.EmailVerificationTokenDTO" alias="EmailVerificationTokenDTO"/>
 	<typeAlias type="kr.co.dreamstart.dto.EventDTO" alias="EventDTO"/>
 	<typeAlias type="kr.co.dreamstart.dto.FileAssetDTO" alias="FileAssetDTO"/>
-	<typeAlias type="kr.co.dreamstart.dto.OauthProviderDTO" alias="OauthProviderDTO"/>
-	<typeAlias type="kr.co.dreamstart.dto.PasswordResetTokenDTO" alias="PasswordResetTokenDTO"/>
 	<typeAlias type="kr.co.dreamstart.dto.PaymentDTO" alias="PaymentDTO"/>
 	<typeAlias type="kr.co.dreamstart.dto.ReservationDTO" alias="ReservationDTO"/>
 	<typeAlias type="kr.co.dreamstart.dto.SurveyAnswerDTO" alias="SurveyAnswerDTO"/>

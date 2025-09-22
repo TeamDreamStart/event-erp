@@ -23,7 +23,6 @@ public interface UserMapper {
 	//회원가입 - 이메일 중복 확인
 	public String joinEmailCheck(String email);
 	
-	
 	// 회원 정보 수정
 	public int updateUser(UserDTO userDTO);
 	// 회원 비밀번호 변경

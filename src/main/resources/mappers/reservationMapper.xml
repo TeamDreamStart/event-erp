@@ -18,8 +18,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 
-	<select id="reservationSelectAll" resultMap="reservationMap">
-		select * from reservation
+	<select id="reservationList" resultMap="reservationMap">
+		select * from `reservation`
 	</select>
 	
 	

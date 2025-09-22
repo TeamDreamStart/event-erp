@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.dreamstart.mapper.UserMapper">
-	<!-- UserDTO UserRoleDTO RoleDTO AdminActionLogDTO OauthProviderDTO EmailVErificationTokenDTO -->
+	<!-- UserDTO UserRoleDTO RoleDTO-->
 	<!-- 회원 정보 -->
 	<resultMap type="UserDTO" id="userMap">
 		<id column="user_id" property="userId" />
@@ -12,11 +12,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="name" property="name" />
 		<result column="email" property="email" />
 		<result column="phone" property="phone" />
-		<result column="status" property="status" />
 		<result column="last_login_at" property="lastLoginAt" />
 		<result column="created_at" property="createdAt" />
 		<result column="updated_at" property="updatedAt" />
-		<result column="id_active" property="isActive" />
+		<result column="is_active" property="isActive" />
 	</resultMap>
 
 	<!-- 회원권한 -->
@@ -32,16 +31,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="role_name" property="roleName" />
 	</resultMap>
 
-	<!-- 관리자 활동 로그 -->
-	<resultMap type="AdminActionLogDTO" id="adminActionLogMap">
-		<id column="log_id" property="logId" />
-		<result column="admin_id" property="adminId" />
-		<result column="target_type" property="targetType" />
-		<result column="target_id" property="targetId" />
-		<result column="action" property="action" />
-		<result column="reason" property="reason" />
-		<result column="created_at" property="createdAt" />
-	</resultMap>
 
 	<select id="userSelectAll" resultMap="userMap">
 		select * from `user`
@@ -58,6 +47,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<!-- <select id="userRoleSelectAll" resultMap="userMap"> select * from `user_role` 
 		</select> <select id="roleSelectAll" resultMap="roleMap"> select * from `role` 
-		</select> <select id="adminActionAll" resultMap="adminActionLogMap"> select 
-		* from `admin_action_log` </select> -->
+		</select> -->
 </mapper>

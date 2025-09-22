@@ -17,10 +17,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result column="created_by" property="createdBy" />
  		<result column="created_at" property="createdAt" />
  		<result column="updated_at" property="updatedAt" />
+ 		<result column="is_paid" property="isPaid"/>
+ 		<result column="price" property="price"/>
+ 		<result column="currency" property="currency"/>
+ 		<result column="category" property="category"/>
  	</resultMap>
 
 	<select id="eventAll" resultMap="eventMap">
-		select * from `event`
+		select * from `event` where `category` = #{category} order by `event_id` DESC
 	</select>
 	
 	
