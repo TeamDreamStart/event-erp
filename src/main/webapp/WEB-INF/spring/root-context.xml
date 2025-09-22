@@ -14,7 +14,7 @@
 		<property name="driverClassName"
 			value="com.mysql.cj.jdbc.Driver" />
 		<property name="url"
-			value="jdbc:mysql://localhost:3306/event_erp?serverTimezone=UTC" />
+			value="jdbc:mysql://192.168.0.50:3306/event_erp?serverTimezone=UTC" />
 		<property name="username" value="dreamS" />
 		<property name="password" value="1234" />
 	</bean>
