@@ -9,17 +9,5 @@
 </head>
 <body>
 
-	<header> </header>
-
-	<nav></nav>
-
-	<article>
-		<h1>Hello world!</h1>
-
-		<P>The time on the server is serverTime.</P>
-
-	</article>
-
-	<footer> </footer>
 </body>
 </html>
