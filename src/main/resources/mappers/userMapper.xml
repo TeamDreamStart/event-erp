@@ -3,11 +3,11 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.dreamstart.mapper.UserMapper">
-	<!-- UserDTO UserRoleDTO RoleDTO-->
+	<!-- UserDTO UserRoleDTO RoleDTO -->
 	<!-- 회원 정보 -->
 	<resultMap type="UserDTO" id="userMap">
 		<id column="user_id" property="userId" />
-		<result column="user_name" property="userName" />
+		<result column="username" property="userName" />
 		<result column="password" property="password" />
 		<result column="name" property="name" />
 		<result column="email" property="email" />
@@ -31,21 +31,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="role_name" property="roleName" />
 	</resultMap>
 
-
-	<select id="userSelectAll" resultMap="userMap">
-		select * from `user`
+	<!-- 관리자 - 회원 전체 목록 + 페이징 -->
+	<select id="list" resultMap="userMap">
+		select *
+		from `user`
+		order by `user_id` desc
+		limit
+		#{cri.pageStart},#{cri.perPageNum}
 	</select>
-
-	<select id="userCount" resultType="int">
+	
+	<!-- 회원 수 조회 -->
+	<select id="count" resultType="int">
 		select count(*) from `user`
 	</select>
+	
+	<!-- 회원가입시 생성되는 user_id 키 값 -> dto.getUserId() -->
+	<insert id="join" parameterType="UserDTO" useGeneratedKeys="true" keyProperty="userId">
+		insert into `user` 
+		(`username`,`password`,`name`,`email`,`created_at`,`is_active`) 
+		values(#{userName},#{password},#{name},#{email},now(),1)
+	</insert>
+	<!-- 회원가입시 일반회원 권한 부여 -->
+	<insert id="joinRole" parameterType="long">
+		insert into `user_role` values (#{userId},0,now())
+	</insert>
 
-	<select id="userPagingList" resultMap="userMap">
-		select *
-		from user
-		limit #{page},#{perPageNum}
-	</select>
-	<!-- <select id="userRoleSelectAll" resultMap="userMap"> select * from `user_role` 
-		</select> <select id="roleSelectAll" resultMap="roleMap"> select * from `role` 
-		</select> -->
 </mapper>

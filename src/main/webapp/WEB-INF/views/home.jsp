@@ -36,6 +36,9 @@
 			var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 		</script>
 
+<a href="/list-test">회원목록 테스트</a>
+<a href="/board-test">게시판 테스트</a>
+<a href="/pay-test">결제 테스트</a>
 	</article>
 
 	<footer> </footer>

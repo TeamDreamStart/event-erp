@@ -181,8 +181,23 @@
 			<artifactId>javax.mail</artifactId>
 			<version>1.6.2</version>
 		</dependency>
+		<!-- end -->
 		
-		<!-- 이메일 전송 end -->
+		<!-- 댓글 작성 - json data 처리 start -->
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+      <dependency>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-databind</artifactId>
+          <version>2.11.2</version>
+      </dependency>
+             <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+      <dependency>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-core</artifactId>
+          <version>2.11.2</version>
+      </dependency>
+      <!-- end -->
+      
 	</dependencies>
 	<build>
 		<plugins>

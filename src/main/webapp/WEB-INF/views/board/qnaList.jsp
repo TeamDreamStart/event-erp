@@ -14,9 +14,7 @@
 	<nav></nav>
 
 	<article>
-		<h1>Hello world!</h1>
-
-		<P>The time on the server is serverTime.</P>
+Q&A 목록
 
 	</article>
 

@@ -14,17 +14,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.EventDTO;
 import kr.co.dreamstart.dto.PageVO;
 import kr.co.dreamstart.dto.UserDTO;
+import kr.co.dreamstart.mapper.BoardMapper;
 import kr.co.dreamstart.mapper.UserMapper;
 
 @Controller
 public class TestController {
 
 	@Autowired
-	private UserMapper mapper;
+	private UserMapper userMapper;
+
+	@Autowired
+	private BoardMapper boardMapper;
 
 	@GetMapping("/list-test")
 	public String userList(@RequestParam(required = false) Integer userId, Criteria cri, Model model) {
@@ -32,10 +37,10 @@ public class TestController {
 		pageVO.setCri(cri);
 		// 특정 아이디 검색 값이 없다면 -> 회원 전체 목록
 		if (userId == null) {
-			List<UserDTO> userList = mapper.userPagingList(cri);
+			List<UserDTO> userList = userMapper.list(cri);
 			model.addAttribute("userList", userList);
 			// 회원 전체 목록으로 페이징 값 (total) 계산
-			pageVO.setTotalCount(mapper.userCount());
+			pageVO.setTotalCount(userMapper.count());
 		} else {// 특정 아이디 검색 값이 있다면 -> 목록에 특정 회원만 표시
 //			UserDTO user = mapper.selectUser();
 
@@ -43,14 +48,20 @@ public class TestController {
 		// 페이징에 필요한 값을 객체로 전달
 		model.addAttribute("pageVO", pageVO);
 		// 전체 회원 수
-		model.addAttribute("userCount", mapper.userCount());
-		return "/listTest";
+		model.addAttribute("userCount", userMapper.count());
+		// 맨 뒤 페이지
+		int lastPage = (int) pageVO.getTotal() / cri.getPerPageNum();
+		if (pageVO.getTotal() % cri.getPerPageNum() != 0) {
+			lastPage += 1;
+		}
+		model.addAttribute("lastPage", lastPage);
+		return "test/listTest";
 	}
 
 	@PostMapping("/upload")
 	public String handleFileUpload(@RequestParam("imageFile") MultipartFile file) {
 		if (file.isEmpty()) {
-			return "redirect:/list-test"; // 업로드 실패 처리
+			return "redirect:test/list-test"; // 업로드 실패 처리
 		}
 
 		// 외부 경로 (이미 존재하는 디렉토리 사용 or 코드에서 생성)
@@ -72,13 +83,13 @@ public class TestController {
 			return "redirect:/list-test";
 		}
 
-		return "redirect:/list-test";
+		return "redirect:test/list-test";
 	}
 
 	@GetMapping("/map-test")
 	public String map() {
 
-		return "/mapTest";
+		return "test/mapTest";
 	}
 
 	@GetMapping("/pay-test")
@@ -101,25 +112,41 @@ public class TestController {
 		model.addAttribute("event", event);
 
 		// 가격은 임의로 만원
-		model.addAttribute("price", 0);
+		model.addAttribute("price", 100);
 
-		return "payTest";
+		return "test/payTest";
 	}
-	
+
 	@GetMapping("/kakao-test")
 	public String kakaoTest(Model model) {
-		String location="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=e1dafd936102e43b285b3a9893988593&redirect_uri=http://localhost:8080/map-test";
+		String location = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=e1dafd936102e43b285b3a9893988593&redirect_uri=http://localhost:8080/map-test";
 		model.addAttribute("location", location);
 
-		return "kakaoTest";
+		return "test/kakaoTest";
 	}
-	
+
 	@PostMapping("https://kauth.kakao.com/oauth/token")
 	public String kakaoTokenTest() {
-		
-		return "map-test";
+
+		return "test/map-test";
 	}
-	
-	
+
+	@GetMapping("/board-test")
+	public String boardTest(/* @RequestParam(required = false) String search, */ Criteria cri, Model model) {
+		PageVO pageVO = new PageVO();
+		pageVO.setCri(cri);
+		List<BoardPostDTO> boardList = boardMapper.list(cri);
+		model.addAttribute("boardList", boardList);
+		// 페이징에 필요한 값을 객체로 전달
+		model.addAttribute("pageVO", pageVO);
+		// 맨 뒤 페이지
+		int lastPage = (int) pageVO.getTotal() / cri.getPerPageNum();
+		if (pageVO.getTotal() % cri.getPerPageNum() != 0) {
+			lastPage += 1;
+		}
+		model.addAttribute("lastPage", lastPage);
+		model.addAttribute("cri", cri);
+		return "test/boardTest";
+	}
 
 }

@@ -19,7 +19,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 	<select id="reservationList" resultMap="reservationMap">
-		select * from `reservation`
+		select * from `reservation` 
+		order by `reservation_date`
+		limit
+		#{cri.pageStart},#{cri.perPageNum}
 	</select>
 	
 	

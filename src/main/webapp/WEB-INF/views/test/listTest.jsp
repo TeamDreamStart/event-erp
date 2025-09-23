@@ -50,7 +50,6 @@
 						<th>성함</th>
 						<th>이메일</th>
 						<th>전화번호</th>
-						<th>상태</th>
 						<th>마지막 로그인</th>
 						<th>계정생성일</th>
 						<th>수정일</th>
@@ -58,11 +57,11 @@
 					</tr>
 				</thead>
 				<tbody>
-					<!-- 존재하지 않는 사원번호 검색시-->
+					<!-- 존재하지 않는 사원번호 검색시 또는 사원이 한명도 없을 때-->
 					<c:choose>
 						<c:when test="${empty userList}">
 							<tr>
-								<td class="text-center" colspan="4">사원정보를 찾을 수 없습니다.</td>
+								<td class="text-center" colspan="9">사원정보를 찾을 수 없습니다.</td>
 							</tr>
 						</c:when>
 						<c:otherwise>
@@ -73,48 +72,44 @@
 									<td>${userDTO.name}</td>
 									<td>${userDTO.email}</td>
 									<td>${userDTO.phone}</td>
-									<td>${userDTO.status}</td>
 									<td>${userDTO.lastLoginAt}</td>
 									<td>${userDTO.createdAt}</td>
 									<td>${userDTO.updatedAt}</td>
 									<c:choose>
-										<c:when test="${userDTO.isActive==0}">
+										<c:when test="${userDTO.isActive==1}">
 											<td>활동중</td>
 										</c:when>
 										<c:otherwise>
 											<td>휴면</td>
 										</c:otherwise>
 									</c:choose>
-									<td><a class="btn btn-default"
-										href="user/detail/${userDTO.userName}"> 상세보기 </a></td>
+									<td><a class="btn btn-default" href="#"> 상세보기 </a></td>
 								</tr>
 							</c:forEach>
 						</c:otherwise>
 					</c:choose>
 				</tbody>
 			</table>
+			
+			
 			<!-- paging -->
 			<div class="text-center">
 				<ul class="pagination">
 					<c:if test="${pageVO.prev }">
-						<li><a href="list-test?page=${pageVO.startPage-1}">&laquo;&laquo;</a></li>
+						<li><a href="list-test?page=1">&laquo;&laquo;</a></li>
 						<li><a href="list-test?page=${pageVO.startPage-1}">&laquo;</a></li>
 					</c:if>
-					<c:choose>
-						<c:when test="${empty userList || userList.size()==1}">
-						</c:when>
-						<c:otherwise>
-							<c:forEach begin="${pageVO.startPage }" end="${pageVO.endPage }"
-								var="idx">
-								<li class=<c:out value="${pageVO.cri.page==idx? 'active':''}"/>>
-									<a href="list-test?page=${idx }">${idx }</a>
-								</li>
-							</c:forEach>
-						</c:otherwise>
-					</c:choose>
+					<c:if test="${!empty userList || userList.size()!=1}">
+						<c:forEach begin="${pageVO.startPage }" end="${pageVO.endPage }"
+							var="idx">
+							<li class=<c:out value="${pageVO.cri.page==idx? 'active':''}"/>>
+								<a href="list-test?page=${idx }">${idx }</a>
+							</li>
+						</c:forEach>
+					</c:if>
 					<c:if test="${pageVO.next && pageVO.endPage > 0 }">
 						<li><a href="list-test?page=${pageVO.endPage+1 }">&raquo;</a></li>
-						<li><a href="list-test?page=${pageVO.endPage+1 }">&raquo;&raquo;</a></li>
+						<li><a href="list-test?page=${lastPage}">&raquo;&raquo;</a></li>
 					</c:if>
 
 				</ul>
