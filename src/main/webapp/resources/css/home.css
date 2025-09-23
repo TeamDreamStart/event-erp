@@ -20,14 +20,12 @@ body {
 
 .header {
     position: relative;
-    display: flex; /* 자식 요소들을 flex-direction: column으로 배치 */
-    flex-direction: column; /* header-top-row와 header-nav를 세로로 쌓음 */
-    padding: 20px 50px; /* 하단 패딩 60px 제거. main의 margin-top으로 간격 조절 */
-    min-height: 120px; /* 헤더의 최소 높이 */
+    display: flex;
+    flex-direction: column;
+     padding: 20px 50px 0; /* 하단 패딩을 0으로 수정 */
+    min-height: 120px;
     background-color: transparent;
-}
-/* 변경 이유: header-nav와 main 콘텐츠 사이의 간격을 main의 margin-top으로 통일하여 관리하기 위해 header의 하단 패딩을 제거했습니다. */
-
+    height: auto;}
 
 .header-top { 
     display: flex; /* D 로고와 user-actions를 가로로 배치 */
@@ -38,6 +36,7 @@ body {
     top: 20px; /* header의 상단 패딩과 동일하게 맞춤 */
     left: 50px; /* header의 좌측 패딩과 동일하게 맞춤 */
     width: calc(100% - 100px); /* header의 좌우 패딩을 제외한 너비 */
+    height: auto;
 }
 
 .header-left {
@@ -65,61 +64,56 @@ body {
     display: flex;
     align-items: center;
     position: relative;
+    /* gap: 10px; /* 버튼 간 간격 추가 - 필요하다면 주석 해제 */
+    /* 두 버튼의 높이를 명확하게 지정 (padding 8px + border 1px*2 + 텍스트 높이) */
+    height: 38px;
 }
-
-.membership {
-    background-color: transparent;
-    border: none;
+.mypage-link {
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
     font-family: 'Montserrat', sans-serif;
     font-size: 1.1em;
-    color: #222222; /* #000 -> #222222 */
+    color: #333;
     cursor: pointer;
-    padding: 0;
-    margin-right: 20px;
-    position: relative;
-    outline: none;
-}
-
-.membership li {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    display: none;
-    min-width: 120px;
-    z-index: 10;
-}
-
-.membership:hover li,
-.membership:focus-within li {
-    display: block;
-}
-
-.membership li a {
-    display: block;
-    padding: 10px 15px;
+    padding: 8px 15px; /* 내부 패딩 */
+    border-radius: 0px; /* 이미지에 맞춰 모서리 각지게 */
     text-decoration: none;
-    color: #222222; /* #000 -> #222222 */
-    white-space: nowrap;
+    margin-right: 10px;
+    display: inline-flex; /* flex를 사용하여 텍스트 중앙 정렬 및 높이 제어 */
+    justify-content: center; /* 텍스트 가로 중앙 정렬 */
+    align-items: center; /* 텍스트 세로 중앙 정렬 */
+    /* width: 90px; */ /* 정확한 픽셀값보다는 min-width로 유연하게 가져가는 것이 좋습니다. */
+    min-width: 90px; /* 내용에 따라 너비가 유동적으로 변하되 최소 너비 보장 */
+    height: 100%; /* 부모 .user-actions의 높이에 맞춤 */
+    box-sizing: border-box; /* 패딩과 보더가 너비에 포함되도록 */
 }
 
-.membership li a:hover {
-    background-color: #f0f0f0;
+.mypage-link:hover {
+    background-color: #e0e0e0; /* 호버 시 배경색 변경 */
 }
 
-.user-actions > a {
-    background-color: #222222; /* #000 -> #222222 */
-    color: #e5e2db;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+/* login 버튼 스타일 */
+.btn-login {
+    background-color: #333;
+    color: #fff;
+    border: none; /* 이미지에 맞춰 테두리 제거 */
+    font-family: 'Montserrat', sans-serif;
     font-size: 1.1em;
+    cursor: pointer;
+    padding: 8px 15px; /* mypage-link와 동일한 패딩 유지 */
+    border-radius: 0px; /* 이미지에 맞춰 모서리 각지게 */
     font-weight: 500;
+    display: inline-flex; /* flex를 사용하여 텍스트 중앙 정렬 및 높이 제어 */
+    justify-content: center; /* 텍스트 가로 중앙 정렬 */
+    align-items: center; /* 텍스트 세로 중앙 정렬 */
+    /* width: 90px; */ /* 정확한 픽셀값보다는 min-width로 유연하게 가져가는 것이 좋습니다. */
+    min-width: 90px; /* mypage-link와 동일한 최소 너비 설정 */
+    height: 100%; /* 부모 .user-actions의 높이에 맞춤 */
+    box-sizing: border-box; /* 패딩과 보더가 너비에 포함되도록 */
+}
+
+.btn-login:hover {
+    background-color: #555;
 }
 
 .header-nav {
@@ -143,32 +137,34 @@ body {
 }
 
 main {
-    padding: 0 40px;
-    margin-top: 0; /* header-nav와 main 콘텐츠 사이 간격 20px */
-}
-/* 변경 이유: header-nav는 bottom: 20px에 위치하므로, main의 margin-top을 20px로 주면 header-nav 바로 아래 20px 간격이 생깁니다. */
-
-.main-visual {
-    margin-bottom: 50px;
-    text-align: center;
+    padding: 0 50px;
+    margin-top: none; /* `header-nav`와의 간격을 줄이기 위해 0에서 20px로 수정 */
 }
 
-.main-visual hr {
+.main-visual .hr1 {
     border: none;
     border-top: 1px solid #ccc;
-    margin: 0px 0; /* 기존 40px 0 에서 20px 0으로 변경 */
+    margin-bottom: 32px; /* `visual-image`와의 간격을 늘리기 위해 0에서 30px로 수정 */
+    width: 100%;
 }
-/* 변경 이유: visual-image와 hr 사이 간격을 20px로 만들기 위해 hr의 상단 margin을 20px로 조정했습니다. */
+.main-visual .hr2 {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin-top: 32px; /* `visual-image`와의 간격을 늘리기 위해 0에서 30px로 수정 */
+    width: 100%;
+}
+.main-visual figure {
+    margin: 0; /* figure의 기본 마진 제거 */
+    width: 100%; /* figure가 부모(.main-visual)의 100%를 차지하도록 */
+    line-height: 0; /* 이미지 하단에 생길 수 있는 미세한 여백 제거 */
+}
 
 .visual-image {
-    width: 100%;
-    width: auto;
+    width: 100%; /* 부모 figure의 100%를 차지하여 hr 선과 동일한 가로 길이 */
     height: auto;
     display: block;
-    margin: 0 auto 20px; /* 이미지 아래 간격을 20px로 설정 */
+    margin: 0; /* 이미지 자체의 마진은 0으로 설정. hr과의 간격은 main-visual hr에서 조절 */
 }
-/* 변경 이유: visual-image와 hr 사이 간격을 20px로 만들기 위해 margin-bottom을 20px로 설정합니다. */
-
 .museum-status {
     text-align: right;
     margin-top: 20px;
@@ -217,7 +213,7 @@ main {
 .exhibition-card figure {
     margin: 0;
     width: 100%;
-    height: 300px;
+    height: auto;
     overflow: hidden;
 }
 

@@ -15,14 +15,8 @@
 			</span>
 			<span class="header-right">
 				<span class="user-actions">
-					<button class="membership">Membership
-						<li>
-							<a href="#">로그인</a>
-							<a href="#">로그아웃</a>
-							<a href="#">회원가입</a>
-						</li>
-					</button>
-					<a href="#">Tickets</a>
+					<a href="#" class="mypage-link">my page</a>
+					<button class="btn-login">login</button>
 				</span>
 			</span>
 		</div>
@@ -40,7 +34,7 @@
 				<h2>Present Exhibitions</h2>
 				</div>
 				<div class="exhibition-grid">
-					<div class="exhibition-card">
+					<div class="exhibition-card">    
 						<div class="placeholder">
 							<figure class="exhibition-1">
 								<img src="#"/>

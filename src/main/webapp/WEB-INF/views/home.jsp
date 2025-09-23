@@ -20,14 +20,8 @@
 			</span>
 			<span class="header-right">
 				<span class="user-actions">
-					<button class="membership">Membership
-						<li>
-							<a href="#">로그인</a>
-							<a href="#">로그아웃</a>
-							<a href="#">회원가입</a>
-						</li>
-					</button>
-					<a href="#">Tickets</a>
+					<a href="#" class="mypage-link">my page</a>
+					<button class="btn-login">login</button>
 				</span>
 			</span>
 		</div>
@@ -39,11 +33,11 @@
 	</header>
 	<main>
 		<section class="main-visual">
-			<hr>
+			<hr class="hr1">
 			<figure>
 				<img src="<c:url value='/resources/img/grand.jpg'/>" alt="메인 베너입니다." class="visual-image"/>
 				<figcaption class="hidden">할아버지 할머니가 미술관 구경하는 배너</figcaption>
-			</figure><hr>
+			</figure><hr class="hr2">
 			<div class="museum-status">
 				<p>open 10:30 a.m.</p>
 				<p>close 18:00 p.m.</p>
@@ -62,33 +56,33 @@
 				<div class="placeholder">
 				</div>
 				<figure class="exhibition-1">
-					<img src="<c:url value='/resources/img/ham.jpg'/>" alt="햄스터 이미지를 넣습니다."/>
-					<figcaption>귀여운 햄쥐기 이미지</figcaption>
+					<img src="<c:url value='/resources/img/exhibitions1.jpg'/>" alt="전시 1을 넣습니다."/>
+					<figcaption class="hidden">포스터 이미지</figcaption>
 				</figure>
-				<p class="title">전시1</p>
+				<p class="title">오전과 오후 사이</p>
 				</article>
 				<article class="exhibition-card swiper-slide">
 				<div class="placeholder"></div>
 				<figure class="exhibition-2">
-					<img src="<c:url value='/resources/img/ham1.jpg'/>" alt="햄스터 이미지1를 넣습니다."/>
+					<img src="<c:url value='/resources/img/exhibitions2.jpg'/>" alt="전시 2를 넣습니다."/>
 				</figure>
-				<p class="title">전시2</p>
+				<p class="title">도로 위의 밤</p>
 				</article>
 				<article class="exhibition-card swiper-slide">
 				<div class="placeholder"></div>
 				<figure class="exhibition-3">
-					<img src="<c:url value='/resources/img/ham2.jpg'/>" alt="햄스터 이미지2를 넣습니다."/>
+					<img src="<c:url value='/resources/img/exhibitions-3.jpg'/>" alt="전시 3을 넣습니다."/>
 				</figure>
-				<p class="title">전시3</p>
+				<p class="title">시선</p>
 				</article>
 				<article class="exhibition-card swiper-slide">
 				<div class="placeholder"></div>
 				<figure class="exhibition-4">
-					<img src="<c:url value='/resources/img/ham3.jpg'/>" alt="햄스터 이미지3를 넣습니다."/>
+					<img src="<c:url value='/resources/img/exhibitions4.jpg'/>" alt="전시 4를 넣습니다."/>
 				</figure>
-				<p class="title">전시4</p>
+				<p class="title">머무를 곳</p>
 				</article>
-				<article class="exhibition-card swiper-slide">
+				<!-- <article class="exhibition-card swiper-slide">
 				<div class="placeholder"></div>
 				<figure class="exhibition-5">
 					<img src="<c:url value='/resources/img/ham4.jpg'/>" alt="햄스터 이미지4를 넣습니다."/>
@@ -101,7 +95,7 @@
 					<img src="<c:url value='/resources/img/ham5.jpg'/>" alt="햄스터 이미지를 넣습니다."/>
 				</figure></a>
 				<p class="title">전시6</p>
-				</article>
+				</article> -->
     </div>
     <div class="swiper-button-prev"></div>
     <div class="swiper-button-next"></div>
