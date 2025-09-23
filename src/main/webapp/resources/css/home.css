@@ -1,62 +1,369 @@
-    @font-face {
-  font-family: 'Peristiwa';
-  src: url('/resources/css/font/Peristiwa.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
+@font-face {
+    font-family: 'Peristiwa';
+    src: url('/resources/css/font/Peristiwa.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
 }
 
-    figcaption {
-      display: none;
-    }
-    body{
-      background-color: #e5e2db;
-      color:#000;
-      font-family:'Montserrat';
-    }
-    header{
-    }
-    header .user-actions{
-      text-align: right;
-    }
-    .user-actions ul {
-      list-style: none; 
-    }
-    .header-container .logo{
-      font-family:'Peristiwa';
-    }
-    .logo a{
-      color: olive;
-    }
-    header .main-nav ul{   
-      list-style: none;   
-      display: flex;
-      gap: 20px;
-    }
-    header .main-nav li{
-      text-align: left;
-    }
-    header .main-nav a{
-      text-decoration: none;
-      color: #000;
+body {
+    background-color: #e5e2db;
+    color: #222222; /* #000 -> #222222 */
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
 
-    }
+.hidden {
+    display: none;
+}
 
-    main .museum-status{
-      text-align: right;
-    }
+.header {
+    position: relative;
+    display: flex; /* 자식 요소들을 flex-direction: column으로 배치 */
+    flex-direction: column; /* header-top-row와 header-nav를 세로로 쌓음 */
+    padding: 20px 50px; /* 하단 패딩 60px 제거. main의 margin-top으로 간격 조절 */
+    min-height: 120px; /* 헤더의 최소 높이 */
+    background-color: transparent;
+}
+/* 변경 이유: header-nav와 main 콘텐츠 사이의 간격을 main의 margin-top으로 통일하여 관리하기 위해 header의 하단 패딩을 제거했습니다. */
 
-    .swiper {
-      width: 100%;
-      height: 100%;
-    }
-      .swiper-slide img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .swiper {
-      width: 100%;
-      height: 300px;
-      margin: 20px auto;
-    }
+
+.header-top { 
+    display: flex; /* D 로고와 user-actions를 가로로 배치 */
+    justify-content: space-between; /* 양 끝으로 밀어냄 */
+    align-items: flex-start; /* 상단 정렬 (D 로고와 Membership/Tickets를 상단에 맞춤) */
+    width: 100%; /* 부모(header) 너비에 꽉 채움 */
+    position: absolute; /* header 내에서 절대 위치 지정 */
+    top: 20px; /* header의 상단 패딩과 동일하게 맞춤 */
+    left: 50px; /* header의 좌측 패딩과 동일하게 맞춤 */
+    width: calc(100% - 100px); /* header의 좌우 패딩을 제외한 너비 */
+}
+
+.header-left {
+    /* 로고를 감싸는 역할만 함 */
+}
+
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.logo {
+    font-family: 'Peristiwa', cursive;
+    font-size: 3em;
+    /* color는 logo-link에서 inherit 하므로 여기서 변경 필요 없음 */
+}
+
+.header-right {
+    display: flex;
+    align-items: flex-start;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.membership {
+    background-color: transparent;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1em;
+    color: #222222; /* #000 -> #222222 */
+    cursor: pointer;
+    padding: 0;
+    margin-right: 20px;
+    position: relative;
+    outline: none;
+}
+
+.membership li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: none;
+    min-width: 120px;
+    z-index: 10;
+}
+
+.membership:hover li,
+.membership:focus-within li {
+    display: block;
+}
+
+.membership li a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #222222; /* #000 -> #222222 */
+    white-space: nowrap;
+}
+
+.membership li a:hover {
+    background-color: #f0f0f0;
+}
+
+.user-actions > a {
+    background-color: #222222; /* #000 -> #222222 */
+    color: #e5e2db;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: 500;
+}
+
+.header-nav {
+    position: absolute; /* header 내에서 절대 위치 지정 */
+    bottom: 20px; /* header의 하단 패딩과 동일하게 맞춤 */
+    left: 50px; /* header의 좌측 패딩과 동일하게 맞춤 */
+    display: flex;
+    width: calc(100% - 100px); /* header의 좌우 패딩을 제외한 너비 */
+}
+
+.header-nav a {
+    text-decoration: none;
+    color: #222222; /* #000 -> #222222 */
+    margin-right: 30px;
+    font-size: 1.1em;
+    font-weight: 500;
+}
+
+.header-nav a:last-child {
+    margin-right: 0;
+}
+
+main {
+    padding: 0 40px;
+    margin-top: 0; /* header-nav와 main 콘텐츠 사이 간격 20px */
+}
+/* 변경 이유: header-nav는 bottom: 20px에 위치하므로, main의 margin-top을 20px로 주면 header-nav 바로 아래 20px 간격이 생깁니다. */
+
+.main-visual {
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.main-visual hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 0px 0; /* 기존 40px 0 에서 20px 0으로 변경 */
+}
+/* 변경 이유: visual-image와 hr 사이 간격을 20px로 만들기 위해 hr의 상단 margin을 20px로 조정했습니다. */
+
+.visual-image {
+    width: 100%;
+    width: auto;
+    height: auto;
+    display: block;
+    margin: 0 auto 20px; /* 이미지 아래 간격을 20px로 설정 */
+}
+/* 변경 이유: visual-image와 hr 사이 간격을 20px로 만들기 위해 margin-bottom을 20px로 설정합니다. */
+
+.museum-status {
+    text-align: right;
+    margin-top: 20px;
+    font-size: 1.1em;
+    padding-right: 50px;
+}
+
+.museum-status p {
+    margin: 5px 0;
+}
+
+.exhibitions {
+    margin-bottom: 50px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.section-header h2 {
+    font-size: 2em;
+    font-weight: 600;
+    margin: 0;
+}
+
+.swiper {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 20px 0;
+}
+.swiper-wrapper {
+    height: auto;
+}
+
+.swiper-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.exhibition-card figure {
+    margin: 0;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+}
+
+.exhibition-card img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.exhibition-card .title {
+    margin-top: 15px;
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+    color: #222222 !important; /* #000 -> #222222 */
+    transform: scale(0.8);
+    opacity: 0.7;
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+    opacity: 1;
+}
+
+.calendar-section {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 50px;
+    margin-bottom: 50px;
+}
+
+.calendar-section .section-header {
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+#calendar {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+.fc .fc-toolbar-title {
+    font-size: 1.8em;
+    font-weight: 600;
+}
+
+.fc .fc-button-group > .fc-button {
+    background-color: transparent;
+    border: none;
+    color: #fff; /* #000 -> #222222 */
+    font-size: 1.5em;
+    padding: 0 10px;
+    box-shadow: none;
+}
+.fc .fc-button-group > .fc-button:hover {
+    background-color: transparent;
+    color: #555;
+}
+
+.fc-daygrid-week-number,
+.fc-col-header-cell {
+    background-color: #f9f9f9;
+}
+
+.fc-daygrid-day-number {
+    padding: 8px;
+    font-size: 1em;
+    font-weight: 500;
+}
+
+.fc-daygrid-day-top {
+    justify-content: center;
+}
+
+.fc-event {
+    background-color: #a8a39d;
+    border-color: #a8a39d;
+    font-size: 0.9em;
+    margin-top: 2px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fc-daygrid-event-harness {
+    margin-bottom: 5px;
+}
+
+.calendar-add {
+    display: block;
+    text-align: right;
+    margin-top: 10px;
+    color: #555;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.notice-label {
+    font-size: 2em;
+    font-weight: 600;
+    margin-bottom: 20px;
+    grid-column: 2 / 3;
+    align-self: flex-start;
+}
+
+.notice-item {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #fff;
+}
+
+.notice-item .title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+footer {
+    background-color: #a8a39d;
+    color: #fff;
+    padding: 40px 50px;
+    margin-top: 50px;
+}
+
+footer h1 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+footer address {
+    font-style: normal;
+    font-size: 1.1em;
+    line-height: 1.8;
+}
+
+footer address a {
+    color: #fff;
+    text-decoration: none;
+}

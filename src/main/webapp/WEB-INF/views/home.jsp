@@ -12,37 +12,38 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet"/>
 <title>Home</title>
 </head>
-<body>
-	<header>
-		<div class="header-container">
-			<h1 class="logo"><a href="/">D</a></h1>
-			<div class="user-actions">
-				<div>
-					<div href="#">Membership</div>
-					<ul>
-						<li><a href="#">로그인</a></li>
-						<li><a href="#">로그아웃</a></li>
-						<li><a href="#">회원가입</a></li>
-					</ul>
-				</div>
-				<a href="#">Tickets</a>
-			</div>
-			<nav class="main-nav">
-				<ul>
-					<li><a href="#">Visit</a></li>
-					<li><a href="#">Exhibitions</a></li>
-					<li><a href="#">Store</a></li>
-				</ul>
-			</nav>
+<body>  
+	<header class="header">
+		<div class="header-top">
+		<span class="header-left">
+			<a href="/" class="logo-link"><span class="logo">D</span></a>
+			</span>
+			<span class="header-right">
+				<span class="user-actions">
+					<button class="membership">Membership
+						<li>
+							<a href="#">로그인</a>
+							<a href="#">로그아웃</a>
+							<a href="#">회원가입</a>
+						</li>
+					</button>
+					<a href="#">Tickets</a>
+				</span>
+			</span>
 		</div>
+			<nav class="header-nav">
+				<a href="#">Visit</a>
+				<a href="#">Exhibitions</a>
+				<a href="#">Store</a>
+			</nav>
 	</header>
 	<main>
 		<section class="main-visual">
-			<hr><br><br>
+			<hr>
 			<figure>
 				<img src="<c:url value='/resources/img/grand.jpg'/>" alt="메인 베너입니다." class="visual-image"/>
 				<figcaption class="hidden">할아버지 할머니가 미술관 구경하는 배너</figcaption>
-			</figure><br><br> <hr>
+			</figure><hr>
 			<div class="museum-status">
 				<p>open 10:30 a.m.</p>
 				<p>close 18:00 p.m.</p>
@@ -96,9 +97,9 @@
 				</article>
 				<article class="exhibition-card swiper-slide">
 				<div class="placeholder"></div>
-				<figure class="exhibition-6">
+				<a href="#"><figure class="exhibition-6">
 					<img src="<c:url value='/resources/img/ham5.jpg'/>" alt="햄스터 이미지를 넣습니다."/>
-				</figure>
+				</figure></a>
 				<p class="title">전시6</p>
 				</article>
     </div>
@@ -161,17 +162,19 @@
 		
 			</script>
 				<span class="calendar-add">더보기</span>
+				
 				<span class="notice-label">Notic</span>
 			</div>
 		</section>
 	</main>
-	<footer>
+	<footer class="footer">
 		<h1>Contacts</h1>
-		<address>
-			Exhibition Hall. <a href=""/><br>
-			Phone Call.
-			<a href="tel.031-420-4204">031-420-4204</a>
-		</address>
+		<address class="footer-address">
+      수원시 팔달구 덕영대로 899번길 11
+    </address>
+      <div class="footer-phone">
+        대표전화: 031-420-4204
+      </div>
 	</footer>
 
  <!-- Initialize Swiper -->
