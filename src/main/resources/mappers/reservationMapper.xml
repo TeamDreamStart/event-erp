@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.dreamstart.mapper.ReservationMapper">
+
+	<resultMap type="ReservationDTO" id="reservationMap">
+		<id column="reservation_id" property="reservationId" />
+		<result column="user_id" property="userId" />
+		<result column="event_id" property="eventId"/>
+		<result column="reservation_date" property="reservationDate"/>
+		<result column="status" property="status"/>
+		<result column="qr_code" property="qrCode"/>
+		<result column="headcount" property="headCount"/>
+		<result column="cancel_reason" property="cancelReason"/>
+		<result column="cancelled_at" property="cancelledAt"/>
+	</resultMap>
+
+
+
+	<select id="reservationList" resultMap="reservationMap">
+		select * from `reservation` 
+		order by `reservation_date`
+		limit
+		#{cri.pageStart},#{cri.perPageNum}
+	</select>
+	
+	
+</mapper>
