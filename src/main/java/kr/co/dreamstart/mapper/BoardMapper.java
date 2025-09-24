@@ -12,7 +12,8 @@ import kr.co.dreamstart.dto.Criteria;
 @Mapper
 public interface BoardMapper {
 
-	public int postCount();
+	// 카테고리별 공개된 게시물 갯수 (category, visibility = PUBLIC)
+	public int postCount(String category);
 
 	// NOTICE 전체 목록 조회 내림차순 + 페이징 list
 	public List<BoardPostDTO> noticeList(@Param("cri") Criteria cri);

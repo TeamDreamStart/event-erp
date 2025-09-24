@@ -45,7 +45,7 @@
 				<p style="white-space: pre-wrap;">${boardDTO.content}</p>
 			</div>
 
-			<!-- 댓글 -->
+			<!-- QNA 답변 ! -->
 			<!-- 댓글이 없다면 -->
 			<h4 class="page-header">댓글</h4>
 			<c:choose>

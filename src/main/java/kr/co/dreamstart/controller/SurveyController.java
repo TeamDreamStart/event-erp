@@ -15,9 +15,10 @@ public class SurveyController {
 	@Autowired
 	private SurveyMapper mapper;
 	
-	@GetMapping("/{eventId}/survey")
-	public String surveyForm() {
-		
-	}
+	/*
+	 * @GetMapping("/{eventId}/survey") public String surveyForm() {
+	 * 
+	 * }
+	 */
 	
 }

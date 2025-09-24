@@ -16,7 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="created_at" property="createdAt" />
 		<result column="updated_at" property="updatedAt" />
 		<result column="published_at" property="publishedAt" />
-		<result column="comment_count" property="commentCount"/>
+		<result column="comment_count" property="commentCount" />
 	</resultMap>
 
 	<resultMap type="BoardCommentDTO" id="boardCommentMap">
@@ -30,13 +30,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="postCount" resultType="int">
 		select count(*) from
-		`board_post`
+		`board_post` where `category` = #{category} AND `visibility` =
+		'PUBLIC'
 	</select>
 
-<!-- 서브쿼리로 게시물당 댓글 개수를 매칭해서 가져옴 -->
+	<!-- 서브쿼리로 게시물당 댓글 개수를 매칭해서 가져옴 -->
 	<select id="noticeList" resultMap="boardPostMap">
-		select p.*,(SELECT COUNT(*) FROM board_comment c WHERE c.post_id = p.post_id) AS comment_count from `board_post` p
-		where `category` = 'NOTICE' and `visibility` = 'PUBLIC'
+		select p.*,(SELECT COUNT(*)
+		FROM board_comment c WHERE c.post_id = p.post_id) AS comment_count
+		from `board_post` p
+		where `category` = 'NOTICE' and `visibility` =
+		'PUBLIC'
 		order by
 		`post_id` DESC
 		limit
@@ -109,23 +113,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 
 	<select id="postSearch" resultMap="boardPostMap">
-		select *
-		from `board_post`
+		select * from `board_post`
 		<where>
 			`category` = #{category}
-			<if test="searchType == 'title' or 'TITLE'">
-				and `title` like concat('%', #{keyword}, '%')
+			<if test="searchType == 'title'">
+				and `title` like concat('%', #{keyword}, '%') </if>
+			<if test="searchType == 'content'"> and `content` like concat('%', #{keyword}, '%')
 			</if>
-			<if test="searchType == 'content' or 'CONTENT'">
-				and `content` like concat('%', #{keyword}, '%')
-			</if>
-			<if test="searchType == 'all' or  'ALL'">
-				and ( `content` like concat('%', #{keyword}, '%')
-				or
-				`title` like concat('%', #{keyword}, '%') )
-			</if>
+			<if test="searchType == 'all'"> and ( `content` like concat('%',
+				#{keyword}, '%') or
+				`title` like concat('%', #{keyword}, '%') ) </if>
 		</where>
 	</select>
+	<!-- searchType 필요 없을 시 (ALL) -->
+	<!-- <select id="postSearch" resultMap="boardPostMap"> select * from `board_post` 
+		WHERE `category` = #{category} and ( `content` like concat('%', #{keyword}, 
+		'%') or `title` like concat('%', #{keyword}, '%') ) </select> -->
 
 
 	<select id="commentCount" parameterType="long" resultType="int">

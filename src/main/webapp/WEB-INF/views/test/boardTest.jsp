@@ -25,21 +25,15 @@
 			<div class="page-header">
 				<h1>공지사항</h1>
 			</div>
-
-			<!-- 		<div class="row">
-			<div class="col-md-6 text-right">
-				<form class="form-inline" action="empDetail" method="get">
-					<div class="form-group">
-						<input type="text" name="empno" class="form-control"
-							placeholder="회원번호 입력">
-					</div>
-					<button type="submit" class="btn btn-primary">
-						<span class="glyphicon glyphicon-search"></span> 검색
-					</button>
-				</form>
-			</div>
-		</div> -->
-
+			<p>게시물 총 갯수 : ${totalCount }</p>
+			<form action="/board-test" method="get">
+				<select name="searchType">
+					<option value="all" selected>전체&nbsp;&nbsp;&nbsp;</option>
+					<option value="title">제목</option>
+					<option value="content">내용</option>
+				</select> <input type="text" name="keyword" value="${param.keyword}" placeholder="검색어를 입력하세요.">
+				<button type="submit">검색</button>
+			</form>
 			<hr>
 			<table class="table table-striped table-hover">
 				<thead>
@@ -58,7 +52,7 @@
 					<c:choose>
 						<c:when test="${empty boardList}">
 							<tr>
-								<td class="text-center" colspan="5">게시글이 없습니다.</td>
+								<td class="text-center" colspan="7">게시글이 없습니다.</td>
 							</tr>
 						</c:when>
 						<c:otherwise>

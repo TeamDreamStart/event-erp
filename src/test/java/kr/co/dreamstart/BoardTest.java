@@ -82,8 +82,7 @@ public class BoardTest {
 		try (SqlSession session = sqlFactory.openSession()) {
 			BoardMapper mapper = session.getMapper(BoardMapper.class);
 			String category = "QNA";
-			String searchtype = "TITLE";
-			List<BoardPostDTO> list = mapper.postSearch(category,searchtype, "test");
+			List<BoardPostDTO> list = mapper.postSearch(category,"TITLE","test");
 			if (list!=null) {
 				for (BoardPostDTO postDTO : list) {
 					System.out.println(postDTO);

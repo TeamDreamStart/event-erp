@@ -134,9 +134,21 @@ public class TestController {
 	}
 
 	@GetMapping("/board-test")
-	public String boardTest(/* @RequestParam(required = false) String search, */ Criteria cri, Model model) {
-		int totalCount = boardMapper.postCount(); // 전체 게시물 수
-
+	public String boardTest(@RequestParam(required = false) String searchType,
+			@RequestParam(required = false) String keyword,
+			Criteria cri, Model model) {
+		int totalCount = boardMapper.postCount("NOTICE"); // 전체 게시물 수
+		List<BoardPostDTO> boardList = null;
+		if (keyword == null) {
+			boardList = boardMapper.noticeList(cri);
+		} else {
+			// 넘어온 검색어 공백 제거 처리
+			keyword = keyword.replaceAll("\\s", "");
+			boardList = boardMapper.postSearch("NOTICE", searchType, keyword);
+			for (BoardPostDTO postDTO : boardList) {
+				System.out.println(postDTO);
+			}
+		}
 		// 페이징 객체 먼저 세팅
 		PageVO pageVO = new PageVO();
 		pageVO.setCri(cri);
@@ -148,8 +160,8 @@ public class TestController {
 		}
 
 		// 현재 페이지 게시물 조회
-		List<BoardPostDTO> boardList = boardMapper.noticeList(cri);
 
+		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("pageVO", pageVO);
 		model.addAttribute("cri", cri);
@@ -161,7 +173,7 @@ public class TestController {
 	public String detailTest(@PathVariable("boardId") long boardId, Model model) {
 		// detail 클릭할 때 마다 조회수 증가
 		boardMapper.viewCountPlus(boardId);
-		
+
 		BoardPostDTO boardDTO = boardMapper.select(boardId);
 
 		model.addAttribute("boardDTO", boardDTO);
@@ -171,9 +183,9 @@ public class TestController {
 
 		BoardPostDTO nextDTO = boardMapper.selectNext("NOTICE", boardId);
 		model.addAttribute("nextDTO", nextDTO);
-		
+
 		int commentCount = boardMapper.commentCount(boardId);
-		if(commentCount>0) {
+		if (commentCount > 0) {
 			List<BoardCommentDTO> commentList = boardMapper.commentList(boardId);
 			model.addAttribute("commentList", commentList);
 		}
