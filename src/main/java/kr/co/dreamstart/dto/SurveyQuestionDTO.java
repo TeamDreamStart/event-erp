@@ -4,8 +4,10 @@ import lombok.Data;
 
 @Data
 public class SurveyQuestionDTO {
-    private long questionId;
-    private long surveyId;
+    private Long questionId;
+    private Long surveyId;
     private String question;
-    private String type;      // TEXT, MULTIPLE, SINGLE
+    private QuestionType type;
+    
+    public enum QuestionType{SINGLE, MULTI, SCALE_5}; // DEFAULT : SINGLE
 }

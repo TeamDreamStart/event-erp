@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class SurveyAnswerDTO {
-    private long answerId;
-    private long responseId;
-    private long questionId;
-    private long optionId;    // nullable
+    private Long answerId;
+    private Long responseId;
+    private Long questionId;
+    private Long optionId;    // nullable
     private String answerText;
 }

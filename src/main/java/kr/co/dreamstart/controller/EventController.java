@@ -11,12 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EventController {
 
-	@GetMapping("/main")
-	public String main() {
-		log.info("GET event/main 호출");
-		log.warn("경고!");
-		return "redirect:/event/eventMain";
-	}
+//	@GetMapping("/main")
+//	public String main() {
+//		log.info("GET event/main 호출");
+//		log.warn("경고!");
+//		return "redirect:/event/eventMain";
+//	}
 	
 	@GetMapping("/datail")
 	public String detail() {

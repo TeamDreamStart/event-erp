@@ -38,3 +38,53 @@
 				o.s.web.servlet.DispatcherServlet - Completed initialization in 916 ms
 [2025-09-19 11:48:46:3384][http-nio-8080-exec-2] INFO 
 				k.c.d.controller.HomeController - Welcome home! The client locale is ko_KR.
+[2025-09-22 15:09:57:215][main] INFO 
+				o.s.web.context.ContextLoader - Root WebApplicationContext: initialization started
+[2025-09-22 15:09:58:945][main] INFO 
+				o.s.web.context.ContextLoader - Root WebApplicationContext initialized in 721 ms
+[2025-09-22 15:09:58:1316][main] INFO 
+				o.s.web.servlet.DispatcherServlet - Initializing Servlet 'appServlet'
+[2025-09-22 15:09:59:1857][main] INFO 
+				o.s.web.servlet.DispatcherServlet - Completed initialization in 538 ms
+[2025-09-22 15:09:59:2340][http-nio-8080-exec-1] INFO 
+				k.c.d.controller.HomeController - Welcome home! The client locale is ko_KR.
+[2025-09-22 15:10:00:3536][http-nio-8080-exec-2] INFO 
+				k.c.d.controller.HomeController - Welcome home! The client locale is ko_KR.
+[2025-09-22 15:13:23:291][main] INFO 
+				o.s.web.context.ContextLoader - Root WebApplicationContext: initialization started
+[2025-09-22 15:13:24:1152][main] INFO 
+				o.s.web.context.ContextLoader - Root WebApplicationContext initialized in 856 ms
+[2025-09-22 15:13:24:1555][main] INFO 
+				o.s.web.servlet.DispatcherServlet - Initializing Servlet 'appServlet'
+[2025-09-22 15:13:25:2146][main] INFO 
+				o.s.web.servlet.DispatcherServlet - Completed initialization in 591 ms
+[2025-09-22 15:13:26:2643][http-nio-8080-exec-1] INFO 
+				k.c.d.controller.HomeController - Welcome home! The client locale is ko_KR.
+[2025-09-22 15:13:26:3181][http-nio-8080-exec-2] INFO 
+				k.c.d.controller.HomeController - Welcome home! The client locale is ko_KR.
+[2025-09-22 15:18:50:193][main] INFO 
+				o.s.web.context.ContextLoader - Root WebApplicationContext: initialization started
+[2025-09-22 15:18:51:944][main] INFO 
+				o.s.web.context.ContextLoader - Root WebApplicationContext initialized in 746 ms
+[2025-09-22 15:18:51:1337][main] INFO 
+				o.s.web.servlet.DispatcherServlet - Initializing Servlet 'appServlet'
+[2025-09-22 15:18:52:1849][main] INFO 
+				o.s.web.servlet.DispatcherServlet - Completed initialization in 511 ms
+[2025-09-22 15:18:52:2274][http-nio-8080-exec-1] INFO 
+				k.c.d.controller.HomeController - Welcome home! The client locale is ko_KR.
+[2025-09-22 15:18:53:2778][http-nio-8080-exec-2] INFO 
+				k.c.d.controller.HomeController - Welcome home! The client locale is ko_KR.
+[2025-09-22 18:38:48:188][main] INFO 
+				o.s.web.context.ContextLoader - Root WebApplicationContext: initialization started
+[2025-09-22 18:38:48:903][main] INFO 
+				o.s.web.context.ContextLoader - Root WebApplicationContext initialized in 713 ms
+[2025-09-22 18:38:49:1267][main] INFO 
+				o.s.web.servlet.DispatcherServlet - Initializing Servlet 'appServlet'
+[2025-09-22 18:38:49:1786][main] INFO 
+				o.s.web.servlet.DispatcherServlet - Completed initialization in 518 ms
+[2025-09-22 18:38:50:2216][http-nio-8080-exec-1] INFO 
+				k.c.d.controller.HomeController - Welcome home! The client locale is ko_KR.
+[2025-09-22 18:39:02:14792][http-nio-8080-exec-4] INFO 
+				k.c.d.controller.HomeController - Welcome home! The client locale is ko_KR.
+[2025-09-22 18:49:53:665586][http-nio-8080-exec-9] INFO 
+				k.c.d.controller.EventController - GET event/main 호출

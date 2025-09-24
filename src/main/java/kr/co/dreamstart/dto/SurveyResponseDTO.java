@@ -1,11 +1,13 @@
 package kr.co.dreamstart.dto;
 
+import java.time.LocalDateTime;
+
 import lombok.Data;
 
 @Data
 public class SurveyResponseDTO {
-    private long responseId;
-    private long surveyId;
-    private long userId;
-    private String respondedAt;
+    private Long responseId;
+    private Long surveyId;
+    private Long userId;
+    private LocalDateTime respondedAt; // DEFAULT CURRENT_TIMESTAMP
 }
