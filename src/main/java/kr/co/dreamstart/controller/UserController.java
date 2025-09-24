@@ -34,7 +34,7 @@ public class UserController {
 	public String joinSubmit(@ModelAttribute("user") UserDTO form, RedirectAttributes ra) {
 		log.info("POST /join - email={}", form.getEmail());
 		try {
-			int result = mapper.joinUser(form);
+			int result = mapper.join(form);
 			if (result == 1) { // 성공 -> 로그인페이지로
 				ra.addFlashAttribute("msg", "회원가입이 완료되었습니다.");
 				return "redirect:/login";

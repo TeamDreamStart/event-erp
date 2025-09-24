@@ -37,13 +37,13 @@ public interface SurveyMapper {
 	
 //	테스트용
 //	설문조회
-//	public List<SurveyDTO> surveyAll();
+	public List<SurveyDTO> surveyAll();
 //	응답결과
-//	public List<SurveyAnswerDTO> answerAll();
+	public List<SurveyAnswerDTO> answerAll();
 //	설문보기
-//	public List<SurveyOptionDTO> optionAll();
+	public List<SurveyOptionDTO> optionAll();
 //	설문문항
-//	public List<SurveyQuestionDTO> questionAll();
+	public List<SurveyQuestionDTO> questionAll();
 //	응답이력
-//	public List<SurveyResponseDTO> responseAll();
+	public List<SurveyResponseDTO> responseAll();
 }

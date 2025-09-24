@@ -17,7 +17,7 @@ public class SurveyController {
 	
 	@GetMapping("/{eventId}/survey")
 	public String surveyForm() {
-		
+		return null;
 	}
 	
 }

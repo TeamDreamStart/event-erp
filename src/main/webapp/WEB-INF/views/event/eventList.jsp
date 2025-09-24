@@ -5,8 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>전체조회</title>
-<!-- get -->
+<title>Insert title here</title>
 </head>
 <body>
 	<header class="header">

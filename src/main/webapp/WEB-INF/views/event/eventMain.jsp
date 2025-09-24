@@ -5,10 +5,21 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>이벤트 첫 화면</title>
-<!-- get -->
+<title>Insert title here</title>
 </head>
-<body>  m 
+<body>
 
+	<header> </header>
+
+	<nav></nav>
+
+	<article>
+		<h1>Hello world!</h1>
+
+		<P>The time on the server is serverTime.</P>
+
+	</article>
+
+	<footer> </footer>
 </body>
 </html>
