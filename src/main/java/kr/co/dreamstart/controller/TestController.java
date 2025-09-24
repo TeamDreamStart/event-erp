@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,16 +14,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.EventDTO;
 import kr.co.dreamstart.dto.PageVO;
+import kr.co.dreamstart.dto.SurveyDTO;
+import kr.co.dreamstart.dto.SurveyOptionDTO;
+import kr.co.dreamstart.dto.SurveyQuestionDTO;
 import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.mapper.BoardMapper;
+import kr.co.dreamstart.mapper.SurveyMapper;
 import kr.co.dreamstart.mapper.UserMapper;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
+@Slf4j
 public class TestController {
 
 	@Autowired
@@ -30,6 +38,9 @@ public class TestController {
 
 	@Autowired
 	private BoardMapper boardMapper;
+	
+	@Autowired
+	private SurveyMapper surveyMapper;
 
 	@GetMapping("/list-test")
 	public String userList(@RequestParam(required = false) Integer userId, Criteria cri, Model model) {
@@ -148,5 +159,118 @@ public class TestController {
 		model.addAttribute("cri", cri);
 		return "test/boardTest";
 	}
+	
+	@GetMapping("/survey-test")
+	public String surveyTest(@RequestParam(required = false) Long eventId,
+							@RequestParam(required = false) String keyword,
+							Criteria cri, Model model){
+		log.info("[/survey-test] eventId={}, page={}, perPageNum={}, pageStart={}, keyword={}",
+				eventId, cri.getPage(), cri.getPerPageNum(), cri.getPageStart(), keyword);
+		
+		List<SurveyDTO> list = surveyMapper.surveyPage(eventId, cri, keyword);
+		int total = surveyMapper.surveyCount(eventId, keyword);
+		
+		PageVO pageVO = new PageVO();
+		pageVO.setCri(cri);
+		pageVO.setTotalCount(total);
+		
+		model.addAttribute("surveyList", list);
+		model.addAttribute("pageVO", pageVO);
+		model.addAttribute("total", total);
+		model.addAttribute("eventId", eventId);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("cri", cri);
+		
+		return "test/surveyTest";
+	}
+	
+	// 템플릿 폼
+	@GetMapping("/survey-test/clone-form")
+	public String cloneForm(@RequestParam(required = false) Long templateId,
+							@RequestParam(required = false) Long eventId,
+							@RequestParam(required = false) Long userId,
+							Model model) {
+		log.info("[/survey-test/clone-form] templateId={}, eventId={}, userId={}",
+				templateId, eventId, userId);
+		return "test/surveyCloneFormTest";
+	}
+	
+	// 템플릿 클론(헤더/문항/보기)
+	@PostMapping("/survey-test/clone")
+	@Transactional
+	public String cloneSurvey(@RequestParam Long templateId,
+							@RequestParam Long eventId,
+							@RequestParam Long userId,
+							RedirectAttributes ra) {
+		log.info("[/survey-test/clone] templateId={}, eventId={}, userId={}",
+				templateId, eventId, userId);
+		
+		try {
+			// 1)설문 헤더 복제
+			int result = surveyMapper.cloneSurvey(templateId, eventId, userId);
+			if (result != 1) {
+				ra.addFlashAttribute("ERROR", "설문 헤더 클론 실패!");
+				return "redirect:/survey-test?eventId=" + eventId;
+			}
+			
+			// 2) new survey_id
+			Long newSurveyId = surveyMapper.lastInsertId();
+			log.info(" -> newSurveyId={}", newSurveyId);
+			
+			// 3) 원본 템플릿 문항 조회
+			List<SurveyQuestionDTO> questionDTO = surveyMapper.questionList(templateId);
+			
+			// 4) 문항/보기 복제
+			for (SurveyQuestionDTO q : questionDTO) {
+				SurveyQuestionDTO nq = new SurveyQuestionDTO();
+				nq.setSurveyId(newSurveyId);
+				nq.setQuestion(q.getQuestion());
+				nq.setType(q.getType());
+				surveyMapper.insertQuestion(nq);  // useGeneratedKeys 로 questionId 채워짐
+				
+				Long newQuestionId = nq.getQuestionId();
+				
+				List<SurveyOptionDTO> opts = surveyMapper.optionList(q.getQuestionId());
+				for(SurveyOptionDTO op : opts) {
+					SurveyOptionDTO nop = new SurveyOptionDTO();
+					nop.setQuestionId(newQuestionId);
+					nop.setLabel(op.getLabel());
+					nop.setOptValue(op.getOptValue());
+					surveyMapper.insertOption(nop);
+				}
+			}
+			
+			ra.addFlashAttribute("msg", "클론 완료(새 설문 ID : " + newSurveyId + ")");
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.info("[CLONE] unexpected error", e);
+			ra.addFlashAttribute("ERROR", "알 수 없는 오류로 클론 실패 !");
+		}
+		
+		return "redirect:/survey-test?eventId=" + eventId;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

@@ -54,17 +54,83 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="responded_at" property="respondedAt" />
 	</resultMap>
 	
+	<!-- 조회 -->
 	
-	<!-- select -->
+	<!-- 설문목록(이벤트필터 + 페이징 + keyword) -->
 	<select id="surveyPage" resultMap="surveyMap">
-		select survey_id, event_id, title, description, status, is_anonymous, clone_from_survey_id, open_at, close_at, created_by, created_at, update_at, is_template, template_key
-		from survey
+		select 
+			`survey_id`, `event_id`, `title`, `description`, `status`, 
+			`is_anonymous`, `clone_from_survey_id`, `open_at`, `close_at`, 
+			`created_by`, `created_at`, `update_at`, `is_template`, `template_key`
+		from `survey`
+		<where>
+			<if test="eventId != null">`event_id` = #{eventId}</if>
+			<if test="keyword != null and keyword != ''">
+				and(`title` like concat('%', #{keyword}, '%')
+				or `description` like concat('%', #{keyword}, '%'))
+			</if>
+		</where>
+		order by `created_at` desc
+		limit 
+		#{cri.pageStart}, #{cri.perPageNum}
 	</select>
 	
-	<!-- insert -->
-	<insert id="insertSurvey" parameterType="SurveyDTO">
-		
+	<!-- 총 개수 total -->
+	<select id="surveyCount" resultType="int">
+		select count(*)
+		from `survey`
+		<where>
+			<if test="eventId != null">`event_id` = #{eventId}</if>
+			<if test="keyword != null and keyword != ''">
+				and(`title` like concat('%', #{keyword}, '%')
+				or `description` like concat('%', #{keyword}, '%'))
+			</if>
+		</where>
+	</select>
+	
+	
+	<!-- 템플릿 클론(템플릿) -->
+	<insert id="cloneSurvey">
+		insert into `survey`
+			(`event_id`, `title`, `description`, `status`, 
+			`is_anonymous`, `clone_from_survey_id`, 
+			`open_at`, 
+			`close_at`, 
+			`created_by`, `created_at`, `update_at`, `is_template`, `template_key`)
+		select
+			#{eventId}, concat('[복제] ', s.`title`), s.`description`, 'OPEN', 
+			s.`is_anonymous`, s.`survey_id`, 
+			e.`end_date`, <!-- 이벤트 종료 시각과 동시에 오픈 -->
+			DATE_ADD(e.`end_date`, INTERVAL 7 DAY), <!-- 종료 7일간 오픈 -->
+			#{userId}, NOW(), NOW(), 0, s.`template_key`
+		from `survey` s
+		join `event` e on e.`event_id` = #{eventId}
+		where s.`survey_id` = #{templateId} and s.`is_template` = 1
 	</insert>
+	
+	
+	<!-- 클론시 복제용 문항/보기 -->
+	<!-- 직전 insert의 auto_increment -->
+	<select id="lastInsertId" resultType="long">
+		select last_insert_id()
+	</select>
+	
+	
+	<!-- useGeneratedKeys : INSERT 후에 DB가 만든 AUTO_INCREMENT PK를 바로 DTO 필드에 넣어주려고 쓰는 옵션 / 템플릿 깊은 복제에서 문항을 INSERT 하면 새 question_id 가 생기고, 그걸 바로 이어서 보기 INSERT에 question_id로 써야 하거든. cloneSurvey(설문 헤더 복제)는 파라미터를 DTO로 안 받으니까 LAST_INSERT_ID() 로 새 survey_id를 따오는 방식이 더 깔끔해. (네가 만든 방식 그대로 OK) -->
+	<!-- 새문항 insert -->
+	<insert id="insertQuestion" parameterType="SurveyQuestionDTO" 
+			useGeneratedKeys="true" keyProperty="questionId" keyColumn="question_id">
+			insert into `survey_question`(`survey_id`, `question`, `type`)
+			values (#{surveyId}, #{question}, #{type})
+	</insert>
+	
+	<!-- 새보기 insert -->
+	<insert id="insertOption" parameterType="SurveyOptionDTO" 
+			useGeneratedKeys="true" keyProperty="optionId" keyColumn="option_id">
+		insert into `survey_option`(`question_id`, `label`, `opt_value`)
+		values(#{questionId}, #{label}, #{optValue})
+	</insert>
+	
 	
 	
 	

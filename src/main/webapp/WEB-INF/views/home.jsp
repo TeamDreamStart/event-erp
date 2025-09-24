@@ -39,6 +39,7 @@
 <a href="/list-test">회원목록 테스트</a>
 <a href="/board-test">게시판 테스트</a>
 <a href="/pay-test">결제 테스트</a>
+<a href="/survey-test">설문조사 테스트</a>
 	</article>
 
 	<footer> </footer>

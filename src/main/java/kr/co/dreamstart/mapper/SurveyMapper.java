@@ -1,6 +1,7 @@
 package kr.co.dreamstart.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,36 +15,66 @@ import kr.co.dreamstart.dto.SurveyResponseDTO;
 
 @Mapper
 public interface SurveyMapper {	
-//	설문목록조회 (이벤트 필터 + 페이징)
+	//	조회용
+	//	설문목록조회(이벤트필터 + 페이징)
 	public List<SurveyDTO> surveyPage(@Param("eventId") Long eventId,
-									@Param("cri") Criteria cri);
-	int surveyCount(@Param("eventId") Long eventId);
+									@Param("cri") Criteria cri,
+									@Param("keyword") String keyword);
+	public int surveyCount(@Param("eventId") Long eventId,
+						@Param("keyword") String keyword);
 	
-//	설문문항 (설문기준)	
-//	public List<SurveyQuestionDTO> questionList(@Param("surveyId") Long surveyId);
+	//	템플릿(문항/보기)	
+	public List<SurveyQuestionDTO> questionList(@Param("surveyId") Long surveyId);
+	public List<SurveyOptionDTO> optionList(@Param("questionId") Long questionId); 
 	
-//	보기 (문항기준)
-//	public List<SurveyOptionDTO> optionList(@Param("questionId") Long questionId);
+	//	응답이력(설문기존 + 페이징)
+	public List<SurveyResponseDTO> responseList(@Param("surveyId") Long surveyId,
+												@Param("cri") Criteria cri);
+	public int responseCount(@Param("surveyId") Long surveyId);
 	
-//	응답이력 (설문기준, 페이징)
-//	public List<SurveyResponseDTO> responseList(@Param("surveyId") Long surveyId,
-//												@Param("cri") Criteria cri);
-//	int reponseCount(@Param("surveyId") Long surveyId);
+	//	개별응답상세
+	public List<Map<String, Object>> responseDetailFlat(@Param("responseId") Long responseId);
 	
-//	응답결과
-//	public List<SurveyAnswerDTO> answerList(@Param("responseId") Long responseId);
+	//	전체통계(문항별보기)
+	public List<Map<String, Object>> surveyStatus(@Param("surveyId") Long surveyId);
+	
+	//	응닶상세 원본 (조인x)
+//	public List<SurveyAnswerDTO> answerListByresponse(@Param("responseId") Long responseId);
+	
+	
+	// 	클론용
+	// 템플릿을 특정 이벤트용 설문으로 클론(기본 규칙: 이벤트 종료 즉시 오픈, 7일 뒤 종료)
+	public int cloneSurvey(@Param("templateId") Long templateId,
+						@Param("eventId") Long eventId,
+						@Param("userId") Long userId);
+	
+	// 템플릿을 특정 이벤트용 설문으로 클론(오프셋 지정: 종료 + n시간 후 오픈, m일 뒤 종료)
+	public int cloneSurveyWithOffsets(@Param("templateId") Long templateId,
+									@Param("eventId") Long eventId,
+									@Param("userId") Long userId,
+									@Param("openDelayHours") int openDelayHours, // 종료 후 몇 시간 뒤 오픈
+									@Param("closeAfterDays") int closeAfterDays); // 오픈 후 며칠 뒤 종료
+	
+	// 바로 전 insert의 auto_increment 값
+	public Long lastInsertId();
+	
+	// 새 문항 insert (깊은 복제용) - 템플릿 클론시 문항이랑 같이 가져오기
+	public int insertQuestion(SurveyQuestionDTO questionDTO);
+	
+	// 새 보기 insert (깊은 복제용) - 템플릿 클론시 보기랑 같이 가져오기
+	public int insertOption(SurveyOptionDTO optionDTO);
 	
 	
 	
 //	테스트용
 //	설문조회
-//	public List<SurveyDTO> surveyAll();
+	public List<SurveyDTO> surveyAll();
 //	응답결과
-//	public List<SurveyAnswerDTO> answerAll();
+	public List<SurveyAnswerDTO> answerAll();
 //	설문보기
-//	public List<SurveyOptionDTO> optionAll();
+	public List<SurveyOptionDTO> optionAll();
 //	설문문항
-//	public List<SurveyQuestionDTO> questionAll();
+	public List<SurveyQuestionDTO> questionAll();
 //	응답이력
-//	public List<SurveyResponseDTO> responseAll();
+	public List<SurveyResponseDTO> responseAll();
 }
