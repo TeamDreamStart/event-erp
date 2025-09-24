@@ -50,6 +50,7 @@
 						<th>조회수</th>
 						<th>생성일</th>
 						<th>수정일</th>
+						<th>댓글수</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -62,8 +63,7 @@
 						</c:when>
 						<c:otherwise>
 							<c:forEach var="boardDTO" items="${boardList}">
-								<c:if
-									test="${boardDTO.visibility eq 'PUBLIC' and boardDTO.category eq 'NOTICE'}">
+								<c:if test="${boardDTO.visibility eq 'PUBLIC'}">
 									<tr>
 										<td>${boardDTO.postId}</td>
 										<td>${boardDTO.category}</td>
@@ -71,8 +71,9 @@
 										<td>${boardDTO.viewCount}</td>
 										<td>${boardDTO.createdAt}</td>
 										<td>${boardDTO.updatedAt}</td>
+										<td>${boardDTO.commentCount}</td>
 										<td><a class="btn btn-default"
-											href="notice/${boardDTO.postId}"> 상세보기 </a></td>
+											href="/board-test/${boardDTO.postId}"> 상세보기 </a></td>
 									</tr>
 								</c:if>
 							</c:forEach>
@@ -85,25 +86,25 @@
 			<!-- paging -->
 			<div class="text-center">
 				<ul class="pagination">
-					<c:if test="${pageVO.prev }">
+					<c:if test="${pageVO.prev}">
 						<li><a href="board-test?page=1">&laquo;&laquo;</a></li>
-						<li><a href="board-test?page=${pageVO.startPage-1}">&laquo;</a></li>
-					</c:if>
-					<c:if test="${boardList.size()>cri.perPageNum}">
-						<c:forEach begin="${pageVO.startPage }" end="${pageVO.endPage }"
-							var="idx">
-							<li class=<c:out value="${pageVO.cri.page==idx? 'active':''}"/>>
-								<a href="board-test?page=${idx }">${idx }</a>
-							</li>
-						</c:forEach>
-					</c:if>
-					<c:if test="${pageVO.next && pageVO.endPage > 0 }">
-						<li><a href="board-test?page=${pageVO.endPage+1 }">&raquo;</a></li>
-						<li><a href="board-test?page=${lastPage}">&raquo;&raquo;</a></li>
+						<li><a href="board-test?page=${pageVO.startPage - 1}">&laquo;</a></li>
 					</c:if>
 
+					<c:forEach begin="${pageVO.startPage}" end="${pageVO.endPage}"
+						var="idx">
+						<li class="${pageVO.cri.page == idx ? 'active' : ''}"><a
+							href="board-test?page=${idx}">${idx}</a></li>
+					</c:forEach>
+
+					<c:if test="${pageVO.next}">
+						<li><a href="board-test?page=${pageVO.endPage + 1}">&raquo;</a></li>
+						<li><a href="board-test?page=${pageVO.totalPage}">&raquo;&raquo;</a></li>
+					</c:if>
 				</ul>
 			</div>
+
+
 		</div>
 	</article>
 

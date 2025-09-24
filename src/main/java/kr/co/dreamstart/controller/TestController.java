@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.dreamstart.dto.BoardCommentDTO;
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.EventDTO;
@@ -133,20 +135,63 @@ public class TestController {
 
 	@GetMapping("/board-test")
 	public String boardTest(/* @RequestParam(required = false) String search, */ Criteria cri, Model model) {
+		int totalCount = boardMapper.postCount(); // 전체 게시물 수
+
+		// 페이징 객체 먼저 세팅
 		PageVO pageVO = new PageVO();
 		pageVO.setCri(cri);
-		List<BoardPostDTO> boardList = boardMapper.list(cri);
-		model.addAttribute("boardList", boardList);
-		// 페이징에 필요한 값을 객체로 전달
-		model.addAttribute("pageVO", pageVO);
-		// 맨 뒤 페이지
-		int lastPage = (int) pageVO.getTotal() / cri.getPerPageNum();
-		if (pageVO.getTotal() % cri.getPerPageNum() != 0) {
-			lastPage += 1;
+		pageVO.setTotalCount(totalCount); // totalCount 세팅 후 calcData() 호출
+
+		// 현재 페이지가 총 페이지보다 크면 마지막 페이지로 보정
+		if (cri.getPage() > pageVO.getTotalPage()) {
+			cri.setPage(pageVO.getTotalPage() > 0 ? pageVO.getTotalPage() : 1);
 		}
-		model.addAttribute("lastPage", lastPage);
+
+		// 현재 페이지 게시물 조회
+		List<BoardPostDTO> boardList = boardMapper.noticeList(cri);
+
+		model.addAttribute("boardList", boardList);
+		model.addAttribute("pageVO", pageVO);
 		model.addAttribute("cri", cri);
+
 		return "test/boardTest";
 	}
 
+	@GetMapping("board-test/{boardId}")
+	public String detailTest(@PathVariable("boardId") long boardId, Model model) {
+		// detail 클릭할 때 마다 조회수 증가
+		boardMapper.viewCountPlus(boardId);
+		
+		BoardPostDTO boardDTO = boardMapper.select(boardId);
+
+		model.addAttribute("boardDTO", boardDTO);
+
+		BoardPostDTO prevDTO = boardMapper.selectPrev("NOTICE", boardId);
+		model.addAttribute("prevDTO", prevDTO);
+
+		BoardPostDTO nextDTO = boardMapper.selectNext("NOTICE", boardId);
+		model.addAttribute("nextDTO", nextDTO);
+		
+		int commentCount = boardMapper.commentCount(boardId);
+		if(commentCount>0) {
+			List<BoardCommentDTO> commentList = boardMapper.commentList(boardId);
+			model.addAttribute("commentList", commentList);
+		}
+		return "test/boardDetailTest";
+	}
+
+	@GetMapping("board-test/{boardId}/update")
+	public String updateTest(@PathVariable("boardId") long boardId, Model model) {
+		BoardPostDTO boardDTO = boardMapper.select(boardId);
+
+		model.addAttribute("boardDTO", boardDTO);
+
+		return "test/boardFormTest";
+	}
+
+	@PostMapping("board-test/{boardId}/update")
+	public String updatePostTest(@PathVariable("boardId") BoardPostDTO postDTO) {
+
+		return "board-test/";
+	}
 }

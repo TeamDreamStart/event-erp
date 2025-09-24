@@ -16,6 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="created_at" property="createdAt" />
 		<result column="updated_at" property="updatedAt" />
 		<result column="published_at" property="publishedAt" />
+		<result column="comment_count" property="commentCount"/>
 	</resultMap>
 
 	<resultMap type="BoardCommentDTO" id="boardCommentMap">
@@ -27,15 +28,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="created_at" property="createdAt" />
 	</resultMap>
 
-	<select id="list" resultMap="boardPostMap">
-		select * from `board_post`
+	<select id="postCount" resultType="int">
+		select count(*) from
+		`board_post`
+	</select>
+
+<!-- 서브쿼리로 게시물당 댓글 개수를 매칭해서 가져옴 -->
+	<select id="noticeList" resultMap="boardPostMap">
+		select p.*,(SELECT COUNT(*) FROM board_comment c WHERE c.post_id = p.post_id) AS comment_count from `board_post` p
+		where `category` = 'NOTICE' and `visibility` = 'PUBLIC'
 		order by
 		`post_id` DESC
 		limit
 		#{cri.pageStart},#{cri.perPageNum}
 	</select>
 
-	<insert id="postInsert" useGeneratedKeys="true" keyProperty="postId">
+	<select id="qnaList" resultMap="boardPostMap">
+		select * from `board_post`
+		where
+		`category` = 'QNA'
+		order by
+		`post_id` DESC
+		limit
+		#{cri.pageStart},#{cri.perPageNum}
+	</select>
+
+	<insert id="postInsert" useGeneratedKeys="true"
+		keyProperty="postId">
 		insert into `board_post`
 		(`category`,`title`,`content`,`user_id`,`visibility`,`created_at`)
 		values
@@ -51,15 +70,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 
 	<select id="select" resultMap="boardPostMap">
-		select * from `board_post` where `post_Id` = #{postId}
+		select * from `board_post` where
+		`post_Id` = #{postId}
 	</select>
-	
+	<select id="selectPrev" resultMap="boardPostMap">
+		select * from `board_post` where `category`=#{category} and
+		`post_Id` <![CDATA[<]]>
+		#{postId} order by `post_Id` desc limit 1
+	</select>
+	<select id="selectNext" resultMap="boardPostMap">
+		select * from `board_post` where `category`=#{category} and
+		`post_Id` <![CDATA[>]]>
+		#{postId} order by `post_Id` asc limit 1
+	</select>
+
 	<update id="toPrivate">
 		update `board_post` set `visibility` = 'PRIVATE'
 		,`updated_at` = now() where `post_id` =
 		#{postId}
 	</update>
-
 
 	<update id="toPublic">
 		update `board_post` set `visibility` = 'PUBLIC'
@@ -67,9 +96,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{postId}
 	</update>
 
-	<update id="viewCount" parameterType="long">
+	<select id="viewCount" resultType="int">
+		select `view_count` from
+		`board_post` where `post_id`
+		= #{postId}
+	</select>
+
+	<update id="viewCountPlus" parameterType="long">
 		update `board_post` set
 		`view_count` = `view_count`+1 where `post_id` =
 		#{postId}
 	</update>
+
+	<select id="postSearch" resultMap="boardPostMap">
+		select *
+		from `board_post`
+		<where>
+			`category` = #{category}
+			<if test="searchType == 'title' or 'TITLE'">
+				and `title` like concat('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'content' or 'CONTENT'">
+				and `content` like concat('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'all' or  'ALL'">
+				and ( `content` like concat('%', #{keyword}, '%')
+				or
+				`title` like concat('%', #{keyword}, '%') )
+			</if>
+		</where>
+	</select>
+
+
+	<select id="commentCount" parameterType="long" resultType="int">
+		select count(*) from `board_comment` where post_id = #{postId}
+	</select>
+
+	<select id="commentList" resultMap="boardCommentMap">
+		select * from `board_comment`
+		where post_id = #{postId}
+	</select>
 </mapper>

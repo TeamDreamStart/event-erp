@@ -15,4 +15,8 @@ public class BoardPostDTO {
     private String createdAt;
     private String updatedAt;
     private String publishedAt;
+    
+    
+    //댓글 개수
+    private int commentCount;
 }

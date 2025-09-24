@@ -50,6 +50,10 @@ public class PageVO {
 	public void setTotal(int total) {
 		this.total = total;
 	}
+	
+	public int getTotalPage() {
+	    return (int) Math.ceil((double) total / cri.getPerPageNum());
+	}
 
 	public int getStartPage() {
 		return startPage;
