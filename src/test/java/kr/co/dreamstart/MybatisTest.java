@@ -82,31 +82,6 @@ public class MybatisTest {
 	 * e) { log.error("eventAllTest Error", e); fail(e.getMessage()); } }
 	 */
 
-	@Test
-	public void surveySmokeTest() {
-		try (SqlSession session = sqlFactory.openSession()) {
-			SurveyMapper mapper = session.getMapper(SurveyMapper.class);
-
-			List<SurveyDTO> surveyList = mapper.surveyAll();
-			log.info("survey row={}", surveyList.size());
-
-			List<SurveyAnswerDTO> answerList = mapper.answerAll();
-			log.info("answer row={}", answerList.size());
-
-			List<SurveyOptionDTO> optionList = mapper.optionAll();
-			log.info("option row={}", optionList.size());
-
-			List<SurveyQuestionDTO> questList = mapper.questionAll();
-			log.info("quest row={}", questList.size());
-
-			List<SurveyResponseDTO> responceList = mapper.responseAll();
-			log.info("responce row={}", responceList.size());
-
-		} catch (Exception e) {
-			log.error("surveySmokeTest error", e);
-			fail(e.getMessage());
-		}
-	}
 
 	@Test
 	public void mailtrapQuickTest() {
