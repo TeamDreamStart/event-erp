@@ -2,7 +2,9 @@ package kr.co.dreamstart.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,10 +12,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.dreamstart.dto.BoardCommentDTO;
 import kr.co.dreamstart.dto.BoardPostDTO;
@@ -135,8 +140,7 @@ public class TestController {
 
 	@GetMapping("/board-test")
 	public String boardTest(@RequestParam(required = false) String searchType,
-			@RequestParam(required = false) String keyword,
-			Criteria cri, Model model) {
+			@RequestParam(required = false) String keyword, Criteria cri, Model model) {
 		int totalCount = boardMapper.postCount("NOTICE"); // 전체 게시물 수
 		List<BoardPostDTO> boardList = null;
 		if (keyword == null) {
@@ -145,9 +149,8 @@ public class TestController {
 			// 넘어온 검색어 공백 제거 처리
 			keyword = keyword.replaceAll("\\s", "");
 			boardList = boardMapper.postSearch("NOTICE", searchType, keyword);
-			for (BoardPostDTO postDTO : boardList) {
-				System.out.println(postDTO);
-			}
+			// 찾은 게시물 수를 totalCount로 넘겨서 페이지네이션 적용
+			totalCount = boardList.size();
 		}
 		// 페이징 객체 먼저 세팅
 		PageVO pageVO = new PageVO();
@@ -169,41 +172,83 @@ public class TestController {
 		return "test/boardTest";
 	}
 
-	@GetMapping("board-test/{boardId}")
-	public String detailTest(@PathVariable("boardId") long boardId, Model model) {
+	@GetMapping("board-test/{postId}")
+	public String detailTest(@PathVariable("postId") long postId, Model model) {
 		// detail 클릭할 때 마다 조회수 증가
-		boardMapper.viewCountPlus(boardId);
+		boardMapper.viewCountPlus(postId);
 
-		BoardPostDTO boardDTO = boardMapper.select(boardId);
+		BoardPostDTO boardDTO = boardMapper.select(postId);
 
 		model.addAttribute("boardDTO", boardDTO);
 
-		BoardPostDTO prevDTO = boardMapper.selectPrev("NOTICE", boardId);
+		BoardPostDTO prevDTO = boardMapper.selectPrev("NOTICE", postId);
 		model.addAttribute("prevDTO", prevDTO);
 
-		BoardPostDTO nextDTO = boardMapper.selectNext("NOTICE", boardId);
+		BoardPostDTO nextDTO = boardMapper.selectNext("NOTICE", postId);
 		model.addAttribute("nextDTO", nextDTO);
 
-		int commentCount = boardMapper.commentCount(boardId);
+		int commentCount = boardMapper.commentCount(postId);
 		if (commentCount > 0) {
-			List<BoardCommentDTO> commentList = boardMapper.commentList(boardId);
+			List<BoardCommentDTO> commentList = boardMapper.commentList(postId);
 			model.addAttribute("commentList", commentList);
 		}
 		return "test/boardDetailTest";
 	}
 
-	@GetMapping("board-test/{boardId}/update")
-	public String updateTest(@PathVariable("boardId") long boardId, Model model) {
-		BoardPostDTO boardDTO = boardMapper.select(boardId);
+	@GetMapping("board-test/{postId}/update")
+	public String updateTest(@PathVariable("postId") long postId, Model model) {
+		BoardPostDTO postDTO = boardMapper.select(postId);
 
-		model.addAttribute("boardDTO", boardDTO);
-
+		model.addAttribute("postDTO", postDTO);
+		model.addAttribute("formType", "update");
 		return "test/boardFormTest";
 	}
 
-	@PostMapping("board-test/{boardId}/update")
-	public String updatePostTest(@PathVariable("boardId") BoardPostDTO postDTO) {
-
-		return "board-test/";
+	@PostMapping("board-test/{postId}/update")
+	public String updatePostTest(BoardPostDTO postDTO) {
+		int result = -1;
+		result = boardMapper.postUpdate(postDTO);
+		if (result > 0) {
+			System.out.println("업데이트 성공");
+		}
+		return "redirect:/board-test/" + postDTO.getPostId();
 	}
+
+	@GetMapping("/board-test/form")
+	public String formTest(Model model) {
+		model.addAttribute("formType", "insert");
+		return "test/boardFormTest";
+	}
+
+	@PostMapping("/board-test/form")
+	public String formPostTest(BoardPostDTO postDTO) {
+		int result = -1;
+		// Session에서 받아온 사용자 정보 미리 기입 userId@@@@@@@@@@@@
+		// 현재는 임의값 넣어줌
+		postDTO.setUserId(1);
+		result = boardMapper.postInsert(postDTO);
+		if (result > 0) {
+			System.out.println("insert success");
+			long postId = postDTO.getPostId();
+			// 생성된 게시물의 상세페이지로 바로 이동
+			return "redirect:/board-test/" + postId;
+		}
+
+		return "/board-test";
+	}
+	// 댓글 빡치게 해서 그냥 삭제함.. 다시 구현하자
+
+	@GetMapping("/board-test/{postId}/delete")
+	public String postDeleteTest(@PathVariable("postId") long postId, RedirectAttributes redirectAttributes) {
+		int result = -1;
+		result = boardMapper.toPrivate(postId);
+		if (result > 0) {
+			redirectAttributes.addFlashAttribute("msg", "삭제");
+		} else {
+			redirectAttributes.addFlashAttribute("msg", "삭제가 실패");
+
+		}
+		return "redirect:/board-test";
+	}
+
 }

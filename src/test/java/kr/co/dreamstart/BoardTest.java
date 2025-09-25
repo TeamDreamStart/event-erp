@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import kr.co.dreamstart.dto.BoardCommentDTO;
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.mapper.BoardMapper;
@@ -56,21 +57,24 @@ public class BoardTest {
 		int result = -1;
 		try (SqlSession session = sqlFactory.openSession()) {
 			BoardMapper mapper = session.getMapper(BoardMapper.class);
-			BoardPostDTO post = new BoardPostDTO();
-			post.setCategory("QNA");
-			post.setTitle("test");
-			post.setContent("test");
-			post.setUserId(1);
-			post.setVisibility("PUBLIC");
-			result = mapper.postInsert(post);
-			if (result > 0) {
-				log.info("boardInsertTest : success");
-				log.info("새로 생성된 post_id : " + post.getPostId());
-				result = -1;
+			for(int i=0; i<10;i++) {
+				
+				BoardPostDTO post = new BoardPostDTO();
+				post.setCategory("NOTICE");
+				post.setTitle("title");
+				post.setContent("content");
+				post.setUserId(1);
+				post.setVisibility("PUBLIC");
+				result = mapper.postInsert(post);
+				if (result > 0) {
+					log.info("boardInsertTest : success");
+					log.info("새로 생성된 post_id : " + post.getPostId());
+					result = -1;
+				}
+				BoardPostDTO resultDTO = mapper.select(post.getPostId());
+				log.info("insert result : {}", resultDTO);
+				System.out.println(resultDTO);
 			}
-			BoardPostDTO resultDTO = mapper.select(post.getPostId());
-			log.info("insert result : {}", resultDTO);
-			System.out.println(resultDTO);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -96,9 +100,20 @@ public class BoardTest {
 	}
 
 	@Test
-	public void Test2() {
+	public void commentInsertTest() {
 		try (SqlSession session = sqlFactory.openSession()) {
 			BoardMapper mapper = session.getMapper(BoardMapper.class);
+			BoardCommentDTO commentDTO = new BoardCommentDTO();
+			commentDTO.setPostId(56);
+			commentDTO.setContent("왜 취소했어요??");
+			
+			// 추후엔 세션에서 받아옴
+			commentDTO.setUserId(1);
+			int result = -1;
+			result = mapper.commentInsert(commentDTO);
+			if(result>0) {
+				System.out.println("성공");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

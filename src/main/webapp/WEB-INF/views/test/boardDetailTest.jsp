@@ -12,7 +12,6 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
 </head>
 <body>
 
@@ -45,30 +44,6 @@
 				<p style="white-space: pre-wrap;">${boardDTO.content}</p>
 			</div>
 
-			<!-- QNA 답변 ! -->
-			<!-- 댓글이 없다면 -->
-			<h4 class="page-header">댓글</h4>
-			<c:choose>
-				<c:when test="${empty commentList}">
-					<div class="well">
-						<p style="white-space: pre-wrap;">댓글이 없습니다.</p>
-					</div>
-				</c:when>
-				<c:otherwise>
-				<table class="table table-bordered">
-					<c:forEach var="commentDTO" items="${commentList }">
-						<tr>
-							<th style="width:100px">작성자</th>
-							<td style="width:100px">${commentDTO.userId }</td>
-							<th style="width:100px">내용</th>
-							<td>${commentDTO.content }</td>
-							<th style="width:100px">작성일자</th>
-							<td style="width:150px">${commentDTO.createdAt }</td>
-						</tr>
-					</c:forEach>
-				</table>
-				</c:otherwise>
-			</c:choose>
 			<!-- 이전글/다음글 -->
 			<table class="table table-bordered">
 				<tr>
@@ -98,6 +73,29 @@
 					href="${pageContext.request.contextPath}/board-test/${boardDTO.postId}/delete"
 					class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
 			</div>
+			<!-- 미구현 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+			<!-- QNA 답변 ! -->
+			<h4 class="page-header">댓글</h4>
+
+			<!-- 댓글 입력 -->
+			<form id="commentForm">
+				<textarea id="commentContent" placeholder="댓글을 입력하세요."
+					style="width: 100%"></textarea>
+				<button type="submit" class="btn btn-default">작성</button>
+			</form>
+
+			<!-- 댓글 목록 -->
+			<div id="commentListArea">
+				<!-- 초기 렌더링용 JSP -->
+				<c:forEach var="commentDTO" items="${commentList}">
+					<div class="well">
+						<b>${commentDTO.userId}</b><br> ${commentDTO.content}<br>
+						<small>${commentDTO.createdAt}</small>
+					</div>
+				</c:forEach>
+			</div>
+
+
 
 		</div>
 

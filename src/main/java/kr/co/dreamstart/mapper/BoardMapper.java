@@ -24,10 +24,10 @@ public interface BoardMapper {
 
 
 	// insert - form
-	public int postInsert(BoardPostDTO boardPostDTO);
+	public int postInsert(BoardPostDTO postDTO);
 
 	// update - form
-	public int postUpdate(@Param("boardPostDTO") BoardPostDTO boardPostDTO);
+	public int postUpdate(@Param("postDTO") BoardPostDTO postDTO);
 
 	// 상세보기 selectOne - detail
 	public BoardPostDTO select(long postId);
@@ -62,6 +62,9 @@ public interface BoardMapper {
 	public int commentCount(long postId);
 	// 게시물 댓글 list
 	public List<BoardCommentDTO> commentList(long postId);
+	// 댓글(Q&A 답변) 작성
+	public int commentInsert(BoardCommentDTO commentDTO);
+	// 게시판 이미지 파일 첨부
 	
 	
 	
