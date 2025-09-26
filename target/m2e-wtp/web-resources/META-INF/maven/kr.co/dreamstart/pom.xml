@@ -12,10 +12,12 @@
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
 		<java-version>1.11</java-version>
+		<spring.security.version>5.3.13.RELEASE</spring.security.version>
 		<org.springframework-version>5.2.6.RELEASE</org.springframework-version>
 		<org.aspectj-version>1.8.9</org.aspectj-version>
 		<org.slf4j-version>1.7.36</org.slf4j-version> <!-- 1.6.6 -> 1.7.36 -->
 	</properties>
+
 	<dependencies>
 		<!-- Spring -->
 		<dependency>
@@ -182,22 +184,51 @@
 			<version>1.6.2</version>
 		</dependency>
 		<!-- end -->
-		
+
 		<!-- 댓글 작성 - json data 처리 start -->
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
-      <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-databind</artifactId>
-          <version>2.11.2</version>
-      </dependency>
-             <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
-      <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-core</artifactId>
-          <version>2.11.2</version>
-      </dependency>
-      <!-- end -->
-      
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.11.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.11.2</version>
+		</dependency>
+		<!-- end -->
+
+		<!-- security -->
+		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-config -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-taglibs -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+		<!-- 로그인/로그아웃을 위한 토글 의존성 추가 -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+		
+
+
+
 	</dependencies>
 	<build>
 		<plugins>

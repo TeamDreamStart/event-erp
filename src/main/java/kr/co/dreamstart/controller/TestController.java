@@ -2,7 +2,9 @@ package kr.co.dreamstart.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,7 +40,7 @@ public class TestController {
 
 	@Autowired
 	private BoardMapper boardMapper;
-	
+
 	@Autowired
 	private SurveyMapper surveyMapper;
 
@@ -159,52 +161,56 @@ public class TestController {
 		model.addAttribute("cri", cri);
 		return "test/boardTest";
 	}
-	
+
 	@GetMapping("/survey-test")
 	public String surveyTest(@RequestParam(required = false) Long eventId,
-							@RequestParam(required = false) String keyword,
-							Criteria cri, Model model){
-		log.info("[/survey-test] eventId={}, page={}, perPageNum={}, pageStart={}, keyword={}",
-				eventId, cri.getPage(), cri.getPerPageNum(), cri.getPageStart(), keyword);
-		
-		List<SurveyDTO> list = surveyMapper.surveyPage(eventId, cri, keyword);
-		int total = surveyMapper.surveyCount(eventId, keyword);
-		
+			@RequestParam(required = false, defaultValue = "all") String field,
+			@RequestParam(required = false) String keyword, @RequestParam(required = false) Integer anon, // 1 or 0
+			Criteria cri, Model model) {
+		log.info("[/survey-test] eventId={}, page={}, perPageNum={}, pageStart={}, keyword={}", eventId, cri.getPage(),
+				cri.getPerPageNum(), cri.getPageStart(), keyword);
+
+		// 고정 템플릿 4개
+		List<SurveyDTO> fixed = surveyMapper.fixedTemplates();
+
+		// 일반 목록
+		List<SurveyDTO> list = surveyMapper.surveyPage(eventId, cri, keyword, field, anon);
+		log.info("surveyList rows={}", list.size());
+		int total = surveyMapper.surveyCount(eventId, keyword, field, anon);
+
 		PageVO pageVO = new PageVO();
 		pageVO.setCri(cri);
 		pageVO.setTotalCount(total);
-		
+
+		model.addAttribute("fixedList", fixed);
 		model.addAttribute("surveyList", list);
 		model.addAttribute("pageVO", pageVO);
 		model.addAttribute("total", total);
+
+		// 유지 파라미터
 		model.addAttribute("eventId", eventId);
+		model.addAttribute("field", field);
 		model.addAttribute("keyword", keyword);
-		model.addAttribute("cri", cri);
-		
+		model.addAttribute("anon", anon);
+
 		return "test/surveyTest";
 	}
-	
+
 	// 템플릿 폼
 	@GetMapping("/survey-test/clone-form")
 	public String cloneForm(@RequestParam(required = false) Long templateId,
-							@RequestParam(required = false) Long eventId,
-							@RequestParam(required = false) Long userId,
-							Model model) {
-		log.info("[/survey-test/clone-form] templateId={}, eventId={}, userId={}",
-				templateId, eventId, userId);
+			@RequestParam(required = false) Long eventId, @RequestParam(required = false) Long userId, Model model) {
+		log.info("[/survey-test/clone-form] templateId={}, eventId={}, userId={}", templateId, eventId, userId);
 		return "test/surveyCloneFormTest";
 	}
-	
+
 	// 템플릿 클론(헤더/문항/보기)
 	@PostMapping("/survey-test/clone")
 	@Transactional
-	public String cloneSurvey(@RequestParam Long templateId,
-							@RequestParam Long eventId,
-							@RequestParam Long userId,
-							RedirectAttributes ra) {
-		log.info("[/survey-test/clone] templateId={}, eventId={}, userId={}",
-				templateId, eventId, userId);
-		
+	public String cloneSurvey(@RequestParam Long templateId, @RequestParam Long eventId, @RequestParam Long userId,
+			RedirectAttributes ra) {
+		log.info("[/survey-test/clone] templateId={}, eventId={}, userId={}", templateId, eventId, userId);
+
 		try {
 			// 1)설문 헤더 복제
 			int result = surveyMapper.cloneSurvey(templateId, eventId, userId);
@@ -212,26 +218,26 @@ public class TestController {
 				ra.addFlashAttribute("ERROR", "설문 헤더 클론 실패!");
 				return "redirect:/survey-test?eventId=" + eventId;
 			}
-			
+
 			// 2) new survey_id
 			Long newSurveyId = surveyMapper.lastInsertId();
 			log.info(" -> newSurveyId={}", newSurveyId);
-			
+
 			// 3) 원본 템플릿 문항 조회
 			List<SurveyQuestionDTO> questionDTO = surveyMapper.questionList(templateId);
-			
+
 			// 4) 문항/보기 복제
 			for (SurveyQuestionDTO q : questionDTO) {
 				SurveyQuestionDTO nq = new SurveyQuestionDTO();
 				nq.setSurveyId(newSurveyId);
 				nq.setQuestion(q.getQuestion());
 				nq.setType(q.getType());
-				surveyMapper.insertQuestion(nq);  // useGeneratedKeys 로 questionId 채워짐
-				
+				surveyMapper.insertQuestion(nq); // useGeneratedKeys 로 questionId 채워짐
+
 				Long newQuestionId = nq.getQuestionId();
-				
+
 				List<SurveyOptionDTO> opts = surveyMapper.optionList(q.getQuestionId());
-				for(SurveyOptionDTO op : opts) {
+				for (SurveyOptionDTO op : opts) {
 					SurveyOptionDTO nop = new SurveyOptionDTO();
 					nop.setQuestionId(newQuestionId);
 					nop.setLabel(op.getLabel());
@@ -239,38 +245,36 @@ public class TestController {
 					surveyMapper.insertOption(nop);
 				}
 			}
-			
+
 			ra.addFlashAttribute("msg", "클론 완료(새 설문 ID : " + newSurveyId + ")");
-			
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			log.info("[CLONE] unexpected error", e);
 			ra.addFlashAttribute("ERROR", "알 수 없는 오류로 클론 실패 !");
 		}
-		
+
 		return "redirect:/survey-test?eventId=" + eventId;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
+	@GetMapping("/survey-test/view")
+	public String surveyView(@RequestParam Long surveyId, Model model) {
+		SurveyDTO survey = surveyMapper.findSurvey(surveyId);
+		if (survey == null)
+			throw new IllegalArgumentException("잘못된 설문 ID");
+
+		List<SurveyQuestionDTO> questions = surveyMapper.questionList(surveyId);
+		Map<Long, List<SurveyOptionDTO>> optionsByQ = new LinkedHashMap<>();
+		for (SurveyQuestionDTO q : questions) {
+			optionsByQ.put(q.getQuestionId(), surveyMapper.optionList(q.getQuestionId()));
+		}
+
+		model.addAttribute("survey", survey);
+		model.addAttribute("questions", questions);
+		model.addAttribute("optionsByQ", optionsByQ);
+
+		return "test/surveyView";
+	}
+
+	
 }

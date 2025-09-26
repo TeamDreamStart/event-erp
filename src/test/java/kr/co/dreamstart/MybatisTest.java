@@ -16,6 +16,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -44,6 +46,12 @@ public class MybatisTest {
 
 	@Autowired
 	private SqlSessionFactory sqlFactory;
+	
+	@Autowired
+	private UserMapper userMapper;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Test
 	public void testFactory() {
@@ -107,6 +115,28 @@ public class MybatisTest {
 			fail(e.getMessage());
 		}
 	}
+	
+	@Test
+	public void surveyListTest() {
+		try (SqlSession session = sqlFactory.openSession()){
+			SurveyMapper mapper = session.getMapper(SurveyMapper.class);
+			
+			Criteria cri = new Criteria(1, 10);
+			log.info("page={}, perPageNum={}, pageStart={}", cri.getPage(), cri.getPerPageNum(), cri.getPageStart());
+			
+			List<SurveyDTO> list = mapper.surveyPage(null, cri, null, null, null);
+			int cnt = mapper.surveyCount(null, null, null, null);
+			
+			log.info("surveyPage rows={}, count={}", (list == null ? 0:list.size()), cnt);
+			assertNotNull(list);
+			assertTrue(cnt >= (list == null ? 0 : list.size()));
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error("surveyPage error", e);
+			fail(e.getMessage());
+		}
+	}
+	
 
 	@Test
 	public void mailtrapQuickTest() {
@@ -229,5 +259,36 @@ public class MybatisTest {
 			e.printStackTrace();
 		}
 	}
+	
+	// 비밀번호 통일 + 랜덤 해시 생성	
+	@Test
+	public void resetAllToPassword() {
+		final String raw = "1234";
+		List<UserDTO> targets = userMapper.findUsersNeedingHash();
+		log.info("[RESET] target users={}", targets.size());
+		
+		for(UserDTO u : targets) {
+			String hash = passwordEncoder.encode(raw);
+			userMapper.updatePasswordById(u.getUserId(), hash);
+			log.info("[RESET] userId={} username={} -> DONE", u.getUserId(), u.getUserName());
+		}
+		log.info("[RESET] completed.");
+	}
+	
+	// 아이디로 로그인 확인 - 이메일도 가져오기
+	@Test
+	public void loginQueryByUsername() {
+		UserDTO dto = userMapper.findByLogin("admin");
+		assertNotNull(dto);
+		log.info("user={} email={}", dto.getUserName(), dto.getEmail());
+	}
 
+	@Test
+	public void passwordMatch() {
+		UserDTO dto = userMapper.findByLogin("admin");
+		assertNotNull(dto);
+		
+		boolean ok = passwordEncoder.matches("1234", dto.getPassword());
+		log.info("matches={}", ok);
+	}
 }
