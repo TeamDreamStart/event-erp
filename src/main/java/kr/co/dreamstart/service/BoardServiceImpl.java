@@ -1,0 +1,53 @@
+package kr.co.dreamstart.service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import kr.co.dreamstart.dto.BoardCommentDTO;
+import kr.co.dreamstart.dto.BoardPostDTO;
+import kr.co.dreamstart.dto.Criteria;
+import kr.co.dreamstart.dto.PageVO;
+import kr.co.dreamstart.mapper.BoardMapper;
+
+@Service
+public class BoardServiceImpl implements BoardService {
+	@Autowired
+	private BoardMapper mapper;
+
+	@Override
+	public Map<String, Object> postList(Criteria cri, String category, String visibility, String searchType,
+			String keyword) {
+		Map<String, Object> map = new HashMap<>();
+		List<BoardPostDTO> postList = null;
+		int totalPostCount = mapper.postCount(visibility, category);
+		// 검색 안할시
+		if (searchType == null|| searchType.isEmpty()) {
+			postList = mapper.postList(cri, visibility, category);
+		} else {
+			// 검색어 공백 제거 처리
+			keyword = keyword.replaceAll("\\s", "");
+			postList = mapper.postSearch(category, searchType, keyword);
+			// 페이징 처리하기 위해 검색된 게시물 갯수만 받아옴
+			totalPostCount = postList.size();
+		}
+		// 페이징 처리를 위한 객체
+		PageVO pageVO = new PageVO();
+		pageVO.setCri(cri);
+		pageVO.setTotalCount(totalPostCount);
+		// 현재 페이지가 총 페이지보다 크면 마지막 페이지로 보정
+		if (cri.getPage() > pageVO.getTotalPage()) {
+			cri.setPage(pageVO.getTotalPage() > 0 ? pageVO.getTotalPage() : 1);
+		}
+		map.put("totalCount", totalPostCount);
+		map.put("postList",postList);
+		map.put("pageVO",pageVO);
+		map.put("cri", cri);
+		
+		return map;
+	}
+
+}

@@ -30,32 +30,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="postCount" resultType="int">
 		select count(*) from
-		`board_post` where `category` = #{category} AND `visibility` =
-		'PUBLIC'
+		`board_post` where `visibility` = #{visibility}
+		AND `category` = #{category}
 	</select>
 
 	<!-- 서브쿼리로 게시물당 댓글 개수를 매칭해서 가져옴 -->
-	<select id="noticeList" resultMap="boardPostMap">
+	<select id="postList" resultMap="boardPostMap">
 		select p.*,(SELECT COUNT(*)
 		FROM board_comment c WHERE c.post_id = p.post_id) AS comment_count
 		from `board_post` p
-		where `category` = 'NOTICE' and `visibility` =
-		'PUBLIC'
+		where `visibility` = #{visibility}
+		AND `category` = #{category}
 		order by
 		`post_id` DESC
 		limit
 		#{cri.pageStart},#{cri.perPageNum}
 	</select>
 
-	<select id="qnaList" resultMap="boardPostMap">
-		select * from `board_post`
-		where
-		`category` = 'QNA'
-		order by
-		`post_id` DESC
-		limit
-		#{cri.pageStart},#{cri.perPageNum}
-	</select>
 
 	<insert id="postInsert" useGeneratedKeys="true"
 		keyProperty="postId">
@@ -142,7 +133,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<insert id="commentInsert" parameterType="BoardCommentDTO">
-		insert into `board_comment` (`post_id`,`user_id`,`content`,`created_at`) 
+		insert into
+		`board_comment` (`post_id`,`user_id`,`content`,`created_at`)
 		values(#{postId},#{userId},#{content},now())
 	</insert>
 </mapper>

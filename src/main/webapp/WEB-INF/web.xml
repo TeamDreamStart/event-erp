@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+<web-app version="3.1" xmlns="http://java.sun.com/xml/ns/javaee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_3_1.xsd"
+	id="WebApp_ID">
 
 	<!-- The definition of the Root Spring Container shared by all Servlets 
 		and Filters -->
@@ -33,7 +34,7 @@
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	
+
 	<!-- 한글 필터 설정 -->
 	<filter>
 		<filter-name>encodingFilter</filter-name>
@@ -51,7 +52,27 @@
 	<filter-mapping>
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
-	</filter-mapping>	
+	</filter-mapping>
 	<!-- 한글 필터 설정 END -->
+
+	<!-- 파일 업로드 기능에 대한 설정 -->
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml
+			</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+		<multipart-config>
+			<location>C:\\upload\\temp</location> <!-- 파일이 임시로 저장될 위치 -->
+			<max-file-size>20971520</max-file-size> <!-- 최대 파일 크기: 20MB (1MB * 20) -->
+			<max-request-size>41943040</max-request-size><!-- 최대 요청 크기: 40MB -->
+			<!-- 파일 크기가 이 값보다 크면 디스크에 기록되고, 그렇지 않으면 메모리에 기록된다 -->
+			<file-size-threshold>20971520</file-size-threshold>
+		</multipart-config>
+	</servlet>
 
 </web-app>

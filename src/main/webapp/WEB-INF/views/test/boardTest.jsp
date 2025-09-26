@@ -78,18 +78,18 @@
 						</tr>
 					</c:when>
 					<c:otherwise>
-						<c:forEach var="boardDTO" items="${boardList}">
-							<c:if test="${boardDTO.visibility eq 'PUBLIC'}">
+						<c:forEach var="postDTO" items="${postList}">
+							<c:if test="${postDTO.visibility eq 'PUBLIC'}">
 								<tr>
-									<td>${boardDTO.postId}</td>
-									<td>${boardDTO.category}</td>
-									<td>${boardDTO.title}</td>
-									<td>${boardDTO.viewCount}</td>
-									<td>${boardDTO.createdAt}</td>
-									<td>${boardDTO.updatedAt}</td>
-									<td>${boardDTO.commentCount}</td>
+									<td>${postDTO.postId}</td>
+									<td>${postDTO.category}</td>
+									<td>${postDTO.title}</td>
+									<td>${postDTO.viewCount}</td>
+									<td>${postDTO.createdAt}</td>
+									<td>${postDTO.updatedAt}</td>
+									<td>${postDTO.commentCount}</td>
 									<td><a class="btn btn-default"
-										href="/board-test/${boardDTO.postId}"> 상세보기 </a></td>
+										href="/board-test/${postDTO.postId}"> 상세보기 </a></td>
 								</tr>
 							</c:if>
 						</c:forEach>

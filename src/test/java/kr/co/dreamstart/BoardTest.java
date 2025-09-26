@@ -13,7 +13,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import kr.co.dreamstart.dto.BoardCommentDTO;
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
+import kr.co.dreamstart.dto.FileAssetDTO;
 import kr.co.dreamstart.mapper.BoardMapper;
+import kr.co.dreamstart.mapper.FileAssetMapper;
 import lombok.extern.slf4j.Slf4j;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -29,7 +31,7 @@ public class BoardTest {
 		try (SqlSession session = sqlFactory.openSession()) {
 			BoardMapper mapper = session.getMapper(BoardMapper.class);
 			Criteria cri = new Criteria(2, 10);
-			List<BoardPostDTO> list = mapper.noticeList(cri);
+			List<BoardPostDTO> list = mapper.postList(cri,"PUBLIC","NOTICE");
 
 			for (BoardPostDTO DTO : list) {
 				System.out.println(DTO);
@@ -120,9 +122,23 @@ public class BoardTest {
 	}
 
 	@Test
-	public void Test3() {
+	public void fileInfoDBInsertTest() {
 		try (SqlSession session = sqlFactory.openSession()) {
-			BoardMapper mapper = session.getMapper(BoardMapper.class);
+			FileAssetMapper mapper = session.getMapper(FileAssetMapper.class);
+			FileAssetDTO fileDTO = new FileAssetDTO();
+			fileDTO.setOwnerType("board_post");
+			fileDTO.setOwnerId(1);
+			fileDTO.setOriginalName("oil.jpg");
+			fileDTO.setStoredPath("2025\\09\\26");
+			fileDTO.setMimeType("image/jpeg");;
+			fileDTO.setSizeBytes(47894);
+			fileDTO.setUuid("dba45a62-fe1c-4d2c-bf9c-8a030db54b41");
+			
+			int result = -1;
+			result = mapper.insert(fileDTO);
+			if(result>0) {
+				log.info("fileInfoDBInsertTest : success");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

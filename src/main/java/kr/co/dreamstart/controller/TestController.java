@@ -1,14 +1,25 @@
 package kr.co.dreamstart.controller;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,11 +35,15 @@ import kr.co.dreamstart.dto.BoardCommentDTO;
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.EventDTO;
+import kr.co.dreamstart.dto.FileAssetDTO;
 import kr.co.dreamstart.dto.PageVO;
 import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.mapper.BoardMapper;
 import kr.co.dreamstart.mapper.UserMapper;
+import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnailator;
 
+@Slf4j
 @Controller
 public class TestController {
 
@@ -63,34 +78,6 @@ public class TestController {
 		}
 		model.addAttribute("lastPage", lastPage);
 		return "test/listTest";
-	}
-
-	@PostMapping("/upload")
-	public String handleFileUpload(@RequestParam("imageFile") MultipartFile file) {
-		if (file.isEmpty()) {
-			return "redirect:test/list-test"; // 업로드 실패 처리
-		}
-
-		// 외부 경로 (이미 존재하는 디렉토리 사용 or 코드에서 생성)
-		String uploadDir = "C:/teamDS/upload";
-		File dir = new File(uploadDir);
-		if (!dir.exists()) {
-			dir.mkdirs(); // 없으면 자동 생성
-		}
-
-		String fileName = file.getOriginalFilename();
-		File dest = new File(uploadDir, fileName);
-
-		try {
-			file.transferTo(dest);
-			// DB에는 웹에서 접근 가능한 상대경로만 저장
-			// 예: "/upload/파일명"
-		} catch (IOException e) {
-			e.printStackTrace();
-			return "redirect:/list-test";
-		}
-
-		return "redirect:test/list-test";
 	}
 
 	@GetMapping("/map-test")
@@ -138,39 +125,31 @@ public class TestController {
 		return "test/map-test";
 	}
 
-	@GetMapping("/board-test")
-	public String boardTest(@RequestParam(required = false) String searchType,
-			@RequestParam(required = false) String keyword, Criteria cri, Model model) {
-		int totalCount = boardMapper.postCount("NOTICE"); // 전체 게시물 수
-		List<BoardPostDTO> boardList = null;
-		if (keyword == null) {
-			boardList = boardMapper.noticeList(cri);
-		} else {
-			// 넘어온 검색어 공백 제거 처리
-			keyword = keyword.replaceAll("\\s", "");
-			boardList = boardMapper.postSearch("NOTICE", searchType, keyword);
-			// 찾은 게시물 수를 totalCount로 넘겨서 페이지네이션 적용
-			totalCount = boardList.size();
-		}
-		// 페이징 객체 먼저 세팅
-		PageVO pageVO = new PageVO();
-		pageVO.setCri(cri);
-		pageVO.setTotalCount(totalCount); // totalCount 세팅 후 calcData() 호출
-
-		// 현재 페이지가 총 페이지보다 크면 마지막 페이지로 보정
-		if (cri.getPage() > pageVO.getTotalPage()) {
-			cri.setPage(pageVO.getTotalPage() > 0 ? pageVO.getTotalPage() : 1);
-		}
-
-		// 현재 페이지 게시물 조회
-
-		model.addAttribute("totalCount", totalCount);
-		model.addAttribute("boardList", boardList);
-		model.addAttribute("pageVO", pageVO);
-		model.addAttribute("cri", cri);
-
-		return "test/boardTest";
-	}
+	/*
+	 * @GetMapping("/board-test") public String boardTest(@RequestParam(required =
+	 * false) String searchType,
+	 * 
+	 * @RequestParam(required = false) String keyword, Criteria cri, Model model) {
+	 * int totalCount = boardMapper.postCount("PUBLIC", "NOTICE"); // 공개되어있는 게시물 수
+	 * List<BoardPostDTO> boardList = null; if (keyword == null) { boardList =
+	 * boardMapper.postList(cri, "PUBLIC", "NOTICE"); } else { // 넘어온 검색어 공백 제거 처리
+	 * keyword = keyword.replaceAll("\\s", ""); boardList =
+	 * boardMapper.postSearch("NOTICE", searchType, keyword); // 찾은 게시물 수를
+	 * totalCount로 넘겨서 페이지네이션 적용 totalCount = boardList.size(); } // 페이징 객체 먼저 세팅
+	 * PageVO pageVO = new PageVO(); pageVO.setCri(cri);
+	 * pageVO.setTotalCount(totalCount); // totalCount 세팅 후 calcData() 호출
+	 * 
+	 * // 현재 페이지가 총 페이지보다 크면 마지막 페이지로 보정 if (cri.getPage() > pageVO.getTotalPage())
+	 * { cri.setPage(pageVO.getTotalPage() > 0 ? pageVO.getTotalPage() : 1); }
+	 * 
+	 * // 현재 페이지 게시물 조회
+	 * 
+	 * model.addAttribute("totalCount", totalCount); model.addAttribute("boardList",
+	 * boardList); model.addAttribute("pageVO", pageVO); model.addAttribute("cri",
+	 * cri);
+	 * 
+	 * return "test/boardTest"; }
+	 */
 
 	@GetMapping("board-test/{postId}")
 	public String detailTest(@PathVariable("postId") long postId, Model model) {
@@ -217,6 +196,7 @@ public class TestController {
 	@GetMapping("/board-test/form")
 	public String formTest(Model model) {
 		model.addAttribute("formType", "insert");
+		model.addAttribute("category", "NOTICE");
 		return "test/boardFormTest";
 	}
 
@@ -236,7 +216,7 @@ public class TestController {
 
 		return "/board-test";
 	}
-	// 댓글 빡치게 해서 그냥 삭제함.. 다시 구현하자
+	// 댓글 빡치게 해서 그냥 삭제함.. 다시 구현하자@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 	@GetMapping("/board-test/{postId}/delete")
 	public String postDeleteTest(@PathVariable("postId") long postId, RedirectAttributes redirectAttributes) {
@@ -251,4 +231,174 @@ public class TestController {
 		return "redirect:/board-test";
 	}
 
+	@GetMapping("/upload")
+	public String fileTest() {
+
+		return "/test/fileTest";
+	}
+
+//	@PostMapping("/upload")
+//	public String fileUploadTest(MultipartFile[] uploadFile, Model model/* ,@PathVariable("boardId")long boardId */) {
+//		// 업로드된 파일을 저장할 폴더 경로
+//		String uploadFolder = "c:\\upload";
+//
+//		for (MultipartFile multipartFile : uploadFile) {
+//			log.info("---------------------------------");
+//			log.info("upload File Name : " + multipartFile.getOriginalFilename());
+//			log.info("upload File Size : " + multipartFile.getSize());
+//
+//			// 실제로 파일을 저장하기 위한 File 객체 생성
+//			File savefile = new File(uploadFolder, multipartFile.getOriginalFilename());
+//
+//			try { // 파일을 지정된 경로에 저장
+//				multipartFile.transferTo(savefile);
+//			} catch (Exception e) { // 파일 저장 중 예외 발생 시 에러 메시지 출력
+//				e.printStackTrace();
+//			}
+//		}
+//		return "redirect:/upload";
+//	}
+
+	@PostMapping(value = "/uploadAjax", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody // json으로 반환
+	public ResponseEntity<List<FileAssetDTO>> ajaxTest(MultipartFile[] uploadFile) {
+
+		// 업로드된 파일 정보를 담을 리스트 생성
+		List<FileAssetDTO> list = new ArrayList<>();
+		// 업로드 처리 로그 기록
+		log.info("update ajax post.........");
+		// 파일을 저장할 폴더 경로
+		String uploadFolder = "C:\\upload";
+
+		// 현재 날짜를 기준으로 업로드된 파일을 저장할 서브 폴더 경로를 생성하여 반환
+		String uploadFolderPath = getFolder();
+
+		// 현재 날짜를 기준으로 업로드된 파일을 저장할 서브 폴더 경로 생성
+		File uploadPath = new File(uploadFolder, getFolder()); // C:\\upload\2024\02\12
+		log.info("upload path : " + uploadPath);
+
+		// 업로드할 서브 폴더가 없는 경우 생성
+		if (uploadPath.exists() == false) {
+			uploadPath.mkdirs();
+		}
+
+		// 받은 파일들을 순회하며 정보를 로그에 출력하고 저장
+		for (MultipartFile multipartFile : uploadFile) {
+
+			log.info("-------------------------------------");
+			log.info("Upload File Name: " + multipartFile.getOriginalFilename());
+			log.info("Upload File Size: " + multipartFile.getSize());
+			// 업로드된 파일 정보를 담을 객체 생성
+			FileAssetDTO fileDTO = new FileAssetDTO();
+
+			// 업로드된 파일의 이름만 추출하여 저장
+			String uploadFileName = multipartFile.getOriginalFilename();
+
+			// @@ DB에 넣을 이름 객체에 저장
+			fileDTO.setOriginalName(uploadFileName);
+
+			// Internet Explorer의 경우 파일 경로가 포함되므로 파일 이름만 추출
+			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
+			log.info("only file name: " + uploadFileName);
+
+			// UUID를 이용하여 파일명 중복을 방지하기 위해 파일명 변경
+			UUID uuid = UUID.randomUUID();
+			uploadFileName = uuid.toString() + "_" + uploadFileName;
+
+			// 파일 저장을 위한 File 객체 생성
+			File saveFile = new File(uploadPath, uploadFileName);
+
+			try {
+				// 업로드 폴더와 멀티파트 파일의 원본 파일 이름을 사용하여 File 객체를 생성
+				/*
+				 * File savefile = new File(uploadFolder, multipartFile.getOriginalFilename());
+				 */
+				// 파일을 지정된 경로에 저장
+				multipartFile.transferTo(saveFile);
+
+				// @@ UUID, 파일 경로 객체에 저장
+				fileDTO.setUuid(uuid.toString());
+				fileDTO.setStoredPath(uploadFolderPath);
+				fileDTO.setMimeType(multipartFile.getContentType());
+				fileDTO.setSizeBytes(multipartFile.getSize());
+				System.out.println("ORIGINALNAME : "+fileDTO.getOriginalName());
+				System.out.println("UUID : "+fileDTO.getUuid());
+				System.out.println("STOREDPATH : "+fileDTO.getStoredPath());
+				System.out.println("MIMETYPE : "+fileDTO.getMimeType());
+				System.out.println("SIZEBYTES : "+fileDTO.getSizeBytes());
+//				fileDTO.setCreatedAt(LocalDateTime.now().toString()); // DB에서 now() 써도 됨
+
+				// 저장한 파일이 이미지인 경우 썸네일 생성
+				if (checkImageType(saveFile)) {
+					// 이미지 불린 처리
+					fileDTO.setImage(true);
+					FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
+					Thumbnailator.createThumbnail(multipartFile.getInputStream(), thumbnail, 100, 100);
+					thumbnail.close(); // 파일 출력 스트림을 닫음
+				}
+				// @@
+				list.add(fileDTO);
+
+			} catch (Exception e) { // 파일 저장 중 예외 발생 시 에러 메시지 출력
+				log.error(e.getMessage());
+			} // end catch
+		}
+		// @@ DB에 file 정보 넣어야함@@@@@@@@@@@@@@@@@@@@@@@@@@ list니까 foreach문 돌려야되나?
+		for (FileAssetDTO fileDTO : list) {
+//		    fileMapper.insertFile(fileDTO);  // 매퍼 메소드 호출
+		}
+		// 클라이언트에게 업로드가 성공했음을 나타내는 HTTP 응답을 생성
+		// 리스트는 업로드된 각 파일의 정보를 담고 있으며, HttpStatus.OK는 HTTP 상태 코드를 리턴
+		return new ResponseEntity<List<FileAssetDTO>>(list, HttpStatus.OK);
+	}
+
+	// 현재 날짜를 기준으로 업로드된 파일을 저장할 서브 폴더 경로를 생성하는 메서드
+	private String getFolder() {
+		// 현재 날짜 정보를 포함한 경로 생성
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		String str = sdf.format(date); // 2024-02-12
+		// 현재 날짜를 기준으로 생성된 서브 폴더 경로 문자열
+		return str.replace("-", File.separator);
+	}
+
+	// 이미지 파일 유무 체크. 마임타입 확인
+	private boolean checkImageType(File file) {
+		try {
+			// 파일의 마임 타입을 확인하여 이미지인지 여부를 판단
+			String contentType = Files.probeContentType(file.toPath());
+			return contentType.startsWith("image");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		// 마임 타입을 확인할 수 없는 경우 이미지가 아닌 것으로 간주
+		return false;
+	}
+
+	@GetMapping("/display")
+	@ResponseBody
+	// 클라이언트에게 파일 전송
+	// 파일 응답받음
+	public ResponseEntity<byte[]> getFile(String fileName) {
+		// 파일명
+		log.info("display fileName : " + fileName);
+		// 파일 경로
+		File file = new File("c:\\upload\\" + fileName);
+
+		log.info("file path :" + file);
+
+		ResponseEntity<byte[]> result = null;
+
+		try {
+			HttpHeaders header = new HttpHeaders();
+			// MIME 타입 헤더에 추가
+			header.add("Content-type", Files.probeContentType(file.toPath()));
+			// 파일 내용 바이트 배열로 복사하여 ResponseEntity 생성
+			result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

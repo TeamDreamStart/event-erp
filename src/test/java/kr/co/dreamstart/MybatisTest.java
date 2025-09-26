@@ -148,7 +148,6 @@ public class MybatisTest {
 	}
 
 
-
 	@Test
 	public void userListTest() {
 		try (SqlSession session = sqlFactory.openSession()) {
