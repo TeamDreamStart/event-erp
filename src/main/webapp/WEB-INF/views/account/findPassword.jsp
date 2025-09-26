@@ -25,6 +25,7 @@
 				<a href="#">Visit</a>
 				<a href="#">Event</a>
 				<a href="#">Notice</a>
+				<a href="#">Help</a>
 			</nav>
 	</header>
 	<div class="container">

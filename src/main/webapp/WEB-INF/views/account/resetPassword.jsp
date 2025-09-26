@@ -2,10 +2,12 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<script src="<c:url value='/js/main.js'/>"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet"/>
+<title>resetPassword</title>
 </head>
 <body>
 <header class="header">
@@ -22,8 +24,9 @@
 		</div>
 			<nav class="header-nav">
 				<a href="#">Visit</a>
-				<a href="#">Event</a>
-				<a href="#">Notice</a>
+				<a href="/events">Event</a>
+				<a href="/notices">Notice</a>
+                <a href="#">Help</a>
 			</nav>
 	</header>
 	<div class="container">
