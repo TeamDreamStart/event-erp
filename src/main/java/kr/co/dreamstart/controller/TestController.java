@@ -148,5 +148,17 @@ public class TestController {
 		model.addAttribute("cri", cri);
 		return "test/boardTest";
 	}
-
+	
+	@GetMapping("/find-password")
+	public String findPass() {
+		return "/account/findPassword";
+	}
+	@GetMapping("/login")
+	public String loginTest() {
+		return "/account/login";
+	}
+	@GetMapping("/reset-password")
+	public String reseTest() {
+		return "/account/resetPassword";
+	}
 }

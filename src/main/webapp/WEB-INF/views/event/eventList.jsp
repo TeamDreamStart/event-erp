@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>eventList</title>
 </head>
 <body>
 	<header class="header">
@@ -124,13 +124,10 @@
 	</main>
 
 	<footer class="footer">
-		<h1>Contacts</h1>
-			<address class="footer-address">
-				수원시 팔달구 덕영대로 899번길 11
-			</address>
-    <div class="footer-phone">
-      대표전화: 031-420-4204
-    </div>
+		<p>수원시 팔달구 덕영대로 895번길 11</p>
+		<p>대표전화. 031-420-4204</p>
+		<hr class="footer-hr">
+		<p>@jfdfhfksehfkjsnckaul</p>
 	</footer>
 </body>
 </html>

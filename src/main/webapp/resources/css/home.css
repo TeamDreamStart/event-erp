@@ -86,6 +86,7 @@ body {
     min-width: 90px; /* 내용에 따라 너비가 유동적으로 변하되 최소 너비 보장 */
     height: 100%; /* 부모 .user-actions의 높이에 맞춤 */
     box-sizing: border-box; /* 패딩과 보더가 너비에 포함되도록 */
+    
 }
 
 .mypage-link:hover {
