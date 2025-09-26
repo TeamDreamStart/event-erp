@@ -1,73 +1,87 @@
-<configuration debug="true">
-	<!-- ★ 네 PC 절대경로로 바꿔 -->
-	<property name="LOG_DIR" value="${APP_LOG_DIR}" />
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
 
-
-	<!-- 내부 상태 메시지를 콘솔에 찍음: 어떤 설정/파일이 로딩됐는지 확인용 -->
+	<!-- 내부 초기화 상태 로그를 콘솔에 안 찍도록 비활성화 -->
 	<statusListener
-		class="ch.qos.logback.core.status.OnConsoleStatusListener" />
+		class="ch.qos.logback.core.status.NopStatusListener" />
 
+	<!-- 프로젝트 상대 경로: was-logs 폴더 사용 -->
+	<property name="LOG_DIR" value="was-logs" />
+
+	<!-- 콘솔: 핵심 결과/메시지만 출력 (INFO 이상) -->
+	<appender name="STDOUT"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<encoder>
+			<pattern>%d{HH:mm:ss} %-5level - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- info 파일 (모든 INFO 레벨 메시지) -->
 	<appender name="INFO_FILE"
 		class="ch.qos.logback.core.FileAppender">
 		<file>${LOG_DIR}/info.txt</file>
-		<append>false</append> <!-- 재실행 시 비움 -->
+		<append>true</append>
 		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%logger{36}] - %msg%n
+			</pattern>
 		</encoder>
-		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
 			<level>INFO</level>
-			<onMatch>ACCEPT</onMatch>
-			<onMismatch>DENY</onMismatch>
 		</filter>
 	</appender>
 
+	<!-- warn 파일 -->
 	<appender name="WARN_FILE"
 		class="ch.qos.logback.core.FileAppender">
 		<file>${LOG_DIR}/warn.txt</file>
-		<append>false</append>
+		<append>true</append>
 		<encoder>
-			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%logger{36}] - %msg%n
 			</pattern>
 		</encoder>
-		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
 			<level>WARN</level>
-			<onMatch>ACCEPT</onMatch>
-			<onMismatch>DENY</onMismatch>
 		</filter>
 	</appender>
 
+	<!-- error 파일 -->
 	<appender name="ERROR_FILE"
 		class="ch.qos.logback.core.FileAppender">
 		<file>${LOG_DIR}/error.txt</file>
-		<append>false</append>
+		<append>true</append>
 		<encoder>
-			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%logger{36}] - %msg%n
 			</pattern>
 		</encoder>
-		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
 			<level>ERROR</level>
-			<onMatch>ACCEPT</onMatch>
-			<onMismatch>DENY</onMismatch>
 		</filter>
 	</appender>
 
-	<!-- 선택: 요약 전용 -->
+	<!-- DB summary 전용 파일 (이름 스크린샷과 동일하게) -->
 	<appender name="DB_SUMMARY_FILE"
 		class="ch.qos.logback.core.FileAppender">
 		<file>${LOG_DIR}/test-db-summary.txt</file>
-		<append>false</append>
+		<append>true</append>
 		<encoder>
-			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n
-			</pattern>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level - %msg%n</pattern>
 		</encoder>
 	</appender>
-	<logger name="db.summary" level="INFO" additivity="false">
-		<appender-ref ref="DB_SUMMARY_FILE" />
-	</logger>
 
+	<!-- 루트 로거: 콘솔(간단) + 파일(상세) -->
 	<root level="INFO">
+		<appender-ref ref="STDOUT" />
 		<appender-ref ref="INFO_FILE" />
 		<appender-ref ref="WARN_FILE" />
 		<appender-ref ref="ERROR_FILE" />
 	</root>
+
+	<!-- db.summary 전용 로거(원래처럼 파일에만 기록) -->
+	<logger name="db.summary" additivity="false" level="INFO">
+		<appender-ref ref="DB_SUMMARY_FILE" />
+	</logger>
+
 </configuration>

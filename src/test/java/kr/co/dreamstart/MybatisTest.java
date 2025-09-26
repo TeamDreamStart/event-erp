@@ -291,4 +291,77 @@ public class MybatisTest {
 		boolean ok = passwordEncoder.matches("1234", dto.getPassword());
 		log.info("matches={}", ok);
 	}
+	
+	@Test
+	public void templateQaIntegrityTest() {
+		try (SqlSession session = sqlFactory.openSession()) {
+			SurveyMapper mapper = session.getMapper(SurveyMapper.class);
+
+			List<SurveyDTO> surveys = mapper.surveyAll();
+			List<SurveyQuestionDTO> allQuestions = mapper.questionAll();
+			List<SurveyOptionDTO> allOptions = mapper.optionAll();
+
+			assertNotNull("surveys null", surveys);
+			assertNotNull("questions null", allQuestions);
+			assertNotNull("options null", allOptions);
+
+			// 템플릿만 필터링 (templateKey가 있는 설문을 템플릿으로 간주)
+			int templateCount = 0;
+			StringBuilder sb = new StringBuilder();
+
+			for (SurveyDTO s : surveys) {
+				String tkey = s.getTemplateKey(); // SurveyDTO에 templateKey 존재한다고 가정 (JSP에서 사용됨)
+				if (tkey == null || tkey.trim().isEmpty()) continue; // 템플릿 아님
+
+				templateCount++;
+
+				// 템플릿의 문항 목록
+				Long surveyId = s.getSurveyId();
+				int questionCnt = 0;
+
+				for (SurveyQuestionDTO q : allQuestions) {
+					if (q.getSurveyId() == surveyId) questionCnt++;
+				}
+
+				log.info("[TEMPLATE] surveyId={} templateKey={} title='{}' -> questionCnt={}",
+						surveyId, tkey, s.getTitle(), questionCnt);
+
+				// 문항 20개 확인
+				if (questionCnt != 20) {
+					sb.append(String.format(" - [Q COUNT MISMATCH] surveyId=%d templateKey=%s expected=20 actual=%d%n",
+							surveyId, tkey, questionCnt));
+				}
+
+				// 각 문항별 보기 5개 확인 (디테일 로그)
+				for (SurveyQuestionDTO q : allQuestions) {
+					if (q.getSurveyId() != surveyId) continue;
+
+					Long qid = q.getQuestionId();
+					int optCnt = 0;
+					for (SurveyOptionDTO op : allOptions) {
+						if (op.getQuestionId() == qid) optCnt++;
+					}
+
+					if (optCnt != 5) {
+						sb.append(String.format("   * [OPT COUNT MISMATCH] surveyId=%d qId=%d expected=5 actual=%d%n",
+								surveyId, qid, optCnt));
+					}
+				}
+			}
+
+			log.info("[TEMPLATE] total templates found={}", templateCount);
+			if (templateCount == 0) {
+				fail("템플릿이 한 건도 없습니다. (SurveyDTO.templateKey 기준)");
+			}
+
+			if (sb.length() > 0) {
+				log.error("무결성 위반 내역:\n{}", sb);
+				fail("템플릿 문항/보기 수 검증 실패. 로그를 확인하세요.");
+			}
+		} catch (Exception e) {
+			log.error("templateQaIntegrityTest error", e);
+			fail(e.getMessage());
+		}
+	}
+
 }
