@@ -148,5 +148,12 @@ public class TestController {
 		model.addAttribute("cri", cri);
 		return "test/boardTest";
 	}
-
+	@GetMapping("/notices/{id}")
+	public String noticeDetail() {
+		return "/board/noticeDetail";
+	}
+	@GetMapping("/qna/{id}")
+	public String qnaDetail() {
+		return "/board/qnaDetail";
+	}
 }
