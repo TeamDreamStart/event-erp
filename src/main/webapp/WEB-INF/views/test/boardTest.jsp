@@ -72,7 +72,7 @@
 			<tbody>
 				<!-- 존재하지 않는 사원번호 검색시-->
 				<c:choose>
-					<c:when test="${empty boardList}">
+					<c:when test="${empty postList}">
 						<tr>
 							<td class="text-center" colspan="7">게시글이 없습니다.</td>
 						</tr>

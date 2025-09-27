@@ -39,6 +39,7 @@ import kr.co.dreamstart.dto.FileAssetDTO;
 import kr.co.dreamstart.dto.PageVO;
 import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.mapper.BoardMapper;
+import kr.co.dreamstart.mapper.FileAssetMapper;
 import kr.co.dreamstart.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnailator;
@@ -52,6 +53,9 @@ public class TestController {
 
 	@Autowired
 	private BoardMapper boardMapper;
+	
+	@Autowired
+	private FileAssetMapper fileMapper;
 
 	@GetMapping("/list-test")
 	public String userList(@RequestParam(required = false) Integer userId, Criteria cri, Model model) {
@@ -151,12 +155,13 @@ public class TestController {
 	 * return "test/boardTest"; }
 	 */
 
+	// DETAIL
 	@GetMapping("board-test/{postId}")
 	public String detailTest(@PathVariable("postId") long postId, Model model) {
 		// detail 클릭할 때 마다 조회수 증가
 		boardMapper.viewCountPlus(postId);
 
-		BoardPostDTO boardDTO = boardMapper.select(postId);
+		BoardPostDTO boardDTO = boardMapper.select("NOTICE",postId);
 
 		model.addAttribute("boardDTO", boardDTO);
 
@@ -166,6 +171,7 @@ public class TestController {
 		BoardPostDTO nextDTO = boardMapper.selectNext("NOTICE", postId);
 		model.addAttribute("nextDTO", nextDTO);
 
+		//댓글
 		int commentCount = boardMapper.commentCount(postId);
 		if (commentCount > 0) {
 			List<BoardCommentDTO> commentList = boardMapper.commentList(postId);
@@ -176,7 +182,7 @@ public class TestController {
 
 	@GetMapping("board-test/{postId}/update")
 	public String updateTest(@PathVariable("postId") long postId, Model model) {
-		BoardPostDTO postDTO = boardMapper.select(postId);
+		BoardPostDTO postDTO = boardMapper.select("NOTICE",postId);
 
 		model.addAttribute("postDTO", postDTO);
 		model.addAttribute("formType", "update");
@@ -232,8 +238,9 @@ public class TestController {
 	}
 
 	@GetMapping("/upload")
-	public String fileTest() {
-
+	public String fileTest(Model model) {
+		List<FileAssetDTO> fileList = fileMapper.select("board_post", 1);
+		model.addAttribute("fileList", fileList);
 		return "/test/fileTest";
 	}
 
@@ -400,5 +407,17 @@ public class TestController {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	@GetMapping("/admin/main")
+	public String bootTest() {
+		
+		return "/admin/index";
+	}
+	
+	@GetMapping("/admin/tables")
+	public String tablesTest() {
+		
+		return "/admin/tables";
 	}
 }

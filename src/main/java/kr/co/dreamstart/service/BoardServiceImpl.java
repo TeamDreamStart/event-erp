@@ -25,14 +25,15 @@ public class BoardServiceImpl implements BoardService {
 		List<BoardPostDTO> postList = null;
 		int totalPostCount = mapper.postCount(visibility, category);
 		// 검색 안할시
-		if (searchType == null|| searchType.isEmpty()) {
+		if (keyword == null || keyword.isEmpty()) {
 			postList = mapper.postList(cri, visibility, category);
+			totalPostCount = mapper.postCount(visibility, category);
 		} else {
 			// 검색어 공백 제거 처리
 			keyword = keyword.replaceAll("\\s", "");
-			postList = mapper.postSearch(category, searchType, keyword);
+			postList = mapper.postSearch(visibility,category, searchType, keyword);
 			// 페이징 처리하기 위해 검색된 게시물 갯수만 받아옴
-			totalPostCount = postList.size();
+			totalPostCount = mapper.postSearchCount(visibility, category, searchType, keyword);
 		}
 		// 페이징 처리를 위한 객체
 		PageVO pageVO = new PageVO();
@@ -43,10 +44,29 @@ public class BoardServiceImpl implements BoardService {
 			cri.setPage(pageVO.getTotalPage() > 0 ? pageVO.getTotalPage() : 1);
 		}
 		map.put("totalCount", totalPostCount);
-		map.put("postList",postList);
-		map.put("pageVO",pageVO);
+		map.put("postList", postList);
+		map.put("pageVO", pageVO);
 		map.put("cri", cri);
 		
+		return map;
+	}
+	
+
+	@Override
+	public Map<String, Object> postDetail(String category, long postId) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		// 조회수 증가
+		mapper.viewCountPlus(postId);
+		// 게시물 하나 선택
+		BoardPostDTO postDTO = mapper.select(category,postId);
+		
+		// 이전글
+		BoardPostDTO prevDTO = mapper.selectPrev(category, postId);
+		// 다음글
+		BoardPostDTO nextDTO = mapper.selectNext(category, postId);
+		map.put("postDTO", postDTO);
+		map.put("prevDTO", prevDTO);
+		map.put("nextDTO", nextDTO);
 		return map;
 	}
 

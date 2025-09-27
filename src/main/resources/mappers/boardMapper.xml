@@ -10,7 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="title" property="title" />
 		<result column="content" property="content" />
 		<result column="user_id" property="userId" />
-		<result column="is_pinned" property="isPinned" />
+		<result column="is_pinned" property="pinned" />
 		<result column="visibility" property="visibility" />
 		<result column="view_count" property="viewCount" />
 		<result column="created_at" property="createdAt" />
@@ -31,17 +31,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="postCount" resultType="int">
 		select count(*) from
 		`board_post` where `visibility` = #{visibility}
-		AND `category` = #{category}
+		AND `category` =
+		#{category}
 	</select>
 
 	<!-- 서브쿼리로 게시물당 댓글 개수를 매칭해서 가져옴 -->
 	<select id="postList" resultMap="boardPostMap">
 		select p.*,(SELECT COUNT(*)
-		FROM board_comment c WHERE c.post_id = p.post_id) AS comment_count
-		from `board_post` p
+		FROM
+		board_comment c WHERE c.post_id = p.post_id) AS comment_count
+		from
+		`board_post` p
 		where `visibility` = #{visibility}
-		AND `category` = #{category}
+		AND `category` =
+		#{category}
 		order by
+		`is_pinned` DESC,
 		`post_id` DESC
 		limit
 		#{cri.pageStart},#{cri.perPageNum}
@@ -51,10 +56,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="postInsert" useGeneratedKeys="true"
 		keyProperty="postId">
 		insert into `board_post`
-		(`category`,`title`,`content`,`user_id`,`visibility`,`created_at`)
+		(`category`,`title`,`content`,`user_id`,`pinned`,`visibility`,`created_at`)
 		values
-		(#{category},#{title},#{content},#{userId},#{visibility},now())
+		(#{category},#{title},#{content},#{userId},#{pinned},#{visibility},now())
 	</insert>
+
 
 	<update id="postUpdate">
 		update `board_post` set <!-- `category`= #{postDTO.category}, -->
@@ -66,15 +72,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="select" resultMap="boardPostMap">
 		select * from `board_post` where
+		`category`= #{category} and
 		`post_Id` = #{postId}
 	</select>
 	<select id="selectPrev" resultMap="boardPostMap">
-		select * from `board_post` where `category`=#{category} and
+		select * from `board_post` where `category`= #{category} and
 		`post_Id` <![CDATA[<]]>
 		#{postId} order by `post_Id` desc limit 1
 	</select>
 	<select id="selectNext" resultMap="boardPostMap">
-		select * from `board_post` where `category`=#{category} and
+		select * from `board_post` where `category`= #{category} and
 		`post_Id` <![CDATA[>]]>
 		#{postId} order by `post_Id` asc limit 1
 	</select>
@@ -107,6 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from `board_post`
 		<where>
 			`category` = #{category}
+			AND `visibility` = #{visibility}
 			<if test="searchType == 'title'">
 				and `title` like concat('%', #{keyword}, '%') </if>
 			<if test="searchType == 'content'"> and `content` like concat('%', #{keyword}, '%')
@@ -115,11 +123,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				#{keyword}, '%') or
 				`title` like concat('%', #{keyword}, '%') ) </if>
 		</where>
+		order by
+		`is_pinned` DESC,
+		`post_id` DESC
 	</select>
-	<!-- searchType 필요 없을 시 (ALL) -->
-	<!-- <select id="postSearch" resultMap="boardPostMap"> select * from `board_post` 
-		WHERE `category` = #{category} and ( `content` like concat('%', #{keyword}, 
-		'%') or `title` like concat('%', #{keyword}, '%') ) </select> -->
+
+	<select id="postSearchCount" resultType="int">
+		select count(*) from board_post
+		<where>
+			`category` = #{category}
+			AND `visibility` = #{visibility}
+			<if test="searchType == 'title'">
+				and `title` like concat('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'content'">
+				and `content` like concat('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'all'">
+				and (`title` like concat('%', #{keyword}, '%')
+				or `content` like concat('%', #{keyword}, '%'))
+			</if>
+		</where>
+	</select>
+
 
 
 	<select id="commentCount" parameterType="long" resultType="int">

@@ -45,7 +45,7 @@ public class BoardTest {
 	public void boardSelectTest() {
 		try (SqlSession session = sqlFactory.openSession()) {
 			BoardMapper mapper = session.getMapper(BoardMapper.class);
-			BoardPostDTO postDTO = mapper.select(13);
+			BoardPostDTO postDTO = mapper.select("NOTICE",13);
 			int view = mapper.viewCount(13);
 			log.info("select test result : {}", postDTO);
 			log.info("viewCount result : {}", view);
@@ -73,7 +73,7 @@ public class BoardTest {
 					log.info("새로 생성된 post_id : " + post.getPostId());
 					result = -1;
 				}
-				BoardPostDTO resultDTO = mapper.select(post.getPostId());
+				BoardPostDTO resultDTO = mapper.select("NOTICE",post.getPostId());
 				log.info("insert result : {}", resultDTO);
 				System.out.println(resultDTO);
 			}
@@ -88,7 +88,7 @@ public class BoardTest {
 		try (SqlSession session = sqlFactory.openSession()) {
 			BoardMapper mapper = session.getMapper(BoardMapper.class);
 			String category = "QNA";
-			List<BoardPostDTO> list = mapper.postSearch(category,"TITLE","test");
+			List<BoardPostDTO> list = mapper.postSearch("PUBLIC", category, "ALL", "공지");
 			if (list!=null) {
 				for (BoardPostDTO postDTO : list) {
 					System.out.println(postDTO);

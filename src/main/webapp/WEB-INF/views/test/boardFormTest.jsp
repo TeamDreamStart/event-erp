@@ -15,7 +15,6 @@
 </head>
 <body>
 	<div class="container">
-
 		<c:choose>
 			<c:when test="${empty postDTO && formType ne 'insert'}">
 				<div class="alert alert-danger" role="alert">존재하지 않는 게시글입니다.</div>

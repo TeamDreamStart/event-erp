@@ -13,4 +13,5 @@ public interface BoardService {
 	public Map<String, Object> postList(Criteria cri, String category, String visibility, String searchType,
 			String keyword);
 
+	public Map<String,Object> postDetail(String category,long postId);
 }

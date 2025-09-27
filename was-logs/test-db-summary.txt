@@ -1,2 +1,1 @@
-[2025-09-26 11:04:37][TEST] INFO  kr.co.dreamstart.BoardTest - fileInfoDBInsertTest : success
-[2025-09-26 11:06:03][TEST] INFO  kr.co.dreamstart.BoardTest - fileInfoDBInsertTest : success
+[2025-09-27 19:07:18][TEST] INFO  kr.co.dreamstart.BoardTest - fileInfoDBInsertTest : success

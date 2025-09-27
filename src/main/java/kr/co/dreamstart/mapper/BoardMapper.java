@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import kr.co.dreamstart.dto.BoardCommentDTO;
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
+import kr.co.dreamstart.dto.FileAssetDTO;
 
 @Mapper
 public interface BoardMapper {
@@ -20,15 +21,19 @@ public interface BoardMapper {
 	public List<BoardPostDTO> postList(@Param("cri") Criteria cri, 
 			@Param("visibility") String visibility,
 			@Param("category") String category);
+	
+	
 
 	// insert visibility -> 일반회원 hidden, 관리자 select /  category -> hidden
 	public int postInsert(BoardPostDTO postDTO);
-
+	
+	
+	
 	// update
 	public int postUpdate(@Param("postDTO") BoardPostDTO postDTO);
 
 	// 상세보기 selectOne - detail
-	public BoardPostDTO select(long postId);
+	public BoardPostDTO select(@Param("category") String category,long postId);
 
 	// 이전 글
 	public BoardPostDTO selectPrev(@Param("category") String category, @Param("postId") long postId);
@@ -50,10 +55,13 @@ public interface BoardMapper {
 
 	// 게시물 검색 - 공지/Q&A(category)- NOTICE/QNA,
 	// 제목/내용,제목,내용(searchType)-TITLE/CONTENT/ALL, 검색어(keyword)
-	public List<BoardPostDTO> postSearch(@Param("category") String category, 
+	public List<BoardPostDTO> postSearch(@Param("visibility")String visibility,@Param("category") String category, 
 			@Param("searchType") String searchType,
 			@Param("keyword") String keyword);
 
+	public int postSearchCount(@Param("visibility")String visibility,@Param("category") String category, 
+			@Param("searchType") String searchType,
+			@Param("keyword") String keyword);
 	// 게시물당 댓글 갯수
 	public int commentCount(long postId);
 
