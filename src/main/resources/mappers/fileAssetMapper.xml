@@ -41,23 +41,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 
-	<insert id="insert" parameterType="FileAssetDTO">
+	<insert id="insertFileInfo" parameterType="FileAssetDTO"
+		useGeneratedKeys="true" keyProperty="fileId">
 		insert into `file_asset`
-		(`owner_type`, `owner_id`, `original_name`, `stored_path`,
-		`mime_type`, `size_bytes`, `created_at`, `uuid`) values
-		(#{ownerType},
-		#{ownerId}, #{originalName}, #{storedPath}, #{mimeType}, #{sizeBytes},
+		(`original_name`, `stored_path`,
+		`mime_type`, `size_bytes`,
+		`created_at`, `uuid`) values
+		(#{originalName}, #{storedPath}, #{mimeType}, #{sizeBytes},
 		now(), #{uuid})
 	</insert>
-	
-	<update id="update">
-	
+
+	<update id="insertFileOwner">
+		update `file_asset` set `owner_type` = #{ownerType}, `owner_id` = #{ownerId}  where `file_id` = #{fileId}
 	</update>
-	
+
+	<update id="update">
+
+	</update>
+
 	<delete id="deleteByOwner">
-		delete from `file_asset` where `owner_type` = #{ownerType} and `owner_id` = #{ownerId}
+		delete from `file_asset` where `owner_type` =
+		#{ownerType} and `owner_id` = #{ownerId}
 	</delete>
-	
+
 	<delete id="delete">
 		delete from `file_asset` where `file_id` = #{fileId}
 	</delete>

@@ -10,13 +10,18 @@ import org.springframework.stereotype.Service;
 import kr.co.dreamstart.dto.BoardCommentDTO;
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
+import kr.co.dreamstart.dto.FileAssetDTO;
 import kr.co.dreamstart.dto.PageVO;
 import kr.co.dreamstart.mapper.BoardMapper;
+import kr.co.dreamstart.mapper.FileAssetMapper;
 
 @Service
 public class BoardServiceImpl implements BoardService {
 	@Autowired
 	private BoardMapper mapper;
+	
+	@Autowired
+	private FileAssetMapper fileMapper;
 
 	@Override
 	public Map<String, Object> postList(Criteria cri, String category, String visibility, String searchType,
@@ -31,7 +36,7 @@ public class BoardServiceImpl implements BoardService {
 		} else {
 			// 검색어 공백 제거 처리
 			keyword = keyword.replaceAll("\\s", "");
-			postList = mapper.postSearch(visibility,category, searchType, keyword);
+			postList = mapper.postSearch(cri,visibility,category, searchType, keyword);
 			// 페이징 처리하기 위해 검색된 게시물 갯수만 받아옴
 			totalPostCount = mapper.postSearchCount(visibility, category, searchType, keyword);
 		}
@@ -57,16 +62,17 @@ public class BoardServiceImpl implements BoardService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 조회수 증가
 		mapper.viewCountPlus(postId);
-		// 게시물 하나 선택
+		// 현재 게시물
 		BoardPostDTO postDTO = mapper.select(category,postId);
-		
 		// 이전글
 		BoardPostDTO prevDTO = mapper.selectPrev(category, postId);
 		// 다음글
 		BoardPostDTO nextDTO = mapper.selectNext(category, postId);
+		List<FileAssetDTO> fileList = fileMapper.select("board_post", postId);
 		map.put("postDTO", postDTO);
 		map.put("prevDTO", prevDTO);
 		map.put("nextDTO", nextDTO);
+		map.put("fileList",fileList);
 		return map;
 	}
 

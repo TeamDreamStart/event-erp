@@ -35,31 +35,39 @@
 		<div class="container-fluid">
 
 			<!-- Page Heading -->
-			<h1 class="h3 mb-2 text-gray-800">FORM</h1>
-			<p class="mb-4">
-				DataTables is a third party plugin that is used to generate the demo
-				table below. For more information about DataTables, please visit the
-				<a target="_blank" href="https://datatables.net">official
-					DataTables documentation</a>.
-			</p>
+			<h1 class="h3 mb-2 text-gray-800">
+				${postDTO.category}
+				<c:if test="${formType eq 'INSERT'}">작성</c:if>
+				<c:if test="${formType eq 'UPDATE'}">수정</c:if>
+			</h1>
 
 			<!-- DataTales Example -->
 			<div class="card shadow mb-4">
 				<div class="card-header py-3">
-					<h6 class="m-0 font-weight-bold text-primary">DataTables
-						Example</h6>
+					<h6 class="m-0 font-weight-bold text-primary">${formType}</h6>
 				</div>
 				<div class="card-body">
 
 
 					<form method="post"
 						action="<c:choose>
-							<c:when test='${formType eq "insert"}'>${pageContext.request.contextPath}/board-test/form</c:when>
-							<c:when test='${formType eq "update"}'>${pageContext.request.contextPath}/board-test/${postDTO.postId}/update</c:when>
+							<c:when test='${formType eq "INSERT"}'>${pageContext.request.contextPath}/admin/notices/form</c:when>
+							<c:when test='${formType eq "UPDATE"}'>${pageContext.request.contextPath}/admin/notices/${postDTO.postId}/update</c:when>
 						</c:choose>">
 						<div class="form-group">
 							<label>제목</label> <input type="text" name="title"
 								class="form-control" value="${postDTO.title}">
+						</div>
+						<div class="form-group">
+							<div id="ajaxUpload">
+								<p>파일 업로드 최대 크기는 5MB 입니다.</p>
+								<input type="file" name="uploadFile" multiple>
+								<div class="uploadResult">
+									<ul>
+									</ul>
+								</div>
+							</div>
+							<button id="uploadBtn">업로드</button>
 						</div>
 						<div class="form-group">
 							<label>내용</label>
@@ -72,17 +80,20 @@
 						<option value="QNA" <c:if test="${postDTO.category eq 'QNA'}">selected</c:if>>Q&A</option>
 					</select>
 				</div> --%>
-						<input type="hidden" name="category"
-							value="<c:if test="${postDTO.category eq 'NOTICE'}">NOTICE</c:if>
-							   <c:if test="${postDTO.category eq 'QNA'}">QNA</c:if>">
+						<!-- 작성일,작성자,조회수,수정일은 hidden -->
+						<input type="hidden" name="category" value="NOTICE">
 						<div class="text-right">
-							<a href="${pageContext.request.contextPath}/board-test"
-								class="btn btn-light btn-icon-split">취소</a>
-							<button type="submit" class="btn btn-success">
-								<c:if test="${formType eq 'insert'}">등록</c:if>
-								<c:if test="${formType eq 'update'}">수정</c:if>
-								임시
-							</button>
+							<c:if test="${formType eq 'INSERT'}">
+								<a href="${pageContext.request.contextPath}/admin/notices"
+									class="btn btn-light btn-icon-split">취소</a>
+								<button type="submit" class="btn btn-success">등록</button>
+							</c:if>
+							<c:if test="${formType eq 'UPDATE'}">
+								<a
+									href="${pageContext.request.contextPath}/admin/notices/${postDTO.postId}"
+									class="btn btn-light btn-icon-split">취소</a>
+								<button type="submit" class="btn btn-success">수정</button>
+							</c:if>
 						</div>
 					</form>
 

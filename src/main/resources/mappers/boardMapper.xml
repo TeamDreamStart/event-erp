@@ -29,22 +29,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 
 	<select id="postCount" resultType="int">
-		select count(*) from
-		`board_post` where `visibility` = #{visibility}
-		AND `category` =
-		#{category}
+		select count(*) from board_post
+		where category = #{category}
+		<if test="visibility != 'ALL'">
+			and visibility = #{visibility}
+		</if>
 	</select>
+
 
 	<!-- 서브쿼리로 게시물당 댓글 개수를 매칭해서 가져옴 -->
 	<select id="postList" resultMap="boardPostMap">
 		select p.*,(SELECT COUNT(*)
 		FROM
-		board_comment c WHERE c.post_id = p.post_id) AS comment_count
+		board_comment c WHERE c.post_id =
+		p.post_id) AS comment_count
 		from
 		`board_post` p
-		where `visibility` = #{visibility}
-		AND `category` =
-		#{category}
+		where 1=1
+		<if test="visibility != 'ALL'">
+			and visibility = #{visibility}
+		</if>
+		and category = #{category}
 		order by
 		`is_pinned` DESC,
 		`post_id` DESC
@@ -126,6 +131,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		order by
 		`is_pinned` DESC,
 		`post_id` DESC
+		limit
+		#{cri.pageStart},#{cri.perPageNum}
 	</select>
 
 	<select id="postSearchCount" resultType="int">
@@ -141,7 +148,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="searchType == 'all'">
 				and (`title` like concat('%', #{keyword}, '%')
-				or `content` like concat('%', #{keyword}, '%'))
+				or
+				`content` like concat('%', #{keyword}, '%'))
 			</if>
 		</where>
 	</select>

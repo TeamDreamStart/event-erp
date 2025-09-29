@@ -40,25 +40,29 @@
 			<h1 class="h3 mb-2 text-gray-800">공지사항</h1>
 
 			<!-- DataTales Example -->
-			<div class="card shadow mb-4">
+			<div  style="max-width:1200px" class="card shadow mb-4">
 				<div class="card-header py-3">
 					<h6 class="m-0 font-weight-bold text-primary">Notice</h6>
 				</div>
 				<div class="card-body">
-					<p>게시물 총 갯수 : ${totalCount}</p>
-					<div>
+					<a type="button" href="/admin/notices/form" class="btn btn-success">작성</a>
+					<div style="display: flex; justify-content: flex-end; height:45px">
 						<form action="/admin/notices" method="get">
-							<select name="visibility">
-								<option value="PUBLIC">공개</option>
-								<option value="PRIVATE">비공개</option>
+							<input type="hidden" name="searchType" value="${searchType}">
+							<input type="hidden" name="keyword" value="${keyword}"> <select
+								name="visibility" class="custom-select custom-select-sm form-control form-control-sm" style="width:135px">
+								<option value="ALL">전체글 보기</option>
+								<option value="PUBLIC">공개글만 보기</option>
+								<option value="PRIVATE">비공개글만 보기</option>
 							</select>
 							<button class="btn btn-primary" type="submit">선택</button>
 						</form>
 					</div>
-					<div style="display: flex; justify-content: flex-end">
+					<div style="display: flex; justify-content: flex-end; height:45px" >
 
 						<form action="/admin/notices" method="get">
-							<select name="searchType">
+						<input type="hidden" name="visibility" value="${visibility }">
+							<select name="searchType" class="custom-select custom-select-sm form-control form-control-sm" style="width:65px">
 								<option value="all" selected>전체&nbsp;&nbsp;&nbsp;</option>
 								<option value="title">제목</option>
 								<option value="content">내용</option>
@@ -126,25 +130,29 @@
 						<div class="dataTables_paginate paging_simple_numbers">
 							<ul class="pagination" style="justify-content: center">
 								<c:if test="${pageVO.prev}">
-									<li><a class="page-link" href="/admin/notices?page=1">&laquo;&laquo;</a></li>
+									<li><a class="page-link"
+										href="/admin/notices?page=1&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&laquo;&laquo;</a></li>
 									<li><a class="paginate_button page-item previous"
-										href="/admin/notices?page=${pageVO.startPage - 1}">&laquo;</a></li>
+										href="/admin/notices?page=${pageVO.startPage - 1}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&laquo;</a></li>
 								</c:if>
 
 								<c:forEach begin="${pageVO.startPage}" end="${pageVO.endPage}"
 									var="idx">
 									<li class="${pageVO.cri.page == idx ? 'active' : ''}"><a
-										class="page-link" href="/admin/notices?page=${idx}">${idx}</a></li>
+										class="page-link"
+										href="/admin/notices?page=${idx}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">${idx}</a></li>
 								</c:forEach>
 
 								<c:if test="${pageVO.next}">
 									<li><a class="paginate_button page-item next"
-										href="/admin/notices?page=${pageVO.endPage + 1}">&raquo;</a></li>
+										href="/admin/notices?page=${pageVO.endPage + 1}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&raquo;</a></li>
 									<li><a class="page-link"
-										href="/admin/notices?page=${pageVO.totalPage}">&raquo;&raquo;</a></li>
+										href="/admin/notices?page=${pageVO.totalPage}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&raquo;&raquo;</a></li>
 								</c:if>
 							</ul>
 						</div>
+						<!-- paging end -->
+						<span>${totalCount}</span>
 					</div>
 				</div>
 			</div>

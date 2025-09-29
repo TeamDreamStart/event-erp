@@ -88,7 +88,8 @@ public class BoardTest {
 		try (SqlSession session = sqlFactory.openSession()) {
 			BoardMapper mapper = session.getMapper(BoardMapper.class);
 			String category = "QNA";
-			List<BoardPostDTO> list = mapper.postSearch("PUBLIC", category, "ALL", "공지");
+			Criteria cri = new Criteria(1,10);
+			List<BoardPostDTO> list = mapper.postSearch(cri,"PUBLIC", category, "ALL", "공지");
 			if (list!=null) {
 				for (BoardPostDTO postDTO : list) {
 					System.out.println(postDTO);
@@ -126,16 +127,16 @@ public class BoardTest {
 		try (SqlSession session = sqlFactory.openSession()) {
 			FileAssetMapper mapper = session.getMapper(FileAssetMapper.class);
 			FileAssetDTO fileDTO = new FileAssetDTO();
-			fileDTO.setOwnerType("board_post");
-			fileDTO.setOwnerId(1);
-			fileDTO.setOriginalName("oil.jpg");
-			fileDTO.setStoredPath("2025\\09\\26");
-			fileDTO.setMimeType("image/jpeg");;
-			fileDTO.setSizeBytes(47894);
-			fileDTO.setUuid("dba45a62-fe1c-4d2c-bf9c-8a030db54b41");
+			fileDTO.setOriginalName("주디.png");
+			fileDTO.setStoredPath("2025\\09");
+			fileDTO.setMimeType("image/png");;
+			fileDTO.setSizeBytes(84459);
+			fileDTO.setUuid("43b6130a-9cf3-4ee0-aa67-60136655f1ad");
 			
 			int result = -1;
-			result = mapper.insert(fileDTO);
+			result = mapper.insertFileInfo(fileDTO);
+			long fileId = fileDTO.getFileId();
+			mapper.insertFileOwner("board_post",4,fileId);
 			if(result>0) {
 				log.info("fileInfoDBInsertTest : success");
 			}

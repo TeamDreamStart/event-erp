@@ -152,9 +152,10 @@
 
 		<h1>DB에 넣은 사진 경로로 사진 불러오기</h1>
 		<c:forEach var="fileDTO" items="${fileList}">
-    <img src="${pageContext.request.contextPath}/upload/${fileDTO.storedPath}/${fileDTO.uuid}_${fileDTO.originalName}" 
-         alt="${fileDTO.originalName}">
-</c:forEach>
+			<img
+				src="${pageContext.request.contextPath}/upload/${fileDTO.storedPath}/${fileDTO.uuid}_${fileDTO.originalName}"
+				alt="${fileDTO.originalName}">
+		</c:forEach>
 
 
 	</article>

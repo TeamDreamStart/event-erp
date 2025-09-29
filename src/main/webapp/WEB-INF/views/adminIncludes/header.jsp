@@ -69,7 +69,6 @@
 
 	<!-- Heading -->
 	<div class="sidebar-heading">Addons</div>
-
 	<!-- Nav Item - Pages Collapse Menu -->
 	<li class="nav-item"><a class="nav-link collapsed" href="#"
 		data-toggle="collapse" data-target="#collapsePages"
@@ -102,8 +101,28 @@
 			class="fas fa-fw fa-table"></i> <span>Reservation Manage</span></a></li>
 	<li class="nav-item"><a class="nav-link" href="tables.html"> <i
 			class="fas fa-fw fa-table"></i> <span>Payment Manage</span></a></li>
-	<li class="nav-item"><a class="nav-link" href="/admin/notices"> <i
-			class="fas fa-fw fa-table"></i> <span>NOTICE</span></a></li>
+	<!-- Nav Item - Pages Collapse Menu -->
+	<li class="nav-item"><a class="nav-link collapsed" href="#"
+		data-toggle="collapse" data-target="#collapsePages"
+		aria-expanded="true" aria-controls="collapsePages"> <i
+			class="fas fa-fw fa-folder"></i> <span>Board</span>
+	</a>
+		<div id="collapsePages" class="collapse"
+			aria-labelledby="headingPages" data-parent="#accordionSidebar">
+			<div class="bg-white py-2 collapse-inner rounded">
+				<h6 class="collapse-header">Notice</h6>
+				<a class="collapse-item" href="/admin/notices">list</a> <a
+					class="collapse-item" href="/admin/notices/form">form</a>
+				<div class="collapse-divider"></div>
+				<h6 class="collapse-header">Q&A</h6>
+				<a class="collapse-item" href="/admin/qna">list</a> <a
+					class="collapse-item" href="blank.html">Blank Page</a>
+			</div>
+		</div></li>
+
+	<!-- <li class="nav-item"><a class="nav-link" href="/admin/notices">
+			<i class="fas fa-fw fa-table"></i> <span>NOTICE</span>
+	</a></li> -->
 	<li class="nav-item"><a class="nav-link" href="tables.html"> <i
 			class="fas fa-fw fa-table"></i> <span>Q&A</span></a></li>
 
@@ -147,7 +166,7 @@
 				<i class="fa fa-bars"></i>
 			</button>
 
-			
+
 			<!-- Topbar Navbar -->
 			<ul class="navbar-nav ml-auto">
 

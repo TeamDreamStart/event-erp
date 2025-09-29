@@ -268,10 +268,10 @@ public class TestController {
 
 	@PostMapping(value = "/uploadAjax", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody // json으로 반환
-	public ResponseEntity<List<FileAssetDTO>> ajaxTest(MultipartFile[] uploadFile) {
+	public ResponseEntity<List<FileAssetDTO>> ajaxTest(@PathVariable(required = false)String ownerType,@PathVariable(required = false)long ownerId,  MultipartFile[] uploadFile) {
 
 		// 업로드된 파일 정보를 담을 리스트 생성
-		List<FileAssetDTO> list = new ArrayList<>();
+		List<FileAssetDTO> fileList = new ArrayList<>();
 		// 업로드 처리 로그 기록
 		log.info("update ajax post.........");
 		// 파일을 저장할 폴더 경로
@@ -324,6 +324,9 @@ public class TestController {
 				multipartFile.transferTo(saveFile);
 
 				// @@ UUID, 파일 경로 객체에 저장
+				fileDTO.setOwnerType(ownerType);
+				fileDTO.setOwnerId(ownerId);
+				
 				fileDTO.setUuid(uuid.toString());
 				fileDTO.setStoredPath(uploadFolderPath);
 				fileDTO.setMimeType(multipartFile.getContentType());
@@ -344,25 +347,26 @@ public class TestController {
 					thumbnail.close(); // 파일 출력 스트림을 닫음
 				}
 				// @@
-				list.add(fileDTO);
+				fileList.add(fileDTO);
 
 			} catch (Exception e) { // 파일 저장 중 예외 발생 시 에러 메시지 출력
 				log.error(e.getMessage());
 			} // end catch
 		}
 		// @@ DB에 file 정보 넣어야함@@@@@@@@@@@@@@@@@@@@@@@@@@ list니까 foreach문 돌려야되나?
-		for (FileAssetDTO fileDTO : list) {
-//		    fileMapper.insertFile(fileDTO);  // 매퍼 메소드 호출
+		for (FileAssetDTO fileDTO : fileList) {
+		    fileMapper.insertFileInfo(fileDTO);  // 매퍼 메소드 호출
+			/* fileMapper.insertFileOwner("board_post", fileDTO.getFileId()); */
 		}
 		// 클라이언트에게 업로드가 성공했음을 나타내는 HTTP 응답을 생성
 		// 리스트는 업로드된 각 파일의 정보를 담고 있으며, HttpStatus.OK는 HTTP 상태 코드를 리턴
-		return new ResponseEntity<List<FileAssetDTO>>(list, HttpStatus.OK);
+		return new ResponseEntity<List<FileAssetDTO>>(fileList, HttpStatus.OK);
 	}
 
 	// 현재 날짜를 기준으로 업로드된 파일을 저장할 서브 폴더 경로를 생성하는 메서드
 	private String getFolder() {
 		// 현재 날짜 정보를 포함한 경로 생성
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
 		Date date = new Date();
 		String str = sdf.format(date); // 2024-02-12
 		// 현재 날짜를 기준으로 생성된 서브 폴더 경로 문자열
@@ -407,6 +411,17 @@ public class TestController {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	@GetMapping("/show")
+	public String justShowTest(Model model) {
+		List<FileAssetDTO> fileList = fileMapper.select("board_post", 1);
+		model.addAttribute("fileList", fileList);
+		for(FileAssetDTO fileDTO : fileList) {
+			System.out.println(fileDTO);
+		}
+		return "/test/fileTest";
+		
 	}
 	
 	@GetMapping("/admin/main")

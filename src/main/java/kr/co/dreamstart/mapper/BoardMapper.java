@@ -33,7 +33,7 @@ public interface BoardMapper {
 	public int postUpdate(@Param("postDTO") BoardPostDTO postDTO);
 
 	// 상세보기 selectOne - detail
-	public BoardPostDTO select(@Param("category") String category,long postId);
+	public BoardPostDTO select(@Param("category") String category,@Param("postId")long postId);
 
 	// 이전 글
 	public BoardPostDTO selectPrev(@Param("category") String category, @Param("postId") long postId);
@@ -55,7 +55,7 @@ public interface BoardMapper {
 
 	// 게시물 검색 - 공지/Q&A(category)- NOTICE/QNA,
 	// 제목/내용,제목,내용(searchType)-TITLE/CONTENT/ALL, 검색어(keyword)
-	public List<BoardPostDTO> postSearch(@Param("visibility")String visibility,@Param("category") String category, 
+	public List<BoardPostDTO> postSearch(@Param("cri")Criteria cri,@Param("visibility")String visibility,@Param("category") String category, 
 			@Param("searchType") String searchType,
 			@Param("keyword") String keyword);
 
