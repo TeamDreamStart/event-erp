@@ -4,7 +4,9 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
+import kr.co.dreamstart.dto.FileAssetDTO;
 
 @Service
 public interface BoardService {
@@ -14,4 +16,10 @@ public interface BoardService {
 			String keyword);
 
 	public Map<String,Object> postDetail(String category,long postId);
+	
+	
+	//insert update delete
+	public Map<String,Object> postInsert(BoardPostDTO postDTO,FileAssetDTO fileDTO);
+	
+	public Map<String, Object> postUpdate(BoardPostDTO postDTO, FileAssetDTO fileDTO);
 }

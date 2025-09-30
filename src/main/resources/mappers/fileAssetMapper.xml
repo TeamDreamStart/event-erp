@@ -16,7 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="uuid" column="uuid" />
 	</resultMap>
 
-	<select id="select" resultMap="fileMap">
+	<select id="list" resultMap="fileMap">
 		select
 		`file_id`, `owner_type`,
 		`owner_id`, `original_name`,
@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and `owner_id`= #{ownerId}
 	</select>
 
-	<select id="selectOne" resultMap="fileMap">
+	<select id="select" resultMap="fileMap">
 		select
 		`file_id`, `owner_type`,
 		`owner_id`, `original_name`,

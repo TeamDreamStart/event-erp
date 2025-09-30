@@ -48,15 +48,15 @@
 				</div>
 				<div class="card-body">
 
-
-					<form method="post"
+					<!-- insert/update action 분기 -->
+					<form method="post" enctype="multipart/form-data"
 						action="<c:choose>
 							<c:when test='${formType eq "INSERT"}'>${pageContext.request.contextPath}/admin/notices/form</c:when>
 							<c:when test='${formType eq "UPDATE"}'>${pageContext.request.contextPath}/admin/notices/${postDTO.postId}/update</c:when>
 						</c:choose>">
 						<div class="form-group">
 							<label>제목</label> <input type="text" name="title"
-								class="form-control" value="${postDTO.title}">
+								class="form-control" value="${postDTO.title}">ㄹ
 						</div>
 						<div class="form-group">
 							<div id="ajaxUpload">

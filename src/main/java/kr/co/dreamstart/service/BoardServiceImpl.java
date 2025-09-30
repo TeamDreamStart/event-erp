@@ -19,7 +19,7 @@ import kr.co.dreamstart.mapper.FileAssetMapper;
 public class BoardServiceImpl implements BoardService {
 	@Autowired
 	private BoardMapper mapper;
-	
+
 	@Autowired
 	private FileAssetMapper fileMapper;
 
@@ -36,7 +36,7 @@ public class BoardServiceImpl implements BoardService {
 		} else {
 			// 검색어 공백 제거 처리
 			keyword = keyword.replaceAll("\\s", "");
-			postList = mapper.postSearch(cri,visibility,category, searchType, keyword);
+			postList = mapper.postSearch(cri, visibility, category, searchType, keyword);
 			// 페이징 처리하기 위해 검색된 게시물 갯수만 받아옴
 			totalPostCount = mapper.postSearchCount(visibility, category, searchType, keyword);
 		}
@@ -52,10 +52,9 @@ public class BoardServiceImpl implements BoardService {
 		map.put("postList", postList);
 		map.put("pageVO", pageVO);
 		map.put("cri", cri);
-		
+
 		return map;
 	}
-	
 
 	@Override
 	public Map<String, Object> postDetail(String category, long postId) {
@@ -63,16 +62,52 @@ public class BoardServiceImpl implements BoardService {
 		// 조회수 증가
 		mapper.viewCountPlus(postId);
 		// 현재 게시물
-		BoardPostDTO postDTO = mapper.select(category,postId);
+		BoardPostDTO postDTO = mapper.select(category, postId);
 		// 이전글
 		BoardPostDTO prevDTO = mapper.selectPrev(category, postId);
 		// 다음글
 		BoardPostDTO nextDTO = mapper.selectNext(category, postId);
-		List<FileAssetDTO> fileList = fileMapper.select("board_post", postId);
+		List<FileAssetDTO> fileList = fileMapper.list("board_post", postId);
 		map.put("postDTO", postDTO);
 		map.put("prevDTO", prevDTO);
 		map.put("nextDTO", nextDTO);
-		map.put("fileList",fileList);
+		map.put("fileList", fileList);
+		return map;
+	}
+
+	@Override
+	public Map<String, Object> postInsert(BoardPostDTO postDTO, FileAssetDTO fileDTO) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		int result = -1;
+		result = mapper.postInsert(postDTO);
+		if (result > 0) {
+			fileMapper.insertFileInfo(fileDTO);
+			fileMapper.insertFileOwner("board_post", postDTO.getPostId(), fileDTO.getFileId());
+			map.put("success", true);
+			map.put("postId", postDTO.getPostId());
+			map.put("fileId", fileDTO.getFileId());
+		} else {
+			map.put("success", false);
+		}
+		return map;
+	}
+	
+	@Override
+	public Map<String, Object> postUpdate(BoardPostDTO postDTO, FileAssetDTO fileDTO) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		int result = -1;
+		result = mapper.postUpdate(postDTO);
+		if (result > 0) {
+			//기존에 있던 파일 정보 다 지우고 새로 넣어야되나?@@@@@@@@@@@@@@@@@@@@@@@
+			
+			fileMapper.insertFileInfo(fileDTO);
+			fileMapper.insertFileOwner("board_post", postDTO.getPostId(), fileDTO.getFileId());
+			map.put("success", true);
+			map.put("postId", postDTO.getPostId());
+			map.put("fileId", fileDTO.getFileId());
+		} else {
+			map.put("success", false);
+		}
 		return map;
 	}
 

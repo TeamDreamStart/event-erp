@@ -7,7 +7,7 @@
 	<!-- Sidebar - Brand -->
 	<a
 		class="sidebar-brand d-flex align-items-center justify-content-center"
-		href="index.html">
+		href="/admin">
 		<div class="sidebar-brand-icon">
 			<figure>
 				<img style="width: 100px" src="/resources/img/ds_logo.png"
@@ -23,7 +23,7 @@
 	<hr class="sidebar-divider my-0">
 
 	<!-- Nav Item - Dashboard -->
-	<li class="nav-item active"><a class="nav-link" href="index.html">
+	<li class="nav-item active"><a class="nav-link" href="/admin">
 			<i class="fas fa-fw fa-tachometer-alt"></i> <span>Dashboard</span>
 	</a></li>
 
@@ -31,7 +31,7 @@
 	<hr class="sidebar-divider">
 
 	<!-- Heading -->
-	<div class="sidebar-heading">Interface</div>
+	<div class="sidebar-heading">Event</div>
 
 	<!-- Nav Item - Pages Collapse Menu -->
 	<li class="nav-item"><a class="nav-link collapsed" href="#"
@@ -103,11 +103,11 @@
 			class="fas fa-fw fa-table"></i> <span>Payment Manage</span></a></li>
 	<!-- Nav Item - Pages Collapse Menu -->
 	<li class="nav-item"><a class="nav-link collapsed" href="#"
-		data-toggle="collapse" data-target="#collapsePages"
-		aria-expanded="true" aria-controls="collapsePages"> <i
+		data-toggle="collapse" data-target="#collapseBoard"
+		aria-expanded="true" aria-controls="collapseBoard"> <i
 			class="fas fa-fw fa-folder"></i> <span>Board</span>
 	</a>
-		<div id="collapsePages" class="collapse"
+		<div id="collapseBoard" class="collapse"
 			aria-labelledby="headingPages" data-parent="#accordionSidebar">
 			<div class="bg-white py-2 collapse-inner rounded">
 				<h6 class="collapse-header">Notice</h6>

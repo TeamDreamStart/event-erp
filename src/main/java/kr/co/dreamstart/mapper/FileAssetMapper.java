@@ -10,9 +10,9 @@ import kr.co.dreamstart.dto.FileAssetDTO;
 @Mapper
 public interface FileAssetMapper {
 	// 사진이 해당하는 테이블,PK
-	public List<FileAssetDTO> select(@Param("ownerType") String ownerType, @Param("ownerId") long ownerId);
+	public List<FileAssetDTO> list(@Param("ownerType") String ownerType, @Param("ownerId") long ownerId);
 
-	public FileAssetDTO selectOne(@Param("ownerType") String ownerType, @Param("ownerId") long ownerId);
+	public FileAssetDTO select(@Param("ownerType") String ownerType, @Param("ownerId") long ownerId);
 
 	// 파일이 여러개가 넘어오면 foreach문으로 insert
 	public int insertFileInfo(FileAssetDTO fileDTO);

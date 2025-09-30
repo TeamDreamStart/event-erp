@@ -239,7 +239,7 @@ public class TestController {
 
 	@GetMapping("/upload")
 	public String fileTest(Model model) {
-		List<FileAssetDTO> fileList = fileMapper.select("board_post", 1);
+		List<FileAssetDTO> fileList = fileMapper.list("board_post", 1);
 		model.addAttribute("fileList", fileList);
 		return "/test/fileTest";
 	}
@@ -415,7 +415,7 @@ public class TestController {
 	
 	@GetMapping("/show")
 	public String justShowTest(Model model) {
-		List<FileAssetDTO> fileList = fileMapper.select("board_post", 1);
+		List<FileAssetDTO> fileList = fileMapper.list("board_post", 1);
 		model.addAttribute("fileList", fileList);
 		for(FileAssetDTO fileDTO : fileList) {
 			System.out.println(fileDTO);
