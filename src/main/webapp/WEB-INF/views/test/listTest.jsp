@@ -115,13 +115,11 @@
 				</ul>
 			</div>
 		</div>
-		<div>
-
-			<form action="/upload" method="post" enctype="multipart/form-data">
-				<input type="file" name="imageFile">
-				<button type="submit">업로드</button>
-			</form>
-		</div>
+		
+		
+		
+		
+		
 
 
 

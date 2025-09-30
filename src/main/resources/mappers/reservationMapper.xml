@@ -6,6 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<resultMap type="ReservationDTO" id="reservationMap">
 		<id column="reservation_id" property="reservationId" />
+		<result column="user_type" property="userType"/>
 		<result column="user_id" property="userId" />
 		<result column="event_id" property="eventId"/>
 		<result column="reservation_date" property="reservationDate"/>

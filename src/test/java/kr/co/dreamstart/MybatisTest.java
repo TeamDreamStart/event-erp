@@ -202,21 +202,6 @@ public class MybatisTest {
 		}
 	}
 
-	@Test
-	public void boardTest() {
-		try (SqlSession session = sqlFactory.openSession()) {
-			BoardMapper mapper = session.getMapper(BoardMapper.class);
-			Criteria cri = new Criteria(1, 3);
-			List<BoardPostDTO> list = mapper.list(cri);
-
-			for (BoardPostDTO DTO : list) {
-				System.out.println(DTO);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
 
 	@Test
 	public void userListTest() {
@@ -234,31 +219,7 @@ public class MybatisTest {
 
 	}
 
-	@Test
-	public void boardWholeTest() {
-		int result = -1;
-		try (SqlSession session = sqlFactory.openSession()) {
-			BoardMapper mapper = session.getMapper(BoardMapper.class);
-			BoardPostDTO post = new BoardPostDTO();
-			post.setCategory("QNA");
-			post.setTitle("test");
-			post.setContent("test");
-			post.setUserId(1);
-			post.setVisibility("PUBLIC");
-			result = mapper.postInsert(post);
-			if (result > 0) {
-				log.info("boardInsertTest : success");
-				log.info("새로 생성된 post_id : " + post.getPostId());
-				result = -1;
-			}
-			BoardPostDTO resultDTO = mapper.select(post.getPostId());
-			log.info("insert result : {}", resultDTO);
-			System.out.println(resultDTO);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 	
 	// 비밀번호 통일 + 랜덤 해시 생성	
 	@Test
