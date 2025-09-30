@@ -174,8 +174,68 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from `event_erp`.`survey_option` o
 		where o.`question_id` =
 		#{questionId}
-		order by o.`opt_value ASC, o.`option_id` ASC
+		order by o.`opt_value` ASC, o.`option_id` ASC
 	</select>
+
+	<!-- 문항 다건의 보기 일괄 조회 -->
+	<select id="findOptionsByQuestionIds" parameterType="list"
+		resultMap="optionMap">
+		select o.`option_id`, o.`question_id`, o.`label`, o.`opt_value`
+		from
+		`event_erp`, `survey_option` o
+		where o.`question_id` IN
+		<foreach collection="list" item="qid" open="(" separator=","
+			close=")">
+			#{qid}
+		</foreach>
+		order by o.`question_id` ASC, o.`opt_value` ASC o.`option_id` ASC
+	</select>
+
+	<!-- 특정 문항에 5점 기본옵션(1~5) 없으면 보충 -->
+	<insert id="ensureLikert5ForQuestion" parameterType="long">
+		insert into
+		`event_erp`, `survey_option` (`question_id`, `label`, `opt_value`)
+		select
+		#{questionId},
+		v.label,
+		v.val
+		from (
+		select '매우 그렇지 않다' as label, '1' as val
+		union all select '그렇지 않다', '2'
+		union all select '보통', '3'
+		union all select '그렇다', '4'
+		union all select '매우 그렇다', '5'
+		) v
+		left join `event_erp`.`survey_option` o
+		on o.`question_id` = #{qustionId}
+		and o.`opt_value` = v.val
+		where o.`option_id` IS NULL
+	</insert>
+
+	<!-- 설문 단위로 'type=scale_5' 문항들에 5점 옵션 보충 -->
+	<insert id="ensureLikert5ForSurvey" parameterType="long">
+		insert into `event_erp`.`survey_option` (`question_id`, `label`, `opt_value`)
+		select
+			q.`question_id`,
+			v.label,
+			v.val
+		from `event_erp`.`survey_question` q
+		join (
+			select '매우 그렇지 않다' as label, '1' as val
+			union all select '그렇지 않다', '2'
+			union all select '보통', '3'
+			union all select '그렇다', '4'
+			union all select '매우 그렇다', '5'
+			) v
+		left join `event_erp`.`survey_option` o
+			on o.`question_id` = q.`question_id`
+			and o.`opt_value` = v.val
+			where q.`survey_id` = #{surveyId}
+			and q.`type` = 'scale_5'
+			and o.`option_id` IS NULL
+	</insert>
+
+
 
 	<!-- useGeneratedKeys : INSERT 후에 DB가 만든 AUTO_INCREMENT PK를 바로 DTO 필드에 넣어주려고 
 		쓰는 옵션 / 템플릿 깊은 복제에서 문항을 INSERT 하면 새 question_id 가 생기고, 그걸 바로 이어서 보기 INSERT에 
@@ -234,14 +294,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</set>
 		where `survey_id` = #{surveyId}
 		and `is_template` = 0
-		and `clone_from_survey_id` is not null
+		and
+		`clone_from_survey_id` is not null
 	</update>
 
 
 	<!-- 템플릿 클론(템플릿) -->
 	<insert id="cloneSurvey">
 		insert into `event_erp`.`survey`
-		(`event_id`, `title`, `description`, `status`,
+		(`event_id`, `title`, `description`,
+		`status`,
 		`is_anonymous`, `clone_from_survey_id`,
 		`open_at`,
 		`close_at`,
@@ -262,50 +324,68 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		s.`survey_id` = #{templateId} and s.`is_template` = 1
 	</insert>
 
-	
+
 	<!-- 설문 단위로 옵션 조회 -->
 	<select id="optionListBySurveyId" resultMap="optionMap">
-		select o.`option_id`, o.`question_id`, o.`label`, o.`opt_value`
-		from `event_erp`.`survey_option` o
-		join `event_erp`.`survey_question` q on q.`question_id` = o.`question_id`
+		select
+		o.`option_id`, o.`question_id`, o.`label`, o.`opt_value`
+		from
+		`event_erp`.`survey_option` o
+		join `event_erp`.`survey_question` q on
+		q.`question_id` = o.`question_id`
 		where q.`survey_id` = #{surveyId}
 		order by q.`question_id` ASC, o.`opt_value` ASC, o.`option_id` ASC
 	</select>
 
 	<!-- db에서 일괄 복제해서 사용하는 쿼리 -->
 	<insert id="cloneQuestionsFromTemplate">
-		insert into `event_erp`.`survey_question`(`survey_id`, `question`, `type`)
-		select #{newSurveyId}, q.`question`, q.`type`
-		from `event_erp`.`survey_question` q
+		insert into
+		`event_erp`.`survey_question`(`survey_id`, `question`, `type`)
+		select
+		#{newSurveyId}, q.`question`, q.`type`
+		from
+		`event_erp`.`survey_question` q
 		where q.`survey_id` = #{templateId}
 		order by q.`question_id`
 	</insert>
 	<insert id="cloneOptionsFromTemplate">
-		insert into `event_erp`.`survey_option`(`question_id`, `label`, `opt_value`)
+		insert into
+		`event_erp`.`survey_option`(`question_id`, `label`, `opt_value`)
 		with
 		old_q as (
-			select q.`question_id`, ROW_NUMBER() OVER (order by q.`question_id`) rn
-			from `event_erp`.`survey_question` q
-			where q.`survey_id` = #{templateId}
+		select q.`question_id`, ROW_NUMBER() OVER (order by
+		q.`question_id`) rn
+		from `event_erp`.`survey_question` q
+		where
+		q.`survey_id` = #{templateId}
 		),
 		new_q as (
-			select q.`question_id`, ROW_NUMBER() OVER (order by q.`question_id`) rn
-			from `event_erp`.`survey_question` q
-			where q.`survey_id` = #{newSurveyId}
+		select q.`question_id`,
+		ROW_NUMBER() OVER (order by q.`question_id`) rn
+		from
+		`event_erp`.`survey_question` q
+		where q.`survey_id` = #{newSurveyId}
 		)
-		select nq.`question_id`, o.`label`, o.`opt_value`
-		from `event_erp`.`survey_option` o
-		join old_q oq on oq.`question_id` = o.`question_id`
+		select nq.`question_id`, o.`label`,
+		o.`opt_value`
+		from
+		`event_erp`.`survey_option` o
+		join old_q oq on
+		oq.`question_id` =
+		o.`question_id`
 		join new_q nq on nq.`rn` = oq.`rn`
-		order by nq.`question_id`, o.`opt_value`
+		order by
+		nq.`question_id`, o.`opt_value`
 	</insert>
 
 	<delete id="deleteOptionsByQuestionId">
 		delete o
 		from `event_erp`.`survey_option` o
-		left join `event_erp`.`survey_answer` a on a.`option_id` = o.`option_id`
-		where o.`question_id` = #{questionId}
-			and a.`option_id` IS NULL
+		left join
+		`event_erp`.`survey_answer` a on a.`option_id` = o.`option_id`
+		where
+		o.`question_id` = #{questionId}
+		and a.`option_id` IS NULL
 	</delete>
 
 
