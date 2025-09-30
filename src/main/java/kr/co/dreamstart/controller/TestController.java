@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -56,7 +55,6 @@ import kr.co.dreamstart.mapper.UserMapper;
 @Slf4j
 @Controller
 //@RequestMapping("/test")
-@Slf4j
 public class TestController {
 
 	@Autowired
