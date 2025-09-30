@@ -1,82 +1,76 @@
-<!-- <?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:security="http://www.springframework.org/schema/security" xsi:schemaLocation="http://www.springframework.org/schema/security
-	http://www.springframework.org/schema/security/spring-security-5.2.xsd
-		http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-5.3.xsd">
 
-    CustomAccessDeniedHandler 빈 설정
-    <bean id="customAccessDenied" class="com.ohmycar.security.CustomAccessDeniedHandler"></bean>
-    커스텀 로그인 성공 핸들러 빈 설정
-    <bean id="customLoginSuccess" class="com.ohmycar.security.CustomLoginSuccessHandler"></bean>
+	<!-- 리소스파일/PG사 웹훅 등은 보안 필터 제외(CSRF 이슈 방지) -->
+	<security:http pattern="/resources/**" security="none" />
+	<!-- 애플리케이션의 HTTP 보안을 구성 - use-expressions="true"속성을 사용하면 보안 구성에서 Spring 
+		Expression Language(SpEL)를 사용할 수 있으므로 더욱 유연하고 동적인 권한 부여 규칙을 구현 -->
+	<security:http use-expressions="true">
+		<security:csrf /> <!-- CSRF(Cross-Site Request Forgery) 보호와 관련 -->
 
+		<!-- 전부공개(임시) -->
+		<security:intercept-url pattern="/**"
+			access="permitAll" />
 
-    BCruptPasswordEncoder를 사용하여 비밀번호를 안전하게 해싱하는데 사용
-    <bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
+		<!-- 로그인/로그아웃 -->
+		<!-- default-target-url="/" : 로그인 성공 후 이동 경로 -->
+		<!-- always-use-default-target="false" - 저장된 요청 있으면 그쪽으로 복귀 (이게 핵심) -->
+		<!-- 아이디, 이메일 둘다 사용가능하게 하기 위해 : username-parameter="login"
+			아이디만 가능하게 할경우 : username-parameter="username" -->
+		<security:form-login 
+			login-page="/login"
+			login-processing-url="/login" 
+			username-parameter="login"
+			password-parameter="password" 
+			default-target-url="/"
+			always-use-default-target="false"
+			authentication-success-handler-ref="customLoginSuccessHandler"
+			authentication-failure-handler-ref="authFailureHandler" />
 
-    CustomUserDetailsService 클래스를 사용하여 사용자 정의 사용자 세부 정보 서비스를 설정
-    <bean id="customUserDetailsService" class="com.ohmycar.security.CustomUserDetailsService"></bean>
+		<security:logout logout-url="/logout"
+			logout-success-url="/" invalidate-session="true"
+			delete-cookies="JSESSIONID" />
+			
+	</security:http>
+	<!-- 로그인 실패 -->
+	<bean id="authFailureHandler" class="org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler">
+		<property name="exceptionMappings">
+			<props>
+				<!-- 비활성 계정만 -->
+				<prop key="org.springframework.security.authentication.DisabledException">
+					/login?error=disabled
+				</prop>
+				<!-- 나머지 오류는 하나의 메시지로 통일 -->
+				<prop key="org.springframework.security.core.userdetails.UsernameNotFoundException">
+					/login?error
+				</prop>
+				<prop key="org.springframework.security.authentication.BadCredentialsException">
+					/login?error
+				</prop>
+			</props>
+		</property>	
+	</bean>
+	
+	
+	<!-- db에 있는 패스워드값 찾아서 암호화로 가져오기 -->
+	<!-- org.springframework.security.core.userdetails.UserDetailsService 사용 -->
+	<security:authentication-manager>
+		<security:authentication-provider user-service-ref="userDetailsService">
+			<security:password-encoder ref="passwordEncoder" />
+		</security:authentication-provider>
+	</security:authentication-manager>
 
-    Spring Security HTTP 요청 설정
-    <security:http>
+	<!-- BCrypt 인코더 (한 번만 정의; root에 있으면 여기선 빼기) -->
+	<bean id="passwordEncoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+		<constructor-arg value="10" />
+	</bean>
+	
+	<!-- 로그인 로그 성공 남기기 위한 코드 -->
+	<bean class="org.springframework.security.authentication.event.LoggerListener" />
 
-        모든 사용자가 접근 가능한 URL
-        <security:intercept-url pattern="/" access="permitAll()" />
-
-        인증된 사용자 모두 접근 가능한 URL
-        <security:intercept-url pattern="/user/mypage" access="isAuthenticated()" />
-        <security:intercept-url pattern="/user/userUpdate" access="isAuthenticated()" />
-        <security:intercept-url pattern="/user/userDelete" access="isAuthenticated()" />
-        <security:intercept-url pattern="/user/passwordCheck" access="isAuthenticated()" />
-        <security:intercept-url pattern="/consumable/*" access="isAuthenticated()" />
-        <security:intercept-url pattern="/carInfo/*" access="isAuthenticated()" />
-        <security:intercept-url pattern="/board/*" access="isAuthenticated()" />
-
-
-        관리자권한을 사진 사용자만 접근 가능한 URL
-        <security:intercept-url pattern="/user/admin" access="hasRole('ROLE_ADMIN')" />
-        <security:intercept-url pattern="/user/adminJoin" access="hasRole('ROLE_ADMIN')" />
-        <security:intercept-url pattern="/carFacts/list" access="hasRole('ROLE_ADMIN')" />
-        <security:intercept-url pattern="/carFacts/create" access="hasRole('ROLE_ADMIN')" />
-        <security:intercept-url pattern="/carFacts/delete" access="hasRole('ROLE_ADMIN')" />
-        <security:intercept-url pattern="/carFacts/modify" access="hasRole('ROLE_ADMIN')" />
-
-
-        직접 구현한 접근제한인터페이스 설정 response.sendRedirect("/accessError") 하는 클래스
-        <security:access-denied-handler ref="customAccessDenied" />
-
-
-        로그인 페이지에서 인증에 성공하면 Spring Security는 customLoginSuccess 빈에 정의된 커스텀
-			로그인 성공 핸들러를 사용하여 처리한다
-        <security:form-login login-page="/user/login" authentication-success-handler-ref="customLoginSuccess" />
-
-        로그아웃 관련 설정 사용자가 로그아웃을 요청할 때 호출되는 URL을 지정 세션의 무효화
-        로그아웃시 자동로그인 체크하고 저장되는 쿠키 삭제
-        <security:logout logout-url="/logout" invalidate-session="true" delete-cookies="remember-me,JSESSION_ID" />
-
-        Csrf 토큰 비활성화 true
-        <security:csrf disabled="false" />
-
-        <security:remember-me data-source-ref="dataSource" token-validity-seconds="604800" />
-
-    </security:http>
-
-    Spring Security 인증 관리자 설정
-    <security:authentication-manager>
-
-        Spring Security 인증 제공자 설정 =
-        <security:authentication-provider user-service-ref="customUserDetailsService">
-
-
-            BCryptPasswordEncoder를 참조하여 비밀번호를 안전하게 인코딩 하는데 사용한다
-            <security:password-encoder ref="bcryptPasswordEncoder" />
-
-
-        </security:authentication-provider>
-
-
-    </security:authentication-manager>
-
-
-</beans> -->
+</beans>

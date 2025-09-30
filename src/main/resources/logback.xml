@@ -1,108 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-	<!-- 각자 환경에 따라 자동 결정: 1) 톰캣 실행: ${catalina.base}/logs/event-erp 2) 메인 실행: 
-		${user.dir}/logs/event-erp -->
-	<property name="LOG_ROOT"
-		value="${APP_LOG_DIR:-${catalina.base:-${user.dir}}/logs/event-erp}" />
-	<property name="ROLL_ROOT" value="${LOG_ROOT}" />
+	<!-- 내부 초기화 상태 로그를 콘솔에 안 찍도록 비활성화 -->
+	<statusListener
+		class="ch.qos.logback.core.status.NopStatusListener" />
 
+	<!-- 프로젝트 상대 경로: was-logs 폴더 사용 -->
+	<property name="LOG_DIR" value="was-logs" />
 
-
+	<!-- 콘솔: 핵심 결과/메시지만 출력 (INFO 이상) -->
 	<appender name="STDOUT"
 		class="ch.qos.logback.core.ConsoleAppender">
-		<!-- layout 대신 encoder 사용 -->
-		<encoder>
-			<pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level
-				%logger{36} - %msg%n</pattern>
-		</encoder>
-	</appender>
-
-	<appender name="INFO_LOG"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<!-- 파일을 저장할 경로를 정한다 -->
-		<file>${LOG_ROOT}/info.txt</file>
-		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
 			<level>INFO</level>
-			<onMatch>ACCEPT</onMatch> <!-- 해당 레벨만 기록한다. -->
-			<onMismatch>DENY</onMismatch> <!-- 다른 수준의 레벨은 기록하지 않는다. -->
 		</filter>
 		<encoder>
-			<pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level
-				%logger{35} - %msg%n</pattern>
+			<pattern>%d{HH:mm:ss} %-5level - %msg%n</pattern>
 		</encoder>
-		<rollingPolicy
-			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<!-- 해당 패턴 네이밍으로 이전 파일이 기록됨 -->
-			<fileNamePattern>${ROLL_ROOT}/info.%d{yyyy-MM-dd}.%i.log.gz
-			</fileNamePattern>
-			<maxFileSize>20KB</maxFileSize> <!-- 한 파일의 최대 용량 -->
-			<maxHistory>2</maxHistory> <!-- 한 파일의 최대 저장 기한 -->
-			<totalSizeCap>1GB</totalSizeCap>
-		</rollingPolicy>
 	</appender>
 
-	<appender name="WARN_LOG"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<!-- 파일을 저장할 경로를 정한다 -->
-		<file>${LOG_ROOT}/warn.txt</file>
-		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+	<!-- info 파일 (모든 INFO 레벨 메시지) -->
+	<appender name="INFO_FILE"
+		class="ch.qos.logback.core.FileAppender">
+		<file>${LOG_DIR}/info.txt</file>
+		<append>true</append>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%logger{36}] - %msg%n
+			</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+	</appender>
+
+	<!-- warn 파일 -->
+	<appender name="WARN_FILE"
+		class="ch.qos.logback.core.FileAppender">
+		<file>${LOG_DIR}/warn.txt</file>
+		<append>true</append>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%logger{36}] - %msg%n
+			</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
 			<level>WARN</level>
-			<onMatch>ACCEPT</onMatch> <!-- 해당 레벨만 기록한다. -->
-			<onMismatch>DENY</onMismatch> <!-- 다른 수준의 레벨은 기록하지 않는다.(상위 레벨도 기록 안함), 상위 수준의 레벨에 대한 기록을 원하면 ACCEPT 로 하면 
-				기록된다. -->
-		</filter> <!-- 레벨별 필터링이 필요없을 경우 filter class 관련된 부분을 삭제하면 됨 -->
-		<encoder>
-			<pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level
-				%logger{35} - %msg%n</pattern> <!-- 해당 패턴 네이밍으로 현재 로그가 기록됨 -->
-		</encoder>
-		<rollingPolicy
-			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<!-- 해당 패턴 네이밍으로 이전 파일이 기록됨 -->
-			<fileNamePattern>${ROLL_ROOT}/warn.%d{yyyy-MM-dd}.%i.log.gz
-			</fileNamePattern>
-			<maxFileSize>1MB</maxFileSize> <!-- 한 파일의 최대 용량 -->
-			<maxHistory>2</maxHistory> <!-- 한 파일의 최대 저장 기한 -->
-			<totalSizeCap>1GB</totalSizeCap>
-		</rollingPolicy>
+		</filter>
 	</appender>
 
-	<appender name="ERROR_LOG"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<!-- 파일을 저장할 경로를 정한다 -->
-		<file>${LOG_ROOT}/error.txt</file>
-		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+	<!-- error 파일 -->
+	<appender name="ERROR_FILE"
+		class="ch.qos.logback.core.FileAppender">
+		<file>${LOG_DIR}/error.txt</file>
+		<append>true</append>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%logger{36}] - %msg%n
+			</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
 			<level>ERROR</level>
-			<onMatch>ACCEPT</onMatch> <!-- 해당 레벨만 기록한다. -->
-			<onMismatch>DENY</onMismatch> <!-- 다른 수준의 레벨은 기록하지 않는다.(상위 레벨도 기록 안함), 상위 수준의 레벨에 대한 기록을 원하면 ACCEPT 로 하면 
-				기록된다. -->
-		</filter> <!-- 레벨별 필터링이 필요없을 경우 filter class 관련된 부분을 삭제하면 됨 -->
-		<encoder>
-			<pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level
-				%logger{35} - %msg%n</pattern> <!-- 해당 패턴 네이밍으로 현재 로그가 기록됨 -->
-		</encoder>
-		<rollingPolicy
-			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<fileNamePattern>${ROLL_ROOT}/error.%d{yyyy-MM-dd}.%i.log.gz
-			</fileNamePattern>
-			<maxFileSize>1MB</maxFileSize> <!-- 한 파일의 최대 용량 -->
-			<totalSizeCap>1GB</totalSizeCap> <!-- 한 파일의 최대 저장 기한 -->
-			<maxHistory>2</maxHistory>
-		</rollingPolicy>
+		</filter>
 	</appender>
 
-	<!-- 👇 모든 appender 정의가 끝난 후에 root -->
+	<!-- DB summary 전용 파일 (이름 스크린샷과 동일하게) -->
+	<appender name="DB_SUMMARY_FILE"
+		class="ch.qos.logback.core.FileAppender">
+		<file>${LOG_DIR}/test-db-summary.txt</file>
+		<append>true</append>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 루트 로거: 콘솔(간단) + 파일(상세) -->
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />
-		<appender-ref ref="INFO_LOG" />
-		<appender-ref ref="WARN_LOG" />
-		<appender-ref ref="ERROR_LOG" />
+		<appender-ref ref="INFO_FILE" />
+		<appender-ref ref="WARN_FILE" />
+		<appender-ref ref="ERROR_FILE" />
 	</root>
 
-	<!-- 필요하면 프레임워크 로그 줄이기 -->
-	<!-- <logger name="org.springframework" level="WARN"/> -->
-	<!-- <logger name="org.mybatis" level="WARN"/> -->
-	<!-- <logger name="org.apache.catalina" level="WARN"/> -->
-	<!-- <logger name="kr.co.dreamstart" level="INFO"/> -->
+	<!-- db.summary 전용 로거(원래처럼 파일에만 기록) -->
+	<logger name="db.summary" additivity="false" level="INFO">
+		<appender-ref ref="DB_SUMMARY_FILE" />
+	</logger>
 
 </configuration>
