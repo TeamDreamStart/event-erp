@@ -39,7 +39,7 @@
 			<h1 class="h3 mb-2 text-gray-800">Notice Detail</h1>
 
 			<!-- DataTales Example -->
-			<div style="max-width: 900px" class="card shadow mb-4">
+			<div class="card shadow mb-4">
 				<div class="card-header py-3">
 					<h6 class="m-0 font-weight-bold text-primary">게시물 상세보기</h6>
 				</div>
@@ -83,18 +83,13 @@
 							</tr>
 						</table>
 
-						<%-- 						<!-- 게시글 내용 -->
-						<div class="well">
-							<p style="white-space: pre-wrap;">${postDTO.content}</p>
-						</div> --%>
-
 						<!-- 이전글/다음글 -->
 						<table class="table table-bordered">
 							<tr>
 								<th style="width: 80px;">이전글</th>
 								<td><c:if test="${not empty prevDTO}">
 										<a
-											href="${pageContext.request.contextPath}/admin/notices/${prevDTO.postId}">
+											href="${pageContext.request.contextPath}/admin/${category}/${prevDTO.postId}">
 											${prevDTO.title} </a>
 									</c:if></td>
 							</tr>
@@ -102,7 +97,7 @@
 								<th>다음글</th>
 								<td><c:if test="${not empty nextDTO}">
 										<a
-											href="${pageContext.request.contextPath}/admin/notices/${nextDTO.postId}">
+											href="${pageContext.request.contextPath}/admin/${category}/${nextDTO.postId}">
 											${nextDTO.title} </a>
 									</c:if></td>
 							</tr>
@@ -110,11 +105,11 @@
 
 						<!-- 버튼 그룹 -->
 						<div class="text-right">
-							<a href="${pageContext.request.contextPath}/admin/notices"
+							<a href="${pageContext.request.contextPath}/admin/${category}"
 								class="btn btn-default">목록</a> <a
-								href="${pageContext.request.contextPath}/admin/notices/${postDTO.postId}/update"
+								href="${pageContext.request.contextPath}/admin/${category}/${postDTO.postId}/update"
 								class="btn btn-primary">수정</a> <a
-								href="${pageContext.request.contextPath}/admin/notices/${postDTO.postId}/delete"
+								href="${pageContext.request.contextPath}/admin/${category}/${postDTO.postId}/delete"
 								class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
 						</div>
 						<!-- 미구현 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->

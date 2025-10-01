@@ -25,7 +25,7 @@ public interface BoardService {
 	//insert update delete
 	public Map<String, Object> postInsert(HttpServletRequest request ,BoardPostDTO postDTO, MultipartFile[] uploadFile/* ,List<FileAssetDTO> fileList */);
 	
-	public Map<String, Object> postUpdate(BoardPostDTO postDTO, MultipartFile[] uploadFile/* , List<FileAssetDTO> fileList */);
+	public Map<String, Object> postUpdate(HttpServletRequest request ,BoardPostDTO postDTO, MultipartFile[] uploadFile,List<Long> deleteFileId/* , List<FileAssetDTO> fileList */);
 	
 	//Public -> Private
 	public Map<String,Object> postDelete(String boardId);

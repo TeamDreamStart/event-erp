@@ -42,7 +42,7 @@ public class AdminController {
 
 	@Autowired
 	private BoardService boardService;
-	
+
 	// main
 	@GetMapping("")
 	public String adminMain() {
@@ -74,18 +74,22 @@ public class AdminController {
 
 	// detail
 	@GetMapping("/notices/{postId}")
-	public String noticeDetail(HttpServletRequest request,@PathVariable("postId") long postId, Model model) {
+	public String noticeDetail(HttpServletRequest request, @PathVariable("postId") long postId, Model model) {
+		String category = "notices";
+		model.addAttribute("category", category);
 		Map<String, Object> map = boardService.postDetail("NOTICE", postId);
 		model.addAttribute("postDTO", map.get("postDTO"));
 		model.addAttribute("prevDTO", map.get("prevDTO"));
 		model.addAttribute("nextDTO", map.get("nextDTO"));
 		model.addAttribute("fileList", map.get("fileList"));
-		return "/admin/adminNoticeDetail";
+		return "/admin/boardDetail";
 	}
 
-	// insert
+	// insert  
 	@GetMapping("/notices/form")
 	public String noticeForm(Model model) {
+		String category = "notices";
+		model.addAttribute("category", category);
 		String formType = "INSERT";
 		model.addAttribute("formType", formType);
 		return "/admin/boardForm";
@@ -93,22 +97,23 @@ public class AdminController {
 
 	// insert
 	@PostMapping("/notices/form")
-	public String noticeFormPost(HttpServletRequest request,BoardPostDTO postDTO, MultipartFile[] uploadFile,
+	public String noticeFormPost(HttpServletRequest request, BoardPostDTO postDTO, MultipartFile[] uploadFile,
 			/* MultipartHttpServletRequest request, */ RedirectAttributes rttr) {
 //		MultipartFile file = request.getFile("uploadFile"); ajax로 변경시 사용
-		Map<String,Object> map = boardService.postInsert(request, postDTO,uploadFile);
-		//map.get("success")값을 받아야하나?
+		postDTO.setCategory("NOTICE");
+		Map<String, Object> map = boardService.postInsert(request, postDTO, uploadFile);
+		// map.get("success")값을 받아야하나?
 		return "redirect:/admin/notices/" + map.get("postId");
 	}
 
-
 // boardService - fileService 분리 작업 후 수정해야함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-	// update
+	// update   
 	@GetMapping("/notices/{postId}/update")
 	public String noticeUpdate(@PathVariable("postId") long postId, Model model) {
+		String category = "notices";
+		model.addAttribute("category", category);
 		String formType = "UPDATE";
 		model.addAttribute("formType", formType);
-		// 파일@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 		// 수정할 게시물
 		Map<String, Object> map = boardService.postDetail("NOTICE", postId);
 		model.addAttribute("postDTO", map.get("postDTO"));
@@ -121,8 +126,13 @@ public class AdminController {
 
 	// update
 	@PostMapping("/notices/{postId}/update")
-	public String noticeUpdatePost(BoardPostDTO postDTO, MultipartFile[] uploadFile) {
+	public String noticeUpdatePost(@PathVariable long postId, BoardPostDTO postDTO,
+			@RequestParam(value = "uploadFile", required = false) MultipartFile[] uploadFile,
+			@RequestParam(value = "deleteFileIds", required = false) List<Long> deleteFileIds,
+			HttpServletRequest request) {
 
+		boardService.postUpdate(request, postDTO, uploadFile, deleteFileIds);
+		
 		return "redirect:/notices/" + postDTO.getPostId();
 	}
 
@@ -143,7 +153,42 @@ public class AdminController {
 		model.addAttribute("searchType", searchType);
 		model.addAttribute("keyword", keyword);
 
+		System.out.println(category);
 		return "/admin/boardList";
+	}
+
+	// detail
+	@GetMapping("/qna/{postId}")
+	public String qnaDetail(HttpServletRequest request, @PathVariable("postId") long postId, Model model) {
+		String category = "qna";
+		model.addAttribute("category", category);
+		Map<String, Object> map = boardService.postDetail("QNA", postId);
+		model.addAttribute("postDTO", map.get("postDTO"));
+		model.addAttribute("prevDTO", map.get("prevDTO"));
+		model.addAttribute("nextDTO", map.get("nextDTO"));
+		model.addAttribute("fileList", map.get("fileList"));
+		System.out.println(map.get("postDTO"));
+		return "/admin/boardDetail";
+	}
+
+	// insert
+	@GetMapping("/qna/form")
+	public String qnaForm(Model model) {
+		String category = "qna";
+		model.addAttribute("category", category);
+		String formType = "INSERT";
+		model.addAttribute("formType", formType);
+		return "/admin/boardForm";
+	}
+
+	// insert
+	@PostMapping("/qna/form")
+	public String qnaFormPost(HttpServletRequest request, BoardPostDTO postDTO, MultipartFile[] uploadFile,
+			/* MultipartHttpServletRequest request, */ RedirectAttributes rttr) {
+//		MultipartFile file = request.getFile("uploadFile"); ajax로 변경시 사용
+		Map<String, Object> map = boardService.postInsert(request, postDTO, uploadFile);
+		// map.get("success")값을 받아야하나?
+		return "redirect:/admin/notices/" + map.get("postId");
 	}
 
 }

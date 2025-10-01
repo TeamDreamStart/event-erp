@@ -103,21 +103,25 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public Map<String, Object> postUpdate(BoardPostDTO postDTO, MultipartFile[] uploadFile) {
+	public Map<String, Object> postUpdate(HttpServletRequest request ,BoardPostDTO postDTO, MultipartFile[] uploadFile,List<Long> deleteFileId) {
 		Map<String, Object> map = new HashMap<String, Object>();
-//		int result = -1;
-//		result = mapper.postUpdate(postDTO);
-//		if (result > 0) {
-//			//기존에 있던 파일 정보 다 지우고 새로 넣어야되나?@@@@@@@@@@@@@@@@@@@@@@@
-//			for(FileAssetDTO fileDTO : fileList) {
-//				fileMapper.insertFileInfo(fileDTO);
-//				fileMapper.insertFileOwner("board_post", postDTO.getPostId(), fileDTO.getFileId());
-//			}
-//			map.put("success", true);
-//			map.put("postId", postDTO.getPostId()); //필요한가?
-//		} else {
-//			map.put("success", false);
-//		}
+		int result = -1;
+		//수정한 게시물
+		result = mapper.postUpdate(postDTO);
+		if(result>0) {
+			if (uploadFile != null && uploadFile.length > 0) {
+			//새로 넣은 파일
+			fileService.saveFiles(request, uploadFile, "board_post", postDTO.getPostId());
+			}
+			if(deleteFileId.size()>0) {
+				//삭제할 파일
+				for(long fileId : deleteFileId) {
+					fileMapper.delete(fileId);
+				}
+			}
+		}
+		
+		// 뭘 반환하지........
 		return map;
 	}
 

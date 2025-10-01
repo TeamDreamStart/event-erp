@@ -42,7 +42,7 @@
 			</h1>
  -->
 			<!-- DataTales Example -->
-			<div style="max-width: 1200px" class="card shadow mb-4">
+			<div class="card shadow mb-4">
 				<div class="card-header py-3">
 					<h6 class="m-0 font-weight-bold text-primary"
 						style="font-size: 2rem;">
@@ -121,10 +121,10 @@
 											<tr>
 												<td>${postDTO.postId}</td>
 												<td><c:if test="${postDTO.pinned}">
-														<a href="/admin/notices/${postDTO.postId }"
+														<a href="/admin/${category }/${postDTO.postId }"
 															style="font-weight: 900"> 📌 ${postDTO.title} </a>
 													</c:if> <c:if test="${!postDTO.pinned}">
-														<a href="/admin/notices/${postDTO.postId }">
+														<a href="/admin/${category }/${postDTO.postId }">
 															${postDTO.title} </a>
 													</c:if></td>
 

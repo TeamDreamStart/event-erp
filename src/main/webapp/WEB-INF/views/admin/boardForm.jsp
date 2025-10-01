@@ -36,7 +36,10 @@
 
 			<!-- Page Heading -->
 			<h1 class="h3 mb-2 text-gray-800">
-				${postDTO.category}
+				<c:if test="${category eq 'qna' }"> 문의
+				</c:if>
+				<c:if test="${category eq 'notices' }">공지
+				</c:if>
 				<c:if test="${formType eq 'INSERT'}">작성</c:if>
 				<c:if test="${formType eq 'UPDATE'}">수정</c:if>
 			</h1>
@@ -48,57 +51,127 @@
 				</div>
 				<div class="card-body">
 
-					<!-- insert/update action 분기 -->
-					<form method="post" enctype="multipart/form-data"
-						action="<c:choose>
-							<c:when test='${formType eq "INSERT"}'>${pageContext.request.contextPath}/admin/notices/form</c:when>
-							<c:when test='${formType eq "UPDATE"}'>${pageContext.request.contextPath}/admin/notices/${postDTO.postId}/update</c:when>
-						</c:choose>">
-						
-						
-						<!-- 작성일,작성자,조회수,수정일은 hidden @@@@@@@@@@@@@@@@@@-->
-						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-						<input type="text" name="category" value="NOTICE">
-						<input type="text" name="pinned" value="0">
-						<input type="text" name="visibility" value="PUBLIC">
-						<input type="text" name="userId" value="1" readonly>
-						
-						<div class="form-group">
-							<label>제목</label> <input type="text" name="title"
-								class="form-control" value="${postDTO.title}">ㄹ
-						</div>
-						<div class="form-group">
-							<div id="ajaxUpload">
-								<p>파일 업로드 최대 크기는 5MB 입니다.</p>
-								<input type="file" name="uploadFile" multiple>
-								<div class="uploadResult">
-									<ul>
-									</ul>
-								</div>
+					<!-- category - notices/qna , formType - INSERT/UPDATE  -->
+					<!-- 새로 입력  -->
+					<c:if test="${formType eq 'INSERT'}">
+						<form method="post" enctype="multipart/form-data"
+							action="/admin/${category}/form">
+							<!-- hidden @@@@@@@@@@@@@@@@@@-->
+							<input type="hidden" name="${_csrf.parameterName}"
+								value="${_csrf.token}" /> <input type="hidden" name="category"
+								value="<c:if test="${category eq 'qna' }">QNA</c:if>
+				<c:if test="${category eq 'notices' }">공지
+				</c:if>">
+							<!-- qna는 중요글 없음 -->
+							<c:if test="${category eq 'qna' }">
+								<input type="hidden" name="pinned" value="0">
+								<input type="hidden" name="visibility" value="PUBLIC">
+							</c:if>
+
+							<!-- session에서 받아와용 ${session.getAttribute("username")}-->
+							<input type="hidden" name="userId" value="1"
+								readonly>
+
+
+							<div class="form-group">
+								<label>제목</label> <input type="text" name="title"
+									class="form-control" value="${postDTO.title}">
 							</div>
-							<button id="uploadBtn">업로드</button>
-						</div>
-						<div class="form-group">
-							<label>내용</label>
-							<textarea name="content" class="form-control" rows="8">${postDTO.content}</textarea>
-						</div>
-						
-						<div class="text-right">
-							<c:if test="${formType eq 'INSERT'}">
-								<a href="${pageContext.request.contextPath}/admin/notices"
+
+							<c:if test="${category eq 'notices' }">
+								<div class="form-group">
+									<div id="ajaxUpload">
+										<label class="btn btn-secondary"> 사진찾기 <input
+											style="display: none" type="file" name="uploadFile" multiple>
+										</label>
+										<p>첨부파일 최대 크기는 5MB 입니다.</p>
+									</div>
+								</div>
+							</c:if>
+							<div class="form-group">
+								<label>추가 내용</label>
+								<textarea name="content" class="form-control" rows="8">${postDTO.content}</textarea>
+							</div>
+							<c:if test="${category eq 'notices' }">
+								<div style="display: flex; justify-content:flex-end;">
+									 <select
+										class="custom-select custom-select-sm form-control form-control-sm"
+										style="width: 100px" name="pinned">
+										<option value="0">일반</option>
+										<option value="1">고정</option>
+									</select> <select
+										class="custom-select custom-select-sm form-control form-control-sm"
+										style="width: 100px" name="visibility">
+										<option value="PUBLIC">공개</option>
+										<option value="PRIVATE">비공개</option>
+									</select>
+								</div>
+							</c:if>
+							<div class="text-right">
+								<a href="${pageContext.request.contextPath}/admin/${category}"
 									class="btn btn-light btn-icon-split">취소</a>
 								<button type="submit" class="btn btn-success">등록</button>
+							</div>
+
+						</form>
+					</c:if>
+
+					<!-- 수정 -->
+					<c:if test="${formType eq 'UPDATE'}">
+						<form method="post" enctype="multipart/form-data"
+							action="/admin/${category }/${postDTO.postId}/update">
+							<!-- hidden @@@@@@@@@@@@@@@@@@-->
+							<input type="hidden" name="${_csrf.parameterName}"
+								value="${_csrf.token}" /> <input type="hidden" name="category"
+								value="${category }">
+							<!-- qna는 중요글 없음 -->
+							<c:if test="${category eq 'notices' }">
+								<select name="pinned">
+									<option value="0">일반</option>
+									<option value="1">고정</option>
+								</select>
+								<select name="visibility">
+									<option value="PUBLIC">공개</option>
+									<option value="PRIVATE">비공개</option>
+								</select>
 							</c:if>
-							<c:if test="${formType eq 'UPDATE'}">
+							<c:if test="${category eq 'qna' }">
+								<input type="hidden" name="pinned" value="0">
+								<input type="hidden" name="visibility" value="PUBLIC">
+							</c:if>
+
+							<!-- session에서 받아와용 ${session.getAttribute("username")}-->
+							<label>작성자</label><input type="text" name="userId" value="1"
+								readonly>
+
+							<div class="form-group">
+								<label>제목</label> <input type="text" name="title"
+									class="form-control" value="${postDTO.title}">
+							</div>
+							<div class="form-group">
+								<div id="ajaxUpload">
+									<p>파일 업로드 최대 크기는 5MB 입니다.</p>
+									<input type="file" name="uploadFile" multiple>
+									<div class="uploadResult">
+										<ul>
+										</ul>
+									</div>
+								</div>
+								<button id="uploadBtn">업로드</button>
+								
+							</div>
+							<div class="form-group">
+								<label>내용</label>
+								<textarea name="content" class="form-control" rows="8">${postDTO.content}</textarea>
+							</div>
+							<div class="text-right">
 								<a
-									href="${pageContext.request.contextPath}/admin/notices/${postDTO.postId}"
+									href="${pageContext.request.contextPath}/admin/${category }/${postDTO.postId}"
 									class="btn btn-light btn-icon-split">취소</a>
 								<button type="submit" class="btn btn-success">수정</button>
-							</c:if>
-						</div>
-					</form>
-
-
+							</div>
+						</form>
+					</c:if>
 				</div>
 			</div>
 
