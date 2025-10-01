@@ -37,32 +37,49 @@
 		<div class="container-fluid">
 
 			<!-- Page Heading -->
-			<h1 class="h3 mb-2 text-gray-800">공지사항</h1>
-
+			<!-- <h1 class="h3 mb-2 text-gray-800">
+				
+			</h1>
+ -->
 			<!-- DataTales Example -->
-			<div  style="max-width:1200px" class="card shadow mb-4">
+			<div style="max-width: 1200px" class="card shadow mb-4">
 				<div class="card-header py-3">
-					<h6 class="m-0 font-weight-bold text-primary">Notice</h6>
+					<h6 class="m-0 font-weight-bold text-primary"
+						style="font-size: 2rem;">
+						<c:if test="${category eq 'notices' }">NOTICE</c:if>
+						<c:if test="${category eq 'qna' }">Q&A</c:if>
+					</h6>
 				</div>
 				<div class="card-body">
-					<a type="button" href="/admin/notices/form" class="btn btn-success">작성</a>
-					<div style="display: flex; justify-content: flex-end; height:45px">
-						<form action="/admin/notices" method="get">
+					<div style="display: flex; justify-content: flex-end;">
+						<span>${totalCount}</span>
+					</div>
+
+					<div
+						style="display: flex; height: 45px; justify-content: space-between">
+						<form
+							action="/admin/${category }"
+							method="get">
 							<input type="hidden" name="searchType" value="${searchType}">
 							<input type="hidden" name="keyword" value="${keyword}"> <select
-								name="visibility" class="custom-select custom-select-sm form-control form-control-sm" style="width:135px">
+								name="visibility"
+								class="custom-select custom-select-sm form-control form-control-sm"
+								style="width: 135px">
 								<option value="ALL">전체글 보기</option>
 								<option value="PUBLIC">공개글만 보기</option>
 								<option value="PRIVATE">비공개글만 보기</option>
 							</select>
 							<button class="btn btn-primary" type="submit">선택</button>
 						</form>
-					</div>
-					<div style="display: flex; justify-content: flex-end; height:45px" >
 
-						<form action="/admin/notices" method="get">
-						<input type="hidden" name="visibility" value="${visibility }">
-							<select name="searchType" class="custom-select custom-select-sm form-control form-control-sm" style="width:65px">
+
+						<form
+							action="/admin/${category }"
+							method="get">
+							<input type="hidden" name="visibility" value="${visibility }">
+							<select name="searchType"
+								class="custom-select custom-select-sm form-control form-control-sm"
+								style="width: 65px">
 								<option value="all" selected>전체&nbsp;&nbsp;&nbsp;</option>
 								<option value="title">제목</option>
 								<option value="content">내용</option>
@@ -85,8 +102,10 @@
 									<th>작성일</th>
 									<th>수정일</th>
 									<th>공개여부</th>
-
 									<!-- <th>댓글수</th> -->
+									<c:if test="${category eq 'qna' }">
+										<th>답변여부</th>
+									</c:if>
 								</tr>
 							</thead>
 							<tbody>
@@ -120,6 +139,11 @@
 												<c:if test="${postDTO.visibility eq 'PRIVATE' }">
 													<td style="color: red">비공개</td>
 												</c:if>
+												<!-- <th>댓글수</th> -->
+												<c:if test="${category eq 'qna' }">
+													<td><c:if test="${postDTO.commentCount >0}">답변완료</c:if>
+														<c:if test="${postDTO.commentCount ==0}">미답변</c:if></td>
+												</c:if>
 											</tr>
 										</c:forEach>
 									</c:otherwise>
@@ -131,44 +155,46 @@
 							<ul class="pagination" style="justify-content: center">
 								<c:if test="${pageVO.prev}">
 									<li><a class="page-link"
-										href="/admin/notices?page=1&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&laquo;&laquo;</a></li>
+										href="/admin/${category }?page=1&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&laquo;&laquo;</a></li>
 									<li><a class="paginate_button page-item previous"
-										href="/admin/notices?page=${pageVO.startPage - 1}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&laquo;</a></li>
+										href="/admin/${category }?page=${pageVO.startPage - 1}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&laquo;</a></li>
 								</c:if>
 
 								<c:forEach begin="${pageVO.startPage}" end="${pageVO.endPage}"
 									var="idx">
 									<li class="${pageVO.cri.page == idx ? 'active' : ''}"><a
 										class="page-link"
-										href="/admin/notices?page=${idx}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">${idx}</a></li>
+										href="/admin/${category }?page=${idx}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">${idx}</a></li>
 								</c:forEach>
 
 								<c:if test="${pageVO.next}">
 									<li><a class="paginate_button page-item next"
-										href="/admin/notices?page=${pageVO.endPage + 1}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&raquo;</a></li>
+										href="/admin/${category }?page=${pageVO.endPage + 1}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&raquo;</a></li>
 									<li><a class="page-link"
-										href="/admin/notices?page=${pageVO.totalPage}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&raquo;&raquo;</a></li>
+										href="/admin/${category }?page=${pageVO.totalPage}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&raquo;&raquo;</a></li>
 								</c:if>
 							</ul>
 						</div>
 						<!-- paging end -->
-						<span>${totalCount}</span>
+						<div style="display: flex; justify-content: flex-end;">
+							<a type="button" href="/admin/${category }/form"
+								class="btn btn-success">새로 작성</a>
+							<div></div>
+						</div>
 					</div>
+
 				</div>
+				<!-- /.container-fluid -->
+
 			</div>
+			<!-- End of Main Content -->
+
+			<!-- Footer -->
+			<jsp:include page="../adminIncludes/footer.jsp" />
+			<!-- End of Footer -->
 
 		</div>
-		<!-- /.container-fluid -->
-
-	</div>
-	<!-- End of Main Content -->
-
-	<!-- Footer -->
-	<jsp:include page="../adminIncludes/footer.jsp" />
-	<!-- End of Footer -->
-
-	</div>
-	<!-- End of Content Wrapper -->
+		<!-- End of Content Wrapper -->
 
 	</div>
 	<!-- End of Page Wrapper -->

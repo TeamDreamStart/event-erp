@@ -41,19 +41,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 
-	<insert id="insertFileInfo" parameterType="FileAssetDTO"
-		useGeneratedKeys="true" keyProperty="fileId">
+	<insert id="insert" parameterType="FileAssetDTO">
 		insert into `file_asset`
-		(`original_name`, `stored_path`,
-		`mime_type`, `size_bytes`,
-		`created_at`, `uuid`) values
-		(#{originalName}, #{storedPath}, #{mimeType}, #{sizeBytes},
-		now(), #{uuid})
+		(`owner_type`,`owner_id`,`original_name`, `stored_path`,
+		`mime_type`, `size_bytes`, `created_at`, `uuid`)
+		values
+		(#{ownerType}, #{ownerId}, #{originalName}, #{storedPath},
+		#{mimeType}, #{sizeBytes}, now(), #{uuid})
 	</insert>
-
-	<update id="insertFileOwner">
-		update `file_asset` set `owner_type` = #{ownerType}, `owner_id` = #{ownerId}  where `file_id` = #{fileId}
-	</update>
 
 	<update id="update">
 

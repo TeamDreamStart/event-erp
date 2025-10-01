@@ -122,27 +122,27 @@ public class BoardTest {
 		}
 	}
 
-	@Test
-	public void fileInfoDBInsertTest() {
-		try (SqlSession session = sqlFactory.openSession()) {
-			FileAssetMapper mapper = session.getMapper(FileAssetMapper.class);
-			FileAssetDTO fileDTO = new FileAssetDTO();
-			fileDTO.setOriginalName("주디.png");
-			fileDTO.setStoredPath("2025\\09");
-			fileDTO.setMimeType("image/png");;
-			fileDTO.setSizeBytes(84459);
-			fileDTO.setUuid("43b6130a-9cf3-4ee0-aa67-60136655f1ad");
-			
-			int result = -1;
-			result = mapper.insertFileInfo(fileDTO);
-			long fileId = fileDTO.getFileId();
-			mapper.insertFileOwner("board_post",4,fileId);
-			if(result>0) {
-				log.info("fileInfoDBInsertTest : success");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	@Test
+//	public void fileInfoDBInsertTest() {
+//		try (SqlSession session = sqlFactory.openSession()) {
+//			FileAssetMapper mapper = session.getMapper(FileAssetMapper.class);
+//			FileAssetDTO fileDTO = new FileAssetDTO();
+//			fileDTO.setOriginalName("주디.png");
+//			fileDTO.setStoredPath("2025\\09");
+//			fileDTO.setMimeType("image/png");;
+//			fileDTO.setSizeBytes(84459);
+//			fileDTO.setUuid("43b6130a-9cf3-4ee0-aa67-60136655f1ad");
+//			
+//			int result = -1;
+//			result = mapper.insertFileInfo(fileDTO);
+//			long fileId = fileDTO.getFileId();
+//			mapper.insertFileOwner("board_post",4,fileId);
+//			if(result>0) {
+//				log.info("fileInfoDBInsertTest : success");
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 }

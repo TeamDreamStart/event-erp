@@ -1,4 +1,5 @@
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!-- Sidebar -->
 <ul
 	class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
@@ -101,29 +102,27 @@
 			class="fas fa-fw fa-table"></i> <span>Reservation Manage</span></a></li>
 	<li class="nav-item"><a class="nav-link" href="tables.html"> <i
 			class="fas fa-fw fa-table"></i> <span>Payment Manage</span></a></li>
+
 	<!-- Nav Item - Pages Collapse Menu -->
 	<li class="nav-item"><a class="nav-link collapsed" href="#"
 		data-toggle="collapse" data-target="#collapseBoard"
 		aria-expanded="true" aria-controls="collapseBoard"> <i
-			class="fas fa-fw fa-folder"></i> <span>Board</span>
+			class="fas fa-fw fa-folder"></i> <span>NOTICE</span>
 	</a>
 		<div id="collapseBoard" class="collapse"
 			aria-labelledby="headingPages" data-parent="#accordionSidebar">
 			<div class="bg-white py-2 collapse-inner rounded">
 				<h6 class="collapse-header">Notice</h6>
-				<a class="collapse-item" href="/admin/notices">list</a> <a
-					class="collapse-item" href="/admin/notices/form">form</a>
-				<div class="collapse-divider"></div>
-				<h6 class="collapse-header">Q&A</h6>
-				<a class="collapse-item" href="/admin/qna">list</a> <a
-					class="collapse-item" href="blank.html">Blank Page</a>
+				<a class="collapse-item" href="/admin/notices">Notice List</a> <a
+					class="collapse-item" href="/admin/notices/form">Notice Form</a>
 			</div>
 		</div></li>
+
 
 	<!-- <li class="nav-item"><a class="nav-link" href="/admin/notices">
 			<i class="fas fa-fw fa-table"></i> <span>NOTICE</span>
 	</a></li> -->
-	<li class="nav-item"><a class="nav-link" href="tables.html"> <i
+	<li class="nav-item"><a class="nav-link" href="/admin/qna"> <i
 			class="fas fa-fw fa-table"></i> <span>Q&A</span></a></li>
 
 	<!-- Divider -->
@@ -242,10 +241,13 @@
 
 				<!-- Nav Item - Messages -->
 				<li class="nav-item dropdown no-arrow mx-1"><a
-					class="nav-link dropdown-toggle" href="#" id="messagesDropdown"
-					role="button" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false"> <i class="fas fa-envelope fa-fw"></i> <!-- Counter - Messages -->
-						<span class="badge badge-danger badge-counter">7</span>
+					class="nav-link dropdown-toggle" href="/admin/qna"
+					id="messagesDropdown" role="button" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false"> <i
+						class="fas fa-envelope fa-fw"></i> <!-- Counter - Messages --> <span
+						class="badge badge-danger badge-counter">
+							<!-- Qna에 답변완료 없는 글 갯수 -->100
+					</span>
 				</a> <!-- Dropdown - Messages -->
 					<div
 						class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -253,37 +255,12 @@
 						<h6 class="dropdown-header">Message Center</h6>
 						<a class="dropdown-item d-flex align-items-center" href="#">
 							<div class="dropdown-list-image mr-3">
-								<img class="rounded-circle"
-									src="/resources/img/undraw_profile_1.svg" alt="...">
 								<div class="status-indicator bg-success"></div>
 							</div>
 							<div class="font-weight-bold">
 								<div class="text-truncate">Hi there! I am wondering if you
 									can help me with a problem I've been having.</div>
-								<div class="small text-gray-500">Emily Fowler · 58m</div>
-							</div>
-						</a> <a class="dropdown-item d-flex align-items-center" href="#">
-							<div class="dropdown-list-image mr-3">
-								<img class="rounded-circle"
-									src="/resources/img/undraw_profile_2.svg" alt="...">
-								<div class="status-indicator"></div>
-							</div>
-							<div>
-								<div class="text-truncate">I have the photos that you
-									ordered last month, how would you like them sent to you?</div>
-								<div class="small text-gray-500">Jae Chun · 1d</div>
-							</div>
-						</a> <a class="dropdown-item d-flex align-items-center" href="#">
-							<div class="dropdown-list-image mr-3">
-								<img class="rounded-circle"
-									src="/resources/img/undraw_profile_3.svg" alt="...">
-								<div class="status-indicator bg-warning"></div>
-							</div>
-							<div>
-								<div class="text-truncate">Last month's report looks
-									great, I am very happy with the progress so far, keep up the
-									good work!</div>
-								<div class="small text-gray-500">Morgan Alvarez · 2d</div>
+								<div class="small text-gray-500">Qna 게시물 올린 회원 이름</div>
 							</div>
 						</a> <a class="dropdown-item d-flex align-items-center" href="#">
 							<div class="dropdown-list-image mr-3">
@@ -297,8 +274,7 @@
 									dogs, even if they aren't good...</div>
 								<div class="small text-gray-500">Chicken the Dog · 2w</div>
 							</div>
-						</a> <a class="dropdown-item text-center small text-gray-500" href="#">Read
-							More Messages</a>
+						</a> <a class="dropdown-item text-center small text-gray-500" href="#">답변하러 가기</a>
 					</div></li>
 
 				<div class="topbar-divider d-none d-sm-block"></div>

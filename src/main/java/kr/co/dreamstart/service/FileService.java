@@ -2,26 +2,19 @@ package kr.co.dreamstart.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.dreamstart.dto.FileAssetDTO;
 
 @Service
 public interface FileService {
-	// 사진이 해당하는 테이블,PK
-	public List<FileAssetDTO> select(@Param("ownerType") String ownerType, @Param("ownerId") long ownerId);
-
-	public FileAssetDTO selectOne(@Param("ownerType") String ownerType, @Param("ownerId") long ownerId);
-
-	// 파일이 여러개가 넘어오면 foreach문으로 insert
-	public int insert(FileAssetDTO fileDTO);
-
-	public int update(FileAssetDTO fileDTO);
-
-	// 게시글이 삭제되면 같이 삭제
-	public int deleteByOwner(@Param("ownerType") String ownerType, @Param("ownerId") long ownerId);
-
-	// 사진 하나 삭제
-	public int delete(long fileId);
+	//detail
+	public List<FileAssetDTO> list(@Param("ownerType") String ownerType, @Param("ownerId") long ownerId);
+	
+	//post insert시 실제 파일 저장 / DB에 저잗된 파일 정보 insert
+	public void saveFiles(HttpServletRequest request ,MultipartFile[] uploadFile, String ownerType, Long ownerId);
 }

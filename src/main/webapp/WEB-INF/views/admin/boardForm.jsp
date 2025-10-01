@@ -54,6 +54,15 @@
 							<c:when test='${formType eq "INSERT"}'>${pageContext.request.contextPath}/admin/notices/form</c:when>
 							<c:when test='${formType eq "UPDATE"}'>${pageContext.request.contextPath}/admin/notices/${postDTO.postId}/update</c:when>
 						</c:choose>">
+						
+						
+						<!-- 작성일,작성자,조회수,수정일은 hidden @@@@@@@@@@@@@@@@@@-->
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+						<input type="text" name="category" value="NOTICE">
+						<input type="text" name="pinned" value="0">
+						<input type="text" name="visibility" value="PUBLIC">
+						<input type="text" name="userId" value="1" readonly>
+						
 						<div class="form-group">
 							<label>제목</label> <input type="text" name="title"
 								class="form-control" value="${postDTO.title}">ㄹ
@@ -73,15 +82,7 @@
 							<label>내용</label>
 							<textarea name="content" class="form-control" rows="8">${postDTO.content}</textarea>
 						</div>
-						<%-- <div class="form-group">
-					<label>카테고리</label>
-					<select name="category" class="form-control">
-						<option value="NOTICE" <c:if test="${postDTO.category eq 'NOTICE'}">selected</c:if>>공지사항</option>
-						<option value="QNA" <c:if test="${postDTO.category eq 'QNA'}">selected</c:if>>Q&A</option>
-					</select>
-				</div> --%>
-						<!-- 작성일,작성자,조회수,수정일은 hidden -->
-						<input type="hidden" name="category" value="NOTICE">
+						
 						<div class="text-right">
 							<c:if test="${formType eq 'INSERT'}">
 								<a href="${pageContext.request.contextPath}/admin/notices"

@@ -4,8 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.dreamstart.dto.BoardCommentDTO;
 import kr.co.dreamstart.dto.BoardPostDTO;
@@ -22,6 +26,9 @@ public class BoardServiceImpl implements BoardService {
 
 	@Autowired
 	private FileAssetMapper fileMapper;
+	
+	@Autowired
+	private FileService fileService;
 
 	@Override
 	public Map<String, Object> postList(Criteria cri, String category, String visibility, String searchType,
@@ -67,6 +74,7 @@ public class BoardServiceImpl implements BoardService {
 		BoardPostDTO prevDTO = mapper.selectPrev(category, postId);
 		// 다음글
 		BoardPostDTO nextDTO = mapper.selectNext(category, postId);
+		// 해당 글 파일리스트
 		List<FileAssetDTO> fileList = fileMapper.list("board_post", postId);
 		map.put("postDTO", postDTO);
 		map.put("prevDTO", prevDTO);
@@ -75,40 +83,54 @@ public class BoardServiceImpl implements BoardService {
 		return map;
 	}
 
+	@Transactional
 	@Override
-	public Map<String, Object> postInsert(BoardPostDTO postDTO, FileAssetDTO fileDTO) {
+	public Map<String, Object> postInsert(HttpServletRequest request ,BoardPostDTO postDTO,MultipartFile[] uploadFile) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		int result = -1;
 		result = mapper.postInsert(postDTO);
 		if (result > 0) {
-			fileMapper.insertFileInfo(fileDTO);
-			fileMapper.insertFileOwner("board_post", postDTO.getPostId(), fileDTO.getFileId());
+			if (uploadFile != null && uploadFile.length > 0) {
+	            // 비어있지 않은 경우
+	            fileService.saveFiles(request,uploadFile, "board_post", postDTO.getPostId());
+	        }
 			map.put("success", true);
 			map.put("postId", postDTO.getPostId());
-			map.put("fileId", fileDTO.getFileId());
 		} else {
 			map.put("success", false);
 		}
 		return map;
 	}
-	
+
 	@Override
-	public Map<String, Object> postUpdate(BoardPostDTO postDTO, FileAssetDTO fileDTO) {
+	public Map<String, Object> postUpdate(BoardPostDTO postDTO, MultipartFile[] uploadFile) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		int result = -1;
-		result = mapper.postUpdate(postDTO);
-		if (result > 0) {
-			//기존에 있던 파일 정보 다 지우고 새로 넣어야되나?@@@@@@@@@@@@@@@@@@@@@@@
-			
-			fileMapper.insertFileInfo(fileDTO);
-			fileMapper.insertFileOwner("board_post", postDTO.getPostId(), fileDTO.getFileId());
-			map.put("success", true);
-			map.put("postId", postDTO.getPostId());
-			map.put("fileId", fileDTO.getFileId());
-		} else {
-			map.put("success", false);
-		}
+//		int result = -1;
+//		result = mapper.postUpdate(postDTO);
+//		if (result > 0) {
+//			//기존에 있던 파일 정보 다 지우고 새로 넣어야되나?@@@@@@@@@@@@@@@@@@@@@@@
+//			for(FileAssetDTO fileDTO : fileList) {
+//				fileMapper.insertFileInfo(fileDTO);
+//				fileMapper.insertFileOwner("board_post", postDTO.getPostId(), fileDTO.getFileId());
+//			}
+//			map.put("success", true);
+//			map.put("postId", postDTO.getPostId()); //필요한가?
+//		} else {
+//			map.put("success", false);
+//		}
 		return map;
+	}
+
+	@Override
+	public Map<String, Object> postDelete(String boardId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<String, Object> postRealDelete(String boardId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

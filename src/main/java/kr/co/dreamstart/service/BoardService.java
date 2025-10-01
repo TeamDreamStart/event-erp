@@ -1,8 +1,12 @@
 package kr.co.dreamstart.service;
 
+import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
@@ -19,7 +23,13 @@ public interface BoardService {
 	
 	
 	//insert update delete
-	public Map<String,Object> postInsert(BoardPostDTO postDTO,FileAssetDTO fileDTO);
+	public Map<String, Object> postInsert(HttpServletRequest request ,BoardPostDTO postDTO, MultipartFile[] uploadFile/* ,List<FileAssetDTO> fileList */);
 	
-	public Map<String, Object> postUpdate(BoardPostDTO postDTO, FileAssetDTO fileDTO);
+	public Map<String, Object> postUpdate(BoardPostDTO postDTO, MultipartFile[] uploadFile/* , List<FileAssetDTO> fileList */);
+	
+	//Public -> Private
+	public Map<String,Object> postDelete(String boardId);
+	
+	//DB에서도 삭제
+	public Map<String,Object> postRealDelete(String boardId);
 }

@@ -1,9 +1,18 @@
 package kr.co.dreamstart.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,103 +31,119 @@ import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.FileAssetDTO;
 import kr.co.dreamstart.mapper.FileAssetMapper;
 import kr.co.dreamstart.service.BoardService;
+import kr.co.dreamstart.service.FileService;
+import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnailator;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-	
+
 	@Autowired
-	private BoardService service;
+	private BoardService boardService;
 	
-	@Autowired
-	private FileAssetMapper fileMapper;
-	
-	//main
+	// main
 	@GetMapping("")
 	public String adminMain() {
 
 		return "/admin/adminMain";
 	}
 
-	//list
+	// list
 	@GetMapping("/notices")
 	public String noticeList(@RequestParam(required = false) String searchType,
-			@RequestParam(required = false) String keyword,@RequestParam(required = false,defaultValue = "PUBLIC") String visibility, Criteria cri, Model model) {
-		Map<String, Object> map = service.postList(cri, "NOTICE",visibility, searchType, keyword);
+			@RequestParam(required = false) String keyword,
+			@RequestParam(required = false, defaultValue = "PUBLIC") String visibility, Criteria cri, Model model) {
+		String category = "notices";
+		model.addAttribute("category", category);
+
+		Map<String, Object> map = boardService.postList(cri, "NOTICE", visibility, searchType, keyword);
 		model.addAttribute("totalCount", map.get("totalCount"));
-		model.addAttribute("postList", map.get("postList"));
+		model.addAttribute("postList", map.get("postList")); // 해당 게시물 commentCount 포함
 		model.addAttribute("pageVO", map.get("pageVO"));
 		model.addAttribute("cri", map.get("cri"));
-		
-		 // 검색 조건 별도 전달
-	    model.addAttribute("visibility", visibility);
-	    model.addAttribute("searchType", searchType);
-	    model.addAttribute("keyword", keyword);
 
+		// 검색 조건 별도 전달
+		model.addAttribute("visibility", visibility);
+		model.addAttribute("searchType", searchType);
+		model.addAttribute("keyword", keyword);
 
-		return "/admin/adminNoticeList";
+		return "/admin/boardList";
 	}
-	
-	//detail
+
+	// detail
 	@GetMapping("/notices/{postId}")
-	public String noticeDetail(@PathVariable("postId")long postId,Model model) {
-		Map<String, Object> map = service.postDetail("NOTICE", postId);
-		BoardPostDTO postDTO = (BoardPostDTO) map.get("postDTO");
-		BoardPostDTO prevDTO = (BoardPostDTO) map.get("prevDTO");
-		BoardPostDTO nextDTO = (BoardPostDTO) map.get("nextDTO");
-		model.addAttribute("postDTO", postDTO);
-		model.addAttribute("prevDTO", prevDTO);
-		model.addAttribute("nextDTO", nextDTO);
-		
-		List<FileAssetDTO> fileList = fileMapper.list("board_post", postId);
-		model.addAttribute("fileList", fileList);
+	public String noticeDetail(HttpServletRequest request,@PathVariable("postId") long postId, Model model) {
+		Map<String, Object> map = boardService.postDetail("NOTICE", postId);
+		model.addAttribute("postDTO", map.get("postDTO"));
+		model.addAttribute("prevDTO", map.get("prevDTO"));
+		model.addAttribute("nextDTO", map.get("nextDTO"));
+		model.addAttribute("fileList", map.get("fileList"));
 		return "/admin/adminNoticeDetail";
 	}
 
-	//insert
+	// insert
 	@GetMapping("/notices/form")
 	public String noticeForm(Model model) {
 		String formType = "INSERT";
 		model.addAttribute("formType", formType);
 		return "/admin/boardForm";
 	}
-	
-	//insert
+
+	// insert
 	@PostMapping("/notices/form")
-	public String noticeFormPost(BoardPostDTO postDTO,/*MultipartFile[] multiFile*/MultipartHttpServletRequest request, RedirectAttributes rttr) {
-		MultipartFile file = request.getFile("uploadFile");
-//		int result = service.insert();
-//		rttr.addAttribute("", "");//result = success-> alert
-		return "redirect:/admin/notices/"+postDTO.getPostId();
+	public String noticeFormPost(HttpServletRequest request,BoardPostDTO postDTO, MultipartFile[] uploadFile,
+			/* MultipartHttpServletRequest request, */ RedirectAttributes rttr) {
+//		MultipartFile file = request.getFile("uploadFile"); ajax로 변경시 사용
+		Map<String,Object> map = boardService.postInsert(request, postDTO,uploadFile);
+		//map.get("success")값을 받아야하나?
+		return "redirect:/admin/notices/" + map.get("postId");
 	}
-	
-	//update
+
+
+// boardService - fileService 분리 작업 후 수정해야함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	// update
 	@GetMapping("/notices/{postId}/update")
-	public String noticeUpdate(@PathVariable("postId")long postId,Model model) {
+	public String noticeUpdate(@PathVariable("postId") long postId, Model model) {
 		String formType = "UPDATE";
 		model.addAttribute("formType", formType);
-		//파일@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-		List<FileAssetDTO> fileList = fileMapper.list("board_post", postId);
-		model.addAttribute("fileList", fileList);
-		//수정할 게시물
-		Map<String, Object> map = service.postDetail("NOTICE", postId);
-		BoardPostDTO postDTO = (BoardPostDTO) map.get("postDTO");
-		BoardPostDTO prevDTO = (BoardPostDTO) map.get("prevDTO");
-		BoardPostDTO nextDTO = (BoardPostDTO) map.get("nextDTO");
-		model.addAttribute("postDTO", postDTO);
-		model.addAttribute("prevDTO", prevDTO);
-		model.addAttribute("nextDTO", nextDTO);
+		// 파일@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+		// 수정할 게시물
+		Map<String, Object> map = boardService.postDetail("NOTICE", postId);
+		model.addAttribute("postDTO", map.get("postDTO"));
+		model.addAttribute("prevDTO", map.get("prevDTO"));
+		model.addAttribute("nextDTO", map.get("nextDTO"));
+		model.addAttribute("fileList", map.get("fileList"));
+
 		return "/admin/boardForm";
 	}
-	
-	//update
+
+	// update
 	@PostMapping("/notices/{postId}/update")
-	public String noticeUpdatePost(List<FileAssetDTO> fileList,BoardPostDTO postDTO) {
-		
-		return "redirect:/notices/"+postDTO.getPostId();
+	public String noticeUpdatePost(BoardPostDTO postDTO, MultipartFile[] uploadFile) {
+
+		return "redirect:/notices/" + postDTO.getPostId();
 	}
-	
-	
-	
+
+	@GetMapping("/qna")
+	public String qnaList(@RequestParam(required = false) String searchType,
+			@RequestParam(required = false) String keyword,
+			@RequestParam(required = false, defaultValue = "PUBLIC") String visibility, Criteria cri, Model model) {
+		String category = "qna";
+		model.addAttribute("category", category);// jsp를 위한거라 service에선 사용못함
+		Map<String, Object> map = boardService.postList(cri, "QNA", visibility, searchType, keyword);
+		model.addAttribute("totalCount", map.get("totalCount"));
+		model.addAttribute("postList", map.get("postList"));// commentCount 포함
+		model.addAttribute("pageVO", map.get("pageVO"));
+		model.addAttribute("cri", map.get("cri"));
+
+		// 검색 조건 별도 전달
+		model.addAttribute("visibility", visibility);
+		model.addAttribute("searchType", searchType);
+		model.addAttribute("keyword", keyword);
+
+		return "/admin/boardList";
+	}
 
 }

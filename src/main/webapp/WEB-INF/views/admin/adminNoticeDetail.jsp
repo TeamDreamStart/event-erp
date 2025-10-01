@@ -73,9 +73,9 @@
 								<th rowspan="2">내용</th>
 								<td colspan="3"><c:forEach var="fileDTO"
 										items="${fileList}">
-										<img
-											src="${pageContext.request.contextPath}/upload/${fileDTO.storedPath}/${fileDTO.uuid}_${fileDTO.originalName}"
-											alt="${fileDTO.originalName}">
+										<img src="${pageContext.request.contextPath}/resources/uploadTemp/${fileDTO.storedPath}/${fileDTO.uuid}_${fileDTO.originalName}"
+     alt="${fileDTO.originalName}">
+
 									</c:forEach></td>
 							</tr>
 							<tr>

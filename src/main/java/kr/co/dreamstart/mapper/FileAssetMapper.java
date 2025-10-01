@@ -15,11 +15,7 @@ public interface FileAssetMapper {
 	public FileAssetDTO select(@Param("ownerType") String ownerType, @Param("ownerId") long ownerId);
 
 	// 파일이 여러개가 넘어오면 foreach문으로 insert
-	public int insertFileInfo(FileAssetDTO fileDTO);
-
-	//게시물 넘긴 후 아이디 받아와서 업데이트
-	public int insertFileOwner(@Param("ownerType") String ownerType, @Param("ownerId") long ownerId,
-			@Param("fileId") long fileId);
+	public int insert(FileAssetDTO fileDTO);
 
 	public int update(FileAssetDTO fileDTO);
 

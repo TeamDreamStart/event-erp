@@ -10,9 +10,9 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!-- 유저아이디/이메일 찾기위한 @survice 등록을 위해 -->
 	<context:component-scan
-      base-package="kr.co.dreamstart.service, kr.co.dreamstart.controller, kr.co.dreamstart.security"/>
-	
-	
+		base-package="kr.co.dreamstart.service, kr.co.dreamstart.controller, kr.co.dreamstart.security" />
+
+
 	<!-- DB 연결 설정 DB 생성하고 경로 수정합시다! -->
 
 
@@ -21,20 +21,18 @@
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName"
 			value="com.mysql.cj.jdbc.Driver" />
-		<!-- 서버 pc 아닐 시 url 아래로 수정  -->
 		<property name="url"
-			value="jdbc:mysql://192.168.0.50:3306/event_erp?serverTimezone=UTC" />
-
+			value="jdbc:mysql://mbc-sw.iptime.org:4200/event_erp?serverTimezone=UTC" />
 		<property name="username" value="dreamS" />
-		<property name="password" value="1234" />
+		<property name="password" value="emflacnfqkfxlaghkdlxld!" />
 	</bean>
-	
+
 	<!-- 패스워드 인코딩 -->
 	<bean id="passwordEncoder"
-      class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
-  		<constructor-arg value="10"/>
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+		<constructor-arg value="10" />
 	</bean>
-	
+
 
 	<!-- SqlSessionFactory 설정 -->
 	<bean id="sqlSessionFactory"
@@ -74,8 +72,7 @@
 				<prop key="mail.smtp.starttls.enable">true</prop>
 				<prop key="mail.smtp.auth">true</prop>
 				<prop key="mail.debug">true</prop>
-				<!-- gmail/naver 용 설정 
-				<prop key="mail.smtps.ssl.checkserveridentity">true</prop> 
+				<!-- gmail/naver 용 설정 <prop key="mail.smtps.ssl.checkserveridentity">true</prop> 
 					<prop key="mail.smtps.ssl.trust">*</prop> <prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop> -->
 			</props>
 		</property>

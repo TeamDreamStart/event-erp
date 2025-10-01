@@ -62,7 +62,7 @@ public class TestController {
 
 	@Autowired
 	private BoardMapper boardMapper;
-	
+
 	@Autowired
 	private FileAssetMapper fileMapper;
 
@@ -176,7 +176,7 @@ public class TestController {
 		// detail 클릭할 때 마다 조회수 증가
 		boardMapper.viewCountPlus(postId);
 
-		BoardPostDTO boardDTO = boardMapper.select("NOTICE",postId);
+		BoardPostDTO boardDTO = boardMapper.select("NOTICE", postId);
 
 		model.addAttribute("boardDTO", boardDTO);
 
@@ -186,7 +186,7 @@ public class TestController {
 		BoardPostDTO nextDTO = boardMapper.selectNext("NOTICE", postId);
 		model.addAttribute("nextDTO", nextDTO);
 
-		//댓글
+		// 댓글
 		int commentCount = boardMapper.commentCount(postId);
 		if (commentCount > 0) {
 			List<BoardCommentDTO> commentList = boardMapper.commentList(postId);
@@ -197,7 +197,7 @@ public class TestController {
 
 	@GetMapping("board-test/{postId}/update")
 	public String updateTest(@PathVariable("postId") long postId, Model model) {
-		BoardPostDTO postDTO = boardMapper.select("NOTICE",postId);
+		BoardPostDTO postDTO = boardMapper.select("NOTICE", postId);
 
 		model.addAttribute("postDTO", postDTO);
 		model.addAttribute("formType", "update");
@@ -259,6 +259,8 @@ public class TestController {
 		return "/test/fileTest";
 	}
 
+	
+	
 //	@PostMapping("/upload")
 //	public String fileUploadTest(MultipartFile[] uploadFile, Model model/* ,@PathVariable("boardId")long boardId */) {
 //		// 업로드된 파일을 저장할 폴더 경로
@@ -283,7 +285,8 @@ public class TestController {
 
 	@PostMapping(value = "/uploadAjax", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody // json으로 반환
-	public ResponseEntity<List<FileAssetDTO>> ajaxTest(@PathVariable(required = false)String ownerType,@PathVariable(required = false)long ownerId,  MultipartFile[] uploadFile) {
+	public ResponseEntity<List<FileAssetDTO>> ajaxTest(@PathVariable(required = false) String ownerType,
+			@PathVariable(required = false) long ownerId, MultipartFile[] uploadFile) {
 
 		// 업로드된 파일 정보를 담을 리스트 생성
 		List<FileAssetDTO> fileList = new ArrayList<>();
@@ -341,17 +344,15 @@ public class TestController {
 				// @@ UUID, 파일 경로 객체에 저장
 				fileDTO.setOwnerType(ownerType);
 				fileDTO.setOwnerId(ownerId);
-				
 				fileDTO.setUuid(uuid.toString());
 				fileDTO.setStoredPath(uploadFolderPath);
 				fileDTO.setMimeType(multipartFile.getContentType());
 				fileDTO.setSizeBytes(multipartFile.getSize());
-				System.out.println("ORIGINALNAME : "+fileDTO.getOriginalName());
-				System.out.println("UUID : "+fileDTO.getUuid());
-				System.out.println("STOREDPATH : "+fileDTO.getStoredPath());
-				System.out.println("MIMETYPE : "+fileDTO.getMimeType());
-				System.out.println("SIZEBYTES : "+fileDTO.getSizeBytes());
-//				fileDTO.setCreatedAt(LocalDateTime.now().toString()); // DB에서 now() 써도 됨
+				System.out.println("ORIGINALNAME : " + fileDTO.getOriginalName());
+				System.out.println("UUID : " + fileDTO.getUuid());
+				System.out.println("STOREDPATH : " + fileDTO.getStoredPath());
+				System.out.println("MIMETYPE : " + fileDTO.getMimeType());
+				System.out.println("SIZEBYTES : " + fileDTO.getSizeBytes());
 
 				// 저장한 파일이 이미지인 경우 썸네일 생성
 				if (checkImageType(saveFile)) {
@@ -370,7 +371,7 @@ public class TestController {
 		}
 		// @@ DB에 file 정보 넣어야함@@@@@@@@@@@@@@@@@@@@@@@@@@ list니까 foreach문 돌려야되나?
 		for (FileAssetDTO fileDTO : fileList) {
-		    fileMapper.insertFileInfo(fileDTO);  // 매퍼 메소드 호출
+			fileMapper.insert(fileDTO); // 매퍼 메소드 호출
 			/* fileMapper.insertFileOwner("board_post", fileDTO.getFileId()); */
 		}
 		// 클라이언트에게 업로드가 성공했음을 나타내는 HTTP 응답을 생성
@@ -427,29 +428,19 @@ public class TestController {
 		}
 		return result;
 	}
-	
+
 	@GetMapping("/show")
 	public String justShowTest(Model model) {
 		List<FileAssetDTO> fileList = fileMapper.list("board_post", 1);
 		model.addAttribute("fileList", fileList);
-		for(FileAssetDTO fileDTO : fileList) {
+		for (FileAssetDTO fileDTO : fileList) {
 			System.out.println(fileDTO);
 		}
 		return "/test/fileTest";
-		
+
 	}
-	
-	@GetMapping("/admin/main")
-	public String bootTest() {
-		
-		return "/admin/index";
-	}
-	
-	@GetMapping("/admin/tables")
-	public String tablesTest() {
-		
-		return "/admin/tables";
-	}
+
+
 	@GetMapping("/survey-test")
 	public String surveyTest(@RequestParam(required = false) Long eventId,
 			@RequestParam(required = false, defaultValue = "all") String field,

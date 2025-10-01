@@ -61,7 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="postInsert" useGeneratedKeys="true"
 		keyProperty="postId">
 		insert into `board_post`
-		(`category`,`title`,`content`,`user_id`,`pinned`,`visibility`,`created_at`)
+		(`category`,`title`,`content`,`user_id`,`is_pinned`,`visibility`,`created_at`)
 		values
 		(#{category},#{title},#{content},#{userId},#{pinned},#{visibility},now())
 	</insert>

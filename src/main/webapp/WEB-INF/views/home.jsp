@@ -4,7 +4,7 @@
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>Home</title>
@@ -76,7 +76,8 @@
 		<!-- 나머지 컨텐츠 그대로 유지 -->
 		<a href="/list-test">회원목록 테스트</a> <a href="/board-test">게시판 테스트</a> <a
 			href="/pay-test">결제 테스트</a> <a href="/survey-test">설문조사 테스트</a> <a
-			href="/survey-test/clone-form">설문조사 폼 테스트</a>
+			href="/survey-test/clone-form">설문조사 폼 테스트</a> <a href="/admin">관리자
+			페이지</a>
 	</article>
 </body>
 </html>
