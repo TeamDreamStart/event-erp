@@ -2,24 +2,44 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<script src="/js/main.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet"/>
+<title>footer</title>
+<style>
+	.footer{
+	padding-left: 36px;
+	padding-right: 36px;
+	margin-top: 100px;
+	border: 1px solid #222222;
+	justify-content: left;
+	background-color: #CBD4C2;
+    font-size: 16px;
+}
+.footer .address{
+	margin-top: 64px;
+	margin-bottom: 16px;
+}
+.footer hr{
+	margin-bottom: 28px;
+	margin-top: 28px;
+	height: 1px;
+	border: none;
+    border-top: 1px solid #222222;
+}
+.footer .other{
+	margin-bottom: 28px;
+}
+</style>
 </head>
 <body>
-
-	<header> </header>
-
-	<nav></nav>
-
-	<article>
-		<h1>Hello world!</h1>
-
-		<P>The time on the server is serverTime.</P>
-
-	</article>
-
-	<footer> </footer>
+<footer class="footer">
+		<p class="address">수원시 팔달구 덕영대로 895번길 11</p>
+		<p class="call">대표전화. 031-420-4204</p>
+		<hr class="footer-hr">
+		<p class="other">@jfdfhfksehfkjsnckaul</p>
+	</footer>
 </body>
 </html>

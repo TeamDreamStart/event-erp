@@ -2,32 +2,31 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
+<script src="<c:url value='/js/main.js'/>"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet"/>
 <title>findPassword</title>
+<style>
+	body {
+		background-color: #E5E2DB;
+		color: #222222;
+		font-family: 'Montserrat', sans-serif;
+		font-size: medium;
+		margin: 0;
+		padding: 0 120px 60px; 
+		line-height: 1;
+	}
+	main {
+		margin-top: 0; 
+		padding: 0; 
+	}
+	</style>
 </head>
 <body>
-
-	<header class="header">
-		<div class="header-top">
-		<span class="header-left">
-			<a href="/" class="logo-link"><span class="logo">D</span></a>
-			</span>
-			<span class="header-right">
-				<span class="user-actions">
-					<a href="#" class="mypage-link">my page</a>
-					<button class="btn-login">login</button>
-				</span>
-			</span>
-		</div>
-			<nav class="header-nav">
-				<a href="#">Visit</a>
-				<a href="#">Event</a>
-				<a href="#">Notice</a>
-				<a href="#">Help</a>
-			</nav>
-	</header>
+	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
+	<main>
 	<div class="container">
 		<h2>Find</h2>
 		<div class="findUid-section">
@@ -64,12 +63,7 @@
 			</form>
 		</div>
 	</div> <hr>
-	
-	<footer class="footer">
-		<p>수원시 팔달구 덕영대로 895번길 11</p>
-		<p>대표전화. 031-420-4204</p>
-		<hr class="footer-hr">
-		<p>@jfdfhfksehfkjsnckaul</p>
-	</footer>
+	</main>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
 </body>
 </html>

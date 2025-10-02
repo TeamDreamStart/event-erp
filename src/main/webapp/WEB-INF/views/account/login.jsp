@@ -262,8 +262,8 @@
                 </div>
             </nav>
             <hr class="hr1">
-					</header>
-<main>
+	</header>
+	<main>
 	<div class="container">
 		<h2 class="login-title">Login</h2>
 		<div class="login-section">
@@ -284,7 +284,7 @@
 			</form>
 		</div>
 	</div>
-	</main>
+</main>
 <footer class="footer">
 		<p class="address">수원시 팔달구 덕영대로 895번길 11</p>
 		<p class="call">대표전화. 031-420-4204</p>

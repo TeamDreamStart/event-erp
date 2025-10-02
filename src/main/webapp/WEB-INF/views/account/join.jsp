@@ -1,101 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Join Membership</title>
-<style>
-    
-    .mypage-link{
-        cursor : pointer;
-    }
-    .mypage-link:hover{
-        background-color: #e0e0e0;
-    }
-    .btn-login {
-        cursor: pointer;
-    }
-    .btn-login:hover {
-    background-color: #555;
-}
-.input-with-button {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-.input-with-button input {
-    flex-grow: 1;
-}
-.error-message {
-    color: red;
-    font-size: 0.9em;
-    margin-top: 5px;
-    display: none; /* 초기에는 숨김 */
-}
-    select.box {
-        display: flex;
-        margin-left: 5px;
-        padding: 5px 0 5px 10px;
-        border: 1px solid #d9d6d6;
-        color: #383838;
-        background-color: #ffffff;
-        font-family: 'Montserrat', sans-serif;
-        text-align: center;
-}
-    option {
-        font-size: 16px;
-    }
-/* 1. select 박스 기본 스타일 통일 */
-.birth-select {
-    width: 100%;
-    height: 50px; /* 기존 box 높이 50px 유지 */
-    box-sizing: border-box;
-    padding: 5px 0 5px 10px;
-    border-radius: 4px;
-    border: 1px solid #d9d6d6;
-    color: #383838;
-    background-color: #ffffff;
-    font-family: 'Montserrat', 'Pretendard', sans-serif;
-    /* 나머지 스타일 (화살표, 폰트 사이즈 등) */
-}
-    /* 2. 생년월일 섹션의 정렬 (가장 중요한 부분!) */
-.form-group.birth-date-group {
-    /* 레이블이 위에 있고, select 박스들이 아래에 한 줄로 오게 하려면 별도 flex 설정을 안 해도 됩니다. */
-}
-/* 3. 년/월/일 select 박스들을 한 줄에 정렬하고 간격 유지 */
-.birth-select-wrapper {
-    display: flex; /* 자식 요소(select)를 가로로 배열 */
-    gap: 8px;      /* select 박스들 사이에 8px 간격 (이미지 기반 추정치) */
-    width: 100%;   /* 부모 요소의 너비를 꽉 채우도록 */
-}
-    .info .box#domain-list option {
-        font-size: 14px;
-        background-color: #ffffff ;
-    }
-</style>
+<script src="<c:url value='/js/main.js'/>"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet"/>
+<title>join</title>
+<link rel="stylesheet" type="text/css" href="/resources/css/join.css">
 </head>
 <body>
-	<header class="header">
-		<div class="header-top">
-			<span class="header-left">
-				<a href="/" class="logo-link"><span class="logo">D</span></a>
-			</span>
-			<span class="header-right">
-				<span class="user-actions">
-					<a href="#" class="mypage-link">my page</a>
-					<button class="btn-login">login</button>
-				</span>
-			</span>
-		</div>
-			<nav class="header-nav">
-				<a href="#">Visit</a>
-				<a href="#">Event</a>
-				<a href="#">Notice</a>
-			</nav>
-	</header>
+<jsp:include page="/WEB-INF/views/common/header.jsp"/>
+	<main>
 	<div class="container">
 		<h2>join membership</h2>
 		<div class="membership-section">
@@ -194,13 +112,8 @@ pageEncoding="UTF-8"%>
     </div>
 </form>
 </div>
-	<footer class="footer">
-        <p>수원시 팔달구 덕영대로 895번길 11</p>
-		<p>대표전화. 031-420-4204</p>
-		<hr class="footer-hr">
-		<p>@jfdfhfksehfkjsnckaul</p>
-	</footer>
-
+</main>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
 	<script>
         // 전역 변수로 중복 확인 상태를 관리
         let isUsernameChecked = false;
@@ -248,8 +161,6 @@ pageEncoding="UTF-8"%>
                 isUsernameChecked = false;
             });
         }
-    // ... (기존 checkUsernameDuplicate, showMessage, hideAllMessages, validateForm 함수 유지)
-
     // 생년월일 select 박스를 가져오는 변수
     const birthYearEl = document.querySelector('#birth_year');
     const birthMonthEl = document.querySelector('#birth_month');
@@ -319,10 +230,8 @@ pageEncoding="UTF-8"%>
         birthYearEl.addEventListener('change', setDayOptions);
         birthMonthEl.addEventListener('change', setDayOptions);
         
-        // ... (기존 이메일 관련 이벤트 리스너는 여기에 유지)
     });
 
-    // ... (기존 이메일 관련 로직 및 validateForm 함수 유지)
 
         // 이메일 입력
         const domainListEl = document.querySelector('#domain-list')

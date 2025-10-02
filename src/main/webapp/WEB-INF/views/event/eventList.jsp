@@ -2,31 +2,41 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
+<script src="/js/main.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet"/>
 <title>eventList</title>
 </head>
 <body>
-	<header class="header">
+<header class="header">
 		<div class="header-top">
-		<span class="header-left">
-			<a href="/" class="logo-link"><span class="logo">D</span></a>
+			<span class="header-left">
+				<a href="/" class="logo-link"><span class="logo">D</span></a>
 			</span>
 			<span class="header-right">
 				<span class="user-actions">
-					<a href="#" class="mypage-link">my page</a>
-					<button class="btn-login">login</button>
+					<a href="/my-info" class="mypage-link">my page</a>
+					<a href="/login" class="btn-login">login</a>
 				</span>
 			</span>
 		</div>
 			<nav class="header-nav">
 				<a href="#">Visit</a>
-				<a href="#">Exhibitions</a>
-				<a href="#">Store</a>
-			</nav>
+				<a href="/events">Event</a>
+				<a href="/reservations/guest-check">Reservation</a>
+                <div class="dropdown-container">
+                    <label class="help">Help</label>
+                    <ul class="menu">
+                        <li><a href="/notices">Notice</a></li>
+                        <li><a href="/qna">Q&A</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <hr class="hr1">
 	</header>
-	<main class="main-content-wrapper">
+	<main>
 		<div class="content-container">
 		<article class="exhibitions-article">
 			<section class="exhibition-section present-exhibitions">
@@ -124,10 +134,10 @@
 	</main>
 
 	<footer class="footer">
-		<p>수원시 팔달구 덕영대로 895번길 11</p>
-		<p>대표전화. 031-420-4204</p>
+		<p class="address">수원시 팔달구 덕영대로 895번길 11</p>
+		<p class="call">대표전화. 031-420-4204</p>
 		<hr class="footer-hr">
-		<p>@jfdfhfksehfkjsnckaul</p>
+		<p class="other">@jfdfhfksehfkjsnckaul</p>
 	</footer>
 </body>
 </html>
