@@ -18,7 +18,7 @@ public class EventController {
 //		return "redirect:/event/eventMain";
 //	}
 	
-	@GetMapping("/datail")
+	@GetMapping("/detail")
 	public String detail() {
 		log.info("GET event/detail 호출");
 		return "event/eventDetail";
