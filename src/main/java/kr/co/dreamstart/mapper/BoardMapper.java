@@ -72,4 +72,6 @@ public interface BoardMapper {
 	public int commentInsert(BoardCommentDTO commentDTO);
 	// 게시판 이미지 파일 첨부
 
+	public int commentDelete(long commentId);
+
 }

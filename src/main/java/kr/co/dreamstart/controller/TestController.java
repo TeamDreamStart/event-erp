@@ -237,7 +237,7 @@ public class TestController {
 
 		return "/board-test";
 	}
-	// 댓글 빡치게 해서 그냥 삭제함.. 다시 구현하자@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	
 
 	@GetMapping("/board-test/{postId}/delete")
 	public String postDeleteTest(@PathVariable("postId") long postId, RedirectAttributes redirectAttributes) {

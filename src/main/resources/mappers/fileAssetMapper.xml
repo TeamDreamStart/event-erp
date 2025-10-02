@@ -44,10 +44,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="insert" parameterType="FileAssetDTO">
 		insert into `file_asset`
 		(`owner_type`,`owner_id`,`original_name`, `stored_path`,
-		`mime_type`, `size_bytes`, `created_at`, `uuid`)
+		`mime_type`,
+		`size_bytes`, `created_at`, `uuid`)
 		values
-		(#{ownerType}, #{ownerId}, #{originalName}, #{storedPath},
-		#{mimeType}, #{sizeBytes}, now(), #{uuid})
+		(#{ownerType}, #{ownerId},
+		#{originalName}, #{storedPath},
+		#{mimeType}, #{sizeBytes}, now(),
+		#{uuid})
 	</insert>
 
 	<update id="update">
@@ -63,4 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		delete from `file_asset` where `file_id` = #{fileId}
 	</delete>
 
+	<select id="getFile" resultMap="fileMap">
+		select * from `file_asset` where `file_id` = #{fileId}
+	</select>
 </mapper>

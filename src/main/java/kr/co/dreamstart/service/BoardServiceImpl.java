@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.dreamstart.dto.BoardCommentDTO;
@@ -76,10 +78,14 @@ public class BoardServiceImpl implements BoardService {
 		BoardPostDTO nextDTO = mapper.selectNext(category, postId);
 		// 해당 글 파일리스트
 		List<FileAssetDTO> fileList = fileMapper.list("board_post", postId);
+		// 해당 글 댓글 리스트
 		map.put("postDTO", postDTO);
 		map.put("prevDTO", prevDTO);
 		map.put("nextDTO", nextDTO);
 		map.put("fileList", fileList);
+		
+		List<BoardCommentDTO> commentList = mapper.commentList(postId);
+		map.put("commentList", commentList);
 		return map;
 	}
 
@@ -103,38 +109,48 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public Map<String, Object> postUpdate(HttpServletRequest request ,BoardPostDTO postDTO, MultipartFile[] uploadFile,List<Long> deleteFileId) {
+	public Map<String, Object> postUpdate(HttpServletRequest request ,@ModelAttribute BoardPostDTO postDTO, 
+			 @RequestParam(value="uploadFile", required=false)MultipartFile[] uploadFile) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		int result = -1;
 		//수정한 게시물
 		result = mapper.postUpdate(postDTO);
+		long postId = postDTO.getPostId();
 		if(result>0) {
-			if (uploadFile != null && uploadFile.length > 0) {
-			//새로 넣은 파일
-			fileService.saveFiles(request, uploadFile, "board_post", postDTO.getPostId());
-			}
-			if(deleteFileId.size()>0) {
-				//삭제할 파일
-				for(long fileId : deleteFileId) {
-					fileMapper.delete(fileId);
-				}
-			}
+			map.put("postId", postId);
+			map.put("success", true);
+		}else {
+			map.put("success",false);
 		}
-		
-		// 뭘 반환하지........
 		return map;
 	}
 
 	@Override
-	public Map<String, Object> postDelete(String boardId) {
+	public Map<String, Object> postDelete(long postId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	//파일,댓글도 함께 지움
+	@Override
+	public Map<String, Object> postRealDelete(long postId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Map<String, Object> postRealDelete(String boardId) {
-		// TODO Auto-generated method stub
-		return null;
+	public int commentInsert(BoardCommentDTO commentDTO) {
+		return mapper.commentInsert(commentDTO);
+	}
+
+	@Override
+	public int commentDelete(long commentId) {
+		return mapper.commentDelete(commentId);
+	}
+
+	@Override
+	public List<BoardCommentDTO> commentList(long postId) {
+		return mapper.commentList(postId);
 	}
 
 }

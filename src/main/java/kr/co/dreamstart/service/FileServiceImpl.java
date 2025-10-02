@@ -39,22 +39,19 @@ public class FileServiceImpl implements FileService {
 		return mapper.list(ownerType, ownerId);
 	}
 
-
 	@Override
-	public void saveFiles(HttpServletRequest request ,MultipartFile[] uploadFile, String ownerType, Long ownerId) {
+	public void saveFiles(HttpServletRequest request, MultipartFile[] uploadFile, String ownerType, long ownerId) {
 		// 파일 받을 리스트
 		List<FileAssetDTO> fileList = new ArrayList<>();
 
 		// 업로드된 파일을 저장할 폴더 경로
 		String uploadFolder = request.getServletContext().getRealPath("/resources/uploadTemp");
 
-
 		// 현재 날짜를 기준으로 업로드된 파일을 저장할 서브 폴더 경로를 생성하여 반환
 		String uploadFolderPath = getFolder();
 
 		// 현재 날짜를 기준으로 업로드된 파일을 저장할 서브 폴더 경로 생성
 		File uploadPath = new File(uploadFolder, getFolder()); // C:\\upload\2025\10 getFolder 메서드에서 날짜 포멧 설정
-		log.info("upload path : " + uploadPath);
 
 		// 업로드할 서브 폴더가 없는 경우 생성
 		if (uploadPath.exists() == false) {
@@ -63,9 +60,15 @@ public class FileServiceImpl implements FileService {
 
 		// 입력받은 여러개의 첨부파일 전부 순회
 		for (MultipartFile multipartFile : uploadFile) {
-			log.info("---------------------------------");
-			log.info("upload File Name : " + multipartFile.getOriginalFilename());
-			log.info("upload File Size : " + multipartFile.getSize());
+			if (multipartFile == null || multipartFile.isEmpty()) {
+				log.warn("[FileService] EMPTY UPLOAD FILE...");
+				continue;
+			}
+			String originalName = multipartFile.getOriginalFilename();
+			if (originalName == null || originalName.trim().isEmpty()) {
+				log.warn("[FileService] NO FILENAME...");
+				continue;
+			}
 
 			// 업로드된 파일 정보를 담을 객체 생성 ->DB
 			FileAssetDTO fileDTO = new FileAssetDTO();
@@ -79,7 +82,6 @@ public class FileServiceImpl implements FileService {
 			UUID uuid = UUID.randomUUID();
 			uploadFileName = uuid.toString() + "_" + uploadFileName; // 파일명 : uuid + '_' + originalFilename -> ex)
 																		// uuid_oil.jpg
-			log.info("upload File -------------------->" + uploadFileName);
 			// 실제로 파일을 저장하기 위한 File 객체 생성
 			File saveFile = new File(uploadPath, uploadFileName);
 			try {
@@ -103,7 +105,7 @@ public class FileServiceImpl implements FileService {
 			fileDTO.setOwnerType(ownerType);
 			fileDTO.setOwnerId(ownerId);
 			fileDTO.setUuid(uuid.toString());
-			fileDTO.setStoredPath(uploadFolderPath.replace("\\","/"));
+			fileDTO.setStoredPath(uploadFolderPath.replace("\\", "/"));
 			fileDTO.setMimeType(multipartFile.getContentType());
 			fileDTO.setSizeBytes(multipartFile.getSize());
 			log.info("DB INFO ---------------------------");
@@ -118,12 +120,12 @@ public class FileServiceImpl implements FileService {
 		// @@@@@@@@@@@@@List DB에 넣기
 		int result = -1;
 		int index = 1;
-		for(FileAssetDTO fileDTO : fileList) {
+		for (FileAssetDTO fileDTO : fileList) {
 			result = mapper.insert(fileDTO);
-			if(result>0) {
-				log.info(index+".file save success");
-			}else {
-				log.info(index+". file save fail");
+			if (result > 0) {
+				log.info(index + ". file save success");
+			} else {
+				log.info(index + ". file save fail");
 			}
 			index++;
 		}
@@ -150,6 +152,29 @@ public class FileServiceImpl implements FileService {
 		}
 		// 마임 타입을 확인할 수 없는 경우 이미지가 아닌 것으로 간주
 		return false;
+	}
+
+	public void deleteFiles(List<Long> deleteFileList) {
+		if (deleteFileList.size() > 0 && !deleteFileList.isEmpty()) {
+			int result = -1;
+			for (long deleteFileId : deleteFileList) {
+				result = -1;
+				result = mapper.delete(deleteFileId);
+				if (result > 0) {
+					log.info("[FileService] DELETED SUCCESS ID : " + deleteFileId);
+				} else {
+					log.warn("[FileService] DELETED FAIL ID : " + deleteFileId);
+				}
+			}
+		}else {
+			log.info("[FileService] EMPTY DELETE FILE LIST...");
+		}
+	}
+
+	@Override
+	public FileAssetDTO getFile(long fileId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

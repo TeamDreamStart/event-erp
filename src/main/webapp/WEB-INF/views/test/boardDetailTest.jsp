@@ -86,7 +86,6 @@
 
 			<!-- 댓글 목록 -->
 			<div id="commentListArea">
-				<!-- 초기 렌더링용 JSP -->
 				<c:forEach var="commentDTO" items="${commentList}">
 					<div class="well">
 						<b>${commentDTO.userId}</b><br> ${commentDTO.content}<br>
@@ -94,12 +93,7 @@
 					</div>
 				</c:forEach>
 			</div>
-
-
-
 		</div>
-
-
 	</article>
 
 	<footer> </footer>

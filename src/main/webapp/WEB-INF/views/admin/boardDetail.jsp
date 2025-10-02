@@ -71,10 +71,12 @@
 							</tr>
 							<tr>
 								<th rowspan="2">내용</th>
+								<!-- 이미지사진 -->
 								<td colspan="3"><c:forEach var="fileDTO"
 										items="${fileList}">
-										<img src="${pageContext.request.contextPath}/resources/uploadTemp/${fileDTO.storedPath}/${fileDTO.uuid}_${fileDTO.originalName}"
-     alt="${fileDTO.originalName}">
+										<img
+											src="${pageContext.request.contextPath}/resources/uploadTemp/${fileDTO.storedPath}/${fileDTO.uuid}_${fileDTO.originalName}"
+											alt="${fileDTO.originalName}">
 
 									</c:forEach></td>
 							</tr>
@@ -89,7 +91,7 @@
 								<th style="width: 80px;">이전글</th>
 								<td><c:if test="${not empty prevDTO}">
 										<a
-											href="${pageContext.request.contextPath}/admin/${category}/${prevDTO.postId}">
+											href="${pageContext.request.contextPath}/admin/${boardType}/${prevDTO.postId}">
 											${prevDTO.title} </a>
 									</c:if></td>
 							</tr>
@@ -97,7 +99,7 @@
 								<th>다음글</th>
 								<td><c:if test="${not empty nextDTO}">
 										<a
-											href="${pageContext.request.contextPath}/admin/${category}/${nextDTO.postId}">
+											href="${pageContext.request.contextPath}/admin/${boardType}/${nextDTO.postId}">
 											${nextDTO.title} </a>
 									</c:if></td>
 							</tr>
@@ -105,11 +107,11 @@
 
 						<!-- 버튼 그룹 -->
 						<div class="text-right">
-							<a href="${pageContext.request.contextPath}/admin/${category}"
+							<a href="${pageContext.request.contextPath}/admin/${boardType}"
 								class="btn btn-default">목록</a> <a
-								href="${pageContext.request.contextPath}/admin/${category}/${postDTO.postId}/update"
+								href="${pageContext.request.contextPath}/admin/${boardType}/${postDTO.postId}/update"
 								class="btn btn-primary">수정</a> <a
-								href="${pageContext.request.contextPath}/admin/${category}/${postDTO.postId}/delete"
+								href="${pageContext.request.contextPath}/admin/${boardType}/${postDTO.postId}/delete"
 								class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
 						</div>
 						<!-- 미구현 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
@@ -117,8 +119,10 @@
 						<h4 class="page-header">댓글</h4>
 
 						<!-- 댓글 입력 -->
-						<form id="commentForm">
-							<textarea id="commentContent" placeholder="댓글을 입력하세요."
+						<form action="/admin/${boardType }/${postId}/comment" method="post">
+							<input type="hidden" name="${_csrf.parameterName}"
+								value="${_csrf.token}" />
+							<textarea name="content" placeholder="답변을 입력하세요."
 								style="width: 100%"></textarea>
 							<button type="submit" class="btn btn-default">작성</button>
 						</form>

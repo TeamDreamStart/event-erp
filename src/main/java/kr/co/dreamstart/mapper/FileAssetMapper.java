@@ -24,4 +24,6 @@ public interface FileAssetMapper {
 
 	// 사진 하나 삭제
 	public int delete(long fileId);
+	
+	public FileAssetDTO getFile(long fileId);
 }
