@@ -29,7 +29,7 @@ public class SurveyController {
 	EventMapper eventMapper; // 임시 나중에 서비스로 바꿔야됨
 	
 	// 설문목록(이벤트필터 + 검색 + 페이징 파라미터만 받음)
-	@GetMapping("/survey-list")
+	@GetMapping("/surveys")
 	public String list(@RequestParam(required = false) Long eventId,
 					@RequestParam(required = false) String field,
 					@RequestParam(required = false) String keyword,
@@ -77,11 +77,11 @@ public class SurveyController {
 	
 	// 등록/수정폼
 	@PostMapping("/surveys/form")
-	public String formPost(@RequestParam(required = false) Long eventId,
+	public String cloneForm(@RequestParam(required = false) Long eventId,
 							Model model) {
 		model.addAttribute("templates", surveyService.fixedTemplates());
-		model.addAttribute("eventId", eventId);
 		model.addAttribute("eventList", eventMapper.eventAll());
+		model.addAttribute("eventId", eventId);
 		return "/admin/surveyCloneForm";
 		
 	}

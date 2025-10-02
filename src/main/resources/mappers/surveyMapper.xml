@@ -45,6 +45,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="survey_id" property="surveyId" />
 		<result column="question" property="question" />
 		<result column="type" property="type" />
+		<result column="required" property="required" />
+		<result column="effective_required" property="effectiveRequired" />
 	</resultMap>
 
 	<!-- 응답 이력 -->
@@ -158,7 +160,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="questionList" parameterType="long"
 		resultMap="questionMap">
 		select q.`question_id`, q.`survey_id`, q.`question`,
-		q.`type`
+		q.`type`, q.`required`, q.`effective_required`
 		from `event_erp`.`survey_question` q
 		where q.`survey_id` =
 		#{surveyId}
@@ -231,7 +233,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			on o.`question_id` = q.`question_id`
 			and o.`opt_value` = v.val
 			where q.`survey_id` = #{surveyId}
-			and q.`type` = 'scale_5'
+			and q.`type` = 'SCALE_5'
 			and o.`option_id` IS NULL
 	</insert>
 
@@ -246,8 +248,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		useGeneratedKeys="true" keyProperty="questionId"
 		keyColumn="question_id">
 		insert into `event_erp`.`survey_question`(`survey_id`,
-		`question`, `type`)
-		values (#{surveyId}, #{question}, #{type})
+		`question`, `type`, `required`)
+		values (#{surveyId}, #{question}, #{type}, #{required})
 	</insert>
 
 	<!-- 새보기 insert -->
@@ -340,9 +342,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- db에서 일괄 복제해서 사용하는 쿼리 -->
 	<insert id="cloneQuestionsFromTemplate">
 		insert into
-		`event_erp`.`survey_question`(`survey_id`, `question`, `type`)
+		`event_erp`.`survey_question`(`survey_id`, `question`, `type`, `required`)
 		select
-		#{newSurveyId}, q.`question`, q.`type`
+		#{newSurveyId}, q.`question`, q.`type`, q.`required`
 		from
 		`event_erp`.`survey_question` q
 		where q.`survey_id` = #{templateId}

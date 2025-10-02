@@ -181,7 +181,7 @@ th.col-wide, td.col-wide {
 
 th.col-action, td.col-action {
 	background: #fff;
-	box-shadow: -6px 0 -6px rgba(0, 0, 0, .6);
+	box-shadow: -6px 0 6px -6px rgba(0, 0, 0, .18);
 	position: sticky;
 	right: 0;
 	z-index: 2;
@@ -537,7 +537,8 @@ td.col-date {
 							<td class="ellip col-mid col-template-key"
 								title="${s.templateKey}" data-value="${s.templateKey}">${empty s.templateKey ? '-' : s.templateKey}</td>
 							<td class="center col-small"><a class="page-btn"
-								href="${pageContext.request.contextPath}/admin/survey-list/${s.surveyId}">상세</a></td>
+								href="${pageContext.request.contextPath}/admin/surveys/${s.surveyId}">상세</a>
+							</td>
 						</tr>
 					</c:forEach>
 				</tbody>
