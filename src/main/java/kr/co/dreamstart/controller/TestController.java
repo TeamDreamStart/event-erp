@@ -675,10 +675,7 @@ public class TestController {
 	public String findPass() {
 		return "/account/findPassword";
 	}
-	@GetMapping("/login")
-	public String loginTest() {
-		return "/account/login";
-	}
+
 	@GetMapping("/reset-password")
 	public String reseTest() {
 		return "/account/resetPassword";
