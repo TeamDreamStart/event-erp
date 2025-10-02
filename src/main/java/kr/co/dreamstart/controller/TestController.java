@@ -670,26 +670,5 @@ public class TestController {
 		return res;
 
 	}
-	
-	@GetMapping("/find-password")
-	public String findPass() {
-		return "/account/findPassword";
-	}
-	@GetMapping("/login")
-	public String loginTest() {
-		return "/account/login";
-	}
-	@GetMapping("/reset-password")
-	public String reseTest() {
-		return "/account/resetPassword";
-	}
-	@GetMapping("/error")
-	public String errorTest() {
-		return "/common/error";
-	}
-	@GetMapping("/access-denied")
-	public String accessTest() {
-		return "/common/accessDenied";
-	}
 
 }
