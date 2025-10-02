@@ -46,8 +46,8 @@
 				<div class="card-header py-3">
 					<h6 class="m-0 font-weight-bold text-primary"
 						style="font-size: 2rem;">
-						<c:if test="${boardType eq 'notices' }">NOTICE</c:if>
-						<c:if test="${boardType eq 'qna' }">Q&A</c:if>
+						<c:if test="${category eq 'notices' }">NOTICE</c:if>
+						<c:if test="${category eq 'qna' }">Q&A</c:if>
 					</h6>
 				</div>
 				<div class="card-body">
@@ -58,7 +58,7 @@
 					<div
 						style="display: flex; height: 45px; justify-content: space-between">
 						<form
-							action="/admin/${boardType }"
+							action="/admin/${category }"
 							method="get">
 							<input type="hidden" name="searchType" value="${searchType}">
 							<input type="hidden" name="keyword" value="${keyword}"> <select
@@ -74,7 +74,7 @@
 
 
 						<form
-							action="/admin/${boardType }"
+							action="/admin/${category }"
 							method="get">
 							<input type="hidden" name="visibility" value="${visibility }">
 							<select name="searchType"
@@ -103,7 +103,7 @@
 									<th>수정일</th>
 									<th>공개여부</th>
 									<!-- <th>댓글수</th> -->
-									<c:if test="${boardType eq 'qna' }">
+									<c:if test="${category eq 'qna' }">
 										<th>답변여부</th>
 									</c:if>
 								</tr>
@@ -120,11 +120,11 @@
 										<c:forEach var="postDTO" items="${postList}">
 											<tr>
 												<td>${postDTO.postId}</td>
-												<td><c:if test="${postDTO.pinned == 1}">
-														<a href="/admin/${boardType }/${postDTO.postId }"
+												<td><c:if test="${postDTO.pinned}">
+														<a href="/admin/${category }/${postDTO.postId }"
 															style="font-weight: 900"> 📌 ${postDTO.title} </a>
-													</c:if> <c:if test="${postDTO.pinned == 0}">
-														<a href="/admin/${boardType }/${postDTO.postId }">
+													</c:if> <c:if test="${!postDTO.pinned}">
+														<a href="/admin/${category }/${postDTO.postId }">
 															${postDTO.title} </a>
 													</c:if></td>
 
@@ -140,7 +140,7 @@
 													<td style="color: red">비공개</td>
 												</c:if>
 												<!-- <th>댓글수</th> -->
-												<c:if test="${boardType eq 'qna' }">
+												<c:if test="${category eq 'qna' }">
 													<td><c:if test="${postDTO.commentCount >0}">답변완료</c:if>
 														<c:if test="${postDTO.commentCount ==0}">미답변</c:if></td>
 												</c:if>
@@ -155,34 +155,32 @@
 							<ul class="pagination" style="justify-content: center">
 								<c:if test="${pageVO.prev}">
 									<li><a class="page-link"
-										href="/admin/${boardType }?page=1&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&laquo;&laquo;</a></li>
+										href="/admin/${category }?page=1&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&laquo;&laquo;</a></li>
 									<li><a class="paginate_button page-item previous"
-										href="/admin/${boardType }?page=${pageVO.startPage - 1}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&laquo;</a></li>
+										href="/admin/${category }?page=${pageVO.startPage - 1}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&laquo;</a></li>
 								</c:if>
 
 								<c:forEach begin="${pageVO.startPage}" end="${pageVO.endPage}"
 									var="idx">
 									<li class="${pageVO.cri.page == idx ? 'active' : ''}"><a
 										class="page-link"
-										href="/admin/${boardType }?page=${idx}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">${idx}</a></li>
+										href="/admin/${category }?page=${idx}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">${idx}</a></li>
 								</c:forEach>
 
 								<c:if test="${pageVO.next}">
 									<li><a class="paginate_button page-item next"
-										href="/admin/${boardType }?page=${pageVO.endPage + 1}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&raquo;</a></li>
+										href="/admin/${category }?page=${pageVO.endPage + 1}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&raquo;</a></li>
 									<li><a class="page-link"
-										href="/admin/${boardType }?page=${pageVO.totalPage}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&raquo;&raquo;</a></li>
+										href="/admin/${category }?page=${pageVO.totalPage}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&raquo;&raquo;</a></li>
 								</c:if>
 							</ul>
 						</div>
 						<!-- paging end -->
-						
-						<c:if test="${boardType eq 'notices' }">
 						<div style="display: flex; justify-content: flex-end;">
-							<a type="button" href="/admin/${boardType }/form"
+							<a type="button" href="/admin/${category }/form"
 								class="btn btn-success">새로 작성</a>
+							<div></div>
 						</div>
-						</c:if>
 					</div>
 
 				</div>

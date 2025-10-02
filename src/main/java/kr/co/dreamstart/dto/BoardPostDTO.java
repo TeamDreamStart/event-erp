@@ -11,7 +11,7 @@ public class BoardPostDTO {
     private String title;
     private String content;
     private long userId;
-    private int pinned;
+    private boolean pinned;
     private String visibility;
     private int viewCount;
     private Date  createdAt;
