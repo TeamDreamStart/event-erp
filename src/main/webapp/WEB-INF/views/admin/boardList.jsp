@@ -109,7 +109,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<!-- 존재하지 않는 사원번호 검색시-->
+								
 								<c:choose>
 									<c:when test="${empty postList}">
 										<tr>
