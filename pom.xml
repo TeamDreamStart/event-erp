@@ -239,6 +239,25 @@
 			<version>${spring.security.version}</version>
 		</dependency>
 
+		<!-- Validator -->
+		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-validator -->
+		<!-- 정의한 제약사항 런타임 검증하는 라이브러리 -->
+		<!-- Bean Validation의 레퍼런스 구현체(엔진). 실제로 @NotNull, @Size, @Valid 같은 애노테이션을 해석하고 검증을 수행 -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.2.5.Final</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+		<!-- 인터페이스/애노테이션 모음 @NotNull 등 -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>2.0.1.Final</version>
+		</dependency>
+		
+		
+
 	</dependencies>
 	<build>
 		<plugins>

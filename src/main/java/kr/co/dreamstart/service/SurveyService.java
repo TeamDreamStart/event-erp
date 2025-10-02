@@ -3,6 +3,7 @@ package kr.co.dreamstart.service;
 import java.util.List;
 import java.util.Map;
 
+import kr.co.dreamstart.dto.CloneInlineReqDTO;
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.SurveyDTO;
 import kr.co.dreamstart.dto.SurveyOptionDTO;
@@ -34,10 +35,8 @@ public interface SurveyService {
 	
 	// 상위 유즈케이스 - 헤더 만들고 -> 새 surveyId 받기 -> 원본 문항/보기 전부 복제 (클론 헤더+QA복제/JSON 인라인 복제)
 	public Long cloneFromTemplate(Long templateId, Long eventId, Long userId);
-	public Long cloneInline(Long templateId, Long eventId, Long userId,
-							List<SurveyQuestionDTO> questions,
-							Map<Long, List<SurveyOptionDTO>> optionsByOldQid);
+	public Long cloneInline(CloneInlineReqDTO req);
 	
 	// Likert(클른문항) 보정이 필요할때만 노출
-	public int ensureLikert5ForSurvey(Long surveyId);
+//	public int ensureLikert5ForSurvey(Long surveyId);
 }

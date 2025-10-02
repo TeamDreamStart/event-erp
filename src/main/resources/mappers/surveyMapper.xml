@@ -182,19 +182,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		resultMap="optionMap">
 		select o.`option_id`, o.`question_id`, o.`label`, o.`opt_value`
 		from
-		`event_erp`, `survey_option` o
+		`event_erp`.`survey_option` o
 		where o.`question_id` IN
 		<foreach collection="list" item="qid" open="(" separator=","
 			close=")">
 			#{qid}
 		</foreach>
-		order by o.`question_id` ASC, o.`opt_value` ASC o.`option_id` ASC
+		order by o.`question_id` ASC, o.`opt_value` ASC, o.`option_id` ASC
 	</select>
 
 	<!-- 특정 문항에 5점 기본옵션(1~5) 없으면 보충 -->
 	<insert id="ensureLikert5ForQuestion" parameterType="long">
 		insert into
-		`event_erp`, `survey_option` (`question_id`, `label`, `opt_value`)
+		`event_erp`.`survey_option` (`question_id`, `label`, `opt_value`)
 		select
 		#{questionId},
 		v.label,
@@ -207,7 +207,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		union all select '매우 그렇다', '5'
 		) v
 		left join `event_erp`.`survey_option` o
-		on o.`question_id` = #{qustionId}
+		on o.`question_id` = #{questionId}
 		and o.`opt_value` = v.val
 		where o.`option_id` IS NULL
 	</insert>

@@ -15,34 +15,37 @@ import kr.co.dreamstart.dto.SurveyResponseDTO;
 
 @Mapper
 public interface SurveyMapper {
-	// 조회용
+	// 조회/유지보수
+	// 고정템플릿4개
+	public List<SurveyDTO> fixedTemplates();
 	// 설문목록조회(이벤트필터 + 페이징) + field, keyword, anon
 	public List<SurveyDTO> surveyPage(@Param("eventId") Long eventId, @Param("cri") Criteria cri,
 			@Param("keyword") String keyword, @Param("field") String field, @Param("anon") Integer anon);
-
+	// 카운트
 	public int surveyCount(@Param("eventId") Long eventId, @Param("keyword") String keyword,
 			@Param("field") String field, @Param("anon") Integer anon);
 
-	// 상단고정/상세
-	// 고정템플릿4개
-	public List<SurveyDTO> fixedTemplates();
-
 	// 상세헤더1건
 	public SurveyDTO findSurvey(@Param("surveyId") Long surveyId);
-
-	// 템플릿(문항/보기)
+	// 템플릿(문항)
 	public List<SurveyQuestionDTO> questionList(@Param("surveyId") Long surveyId);
-
+	// 보기
 	public List<SurveyOptionDTO> optionList(@Param("questionId") Long questionId);
-
 	// 응답이력(설문기존 + 페이징)
 	public List<SurveyResponseDTO> responseList(@Param("surveyId") Long surveyId, @Param("cri") Criteria cri);
 
+	// 응답카운트
 	public int responseCount(@Param("surveyId") Long surveyId);
 
 	// 개별응답flat
 	public List<Map<String, Object>> responseDetailFlat(@Param("responseId") Long responseId);
 
+	// 업데이트
+	public int updateSurveyHeader(@Param("surveyId") Long surveyId, @Param("title") String title,
+			@Param("description") String description, @Param("isAnonymous") Integer isAnonymous);
+	// 설문 단위로 'type=scale_5' 문항들에 5점 옵션 보충
+	public int ensureLikert5ForSurvey(@Param("surveyId") Long surveyId);
+	
 	// 사용자 응답 제출시
 	// 응답헤더저장
 	public int insertResponse(@Param("surveyId") Long surveyId, @Param("userId") Long userId);
@@ -60,8 +63,6 @@ public interface SurveyMapper {
 	// 특정 문항에 5점 기본옵션(1~5) 없으면 보충
 	public int ensureLikert5ForQuestion(@Param("questionId") Long questionId);
 
-	// 설문 단위로 'type=scale_5' 문항들에 5점 옵션 보충
-	public int ensureLikert5ForSurvey(@Param("surveyId") Long surveyId);
 
 	// 응닶상세 원본 (조인x)
 //	public List<SurveyAnswerDTO> answerListByresponse(@Param("responseId") Long responseId);
@@ -84,9 +85,6 @@ public interface SurveyMapper {
 	// 새 보기 insert (깊은 복제용) - 템플릿 클론시 보기랑 같이 가져오기
 	public int insertOption(SurveyOptionDTO optionDTO);
 
-	// 업데이트
-	public int updateSurveyHeader(@Param("surveyId") Long surveyId, @Param("title") String title,
-			@Param("description") String description, @Param("isAnonymous") Integer isAnonymous);
 
 //	테스트용
 //	설문조회

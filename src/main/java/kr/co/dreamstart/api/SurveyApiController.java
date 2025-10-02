@@ -1,19 +1,22 @@
 package kr.co.dreamstart.api;
 
+//import java.util.Collections.emptyList();
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.transaction.annotation.Transactional;
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.server.ResponseStatusException;
 
+import kr.co.dreamstart.dto.CloneInlineReqDTO;
 import kr.co.dreamstart.dto.SurveyOptionDTO;
 import kr.co.dreamstart.dto.SurveyQuestionDTO;
 import kr.co.dreamstart.service.SurveyService;
@@ -22,167 +25,62 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequiredArgsConstructor
-@RequestMapping("/api/surveys")
+@RequiredArgsConstructor // Lombot 라이브러리에서 제공하는 어느테이션/필수 인자를 가진 생성자를 자동 생성
+@RequestMapping("/admin/api/surveys")
 public class SurveyApiController {
-	private SurveyService surveyService;
+	private final SurveyService surveyService;
 	
 	// 문항+보기 묶음 조회(JSON)
-	@GetMapping("/survey-test/template-qa")
-	@ResponseBody
+	@GetMapping(value = "/template-qa",
+	        	produces = "application/json; charset=UTF-8") // ★ JSON으로 못 박기
 	public Map<String, Object> templateQA(@RequestParam Long templateId) {
 		Map<String, Object> res = new LinkedHashMap<>();
-		List<SurveyQuestionDTO> qs = surveyMapper.questionList(templateId);
-
-		Map<Long, List<SurveyOptionDTO>> options = new LinkedHashMap<>();
-		for (SurveyQuestionDTO q : qs) {
-			options.put(q.getQuestionId(), surveyMapper.optionList(q.getQuestionId()));
-		}
-
+		
+		List<SurveyQuestionDTO> qs = surveyService.questionList(templateId);
+		Map<Long, List<SurveyOptionDTO>> options = surveyService.optionsByQuestion(templateId);
 		res.put("questions", qs);
 		res.put("optionsByQ", options);
 		return res;
 	}
 	
-	// 템플릿 클론(헤더/문항/보기)
-		@PostMapping("/survey-test/clone")
-		@Transactional
-		public String cloneSurvey(@RequestParam Long templateId, @RequestParam Long eventId, @RequestParam Long userId,
-				@RequestParam(defaultValue = "default") String scheduleMode,
-				@RequestParam(required = false, defaultValue = "0") int openDelayHours,
-				@RequestParam(required = false, defaultValue = "7") int closeAfterDays, RedirectAttributes ra) {
-			log.info("[/survey-test/clone] templateId={}, eventId={}, userId={}, mode={}, delayH={}, closeD={}", templateId,
-					eventId, userId, scheduleMode, openDelayHours, closeAfterDays);
-
-			try {
-				// 1)기본/오프셋 분기
-				int result = surveyMapper.cloneSurvey(templateId, eventId, userId);
-
-				if (result != 1) {
-					ra.addFlashAttribute("ERROR", "설문 헤더 클론 실패!");
-					return "redirect:/survey-test/clone-form?eventId=" + eventId + "&err=1";
-				}
-
-				// 2) new survey_id
-				Long newSurveyId = surveyMapper.lastInsertId();
-				log.info(" -> newSurveyId={}", newSurveyId);
-
-				// 3) 원본 템플릿 문항 조회
-				List<SurveyQuestionDTO> questionDTO = surveyMapper.questionList(templateId);
-
-				// 4) 문항/보기 복제
-				for (SurveyQuestionDTO q : questionDTO) {
-					SurveyQuestionDTO nq = new SurveyQuestionDTO();
-					nq.setSurveyId(newSurveyId);
-					nq.setQuestion(q.getQuestion());
-					nq.setType(q.getType());
-					surveyMapper.insertQuestion(nq); // useGeneratedKeys 로 questionId 채워짐
-					Long newQuestionId = nq.getQuestionId();
-
-					List<SurveyOptionDTO> opts = surveyMapper.optionList(q.getQuestionId());
-					for (SurveyOptionDTO op : opts) {
-						SurveyOptionDTO nop = new SurveyOptionDTO();
-						nop.setQuestionId(newQuestionId);
-						nop.setLabel(op.getLabel());
-						nop.setOptValue(op.getOptValue());
-						surveyMapper.insertOption(nop);
-					}
-				}
-
-				// 복제 성공 -> 모달로 성공 보여주고 목록으로 이동 시킴
-				return "redirect:/survey-test/clone-form?eventId=" + eventId + "&ok=1";
-
-			} catch (Exception e) {
-				// TODO: handle exception
-				log.info("[CLONE] unexpected error", e);
-				ra.addFlashAttribute("ERROR", "알 수 없는 오류로 클론 실패 !");
-			}
-
-			return "redirect:/survey-test/clone-form?eventId=" + eventId + "&err=1";
+	// 템플릿 클론(헤더/문항/보기) - 서비스클래스에서 전부 수행 -> 원본 그대로 복제해서 사용하는경우
+	@PostMapping(value = "/clone",
+	        	produces = "application/json; charset=UTF-8")
+	public Map<String, Object> cloneSurvey(@RequestParam Long templateId, 
+										@RequestParam Long eventId) {
+		log.info("[/clone] templateId={}, eventId={}", 
+				templateId, eventId);
+		try {
+			// Long userId = user.getId(); 
+			Long userId = 1L; // 임시
+			Long newSurveyId = surveyService.cloneFromTemplate(templateId, eventId, userId);
+			
+			return Map.of("ok", true, "surveyId", newSurveyId);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error("[CLONE] error", e);
+			// 원하는 HTTP 상태와 메시지를 내려보냄 (여기서는 500)
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "클론 실패 !");
 		}
+		
+	}
 	
-	// JSON POST → 기존 메서드만 써서 inline clone
-	@PostMapping(value = "/survey-test/clone-inline", consumes = "application/json")
-	@Transactional
-	@ResponseBody
-	public Map<String, Object> cloneInline(@RequestBody Map<String, Object> req) {
-		Long templateId = ((Number) req.get("templateId")).longValue();
-		Long eventId = ((Number) req.get("eventId")).longValue();
-		Long userId = ((Number) req.get("userId")).longValue();
-
-		String scheduleMode = (String) req.get("scheduleMode");
-		int openDelayHours = req.get("openDelayHours") == null ? 0 : ((Number) req.get("openDelayHours")).intValue();
-		int closeAfterDays = req.get("closeAfterDays") == null ? 7 : ((Number) req.get("closeAfterDays")).intValue();
-
-		// 1. 설문 헤더 복제 (offset 모드 안 씀)
-		int result = surveyMapper.cloneSurvey(templateId, eventId, userId);
-		if (result != 1)
-			throw new RuntimeException("설문 헤더 클론 실패");
-
-		Long newSurveyId = surveyMapper.lastInsertId();
-
-		// 2. QA 복사
-		List<Map<String, Object>> questions = (List<Map<String, Object>>) req.get("questions");
-		if (questions != null) {
-			for (Map<String, Object> q : questions) {
-				String type = (String) q.get("type"); // "single" | "multi" | "SCALE_5"
-				String question = (String) q.get("question");
-				if (type == null || question == null)
-					continue;
-
-				SurveyQuestionDTO nq = new SurveyQuestionDTO();
-				nq.setSurveyId(newSurveyId);
-
-				// 문자열 → enum 매핑
-				SurveyQuestionDTO.QuestionType qType;
-				switch (type.toLowerCase()) {
-				case "single":
-					qType = SurveyQuestionDTO.QuestionType.SINGLE;
-					break;
-				case "multi":
-					qType = SurveyQuestionDTO.QuestionType.MULTI;
-					break;
-				case "SCALE_5":
-				default:
-					qType = SurveyQuestionDTO.QuestionType.SCALE_5;
-					break;
-				}
-				nq.setType(qType);
-
-				nq.setQuestion(question);
-				surveyMapper.insertQuestion(nq); // questionId 자동 세팅
-				Long newQid = nq.getQuestionId();
-				List<Map<String, Object>> options = (List<Map<String, Object>>) q.get("options");
-				if (options != null) {
-					for (Map<String, Object> op : options) {
-						String label = (String) op.get("label");
-						String optValueStr = (String) op.get("optValue");
-						if (label == null)
-							continue;
-
-						SurveyOptionDTO no = new SurveyOptionDTO();
-						no.setQuestionId(newQid);
-						no.setLabel(label);
-
-						Integer optValue = null;
-						if (optValueStr != null && !optValueStr.isBlank()) {
-							try {
-								optValue = Integer.valueOf(optValueStr);
-							} catch (NumberFormatException ignore) {
-							}
-						}
-						no.setOptValue(optValue); // Integer로 세팅
-						surveyMapper.insertOption(no);
-					}
-				}
-			}
+	// JSON POST -> 인라인 클론(요청 dto를 서비스에 위임) -> 원본 복제해서 수정해서 사용할경우
+	@PostMapping(value = "/clone-inline",
+	        	consumes = "application/json",
+	        	produces = "application/json; charset=UTF-8")
+	public Map<String, Object> cloneInline(@Valid @RequestBody CloneInlineReqDTO req) {
+		try {
+			 Long userId = 1L;
+			 req.setUserId(userId);
+			Long newSurveyId = surveyService.cloneInline(req);
+			return Map.of("ok", true, "surveyId", newSurveyId);
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error("[clone-inline] error", e);
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "인라인 클론 실패 !");
 		}
-
-		// return Map.of("ok", true, "surveyId", newSurveyId);
-		Map<String, Object> res = new LinkedHashMap<>();
-		res.put("ok", true);
-		res.put("surveyId", newSurveyId);
-		return res;
 
 	}
 }

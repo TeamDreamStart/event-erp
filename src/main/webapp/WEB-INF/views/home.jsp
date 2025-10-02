@@ -74,9 +74,9 @@
 		<h1>Hello world!</h1>
 		<p>The time on the server is ${serverTime}.</p>
 		<!-- 나머지 컨텐츠 그대로 유지 -->
-		<a href="/list-test">회원목록 테스트</a> <a href="/board-test">게시판 테스트</a> <a
-			href="/pay-test">결제 테스트</a> <a href="/survey-test">설문조사 테스트</a> <a
-			href="/survey-test/clone-form">설문조사 폼 테스트</a>
+		<a href="/list-test">회원목록 테스트</a> <a href="/board-test">게시판 테스트</a>
+		<a href="/admin">어드민페이지</a>
+		<a href="/admin/survey-list">어드민용 설문조사 리스트</a>
 	</article>
 </body>
 </html>
