@@ -29,7 +29,7 @@
          <nav class="header-nav">
             <a href="#">Visit</a>
             <a href="#">Event</a>
-            <a href="#">Store</a>
+            <a href="#">Notice</a>
          </nav>
    </header>
 	<div class="qna-form-container">

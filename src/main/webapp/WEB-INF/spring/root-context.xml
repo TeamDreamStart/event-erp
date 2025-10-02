@@ -9,21 +9,15 @@
 
 
 
-	<bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName"
-			value="com.mysql.cj.jdbc.Driver" />
-		<property name="url"
-
-			value="jdbc:mysql://localhost:3306/event_erp?serverTimezone=UTC" />
-		<!-- 
-		서버 pc 아닐 시 url 아래로 수정
-		<property name="url"
-			value="jdbc:mysql://192.168.0.50:3306/event_erp?serverTimezone=UTC" /> -->
-
-		<property name="username" value="dreamS" />
-		<property name="password" value="1234" />
-	</bean>
+	   <bean id="dataSource"
+      class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName"
+         value="com.mysql.cj.jdbc.Driver" />
+      <property name="url"
+         value="jdbc:mysql://mbc-sw.iptime.org:4200/event_erp?serverTimezone=UTC" />
+      <property name="username" value="dreamS" />
+      <property name="password" value="emflacnfqkfxlaghkdlxld!" />
+   </bean>
 
 	<!-- SqlSessionFactory 설정 -->
 	<bean id="sqlSessionFactory"

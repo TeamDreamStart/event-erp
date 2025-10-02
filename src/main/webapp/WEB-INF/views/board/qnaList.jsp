@@ -29,7 +29,7 @@
          <nav class="header-nav">
             <a href="#">Visit</a>
             <a href="#">Event</a>
-            <a href="#">Store</a>
+            <a href="#">Reservation</a>
          </nav>
    </header>
    <!--메인 컨테이너-->
