@@ -1,39 +1,319 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ page session="false"%>
-<html>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<link href="<c:url value='/resources/css/home.css'/>" rel="stylesheet" type="text/css"/>
-<script src="<c:url value='/js/main.js'/>"></script>
+<meta charset="UTF-8">
+<script src="/js/main.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet"/>
-<title>Home</title>
+<title>home</title>
+<style>
+    @font-face {
+    font-family: 'Peristiwa';
+    src: url('/resources/css/font/Peristiwa.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+    body {
+        background-color: #E5E2DB;
+        color: #222222;
+        font-family: 'Montserrat', sans-serif;
+        font-size: medium;
+        margin: 0;
+        padding: 0 120px 60px; 
+        line-height: 1;
+    }
+    .header {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        /* header 내부 패딩을 0으로 설정하여 body의 120px 패딩을 내부 컨텐츠의 기준으로 사용 */
+        padding: 20px 0 0; 
+        min-height: 120px;
+        background-color: transparent;
+        height: auto;
+    }
+    .header-top { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: flex-start; 
+        width: 100%; 
+        position: static; 
+        height: auto;
+        padding-bottom: 20px;
+    }
+
+.header-left {
+    /* 로고를 감싸는 역할만 함 */
+}
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.logo {
+    font-family: 'Peristiwa', cursive;
+    font-size: 40px;
+}
+
+.header-right {
+    display: flex;
+    align-items: flex-start;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 38px;
+    font-size: 20px;
+}
+.mypage-link {
+    background-color: #ffffff;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    color: #595959;
+    cursor: pointer;
+    padding: 8px 16px; /* 내부 패딩 */
+    border-radius: 0px;
+    text-decoration: none;
+    margin-right: 10px;
+    display: inline-flex;
+    justify-content: center; 
+    align-items: center;
+    min-width: 92px; 
+    height: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+    
+}
+
+.mypage-link:hover {
+    background-color: #e0e0e0;
+}
+
+/* login 버튼 스타일 */
+.btn-login {
+    text-decoration: none;
+    background-color: #222222;
+    color: #E5E2DB;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    padding: 8px 16px; /* mypage-link와 동일한 패딩 유지 */
+    border-radius: 0px; /* 모서리 각지게 */
+    display: inline-flex; /* flex를 사용하여 텍스트 중앙 정렬 및 높이 제어 */
+    justify-content: center; /* 텍스트 가로 중앙 정렬 */
+    align-items: center; /* 텍스트 세로 중앙 정렬 */
+    min-width: 92px; 
+    height: 100%; /* 부모 .user-actions의 높이에 맞춤 */
+    box-sizing: border-box; /* 패딩과 보더가 너비에 포함 */
+    font-size: 16px;
+}
+
+.btn-login:hover {
+    background-color: #555;
+}
+
+    .header-nav {
+        display: flex;
+        width: 100%; 
+        align-items: center;
+        justify-content: space-between; 
+        margin-bottom: 12px;
+        left: 0;
+        font-size: 20px;
+    }
+
+    .header-nav a {
+        text-decoration: none;
+        color: #222222; 
+        margin-right: 30px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    .header-nav a:hover{
+        color: #08f;
+    }
+
+    .header-nav a:last-child {
+        margin-right: 0; 
+    }
+
+    .dropdown-container {
+        position: relative;
+        margin-left: auto; 
+    }
+    /* Help 레이블을 header-nav의 flex 흐름 밖으로 뺌 */
+    .help {
+        font-size: 20px;
+        font-weight: 500;
+        color: #222222;
+        cursor: pointer;
+    }
+    .menu {
+        list-style: none; 
+        margin: 0;
+        position: absolute;
+        /* Help 오른쪽 끝에 정렬 */
+        right: 0; 
+        top: 100%; 
+        background-color: #ffffff; 
+        border: 1px solid #ccc; 
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        z-index: 104; 
+        
+        display: none; 
+        padding-left: 21px;
+        padding-bottom: 21px;
+        padding-right: 96px;
+    }
+    
+    /* Help 텍스트에 호버 시 메뉴 표시 */
+    .dropdown-container:hover .menu{
+        display: block;
+    }
+    
+    .menu li {
+        padding-top: 25px;
+        font-size: 16px;
+        color: #222222;
+        white-space: nowrap;
+        text-align: left;
+    }
+    .menu li a {
+        text-decoration: underline;
+    }
+    
+    .menu a:hover{
+        background-color: transparent;
+        cursor: pointer;
+        color: #08f; 
+    }
+
+    .hr1 {
+        border: none;
+        border-top: 1px solid #222222;
+        margin-bottom: 0;
+        margin-top: 0;
+        width: 100%; 
+        box-sizing: border-box;
+        margin-bottom: 50px;
+    }
+    main {
+        margin-top: 0; 
+        padding: 0; 
+    }
+    .hidden {
+        display: none;
+    }
+	.main-visual figure {
+    margin: 0; /* figure의 기본 마진 제거 */
+    width: 100%; /* figure가 부모(.main-visual)의 100%를 차지하도록 */
+    line-height: 0; /* 이미지 하단에 생길 수 있는 미세한 여백 제거 */
+}
+
+.visual-image {
+    width: 100%; /* 부모 figure의 100%를 차지하여 hr 선과 동일한 가로 길이 */
+    height: auto;
+    display: block;
+    margin: 0; /* 이미지 자체의 마진은 0으로 설정. hr과의 간격은 main-visual hr에서 조절 */
+}
+.museum-status {
+    text-align: right;
+    margin-top: 20px;
+    font-size: 20px;
+    right: 0;
+    margin-bottom: 80;
+}
+
+.museum-status p {
+    margin: 5px 0;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.section-header h2{
+    font-size: 20px;
+    font-weight: bold;
+    
+}
+		.hr2{
+			border: none;
+		border-top: 1px solid #222222;
+		margin-bottom: 0;
+        margin-top: 50px;
+        width: 100%; 
+        box-sizing: border-box;
+		}
+		.footer{
+	padding: 0px 36px;
+	margin-top: 68px;
+	border: 1px solid #222222;
+	justify-content: left;
+	background-color: #CBD4C2;
+	color: #222222;
+}
+.footer{
+	padding-left: 36px;
+	padding-right: 36px;
+	margin-top: 100px;
+	border: 1px solid #222222;
+	justify-content: left;
+	background-color: #CBD4C2;
+    font-size: 16px;
+}
+.footer .address{
+	margin-top: 64px;
+	margin-bottom: 16px;
+}
+.footer hr{
+	margin-bottom: 28px;
+	margin-top: 28px;
+	height: 1px;
+	border: none;
+    border-top: 1px solid #222222;
+}
+.footer .other{
+	margin-bottom: 28px;
+}
+</style>
 </head>
 <body>  
-	<header class="header">
+<header class="header">
 		<div class="header-top">
-		<span class="header-left">
-			<a href="/" class="logo-link"><span class="logo">D</span></a>
+			<span class="header-left">
+				<a href="/" class="logo-link"><span class="logo">D</span></a>
 			</span>
 			<span class="header-right">
 				<span class="user-actions">
-					<a href="#" class="mypage-link">my page</a>
-					<button class="btn-login">login</button>
+					<a href="/my-info" class="mypage-link">my page</a>
+					<a href="/login" class="btn-login">login</a>
 				</span>
 			</span>
 		</div>
 			<nav class="header-nav">
 				<a href="#">Visit</a>
-				<a href="#">Event</a>
-				<a href="#">Notice</a>
-			</nav>
+				<a href="/events">Event</a>
+				<a href="/reservations/guest-check">Reservation</a>
+                <div class="dropdown-container">
+                    <label class="help">Help</label>
+                    <ul class="menu">
+                        <li><a href="/notices">Notice</a></li>
+                        <li><a href="/qna">Q&A</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <hr class="hr1">
 	</header>
 	<main>
 		<section class="main-visual">
-			<hr class="hr1">
 			<figure>
 				<img src="<c:url value='/resources/img/grand.jpg'/>" alt="메인 베너입니다." class="visual-image"/>
 				<figcaption class="hidden">할아버지 할머니가 미술관 구경하는 배너</figcaption>
@@ -47,69 +327,41 @@
 		<!-- Swiper -->
 	<section class="horizontal-scroll-section exhibitions">
 		<div class="section-header">
-			<h2>Exhibitions</h2>
+			<h2>Event</h2>
 		</div>
 
-  <div #swiperRef="" class="swiper mySwiper">
+<div #swiperRef="" class="swiper mySwiper">
     <div class="swiper-wrapper">
-      <article class="exhibition-card swiper-slide">
+    <article class="event-card swiper-slide">
 				<div class="placeholder">
 				</div>
-				<figure class="exhibition-1">
-					<img src="<c:url value='/resources/img/exhibitions1.jpg'/>" alt="전시 1을 넣습니다."/>
+				<figure class="event-1">
+					<img src="<c:url value='/resources/img/event1.jpg'/>" alt="전시 1을 넣습니다."/>
 					<figcaption class="hidden">포스터 이미지</figcaption>
 				</figure>
 				<p class="title">오전과 오후 사이</p>
 				</article>
-				<article class="exhibition-card swiper-slide">
+				<article class="event-card swiper-slide">
 				<div class="placeholder"></div>
-				<figure class="exhibition-2">
-					<img src="<c:url value='/resources/img/exhibitions2.jpg'/>" alt="전시 2를 넣습니다."/>
+				<figure class="event-2">
+					<img src="<c:url value='/resources/img/event2.jpg'/>" alt="전시 2를 넣습니다."/>
 				</figure>
 				<p class="title">도로 위의 밤</p>
 				</article>
-				<article class="exhibition-card swiper-slide">
+				<article class="event-card swiper-slide">
 				<div class="placeholder"></div>
-				<figure class="exhibition-3">
-					<img src="<c:url value='/resources/img/exhibitions-3.jpg'/>" alt="전시 3을 넣습니다."/>
+				<figure class="event-3">
+					<img src="<c:url value='/resources/img/event3.jpg'/>" alt="전시 3을 넣습니다."/>
 				</figure>
 				<p class="title">시선</p>
 				</article>
-				<article class="exhibition-card swiper-slide">
+				<article class="event-card swiper-slide">
 				<div class="placeholder"></div>
-				<figure class="exhibition-4">
-					<img src="<c:url value='/resources/img/exhibitions4.jpg'/>" alt="전시 4를 넣습니다."/>
+				<figure class="event-4">
+					<img src="<c:url value='/resources/img/event4.jpg'/>" alt="전시 4를 넣습니다."/>
 				</figure>
 				<p class="title">머무를 곳</p>
 				</article>
-				<!-- <article class="exhibition-card swiper-slide">
-				<div class="placeholder"></div>
-				<figure class="exhibition-5">
-					<img src="<c:url value='/resources/img/ham4.jpg'/>" alt="햄스터 이미지4를 넣습니다."/>
-				</figure>
-				<p class="title">전시5</p>
-				</article>
-				<article class="exhibition-card swiper-slide">
-				<div class="placeholder"></div>
-				<a href="#"><figure class="exhibition-6">
-					<img src="<c:url value='/resources/img/ham5.jpg'/>" alt="햄스터 이미지를 넣습니다."/>
-				</figure></a>
-				<p class="title">전시6</p>
-				</article> -->
-    </div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-  </div>
-
-  <!-- <p class="append-buttons">
-		<button class="prepend-2-slides">Prepend 2 Slides</button>
-    <button class="prepend-slide">Prepend Slide</button>
-    <button class="append-slide">Append Slide</button>
-    <button class="append-2-slides">Append 2 Slides</button>
-  </p> -->
-
-  <!-- Swiper JS -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> -->
 
 		<section class="calendar-section">
 			<div class="section-header">
@@ -161,32 +413,29 @@
 			</div>
 		</section>
 	</main>
-	<footer class="footer">
-		<h1>Contacts</h1>
-		<address class="footer-address">
-      수원시 팔달구 덕영대로 899번길 11
-    </address>
-      <div class="footer-phone">
-        대표전화: 031-420-4204
-      </div>
+<footer class="footer">
+		<p class="address">수원시 팔달구 덕영대로 895번길 11</p>
+		<p class="call">대표전화. 031-420-4204</p>
+		<hr class="footer-hr">
+		<p class="other">@jfdfhfksehfkjsnckaul</p>
 	</footer>
 
- <!-- Initialize Swiper -->
-  <script>
+<!-- Initialize Swiper -->
+<script>
     var swiper = new Swiper(".mySwiper", {
-      slidesPerView: 3,
-      centeredSlides: true,
-      spaceBetween: 30,
-      pagination: {
+    slidesPerView: 3,
+    centeredSlides: true,
+    spaceBetween: 30,
+    pagination: {
         el: ".swiper-pagination",
         type: "fraction",
-      },
-      navigation: {
+    },
+    navigation: {
         nextEl: ".swiper-button-next",
         prevEl: ".swiper-button-prev",
-      },
+    },
     });
-  </script>
+</script>
 </body>
 
 

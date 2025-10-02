@@ -161,4 +161,13 @@ public class TestController {
 	public String reseTest() {
 		return "/account/resetPassword";
 	}
+	@GetMapping("/error")
+	public String errorTest() {
+		return "/common/error";
+	}
+	@GetMapping("/access-denied")
+	public String accessTest() {
+		return "/common/accessDenied";
+	}
+
 }
