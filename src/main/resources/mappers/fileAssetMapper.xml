@@ -50,9 +50,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{mimeType}, #{sizeBytes}, now(), #{uuid})
 	</insert>
 
-	<update id="update">
+<!-- 	<update id="update">
 
-	</update>
+	</update> -->
 
 	<delete id="deleteByOwner">
 		delete from `file_asset` where `owner_type` =
@@ -62,5 +62,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="delete">
 		delete from `file_asset` where `file_id` = #{fileId}
 	</delete>
+	
+		<select id="getFile" resultMap="fileMap">
+		select * from `file_asset` where `file_id` = #{fileId}
+	</select>
 
 </mapper>

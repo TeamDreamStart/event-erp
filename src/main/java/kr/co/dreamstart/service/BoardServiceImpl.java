@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.dreamstart.dto.BoardCommentDTO;
@@ -26,7 +28,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Autowired
 	private FileAssetMapper fileMapper;
-	
+
 	@Autowired
 	private FileService fileService;
 
@@ -74,26 +76,31 @@ public class BoardServiceImpl implements BoardService {
 		BoardPostDTO prevDTO = mapper.selectPrev(category, postId);
 		// 다음글
 		BoardPostDTO nextDTO = mapper.selectNext(category, postId);
-		// 해당 글 파일리스트
-		List<FileAssetDTO> fileList = fileMapper.list("board_post", postId);
 		map.put("postDTO", postDTO);
 		map.put("prevDTO", prevDTO);
 		map.put("nextDTO", nextDTO);
+		// 해당 글 파일리스트
+		List<FileAssetDTO> fileList = fileMapper.list("board_post", postId);
 		map.put("fileList", fileList);
+
+		List<BoardCommentDTO> commentList = mapper.commentList(postId);
+		map.put("commentList", commentList);
+
 		return map;
 	}
 
 	@Transactional
 	@Override
-	public Map<String, Object> postInsert(HttpServletRequest request ,BoardPostDTO postDTO,MultipartFile[] uploadFile) {
+	public Map<String, Object> postInsert(HttpServletRequest request, BoardPostDTO postDTO,
+			MultipartFile[] uploadFile) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		int result = -1;
 		result = mapper.postInsert(postDTO);
 		if (result > 0) {
 			if (uploadFile != null && uploadFile.length > 0) {
-	            // 비어있지 않은 경우
-	            fileService.saveFiles(request,uploadFile, "board_post", postDTO.getPostId());
-	        }
+				// 비어있지 않은 경우
+				fileService.saveFiles(request, uploadFile, "board_post", postDTO.getPostId());
+			}
 			map.put("success", true);
 			map.put("postId", postDTO.getPostId());
 		} else {
@@ -102,39 +109,47 @@ public class BoardServiceImpl implements BoardService {
 		return map;
 	}
 
-	@Override
-	public Map<String, Object> postUpdate(HttpServletRequest request ,BoardPostDTO postDTO, MultipartFile[] uploadFile,List<Long> deleteFileId) {
+	public Map<String, Object> postUpdate(HttpServletRequest request, @ModelAttribute BoardPostDTO postDTO,
+			@RequestParam(value = "uploadFile", required = false) MultipartFile[] uploadFile) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		int result = -1;
-		//수정한 게시물
+		// 수정한 게시물
 		result = mapper.postUpdate(postDTO);
-		if(result>0) {
-			if (uploadFile != null && uploadFile.length > 0) {
-			//새로 넣은 파일
-			fileService.saveFiles(request, uploadFile, "board_post", postDTO.getPostId());
-			}
-			if(deleteFileId.size()>0) {
-				//삭제할 파일
-				for(long fileId : deleteFileId) {
-					fileMapper.delete(fileId);
-				}
-			}
+		long postId = postDTO.getPostId();
+		if (result > 0) {
+			map.put("postId", postId);
+			map.put("success", true);
+		} else {
+			map.put("success", false);
 		}
-		
-		// 뭘 반환하지........
 		return map;
 	}
 
 	@Override
-	public Map<String, Object> postDelete(String boardId) {
+	public Map<String, Object> postDelete(long boardId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Map<String, Object> postRealDelete(String boardId) {
+	public Map<String, Object> postRealDelete(long boardId) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<BoardCommentDTO> commentList(long postId) {
+		return mapper.commentList(postId);
+	}
+
+	@Override
+	public int commentInsert(BoardCommentDTO commentDTO) {
+		return mapper.commentInsert(commentDTO);
+	}
+
+	@Override
+	public int commentDelete(long commentId) {
+		return mapper.commentDelete(commentId);
 	}
 
 }

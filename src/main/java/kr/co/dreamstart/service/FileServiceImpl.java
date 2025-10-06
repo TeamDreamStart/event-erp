@@ -63,6 +63,15 @@ public class FileServiceImpl implements FileService {
 
 		// 입력받은 여러개의 첨부파일 전부 순회
 		for (MultipartFile multipartFile : uploadFile) {
+			if (multipartFile == null || multipartFile.isEmpty()) {
+				log.warn("[FileService] EMPTY UPLOAD FILE...");
+				continue;
+			}
+			String originalName = multipartFile.getOriginalFilename();
+			if (originalName == null || originalName.trim().isEmpty()) {
+				log.warn("[FileService] NO FILENAME...");
+				continue;
+			}
 			log.info("---------------------------------");
 			log.info("upload File Name : " + multipartFile.getOriginalFilename());
 			log.info("upload File Size : " + multipartFile.getSize());
@@ -151,5 +160,31 @@ public class FileServiceImpl implements FileService {
 		// 마임 타입을 확인할 수 없는 경우 이미지가 아닌 것으로 간주
 		return false;
 	}
+	
+	public void deleteFiles(List<Long> deleteFileList) {
+		if (deleteFileList.size() > 0 && !deleteFileList.isEmpty()) {
+			int result = -1;
+			for (long deleteFileId : deleteFileList) {
+				result = -1;
+				result = mapper.delete(deleteFileId);
+				if (result > 0) {
+					log.info("[FileService] DELETED SUCCESS ID : " + deleteFileId);
+				} else {
+					log.warn("[FileService] DELETED FAIL ID : " + deleteFileId);
+				}
+			}
+		}else {
+			log.info("[FileService] EMPTY DELETE FILE LIST...");
+		}
+	}
+
+	//다운로드용
+	@Override
+	public FileAssetDTO getFile(long fileId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
+
+

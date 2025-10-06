@@ -14,26 +14,20 @@ import kr.co.dreamstart.dto.FileAssetDTO;
 public interface BoardMapper {
 
 	// 카테고리별 , 게시 상태별 게시물 갯수 (category, visibility = PUBLIC)
-	public int postCount(@Param("visibility") String visibility, 
-			@Param("category") String category);
+	public int postCount(@Param("visibility") String visibility, @Param("category") String category);
 
 	// 카테고리별 , 게시 상태별 목록 조회 내림차순 + 페이징 list
-	public List<BoardPostDTO> postList(@Param("cri") Criteria cri, 
-			@Param("visibility") String visibility,
+	public List<BoardPostDTO> postList(@Param("cri") Criteria cri, @Param("visibility") String visibility,
 			@Param("category") String category);
-	
-	
 
-	// insert visibility -> 일반회원 hidden, 관리자 select /  category -> hidden
+	// insert visibility -> 일반회원 hidden, 관리자 select / category -> hidden
 	public int postInsert(BoardPostDTO postDTO);
-	
-	
-	
+
 	// update
 	public int postUpdate(@Param("postDTO") BoardPostDTO postDTO);
 
 	// 상세보기 selectOne - detail
-	public BoardPostDTO select(@Param("category") String category,@Param("postId")long postId);
+	public BoardPostDTO select(@Param("category") String category, @Param("postId") long postId);
 
 	// 이전 글
 	public BoardPostDTO selectPrev(@Param("category") String category, @Param("postId") long postId);
@@ -55,13 +49,13 @@ public interface BoardMapper {
 
 	// 게시물 검색 - 공지/Q&A(category)- NOTICE/QNA,
 	// 제목/내용,제목,내용(searchType)-TITLE/CONTENT/ALL, 검색어(keyword)
-	public List<BoardPostDTO> postSearch(@Param("cri")Criteria cri,@Param("visibility")String visibility,@Param("category") String category, 
-			@Param("searchType") String searchType,
+	public List<BoardPostDTO> postSearch(@Param("cri") Criteria cri, @Param("visibility") String visibility,
+			@Param("category") String category, @Param("searchType") String searchType,
 			@Param("keyword") String keyword);
 
-	public int postSearchCount(@Param("visibility")String visibility,@Param("category") String category, 
-			@Param("searchType") String searchType,
-			@Param("keyword") String keyword);
+	public int postSearchCount(@Param("visibility") String visibility, @Param("category") String category,
+			@Param("searchType") String searchType, @Param("keyword") String keyword);
+
 	// 게시물당 댓글 갯수
 	public int commentCount(long postId);
 
@@ -71,5 +65,7 @@ public interface BoardMapper {
 	// 댓글(Q&A 답변) 작성
 	public int commentInsert(BoardCommentDTO commentDTO);
 	// 게시판 이미지 파일 첨부
+
+	public int commentDelete(long commentId);
 
 }
