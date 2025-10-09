@@ -25,6 +25,9 @@ public interface BoardMapper {
 
 	// update
 	public int postUpdate(@Param("postDTO") BoardPostDTO postDTO);
+	
+	//delete
+	public int postDelete(long postId);	
 
 	// 상세보기 selectOne - detail
 	public BoardPostDTO select(@Param("category") String category, @Param("postId") long postId);
@@ -67,5 +70,7 @@ public interface BoardMapper {
 	// 게시판 이미지 파일 첨부
 
 	public int commentDelete(long commentId);
+	
+	public int commentDeleteByPostId(long postId);
 
 }

@@ -124,6 +124,8 @@
 	</a></li> -->
 	<li class="nav-item"><a class="nav-link" href="/admin/qna"> <i
 			class="fas fa-fw fa-table"></i> <span>Q&A</span></a></li>
+	<li class="nav-item"><a class="nav-link" href="/admin/user-manage"> <i
+			class="fas fa-fw fa-table"></i> <span>USER</span></a></li>
 
 	<!-- Divider -->
 	<hr class="sidebar-divider d-none d-md-block">

@@ -47,6 +47,8 @@ public class FileServiceImpl implements FileService {
 
 		// 업로드된 파일을 저장할 폴더 경로
 		String uploadFolder = request.getServletContext().getRealPath("/resources/uploadTemp");
+//		String rootPath = new File("").getAbsolutePath();
+//		String uploadFolder = rootPath + "\\src\\main\\webapp\\resources\\uploadTemp";
 
 
 		// 현재 날짜를 기준으로 업로드된 파일을 저장할 서브 폴더 경로를 생성하여 반환
@@ -183,6 +185,12 @@ public class FileServiceImpl implements FileService {
 	public FileAssetDTO getFile(long fileId) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	@Override
+	public int deleteByOwner(String ownerType, long ownerId) {
+		return mapper.deleteByOwner(ownerType, ownerId);
 	}
 
 }

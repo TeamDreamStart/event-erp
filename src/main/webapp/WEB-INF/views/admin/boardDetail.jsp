@@ -25,7 +25,17 @@
 <link href="/resources/css/sb-admin-2.min.css" rel="stylesheet">
 </head>
 <body id="page-top">
+<script>
+    const result = '${empty result ? "" : result}';
+    const resultType = '${empty resultType ? "" : resultType}';
 
+    if (result === 'success') {
+        alert(`성공적으로 ${resultType}되었습니다.`);
+    } else if (result === 'fail') {
+        alert(`${resultType}이(가) 실패하였습니다.`);
+    }
+</script>
+<p>result:${result }resultType:${resultType }</p>
 	<!-- Page Wrapper -->
 	<div id="wrapper">
 		<!-- header -->
@@ -113,13 +123,14 @@
 								href="${pageContext.request.contextPath}/admin/${boardType}/${postDTO.postId}/delete"
 								class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
 						</div>
+						
 
 
 
 						<c:if test="${boardType eq 'qna' }">
 
 							<!-- QNA 답변 ! -->
-							<h4 class="page-header">댓글</h4>
+							<h4 class="page-header">답변하기</h4>
 
 							<!-- 댓글 입력 -->
 							<form action="/admin/${boardType }/${postId}/comment"

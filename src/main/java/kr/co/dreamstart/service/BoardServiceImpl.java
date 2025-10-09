@@ -20,7 +20,9 @@ import kr.co.dreamstart.dto.FileAssetDTO;
 import kr.co.dreamstart.dto.PageVO;
 import kr.co.dreamstart.mapper.BoardMapper;
 import kr.co.dreamstart.mapper.FileAssetMapper;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class BoardServiceImpl implements BoardService {
 	@Autowired
@@ -101,10 +103,10 @@ public class BoardServiceImpl implements BoardService {
 				// 비어있지 않은 경우
 				fileService.saveFiles(request, uploadFile, "board_post", postDTO.getPostId());
 			}
-			map.put("success", true);
+			map.put("result", "success");
 			map.put("postId", postDTO.getPostId());
 		} else {
-			map.put("success", false);
+			map.put("result", "fail");
 		}
 		return map;
 	}
@@ -115,27 +117,43 @@ public class BoardServiceImpl implements BoardService {
 		int result = -1;
 		// 수정한 게시물
 		result = mapper.postUpdate(postDTO);
-		long postId = postDTO.getPostId();
 		if (result > 0) {
-			map.put("postId", postId);
-			map.put("success", true);
+			map.put("result", "success");
 		} else {
-			map.put("success", false);
+			map.put("result", "fail");
 		}
 		return map;
 	}
 
 	@Override
-	public Map<String, Object> postDelete(long boardId) {
-		// TODO Auto-generated method stub
-		return null;
+	public int postDelete(long boardId) {
+		int result = -1;
+
+		return result;
 	}
 
 	@Override
-	public Map<String, Object> postRealDelete(long boardId) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map<String, Object> postRealDelete(String boardType, long postId) {
+	    Map<String, Object> map = new HashMap<>();
+	    int result = mapper.postDelete(postId);
+
+	    if (result > 0) {
+	        // QNA인 경우 댓글도 삭제
+	        if (boardType.equals("qna")) {
+	            if (mapper.commentCount(postId) > 0) {
+	                mapper.commentDeleteByPostId(postId);
+	            }
+	        }
+	        map.put("result", "success");
+	        log.info("[BoardService] DELETE SUCCESS POSTID : "+postId);
+	    } else {
+	        map.put("result", "fail");
+	        log.warn("[BoardService] DELETE FAIL POSTID : "+postId);
+	    }
+
+	    return map;
 	}
+
 
 	@Override
 	public List<BoardCommentDTO> commentList(long postId) {

@@ -26,6 +26,16 @@
 <link href="/resources/css/sb-admin-2.min.css" rel="stylesheet">
 </head>
 <body id="page-top">
+<script>
+    const result = '${empty result ? "" : result}';
+    const resultType = '${empty resultType ? "" : resultType}';
+
+    if (result === 'success') {
+        alert(`성공적으로 ${resultType}되었습니다.`);
+    } else if (result === 'fail') {
+        alert(`${resultType}이(가) 실패하였습니다.`);
+    }
+</script>
 
 	<!-- Page Wrapper -->
 	<div id="wrapper">
@@ -137,8 +147,8 @@
 												</c:if>
 												<!-- <th>댓글수</th> -->
 												<c:if test="${boardType eq 'qna' }">
-													<td><c:if test="${postDTO.commentCount >0}">답변완료</c:if>
-														<c:if test="${postDTO.commentCount ==0}">미답변</c:if></td>
+													<c:if test="${postDTO.commentCount >0}"><td style="color: red">답변완료</td></c:if>
+														<c:if test="${postDTO.commentCount ==0}"><td>미답변</td></c:if>
 												</c:if>
 											</tr>
 										</c:forEach>

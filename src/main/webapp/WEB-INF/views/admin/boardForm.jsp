@@ -60,9 +60,7 @@
 							<!-- hidden @@@@@@@@@@@@@@@@@@-->
 							<input type="hidden" name="${_csrf.parameterName}"
 								value="${_csrf.token}" /> <input type="hidden" name="category"
-								value="<c:if test="${boardType eq 'qna' }">QNA</c:if>
-				<c:if test="${boardType eq 'notices' }">NOTICE
-				</c:if>">
+								value="${boardType eq 'qna' ? 'QNA' : 'NOTICE'}" />
 							<!-- qna는 중요글 없음 -->
 							<c:if test="${boardType eq 'qna' }">
 								<input type="hidden" name="pinned" value="0">
@@ -286,6 +284,15 @@
 										      preview.appendChild(container);
 										    };
 										    reader.readAsDataURL(file);
+										  });
+										});
+									document.addEventListener('DOMContentLoaded', function() {
+										  document.querySelectorAll('input, select, textarea').forEach(el => {
+										    if (el.type === 'hidden' || el.type === 'file' || el.type === 'checkbox') {
+										      el.removeAttribute('required'); // 🔥 이렇게 해야 진짜 비활성화됨
+										    } else {
+										      el.setAttribute('required', ''); // 필수 적용
+										    }
 										  });
 										});
 
