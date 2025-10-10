@@ -116,6 +116,11 @@ public class UserServiceImpl implements UserService {
 	public void saveOrUpdateNaverUser(Map<String, String> naverUser) {
 	    UserDTO user = userMapper.findBySnsId(naverUser.get("snsId"));
 	    if(user == null) {
+	        // 이메일로 기존 회원 조회
+	        user = userMapper.findByEmail(naverUser.get("email"));
+	    }
+	    
+	    if(user == null) {
 	        // 신규 회원
 	        UserDTO newUser = new UserDTO();
 	        newUser.setSnsId(naverUser.get("snsId"));
@@ -140,16 +145,28 @@ public class UserServiceImpl implements UserService {
 	    	user.setSnsId(naverUser.get("snsId"));
 	        user.setName(naverUser.get("name"));
 	        user.setEmail(naverUser.get("email"));
+	     // gender 처리
 	        String gender = naverUser.get("gender");
-	        if(gender.equals("F")) {
-	        	user.setGender(0);	        	
-	        }else  if(gender.equals("M")){
-	        	user.setGender(1);	        	
+	        if("F".equals(gender)) {
+	            user.setGender(0);
+	        } else if("M".equals(gender)) {
+	            user.setGender(1);
+	        } else {
+	            user.setGender(2); // unknown
 	        }
-	        String birthDate = naverUser.get("birthyear")+"-"+naverUser.get("birthday");
+
+	        // birthDate 처리
+	        String birthyear = naverUser.get("birthyear");
+	        String birthday = naverUser.get("birthday");
+	        String birthDate = "";
+	        if(birthyear != null && birthday != null) {
+	            birthDate = birthyear + "-" + birthday;
+	        }
 	        user.setBirthDate(birthDate);
-	        //010-0000-0000
-	        user.setPhone(naverUser.get("mobile"));
+
+	        // phone 처리
+	        String mobile = naverUser.get("mobile");
+	        user.setPhone(mobile != null ? mobile : "010-0000-0000"); // 기본값 설정
 	        userMapper.updateNaver(user);
 	    }
 	}

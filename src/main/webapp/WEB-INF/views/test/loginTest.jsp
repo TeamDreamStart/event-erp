@@ -3,6 +3,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
+<%@ page import="java.net.URLEncoder"%>
+<%@ page import="java.security.SecureRandom"%>
+<%@ page import="java.math.BigInteger"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -123,11 +126,10 @@
 			<sec:csrfInput />
 
 			<div class="form-row">
-				<label class="label" for="username">아이디</label> 
+				<label class="label" for="username">아이디</label>
 				<!-- 로그인시 아이디, 이메일 둘다 가능하게 하기 위해 login으로 통일 -->
-				<input class="input"
-					type="text" id="login" name="login" placeholder="아이디(또는 이메일)"
-					required autofocus>
+				<input class="input" type="text" id="login" name="login"
+					placeholder="아이디(또는 이메일)" required autofocus>
 			</div>
 
 			<div class="form-row">
@@ -146,14 +148,25 @@
 			</div>
 		</form>
 	</div>
-	
+
 	<div>
 		<a href="${location }
-	"><img style="height: 20px" alt="카카오로그인버튼" src="../resources/img/kakao.png"></a>
+	"><img style="height: 20px" alt="카카오로그인버튼"
+			src="../resources/img/kakao.png"></a>
 	</div>
-	
-	<div>
-		<a href="/login/naver/callback">네이버</a>
-	</div>
+
+	<%
+	String clientId = "9CN0AyXIHmflebLIalgz";//애플리케이션 클라이언트 아이디값";
+	String redirectURI = URLEncoder.encode("http://localhost:8080/login/naver/callback", "UTF-8");
+	SecureRandom random = new SecureRandom();
+	String state = new BigInteger(130, random).toString();
+	String apiURL = "https://nid.naver.com/oauth2.0/authorize?response_type=code";
+	apiURL += "&client_id=" + clientId;
+	apiURL += "&redirect_uri=" + redirectURI;
+	apiURL += "&state=" + state;
+	session.setAttribute("state", state);
+	%>
+	<a href="<%=apiURL%>"><img height="50"
+		src="http://static.nid.naver.com/oauth/small_g_in.PNG" /></a>
 </body>
 </html>

@@ -89,6 +89,13 @@ public class UserController {
 		return "test/loginTest";
 	}
 	
+	@RequestMapping("/logout")
+	public String logout(HttpSession session) {
+	    session.invalidate(); // 세션 전체 무효화
+	    return "redirect:/";   // 로그아웃 후 메인페이지 이동
+	}
+
+	
 	@RequestMapping("/login/naver/callback")
 	public String naverCallback(HttpServletRequest request, HttpSession session) {
 	    String code = request.getParameter("code");

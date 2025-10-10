@@ -227,6 +227,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		`,`gender`,`birth_date`,`created_at`,`is_active`)
 		values(#{snsId},#{name},#{email },#{gender},#{birthDate},now(),1)
 	</insert>
+	
+	<select id="findByEmail" resultMap="userMap">
+		select * from user where email = #{email}
+	</select>
 
 	<!-- naver sns 회원정보 업데이트 -->
 	<update id="updateNaver" parameterType="userDTO">

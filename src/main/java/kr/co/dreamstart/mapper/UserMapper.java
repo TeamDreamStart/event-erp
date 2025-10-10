@@ -63,4 +63,6 @@ public interface UserMapper {
 	// 사용자 비번 업데이트
 	public int updatePasswordById(@Param("userId") long userId, @Param("password") String password);
 
+	public UserDTO findByEmail(String string);
+
 }
