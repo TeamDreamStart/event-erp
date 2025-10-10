@@ -253,6 +253,8 @@ public class MybatisTest {
 		log.info("matches={}", ok);
 	}
 	
+	
+	
 	@Test
 	public void templateQaIntegrityTest() {
 		try (SqlSession session = sqlFactory.openSession()) {

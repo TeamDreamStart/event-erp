@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ import kr.co.dreamstart.dto.FileAssetDTO;
 import kr.co.dreamstart.service.BoardService;
 import kr.co.dreamstart.service.FileService;
 
+@PreAuthorize("hasRole('ADMIN')") // 권한 메서드 글로벌 설정
 @Controller
 @RequestMapping("/admin")
 public class AdminController {

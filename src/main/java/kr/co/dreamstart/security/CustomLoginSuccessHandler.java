@@ -13,11 +13,14 @@ import org.springframework.stereotype.Component;
 
 import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.mapper.UserMapper;
+import kr.co.dreamstart.service.UserService;
+import lombok.RequiredArgsConstructor;
 
 @Component("customLoginSuccessHandler")
+@RequiredArgsConstructor
 public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler{
 	@Autowired
-	private UserMapper userMapper;
+	private UserService userService;
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, 
@@ -25,13 +28,10 @@ public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSu
 										Authentication authentication) 
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
-		String username = authentication.getName(); // UserDeails.withUsername()값
-		UserDTO u = userMapper.findByLogin(username);	// 아이디/이메일 조회
-		
-		if (u != null) {
-			userMapper.updateLastLoginAt(u.getUserId());	// 마지막 로그인 시간 업데이트
-		}
+		// principal에서 바로 userId 획득 (재조회 없음)
+		CustomUserDetails me = (CustomUserDetails) authentication.getPrincipal();
+		Long userId = me.getUserId();
+		userService.touchLastLogin(userId);
 		
 		// 저장된 요청으로 복귀 (없으면 dafault-target-url 로)
 		super.onAuthenticationSuccess(request, response, authentication);

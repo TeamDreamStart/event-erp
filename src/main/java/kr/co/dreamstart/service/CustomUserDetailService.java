@@ -12,18 +12,21 @@ import org.springframework.stereotype.Service;
 
 import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.mapper.UserMapper;
+import kr.co.dreamstart.security.CustomUserDetails;
+import lombok.RequiredArgsConstructor;
 
 @Service("userDetailsService")
+@RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
 
 	@Autowired
-	private UserMapper userMapper;
+	private UserService userService;
 	
 	@Override
 	public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
-		// 아이디/이메일 겸용 : 하나의 파라미터에 or 조회
-		UserDTO u = userMapper.findByLogin(login);
+		// 1) 사용자 조회 - 아이디/이메일 겸용 : 하나의 파라미터에 or 조회
+		UserDTO u = userService.findByLogin(login);
 		
 		// 없으면 인증 실패
 		if (u == null) {
@@ -31,22 +34,24 @@ public class CustomUserDetailService implements UserDetailsService {
 			throw new UsernameNotFoundException("User not found");
 		}
 		
-		//권한 조회 -> GrantedAuthority로 변환
-		List<String> roles = userMapper.findRoleNameByUserId(u.getUserId());
+		// 2) 권한 조회 -> GrantedAuthority로 변환 + ROLE_ 접두어 + 대문자 정규화
+		List<String> roles = userService.findRoleNames(u.getUserId()); // ["admin","member"]
 		List<SimpleGrantedAuthority> authorities = roles.stream()
+				.map(r -> "ROLE_" + r.toUpperCase()) // "admin" -> "ROLE_ADMIN"
 				.map(SimpleGrantedAuthority::new)
 				.collect(Collectors.toList());
 		
+		boolean enabled = u.getIsActive() == 1;
+		
 		// UserDetails 생성 후 반환
-		return org.springframework.security.core.userdetails.User
-				.withUsername(u.getUserName())	// 세션에 올라갈 username
-				.password(u.getPassword()) 	// bcrypt 해시
-				.authorities(authorities)
-				.disabled(u.getIsActive() == 0) // 1:활성, 0:비활성
-				.accountExpired(false)
-				.accountLocked(false)
-				.credentialsExpired(false)
-				.build();
+		return new CustomUserDetails(
+				u.getUserId(),
+				u.getUserName(),
+				u.getPassword(),
+				enabled,
+				authorities
+		);
+				
 	}
 	
 }
