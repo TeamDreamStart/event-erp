@@ -56,8 +56,7 @@
 				<div class="card-header py-3">
 					<h6 class="m-0 font-weight-bold text-primary"
 						style="font-size: 2rem;">
-						<c:if test="${boardType eq 'notices' }">NOTICE</c:if>
-						<c:if test="${boardType eq 'qna' }">Q&A</c:if>
+						USERLIST
 					</h6>
 				</div>
 				<div class="card-body">
@@ -110,7 +109,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach var="userDTO" items="${userList }">
+								<%-- <c:forEach var="userDTO" items="${userList }">
 								<tr>
 									<td>${userDTO.}</td>
 									<td>${userDTO.}</td>
@@ -118,7 +117,7 @@
 									<td>${userDTO.}</td>
 									<td>${userDTO.}</td>
 								</tr>
-								</c:forEach>
+								</c:forEach> --%>
 							</tbody>
 						</table>
 						<!-- paging -->

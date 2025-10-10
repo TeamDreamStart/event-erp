@@ -185,7 +185,9 @@ public class AdminController {
 	}
 	
 	@GetMapping("/user-manage")
-	public String userManage() {
+	public String userManage(Model model,Criteria cri,
+			@RequestParam(required = false)String searchType,
+			@RequestParam(required = false)String keyword) {
 		return "/admin/customerManage";
 	}
 
