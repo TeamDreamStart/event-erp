@@ -8,6 +8,7 @@
 <!-- CSRF -->
 <meta name="_csrf" content="${_csrf.token}" />
 <meta name="_csrf_header" content="${_csrf.headerName}" />
+<meta name="current-user-id" content="${loginUser.userId}" />
 
 <title>설문 템플릿 클론</title>
 
@@ -252,6 +253,53 @@
 	const CTX  = '${pageContext.request.contextPath}';
 	const BASE = location.origin + CTX;
 	
+	// JSON 안전 파서: 서버가 에러로 HTML을 보내도 "Unexpected token '<'" 안 터지게
+	async function parseJsonSafe(res){
+	  const ct = res.headers.get('content-type') || '';
+	  const text = await res.text();
+	  if (ct.includes('application/json')) {
+	    return JSON.parse(text);
+	  }
+	  throw new Error(`HTTP ${res.status} (non-JSON): ${text.slice(0, 200)}`);
+	}
+	
+	// === 프론트 검증 함수 (전역) ===
+	function validatePayload(payload) {
+	  const allowed = new Set(['SINGLE','MULTI','SCALE_5','TEXT']);
+	  const qs = payload?.questions || [];
+	  if (!qs.length) return { ok:false, msg:'문항이 없습니다.', index:1 };
+
+	  for (let i = 0; i < qs.length; i++) {
+	    const q = qs[i];
+	    const no = i + 1;
+
+	    const t = String(q.type || '').trim().toUpperCase();
+	    if (!allowed.has(t)) {
+	      return { ok:false, msg:`알 수 없는 유형: ${q.type}`, index:no };
+	    }
+
+	    if (!q.question || !q.question.trim()) {
+	      return { ok:false, msg:'질문 내용이 비어있어요.', index:no };
+	    }
+
+	    const opts = q.options || [];
+	    if (t === 'TEXT') {
+	      if (opts.length) return { ok:false, msg:'TEXT 문항에는 보기(options)를 넣지 마세요.', index:no };
+	    } else if (t === 'SINGLE' || t === 'MULTI') {
+	      if (!opts.length) return { ok:false, msg:`${t} 문항은 최소 1개 이상의 보기가 필요합니다.`, index:no };
+	      if (!opts.every(o => Number.isInteger(o.optValue))) {
+	        return { ok:false, msg:`${t} 문항의 optValue는 정수여야 합니다.`, index:no };
+	      }
+	    } else if (t === 'SCALE_5') {
+	      if (opts.length !== 5) return { ok:false, msg:'SCALE_5 문항은 보기 5개가 필요합니다.', index:no };
+	      const okSeq = opts.every((o,i) => o.optValue === (i+1));
+	      if (!okSeq) return { ok:false, msg:'SCALE_5 optValue는 1~5로 보내주세요.', index:no };
+	    }
+
+	  }
+	  return { ok:true };
+	}	
+	
 	/* ===== 스케줄 ===== */
 	function toggleScheduleInputs(){
 	  const mode = $("#scheduleMode").value;
@@ -494,16 +542,16 @@
 	function makeDefaultOptions(type){
 	  if (type === 'scale_5') {
 	    return [
-	      {label:'매우 그렇지 않다', optValue:'1'},
-	      {label:'그렇지 않다',     optValue:'2'},
-	      {label:'보통이다',       optValue:'3'},
-	      {label:'그렇다',         optValue:'4'},
-	      {label:'매우 그렇다',    optValue:'5'}
+	      {label:'매우 그렇지 않다', optValue: 1},
+	      {label:'그렇지 않다',     optValue: 2},
+	      {label:'보통이다',       optValue: 3},
+	      {label:'그렇다',         optValue: 4},
+	      {label:'매우 그렇다',    optValue: 5}
 	    ];
 	  }
 	  return [
-	    {label:'예',   optValue:'Y'},
-	    {label:'아니오', optValue:'N'}
+	    {label:'예',   optValue: 1},
+	    {label:'아니오', optValue: 2}
 	  ];
 	}
 	
@@ -544,29 +592,80 @@
 	});
 	
 	/* ===== 복제(인라인) ===== */
-	$("#btnClone").addEventListener('click', async ()=>{
-	  const templateId = ($('input[name="templateId"]:checked')||{}).value;
-	  if (!templateId){ return alert('템플릿을 선택하세요.'); }
-	  const eventId = $("#eventSel").value;
-	  if (!eventId){ return alert('이벤트를 선택하세요.'); }
-	
-	  const payload = collectPayload(Number(templateId), Number(eventId));
-	  try{
-	    const headers = { 'Content-Type': 'application/json', ...CSRF_HEADERS };
-	    const res = await fetch(BASE + '/admin/api/surveys/clone-inline', {
-	      method: 'POST', headers, credentials: 'same-origin', body: JSON.stringify(payload)
-	    });
-	    const data = await res.json();
-	    if (data.ok){
-	      showModal('템플릿 등록에 성공했습니다!', ()=>{ location.href = CTX + '/admin/surveys?eventId=' + eventId; });
-	    }else{
-	      showModal('템플릿 등록 실패했습니다. 다시 시도해주세요.');
+	(() => {
+	  const btn = $("#btnClone");
+	  let inFlight = false;
+
+	  const MSG = {
+	    SUCCESS: '복제되었습니다.',
+	    DUP: '이미 복제되었습니다.',
+	    UNKNOWN: '복제 중 알 수 없는 오류가 발생했습니다.',
+	    REQ_ERR: '요청 데이터가 올바르지 않습니다.',
+	  };
+
+	  btn.addEventListener('click', async () => {
+	    if (inFlight) return;
+	    inFlight = true; btn.disabled = true;
+
+	    try {
+	      const templateId = ($('input[name="templateId"]:checked')||{}).value;
+	      if (!templateId) { alert('템플릿을 선택하세요.'); return; }
+
+	      const eventId = $("#eventSel").value;
+	      if (!eventId)    { alert('이벤트를 선택하세요.'); return; }
+
+	      const payload = collectPayload(Number(templateId), Number(eventId));
+	      const v = validatePayload(payload);
+	      if (!v.ok) {
+	        showModal(`문항 ${v.index}번 오류: ${v.msg}`);
+	        const t = document.querySelector(`.q-row:nth-of-type(${v.index}) .q-title`);
+	        if (t) { t.scrollIntoView({behavior:'smooth', block:'center'}); t.focus(); }
+	        return;
+	      }
+
+	      const headers = { 'Content-Type': 'application/json', 'Accept': 'application/json', ...CSRF_HEADERS };
+	      const res = await fetch(BASE + '/admin/api/surveys/clone-inline', {
+	        method: 'POST',
+	        headers,
+	        credentials: 'same-origin',
+	        body: JSON.stringify(payload)
+	      });
+
+	      // 1) HTTP 단계 에러 우선
+	      if (!res.ok) {
+	        if (res.status === 409) return showModal(MSG.DUP);
+	        if (res.status === 400 || res.status === 422) return showModal(MSG.REQ_ERR);
+	        const txt = await res.text().catch(()=> '');
+	        return showModal(txt || `${MSG.UNKNOWN} (HTTP ${res.status})`);
+	      }
+
+	      // 2) JSON 파싱 (컨트롤러 200+JSON 전제)
+	      const data = await res.json().catch(() => ({}));
+	      if (data && data.ok && data.surveyId) {
+	        return showModal(MSG.SUCCESS, () => {
+	          // 성공 후 이동: 상세 페이지
+	          location.href = `${CTX}/admin/surveys/${data.surveyId}`;
+	          // 또는 목록으로 보내려면 ↓ 주석 해제
+	          // location.href = `${CTX}/admin/surveys?eventId=${eventId}`;
+	        });
+	      }
+
+	      return showModal((data && data.message) || MSG.UNKNOWN);
+
+	    } catch (e) {
+	      showModal(`${MSG.UNKNOWN}\n` + (e?.message || e));
+	    } finally {
+	      inFlight = false; btn.disabled = false;
 	    }
-	  }catch(e){
-	    showModal('템플릿 등록 실패했습니다. 오류: ' + e);
-	  }
-	});
+	  });
+	})();
 	
+	// 문자열 → 정수 (실패 시 null)
+	function toIntOrNull(v) {
+	  const n = Number(String(v ?? '').trim());
+	  return Number.isFinite(n) ? Math.trunc(n) : null;
+	}
+
 	/* ===== 원본 그대로 복제 ===== */
 	async function cloneAsIs() {
 	  const templateId = (document.querySelector('input[name="templateId"]:checked') || {}).value;
@@ -575,12 +674,14 @@
 	  if (!eventId) { return alert('이벤트를 선택하세요.'); }
 	
 	  try {
-	    const headers = { 'Content-Type': 'application/x-www-form-urlencoded', ...CSRF_HEADERS };
+		// Accept 추가
+		const headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json', ...CSRF_HEADERS };
 	    const params = new URLSearchParams({ templateId, eventId });
 	    const res = await fetch(BASE + '/admin/api/surveys/clone', {
 	      method: 'POST', headers, credentials: 'same-origin', body: params
 	    });
-	    const data = await res.json();
+	 // JSON 안전 파서 사용
+	    const data = await parseJsonSafe(res);
 	    if (data.ok) {
 	      showModal('템플릿 원본 복제에 성공했습니다!', () => { location.href = CTX + '/admin/surveys?eventId=' + eventId; });
 	    } else {
@@ -592,30 +693,61 @@
 	}
 	document.getElementById('btnCloneAsIs')?.addEventListener('click', cloneAsIs);
 	
+
 	/* ===== 페이로드 수집 ===== */
 	function collectPayload(templateId, eventId){
 	  ensureTailTextQuestion(); // 전송 직전에도 보장
 	
 	  const mode = $("#scheduleMode").value;
 	  const oq = $$('.q-row').map(q => {
-	    const type = $('.q-type', q).value;
-	    const question = $('.q-title', q).value.trim();
-	    const opts = $$('.opt-row', q).map(or => ({
+	    const typeRaw   = $('.q-type', q).value;           // 'single' | 'multi' | 'scale_5' | 'text'
+	    const typeUpper = typeRaw.toUpperCase();           // ENUM 규격
+	    const question  = $('.q-title', q).value.trim();
+	
+	    // 옵션 수집 (라벨/값)
+	    const uiOpts = $$('.opt-row', q).map(or => ({
 	      label: $('input:nth-of-type(1)', or).value.trim(),
 	      optValue: $('input:nth-of-type(2)', or).value.trim()
-	    })).filter(o => o.label.length>0 || o.optValue.length>0);
-	    return { type, question, options: (type==='text' ? [] : opts) };
+	    })).filter(o => o.label.length > 0 || o.optValue.length > 0);
+	
+	    // 전송용 옵션 변환
+	    let options = [];
+	    if (typeRaw !== 'text') {
+	      // 숫자 변환 (실패 시 null)
+	      const mapped = uiOpts.map((o, i) => ({
+	        label: o.label,
+	        optValue: toIntOrNull(o.optValue)
+	      }));
+	
+	      if (typeRaw === 'scale_5') {
+	        // 척도는 1~5 강제
+	        options = mapped.map((o, i) => ({
+	          label: o.label,
+	          optValue: i + 1
+	        })).slice(0, 5);
+	      } else {
+	        // single/multi: 비거나 숫자 아님 → 1부터 순번
+	        options = mapped.map((o, i) => ({
+	          label: o.label,
+	          optValue: Number.isInteger(o.optValue) ? o.optValue : (i + 1)
+	        }));
+	      }
+	    }
+	
+	    return { type: typeUpper, question, options };
 	  });
 	
 	  return {
-	    templateId, eventId,
-	    title: document.getElementById('surveyTitle').value.trim(), 
+	    templateId,
+	    eventId,
+	    title: document.getElementById('surveyTitle').value.trim(),
 	    scheduleMode: mode,
-	    openDelayHours: Number($("#openDelayHours").value||0),
-	    closeAfterDays: Number($("#closeAfterDays").value||7),
+	    openDelayHours: Number($("#openDelayHours").value || 0),
+	    closeAfterDays: Number($("#closeAfterDays").value || 7),
 	    questions: oq
 	  };
 	}
+
 	
 	/* ===== 전체선택 토글 ===== */
 	$('#chkAll')?.addEventListener('change', (e) => {

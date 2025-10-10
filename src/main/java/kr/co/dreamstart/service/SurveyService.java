@@ -24,6 +24,9 @@ public interface SurveyService {
 	public List<SurveyOptionDTO> optionList(Long surveyId);
 	public Map<Long, List<SurveyOptionDTO>> optionsByQuestion (Long surveyId);
 	
+	// 상세조회 (이벤트 제목 포함)
+	public String findEventTitleBySurveyId(Long surveyId);
+	
 	// 응답
 	public List<SurveyResponseDTO> responseList(Long surveyId, Criteria cri);
 	public int responseCount(Long surveyId);
@@ -35,7 +38,13 @@ public interface SurveyService {
 	
 	// 상위 유즈케이스 - 헤더 만들고 -> 새 surveyId 받기 -> 원본 문항/보기 전부 복제 (클론 헤더+QA복제/JSON 인라인 복제)
 	public Long cloneFromTemplate(Long templateId, Long eventId, Long userId);
-	public Long cloneInline(CloneInlineReqDTO req);
+	public Long cloneInline(CloneInlineReqDTO req, Long userId);
+	
+	// 응답없고, 클론인 설문 삭제
+	public int deleteCloneSurvey(Long surveyId);
+	
+	// 문항/응답 통계
+	public List<Map<String, Object>> surveyStatus(Long surveyId);
 	
 	// Likert(클른문항) 보정이 필요할때만 노출
 //	public int ensureLikert5ForSurvey(Long surveyId);

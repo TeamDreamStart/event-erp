@@ -11,7 +11,10 @@ public class CloneInlineReqDTO {
 
     @NotNull private Long templateId;
     @NotNull private Long eventId;
-    @NotNull private Long userId;
+    private Long userId;
+    
+    // 클론된 설문의 새로운 surveyId
+    private Long newSurveyId;
 
     // ★ 프론트에서 입력한 새 설문 제목
     @NotBlank(message = "제목은 필수입니다.")

@@ -103,15 +103,21 @@ public class SurveyServiceImpl implements SurveyService {
 	@Transactional(rollbackFor = Exception.class) // 정상 종료 = 커밋, 예외 = 롤백
 	public Long cloneFromTemplate(Long templateId, Long eventId, Long userId) {
 		// TODO Auto-generated method stub
-		log.info("[/survey-test/clone] templateId={}, eventId={}, userId={}", 
-				templateId, eventId, userId);
 
 		// 1) 헤더복제
-		int header = surveyMapper.cloneSurvey(templateId, eventId, userId);
+		CloneInlineReqDTO req = new CloneInlineReqDTO();
+		req.setTemplateId(templateId);
+		req.setEventId(eventId);
+		req.setUserId(userId);
+		
+		int header = surveyMapper.cloneSurvey(req);
 		if (header != 1) throw new IllegalStateException("설문 헤더 클론 실패!"); 
 		
 		// 2) new survey_id
-		Long newSurveyId = surveyMapper.lastInsertId();
+		Long newSurveyId = req.getNewSurveyId();
+		if (newSurveyId == null || newSurveyId <= 0) {
+			throw new IllegalStateException("신규 설문 id 조회 실패 !");
+		}
 		log.info("[cloneFromTemplate] newSurveyId={}", newSurveyId);
 		
 		// 3) 원본 템플릿 문항 조회
@@ -147,19 +153,22 @@ public class SurveyServiceImpl implements SurveyService {
 	// controller에서 json을 dto들로 변환해 넘겨줌
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Long cloneInline(CloneInlineReqDTO req) {
+	public Long cloneInline(CloneInlineReqDTO req, Long userId) {
 		// TODO Auto-generated method stub
+		req.setUserId(userId);
+		
 		// 1) 헤더복제
-		int header = surveyMapper.cloneSurvey(req.getTemplateId(),
-												req.getEventId(),
-												req.getUserId());
+		int header = surveyMapper.cloneSurvey(req);
 		if (header != 1) throw new IllegalStateException("설문 헤더 클론 실패");
 		
 		// 2) new sueveyId
-		Long newSurveyId = surveyMapper.lastInsertId();
+		Long newSurveyId = req.getNewSurveyId();
+		if (newSurveyId == null || newSurveyId <= 0) {
+			throw new IllegalStateException("설문 헤더 클론 실패");
+		}
 		log.info("[cloneInline] newSurveyId={}", newSurveyId);
 		
-		// 3) 문항/보기 변환 + 삽입(요청DTO -> 저장용DTO)
+		// 3) 문항/보기 insert (newSurveyId 사용)
 		if (req.getQuestions() != null) {
 			for (QuestionPayLoadDTO q : req.getQuestions()) {
 				// 요청용 DTO(QuestionPayLoadDTO) -> 저장용DTO(SurveyQuestionDTO)
@@ -185,6 +194,32 @@ public class SurveyServiceImpl implements SurveyService {
 		}
 		
 		return newSurveyId;
+	}
+
+	// 설문삭제
+	@Override
+	public int deleteCloneSurvey(Long surveyId) {
+		// TODO Auto-generated method stub
+		// 응답이 있으면 0, 없으면 삭제
+		int d1 = surveyMapper.deleteCloneOptions(surveyId);
+		int d2 = surveyMapper.deleteCloneQuestions(surveyId);
+		int d3 = surveyMapper.deleteCloneSurvey(surveyId);
+		
+		return d1 + d2 + d3;
+	}
+
+	// 설문상세(이벤트제목포함용)
+	@Override
+	public String findEventTitleBySurveyId(Long surveyId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.findEventTitleBySurveyId(surveyId);
+	}
+
+	// 문항/옵션 통계용 (응답자수 + 퍼센트지화)
+	@Override
+	public List<Map<String, Object>> surveyStatus(Long surveyId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.surveyStatus(surveyId);
 	}
 
 //	@Override

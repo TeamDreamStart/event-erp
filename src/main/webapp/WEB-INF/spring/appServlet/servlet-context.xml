@@ -39,4 +39,8 @@
 	<beans:bean id="multipartResolver"
 		class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
 	</beans:bean>
+	
+	<!-- openapi 정의한느데 필요한 정적 리소스 -->
+	<resources mapping="/docs/**" location="/docs/"/>
+	<resources mapping="/swagger-ui/**" location="/swagger-ui/"/>
 </beans:beans>

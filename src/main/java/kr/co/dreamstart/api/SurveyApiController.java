@@ -8,7 +8,12 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,58 +34,64 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/admin/api/surveys")
 public class SurveyApiController {
 	private final SurveyService surveyService;
-	
+
 	// 문항+보기 묶음 조회(JSON)
-	@GetMapping(value = "/template-qa",
-	        	produces = "application/json; charset=UTF-8") // ★ JSON으로 못 박기
+	@GetMapping(value = "/template-qa", produces = "application/json; charset=UTF-8") // ★ JSON으로 못 박기
 	public Map<String, Object> templateQA(@RequestParam Long templateId) {
 		Map<String, Object> res = new LinkedHashMap<>();
-		
+
 		List<SurveyQuestionDTO> qs = surveyService.questionList(templateId);
 		Map<Long, List<SurveyOptionDTO>> options = surveyService.optionsByQuestion(templateId);
 		res.put("questions", qs);
 		res.put("optionsByQ", options);
 		return res;
 	}
-	
+
 	// 템플릿 클론(헤더/문항/보기) - 서비스클래스에서 전부 수행 -> 원본 그대로 복제해서 사용하는경우
-	@PostMapping(value = "/clone",
-	        	produces = "application/json; charset=UTF-8")
-	public Map<String, Object> cloneSurvey(@RequestParam Long templateId, 
-										@RequestParam Long eventId) {
-		log.info("[/clone] templateId={}, eventId={}", 
-				templateId, eventId);
+	@PostMapping(value = "/clone", produces = "application/json; charset=UTF-8")
+	public Map<String, Object> cloneSurvey(@RequestParam Long templateId, @RequestParam Long eventId) {
+		log.info("[/clone] templateId={}, eventId={}", templateId, eventId);
 		try {
-			// Long userId = user.getId(); 
+			// Long userId = user.getId();
 			Long userId = 1L; // 임시
 			Long newSurveyId = surveyService.cloneFromTemplate(templateId, eventId, userId);
-			
+
 			return Map.of("ok", true, "surveyId", newSurveyId);
-			
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			log.error("[CLONE] error", e);
 			// 원하는 HTTP 상태와 메시지를 내려보냄 (여기서는 500)
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "클론 실패 !");
 		}
-		
+
 	}
-	
+
 	// JSON POST -> 인라인 클론(요청 dto를 서비스에 위임) -> 원본 복제해서 수정해서 사용할경우
-	@PostMapping(value = "/clone-inline",
-	        	consumes = "application/json",
-	        	produces = "application/json; charset=UTF-8")
-	public Map<String, Object> cloneInline(@Valid @RequestBody CloneInlineReqDTO req) {
-		try {
-			 Long userId = 1L;
-			 req.setUserId(userId);
-			Long newSurveyId = surveyService.cloneInline(req);
-			return Map.of("ok", true, "surveyId", newSurveyId);
-		} catch (Exception e) {
-			// TODO: handle exception
-			log.error("[clone-inline] error", e);
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "인라인 클론 실패 !");
+	@PostMapping(value="/clone-inline",
+		    consumes="application/json",
+		    produces="application/json; charset=UTF-8")
+		public ResponseEntity<Map<String,Object>> cloneInline(
+		    @Valid @RequestBody CloneInlineReqDTO req,
+		    BindingResult br,
+		    @AuthenticationPrincipal(expression="id") Long userId) {
+
+		  if (br.hasErrors()) {
+		    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, br.getFieldError().getDefaultMessage());
+		  }
+		  Long id = surveyService.cloneInline(req, userId);
+
+		 return ResponseEntity.ok(Map.of("ok", true, "surveyId", id));
 		}
 
+	// 응답이없고, 클론인 설문만 삭제
+	@DeleteMapping(value ="/{surveyId}",
+				produces = "application/json; charset=UTF-8")
+	public Map<String, Object> deleteCloned(@PathVariable Long surveyId) {
+		int affected = surveyService.deleteCloneSurvey(surveyId);
+		if (affected == 0) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "응답이 있거나 템플릿 원본은 삭제할 수 없습니다.");
+		}
+		return Map.of("ok", true, "deleted", surveyId);
 	}
 }
