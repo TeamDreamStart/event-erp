@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import javax.mail.internet.MimeMessage;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
@@ -322,6 +323,19 @@ public class MybatisTest {
 		} catch (Exception e) {
 			log.error("templateQaIntegrityTest error", e);
 			fail(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void userSearchTest() {
+	/*
+	 * 	public List<UserDTO> search(@Param("cri") Criteria cri,@Param("role") Integer role,@Param("searchType") String searchType,
+			@Param("keyword") String keyword, @Param("startDate") String startDate, @Param("endDate") String endDate);
+
+	 * */
+		List<UserDTO> userList = userMapper.search(new Criteria(),null,"createdAt", null, "2025-09-22","2025-09-26");
+		for(UserDTO userDTO : userList) {
+			System.out.println(userDTO);
 		}
 	}
 

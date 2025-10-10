@@ -1,5 +1,10 @@
 package kr.co.dreamstart.controller;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -13,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.mapper.UserMapper;
+import kr.co.dreamstart.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -23,6 +29,9 @@ public class UserController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private UserService userService;
 	
 	
 //	회원가입
@@ -73,9 +82,31 @@ public class UserController {
 	
 //	로그인
 	@GetMapping("/login")
-	public String loginForm() {
+	public String loginForm(Model model) {
 		log.info("GET /login - 로그인 폼 진입");
+		String location = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=e1dafd936102e43b285b3a9893988593&redirect_uri=http://localhost:8080/map-test";
+		model.addAttribute("location", location);
 		return "test/loginTest";
+	}
+	
+	@RequestMapping("/login/naver/callback")
+	public String naverCallback(HttpServletRequest request, HttpSession session) {
+	    String code = request.getParameter("code");
+	    String state = request.getParameter("state");
+
+	    // 1. access token 발급
+	    String accessToken = userService.getAccessToken(code, state);
+
+	    // 2. 네이버 사용자 정보 조회
+	    Map<String, String> naverUser = userService.getNaverUser(accessToken);
+
+	    // 3. DB insert/update
+	    userService.saveOrUpdateNaverUser(naverUser);
+
+	    // 4. 세션에 로그인 정보 저장
+	    session.setAttribute("loginUser", naverUser);
+
+	    return "redirect:/"; // 메인 페이지
 	}
 	
 //	@PostMapping("/login")

@@ -146,5 +146,14 @@
 			</div>
 		</form>
 	</div>
+	
+	<div>
+		<a href="${location }
+	"><img style="height: 20px" alt="카카오로그인버튼" src="../resources/img/kakao.png"></a>
+	</div>
+	
+	<div>
+		<a href="/login/naver/callback">네이버</a>
+	</div>
 </body>
 </html>

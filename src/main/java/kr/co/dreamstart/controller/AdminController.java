@@ -25,8 +25,10 @@ import kr.co.dreamstart.dto.BoardCommentDTO;
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.FileAssetDTO;
+import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.service.BoardService;
 import kr.co.dreamstart.service.FileService;
+import kr.co.dreamstart.service.UserService;
 
 @Controller
 @RequestMapping("/admin")
@@ -37,6 +39,9 @@ public class AdminController {
 
 	@Autowired
 	private FileService fileService;
+	
+	@Autowired
+	private UserService userService;
 
 	// main
 	@GetMapping("")
@@ -103,7 +108,7 @@ public class AdminController {
 
 	// insert
 	@GetMapping("/{boardType}/form")
-	public String boardForm(@PathVariable("boardType")String boardType,Model model) {
+	public String boardForm(@PathVariable("boardType") String boardType, Model model) {
 		model.addAttribute("boardType", boardType);
 		String formType = "INSERT";
 		model.addAttribute("formType", formType);
@@ -112,17 +117,19 @@ public class AdminController {
 
 	// insert
 	@PostMapping("/{boardType}/form")
-	public String boardFormPost(@PathVariable("boardType")String boardType,HttpServletRequest request, BoardPostDTO postDTO, MultipartFile[] uploadFile,
+	public String boardFormPost(@PathVariable("boardType") String boardType, HttpServletRequest request,
+			BoardPostDTO postDTO, MultipartFile[] uploadFile,
 			/* MultipartHttpServletRequest request, */ RedirectAttributes rttr) {
 		Map<String, Object> map = boardService.postInsert(request, postDTO, uploadFile);
-		rttr.addFlashAttribute("result",map.get("result"));
+		rttr.addFlashAttribute("result", map.get("result"));
 		rttr.addFlashAttribute("resultType", "등록");
 		return "redirect:/admin/{boardType}/" + map.get("postId");
 	}
-	
+
 	// update
 	@GetMapping("/{boardType}/{postId}/update")
-	public String boardUpdate(@PathVariable("boardType")String boardType,@PathVariable("postId") long postId, Model model) {
+	public String boardUpdate(@PathVariable("boardType") String boardType, @PathVariable("postId") long postId,
+			Model model) {
 		String category = (boardType.equals("notices")) ? "NOTICE" : "QNA";
 		model.addAttribute("boardType", boardType);
 		String formType = "UPDATE";
@@ -139,13 +146,13 @@ public class AdminController {
 
 	// update
 	@PostMapping("/{boardType}/{postId}/update")
-	public String boardUpdatePost(@PathVariable("boardType")String boardType,@PathVariable long postId, BoardPostDTO postDTO,
-			@RequestParam(value = "uploadFile", required = false) MultipartFile[] uploadFile,
+	public String boardUpdatePost(@PathVariable("boardType") String boardType, @PathVariable long postId,
+			BoardPostDTO postDTO, @RequestParam(value = "uploadFile", required = false) MultipartFile[] uploadFile,
 			@RequestParam(value = "deleteFileList", required = false) List<Long> deleteFileList,
 			HttpServletRequest request, RedirectAttributes rttr) {
 
 		Map<String, Object> map = boardService.postUpdate(request, postDTO, uploadFile);
-		if (map.get("result").equals("success")&&boardType.equals("notices")) {
+		if (map.get("result").equals("success") && boardType.equals("notices")) {
 			if (uploadFile != null & uploadFile.length > 0) {
 				fileService.saveFiles(request, uploadFile, "board_post", postId);
 			}
@@ -153,9 +160,9 @@ public class AdminController {
 				fileService.deleteFiles(deleteFileList);
 			}
 		}
-		rttr.addFlashAttribute("result",map.get("result"));
+		rttr.addFlashAttribute("result", map.get("result"));
 		rttr.addFlashAttribute("resultType", "수정");
-		return "redirect:/admin/"+boardType+"/"+postId;
+		return "redirect:/admin/" + boardType + "/" + postId;
 	}
 
 	// delete
@@ -172,23 +179,55 @@ public class AdminController {
 		rttr.addFlashAttribute("result", map.get("result"));
 		rttr.addFlashAttribute("resultType", "삭제");
 
-		return "redirect:/admin/"+boardType;
+		return "redirect:/admin/" + boardType;
 	}
 
 	// comment insert
 	@PostMapping("/qna/{postId}/comment")
 	public String qnaAnswer(@PathVariable("postId") long postId, BoardCommentDTO commentDTO) {
 		commentDTO.setPostId(postId); // jsp
-		commentDTO.setUserId(1);  // session
+		commentDTO.setUserId(1); // session
 		boardService.commentInsert(commentDTO);
 		return "redirect:/admin/qna/" + postId;
 	}
-	
+
+	//
+	// userList
 	@GetMapping("/user-manage")
-	public String userManage(Model model,Criteria cri,
-			@RequestParam(required = false)String searchType,
-			@RequestParam(required = false)String keyword) {
+	public String userManage(Criteria cri,@RequestParam(required = false) Integer role,
+			@RequestParam(required = false) String searchType, @RequestParam(required = false) String keyword,
+			@RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
+			Model model) {
+		Map<String,Object> map = userService.userList(cri, role, searchType, keyword, startDate, endDate);
+		model.addAttribute("userList", map.get("userList"));
+		model.addAttribute("totalUserCount", map.get("totalUserCount"));
+		model.addAttribute("pageVO", map.get("pageVO"));
+		model.addAttribute("cri", map.get("cri"));
+		
+		//검색조건
+		model.addAttribute("role", role);
+		model.addAttribute("searchType", searchType);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("startDate", startDate);
+		model.addAttribute("endDate", endDate);
+		
 		return "/admin/customerManage";
 	}
+	
+	@GetMapping("/user-manage/{userId}")
+	public String userDetail(@PathVariable("userId")long userId,Model model) {
+		UserDTO userDTO = userService.userDetail(userId);
+		model.addAttribute("userDTO", userDTO);
+		return "/admin/customerDetailForm";
+	}
+	
+	//update
+	@PostMapping("/user-manage/{userId}")
+	public String userForm(@PathVariable("userId")long userId,UserDTO userDTO,RedirectAttributes rttr) {
+		
+		
+		return "redirect:/user-manage/"+userId;
+	}
+	
 
 }

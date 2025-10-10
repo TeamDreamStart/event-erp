@@ -14,8 +14,22 @@ public interface UserMapper {
 	// 관리자 - 회원 전체 목록 + 페이징
 	public List<UserDTO> list(@Param("cri") Criteria cri);
 
-	// 관리자 - 회원 수 조회
+	// 관리자 - 회원 검색
+	public List<UserDTO> search(@Param("cri") Criteria cri,@Param("role") Integer role,@Param("searchType") String searchType,
+			@Param("keyword") String keyword, @Param("startDate") String startDate, @Param("endDate") String endDate);
 	public int count();
+
+	public int searchCount(@Param("role") Integer role,@Param("searchType") String searchType,
+			@Param("keyword") String keyword, @Param("startDate") String startDate, @Param("endDate") String endDate);
+	// user+userRole+role(roleName)
+	public UserDTO findByUserId(long userId);
+	public UserDTO findBySnsId(String snsId);
+
+	// SNS 로그인
+	public int joinNaver(UserDTO userDTO);
+	public int updateNaver(UserDTO userDTO);
+	
+	// 관리자 - 회원 수 조회
 
 	// 회원가입
 	public int join(UserDTO userDTO);

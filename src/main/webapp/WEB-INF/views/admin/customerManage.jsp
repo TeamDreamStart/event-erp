@@ -26,16 +26,16 @@
 <link href="/resources/css/sb-admin-2.min.css" rel="stylesheet">
 </head>
 <body id="page-top">
-<script>
-    const result = '${empty result ? "" : result}';
-    const resultType = '${empty resultType ? "" : resultType}';
+	<script>
+		const result = '${empty result ? "" : result}';
+		const resultType = '${empty resultType ? "" : resultType}';
 
-    if (result === 'success') {
-        alert(`성공적으로 ${resultType}되었습니다.`);
-    } else if (result === 'fail') {
-        alert(`${resultType}이(가) 실패하였습니다.`);
-    }
-</script>
+		if (result === 'success') {
+			alert(`성공적으로 ${resultType}되었습니다.`);
+		} else if (result === 'fail') {
+			alert(`${resultType}이(가) 실패하였습니다.`);
+		}
+	</script>
 
 	<!-- Page Wrapper -->
 	<div id="wrapper">
@@ -55,9 +55,7 @@
 			<div class="card shadow mb-4">
 				<div class="card-header py-3">
 					<h6 class="m-0 font-weight-bold text-primary"
-						style="font-size: 2rem;">
-						USERLIST
-					</h6>
+						style="font-size: 2rem;">USERLIST</h6>
 				</div>
 				<div class="card-body">
 					<div style="display: flex; justify-content: flex-end;">
@@ -66,7 +64,7 @@
 
 					<div
 						style="display: flex; height: 45px; justify-content: space-between">
-						<form action="/admin/${boardType }" method="get">
+						<%-- <form action="/admin/${boardType }" method="get">
 							<input type="hidden" name="searchType" value="${searchType}">
 							<input type="hidden" name="keyword" value="${keyword}"> <select
 								name="visibility"
@@ -93,7 +91,59 @@
 								type="text" name="keyword" value="${param.keyword}"
 								placeholder="검색어를 입력하세요.">
 							<button class="btn btn-primary" type="submit">검색</button>
+						</form> --%>
+						<form action="/admin/user-manage" method="get" class="search-form">
+
+							<!-- role -->
+							<select name="role">
+								<option value="">전체</option>
+								<option value="0">관리자</option>
+								<option value="1">일반회원</option>
+							</select>
+
+							<!-- searchType -->
+							<select name="searchType" id="searchType">
+								<option value="ALL">전체</option>
+								<option value="userId">회원번호</option>
+								<option value="userName">아이디</option>
+								<option value="email">이메일</option>
+								<option value="phone">전화번호</option>
+								<option value="gender">성별</option>
+								<option value="createdAt">가입일자</option>
+							</select>
+
+							<!-- keyword 입력 -->
+							<input type="text" name="keyword" placeholder="검색어 입력"
+								id="keywordInput" />
+
+							<!-- 날짜 검색 -->
+							<div id="dateRange" style="display: none;">
+								<input type="date" name="startDate"> <input type="date"
+									name="endDate">
+							</div>
+
+							<button type="submit">검색</button>
 						</form>
+
+						<script>
+							const searchType = document
+									.getElementById('searchType');
+							const keyword = document
+									.getElementById('keywordInput');
+							const dateRange = document
+									.getElementById('dateRange');
+
+							searchType.addEventListener('change', function() {
+								if (this.value === 'createdAt') {
+									dateRange.style.display = 'inline-block';
+									keyword.style.display = 'none';
+								} else {
+									dateRange.style.display = 'none';
+									keyword.style.display = 'inline-block';
+								}
+							});
+						</script>
+
 					</div>
 					<div class="table-responsive">
 						<table class="table table-bordered" id="dataTable" width="100%"
@@ -102,22 +152,41 @@
 								<tr>
 									<th>회원 번호</th>
 									<th>아이디</th>
+									<th>이메일</th>
+									<th>성함</th>
+									<th>전화번호</th>
+									<th>성별</th>
 									<th>가입일</th>
 									<th>마지막 로그인</th>
-									<th>활동여부</th>
-								
+									<th>상태</th>
+									<th>회원 유형</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
-								<%-- <c:forEach var="userDTO" items="${userList }">
-								<tr>
-									<td>${userDTO.}</td>
-									<td>${userDTO.}</td>
-									<td>${userDTO.}</td>
-									<td>${userDTO.}</td>
-									<td>${userDTO.}</td>
-								</tr>
-								</c:forEach> --%>
+								<c:forEach var="userDTO" items="${userList }">
+									<tr>
+										<td>${userDTO.userId}</td>
+										<td>${userDTO.userName}</td>
+										<td>${userDTO.email}</td>
+										<td>${userDTO.name}</td>
+										<td>${userDTO.phone}</td>
+										<td><c:if test="${userDTO.gender eq '0'}">여성</c:if> <c:if
+												test="${userDTO.gender eq '1'}">남성</c:if></td>
+										<td>${userDTO.createdAt}</td>
+										<td>${userDTO.lastLoginAt}</td>
+
+										<c:if test="${userDTO.isActive eq '0'}">
+											<td style="color: red">비활성화</td>
+										</c:if>
+										<c:if test="${userDTO.isActive eq '1'}">
+											<td>활동중</td>
+										</c:if>
+										<td>${userDTO.roleName}</td>
+										<td><a class="btn btn-primary"
+											href="/admin/user-manage/${userDTO.userId }">수정/상세</a></td>
+									</tr>
+								</c:forEach>
 							</tbody>
 						</table>
 						<!-- paging -->
