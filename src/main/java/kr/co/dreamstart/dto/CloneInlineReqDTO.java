@@ -1,36 +1,31 @@
 package kr.co.dreamstart.dto;
 
 import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class CloneInlineReqDTO {
-    private Long templateId;
-    private Long eventId;
+
+    @NotNull private Long templateId;
+    @NotNull private Long eventId;
     private Long userId;
+    
+    // 클론된 설문의 새로운 surveyId
+    private Long newSurveyId;
 
-    private String scheduleMode;     // "default" | "offset"
-    private Integer openDelayHours;  // N
-    private Integer closeAfterDays;  // M
-
-    // (선택) 헤더 오버라이드
+    // ★ 프론트에서 입력한 새 설문 제목
+    @NotBlank(message = "제목은 필수입니다.")
     private String title;
-    private String description;
-    private Integer isAnonymous;     // 1/0
 
-    // (선택) 에디터에서 보낸 문항/보기
-    private List<Q> questions;
+    // ★ 스케줄 옵션 (기본: default / 오프셋: offset)
+    private String scheduleMode;      // "default" | "offset"
+    private Integer openDelayHours;   // offset일 때만 사용 (nullable 허용)
+    private Integer closeAfterDays;   // offset일 때만 사용 (nullable 허용)
 
-    @Data
-    public static class Q {
-        private String type;           // single|multi|text
-        private String question;
-        private List<O> options;       // text면 null/빈배열
-    }
-
-    @Data
-    public static class O {
-        private String label;
-        private String optValue;
-    }
+    // 질문 + 옵션 묶음
+    @Valid
+    private List<QuestionPayLoadDTO> questions;
 }

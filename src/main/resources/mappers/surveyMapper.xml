@@ -20,8 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="description" property="description" />
 		<result column="status" property="status" />
 		<result column="is_anonymous" property="isAnonymous" />
-		<result column="clone_from_survey_id"
-			property="cloneFromSurveyId" />
+		<result column="clone_from_survey_id" property="cloneFromSurveyId" />
 		<result column="open_at" property="openAt" />
 		<result column="close_at" property="closeAt" />
 		<result column="created_by" property="createdBy" />
@@ -45,6 +44,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="survey_id" property="surveyId" />
 		<result column="question" property="question" />
 		<result column="type" property="type" />
+		<result column="required" property="required" />
+		<result column="effective_required"
+			property="effectiveRequired" />
 	</resultMap>
 
 	<!-- 응답 이력 -->
@@ -54,7 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="user_id" property="userId" />
 		<result column="responded_at" property="respondedAt" />
 	</resultMap>
-
+	
 	<!-- 조회 -->
 	<!-- 상단 고정 4개 템플릿 -->
 	<select id="fixedTemplates" resultMap="surveyMap">
@@ -111,7 +113,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 
-
 	<!-- 총 개수 total -->
 	<select id="surveyCount" resultType="int">
 		SELECT COUNT(*)
@@ -137,10 +138,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</where>
 	</select>
+	
+	<!-- 응답개수 -->
+	<select id="responseCount" parameterType="long" resultType="int">
+		select count(*)
+		from event_erp.`survey_response`
+		where `survey_id` = #{surveyId}
+	</select>
 
 	<!-- 상세 1건 -->
 	<select id="findSurvey" resultMap="surveyMap">
-		SELECT
+		select
 		s.`survey_id`,
 		s.`event_id`, s.`title`, s.`description`,
 		s.`status`, s.`is_anonymous`,
@@ -149,20 +157,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		s.`created_by`,
 		s.`created_at`, s.`update_at`,
 		s.`is_template`, s.`template_key`
-		FROM
+		from
 		`event_erp`.`survey` s
-		WHERE s.`survey_id` = #{surveyId}
+		where s.`survey_id` = #{surveyId}
+	</select>
+	
+	<!-- surveyId로 이벤트 제목만 가져오기 -->
+	<select id="findEventTitleBySurveyId" parameterType="long" resultType="string">
+		select e.`title`
+		from `event_erp`.`survey` s
+		left join `event_erp`.`event` e on e.`event_id` = s.`event_id`
+		where s.`survey_id` = #{surveyId}
 	</select>
 
 	<!-- 문항리스트 -->
 	<select id="questionList" parameterType="long"
 		resultMap="questionMap">
 		select q.`question_id`, q.`survey_id`, q.`question`,
-		q.`type`
-		from `event_erp`.`survey_question` q
+		q.`type`, q.`required`, q.`effective_required`
+		from
+		`event_erp`.`survey_question` q
 		where q.`survey_id` =
 		#{surveyId}
-		order by q.`question_id` asc
+		order
+		by q.`question_id` asc
 	</select>
 
 
@@ -182,57 +200,67 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		resultMap="optionMap">
 		select o.`option_id`, o.`question_id`, o.`label`, o.`opt_value`
 		from
-		`event_erp`, `survey_option` o
+		`event_erp`.`survey_option` o
 		where o.`question_id` IN
 		<foreach collection="list" item="qid" open="(" separator=","
 			close=")">
 			#{qid}
 		</foreach>
-		order by o.`question_id` ASC, o.`opt_value` ASC o.`option_id` ASC
+		order by o.`question_id` ASC, o.`opt_value` ASC, o.`option_id` ASC
 	</select>
 
 	<!-- 특정 문항에 5점 기본옵션(1~5) 없으면 보충 -->
 	<insert id="ensureLikert5ForQuestion" parameterType="long">
 		insert into
-		`event_erp`, `survey_option` (`question_id`, `label`, `opt_value`)
+		`event_erp`.`survey_option` (`question_id`, `label`, `opt_value`)
 		select
 		#{questionId},
 		v.label,
 		v.val
 		from (
-		select '매우 그렇지 않다' as label, '1' as val
+		select '매우 그렇지 않다' as label,
+		'1' as val
 		union all select '그렇지 않다', '2'
 		union all select '보통', '3'
 		union all select '그렇다', '4'
 		union all select '매우 그렇다', '5'
 		) v
-		left join `event_erp`.`survey_option` o
-		on o.`question_id` = #{qustionId}
-		and o.`opt_value` = v.val
+		left join
+		`event_erp`.`survey_option` o
+		on o.`question_id` = #{questionId}
+		and
+		o.`opt_value` = v.val
 		where o.`option_id` IS NULL
 	</insert>
 
 	<!-- 설문 단위로 'type=scale_5' 문항들에 5점 옵션 보충 -->
 	<insert id="ensureLikert5ForSurvey" parameterType="long">
-		insert into `event_erp`.`survey_option` (`question_id`, `label`, `opt_value`)
+		insert into
+		`event_erp`.`survey_option` (`question_id`, `label`, `opt_value`)
 		select
-			q.`question_id`,
-			v.label,
-			v.val
-		from `event_erp`.`survey_question` q
+		q.`question_id`,
+		v.label,
+		v.val
+		from `event_erp`.`survey_question`
+		q
 		join (
-			select '매우 그렇지 않다' as label, '1' as val
-			union all select '그렇지 않다', '2'
-			union all select '보통', '3'
-			union all select '그렇다', '4'
-			union all select '매우 그렇다', '5'
-			) v
+		select '매우 그렇지 않다' as label, '1' as val
+		union all select '그렇지
+		않다', '2'
+		union all select '보통', '3'
+		union all select '그렇다', '4'
+		union all
+		select '매우 그렇다', '5'
+		) v
 		left join `event_erp`.`survey_option` o
-			on o.`question_id` = q.`question_id`
-			and o.`opt_value` = v.val
-			where q.`survey_id` = #{surveyId}
-			and q.`type` = 'scale_5'
-			and o.`option_id` IS NULL
+		on
+		o.`question_id` = q.`question_id`
+		and o.`opt_value` = v.val
+		where
+		q.`survey_id` = #{surveyId}
+		and q.`type` = 'SCALE_5'
+		and o.`option_id`
+		IS NULL
 	</insert>
 
 
@@ -246,8 +274,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		useGeneratedKeys="true" keyProperty="questionId"
 		keyColumn="question_id">
 		insert into `event_erp`.`survey_question`(`survey_id`,
-		`question`, `type`)
-		values (#{surveyId}, #{question}, #{type})
+		`question`, `type`, `required`)
+		values (#{surveyId}, #{question},
+		#{type}, #{required})
 	</insert>
 
 	<!-- 새보기 insert -->
@@ -260,12 +289,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 	<!-- 클론시 복제용 문항/보기 -->
-	<!-- 직전 insert의 auto_increment -->
-	<select id="lastInsertId" resultType="long">
-		select last_insert_id()
-	</select>
-
-
 	<!-- 사용자 응답 제출시 -->
 	<!-- 응답 헤더 저장 -->
 	<insert id="insertResponse" useGeneratedKeys="true"
@@ -299,8 +322,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 
 
-	<!-- 템플릿 클론(템플릿) -->
-	<insert id="cloneSurvey">
+	<!-- 템플릿 클론(고정된 4개의 템플릿 외 다 일반설문으로 분리 - 목적성을 위해) -->
+	<insert id="cloneSurvey" parameterType="CloneInlineReqDTO">
 		insert into `event_erp`.`survey`
 		(`event_id`, `title`, `description`,
 		`status`,
@@ -316,14 +339,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		e.`end_date`, <!-- 
 			이벤트 종료 시각과 동시에 오픈 -->
 		DATE_ADD(e.`end_date`, INTERVAL 7 DAY), <!-- 종료 7일간 오픈 -->
-		#{userId}, NOW(), NOW(), 0, s.`template_key`
+		#{userId}, NOW(), NOW(), 0, NULL
 		from `event_erp`.`survey`
 		s
-		join `event_erp`.`event` e on e.`event_id` = #{eventId}
+		join
+		`event_erp`.`event` e on e.`event_id` = #{eventId}
 		where
-		s.`survey_id` = #{templateId} and s.`is_template` = 1
+		s.`survey_id` =
+		#{templateId} and s.`is_template` = 1
+
+		<!-- 새로 생성된 NewsurveyId -->
+		<selectKey keyProperty="newSurveyId" resultType="long"
+			order="AFTER">
+			select LAST_INSERT_ID()
+		</selectKey>
 	</insert>
 
+	<!-- 인라인 클론 : 헤더만 생성 -->
+	<insert id="insertSurveyHeaderFromInline"
+		parameterType="CloneInlineReqDTO">
+		insert into `event_erp`.`survey`
+		(`event_id`, `title`, `description`,
+		`status`,
+		`is_anonymous`, `clone_from_survey_id`,
+		`open_at`, `close_at`,
+		`created_by`, `created_at`, `update_at`, `is_template`,
+		`template_key`)
+		values
+		(#{eventId}, #{title}, #{description}, 'OPEN',
+		#{isAnonymous}, #{templateId},
+		#{openAt}, #{closeAt},
+		#{userId}, NOW(),
+		NOW(), 0, NULL)
+
+		<!-- 새로 생성된 NewsurveyId -->
+		<selectKey keyProperty="newSurveyId" resultType="long"
+			order="AFTER">
+			select LAST_INSERT_ID()
+		</selectKey>
+	</insert>
 
 	<!-- 설문 단위로 옵션 조회 -->
 	<select id="optionListBySurveyId" resultMap="optionMap">
@@ -340,9 +394,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- db에서 일괄 복제해서 사용하는 쿼리 -->
 	<insert id="cloneQuestionsFromTemplate">
 		insert into
-		`event_erp`.`survey_question`(`survey_id`, `question`, `type`)
+		`event_erp`.`survey_question`(`survey_id`, `question`, `type`,
+		`required`)
 		select
-		#{newSurveyId}, q.`question`, q.`type`
+		#{newSurveyId}, q.`question`, q.`type`, q.`required`
 		from
 		`event_erp`.`survey_question` q
 		where q.`survey_id` = #{templateId}
@@ -378,6 +433,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		nq.`question_id`, o.`opt_value`
 	</insert>
 
+	<!-- 웅답이 한 건도 달리지 않은 것만 정리 -->
 	<delete id="deleteOptionsByQuestionId">
 		delete o
 		from `event_erp`.`survey_option` o
@@ -388,6 +444,74 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and a.`option_id` IS NULL
 	</delete>
 
+	<!-- 응답 없고 클론본일 때: 옵션 삭제 -->
+	<delete id="deleteCloneOptions" parameterType="long">
+		<!-- 응답 없는 클론 설문만 삭제 (질문/보기 -> 설문 순) -->
+		delete o from `event_erp`.`survey_option` o
+		join
+		`event_erp`.`survey_question` q on q.`question_id` = o.`question_id`
+		join `event_erp`.`survey` s on s.`survey_id` = q.`survey_id`
+		left join
+		`event_erp`.`survey_response` r on r.`survey_id` = s.`survey_id`
+		where
+		s.`survey_id` = #{surveyId}
+		and s.`clone_from_survey_id` IS NOT NULL
+		and r.`response_id` IS NULL
+	</delete>
 
+	<!-- 응답 없고 클론본일 때: 질문 삭제 -->
+	<delete id="deleteCloneQuestions" parameterType="long">
+		delete q from
+		`event_erp`.`survey_question` q
+		join `event_erp`.`survey` s on
+		s.`survey_id` = q.`survey_id`
+		left join `event_erp`.`survey_response` r
+		on r.`survey_id`= s.`survey_id`
+		where s.`survey_id` = #{surveyId}
+		and
+		s.`clone_from_survey_id` IS NOT NULL
+		and r.`response_id` IS NULL
+	</delete>
 
+	<!-- 응답 없고 클론본일 때: 설문 헤더 삭제 -->
+	<delete id="deleteCloneSurvey" parameterType="long">
+		delete s from
+		`event_erp`.`survey` s
+		left join `event_erp`.`survey_response` r on
+		r.`survey_id` = s.`survey_id`
+		where s.`survey_id` = #{surveyId}
+		and
+		s.`clone_from_survey_id` IS NOT NULL
+		and r.`response_id` IS NULL
+	</delete>
+	
+	<!-- 문항/보기 통계  : 보기별 응답수/퍼센트 -->
+	<select id="surveyStatus" parameterType="long" resultType="map">
+		with base as (
+			select
+				q.question_id,
+				o.option_id,
+				o.label,
+				count(a.`answer_id`) as cnt
+			from `event_erp`.`survey_question` q
+			join `event_erp`.`survey_option` o on o.question_id = q.question_id
+			left join `event_erp`.`survey_answer` a
+					on a.question_id = q.question_id and a.option_id = o.option_id
+			where q.`survey_id` = #{surveyId}
+			group by q.question_id, o.option_id, o.label
+		)
+		select
+			b.question_id,
+			b.option_id,
+			b.label,
+			b.cnt,
+			sum(b.cnt) over (PARTITION BY b.question_id) as q_total,
+			case
+				when sum(b.cnt) over (PARTITION BY b.question_id) = 0 then 0
+				else round(100.0 * b.cnt / 
+							sum(b.cnt) over (PARTITION BY b.question_id), 1)
+			end as pct
+		from base b
+		order by b.question_id, b.option_id 
+	</select>
 </mapper>

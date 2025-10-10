@@ -31,7 +31,7 @@ public class EventAdminController {
 	}
 	
 	// 등록폼
-	@GetMapping("/admin/events/form")
+	@GetMapping("/form")
 	public String insertForm(@RequestParam(required = false) Long userId,
 							Model model) {
 		model.addAttribute("userId", userId); // 작성자 표시/전달용
@@ -55,6 +55,6 @@ public class EventAdminController {
 		eventMapper.insert(dto);
 		ra.addFlashAttribute("msg", "이벤트 생성 완료 (ID : " + dto.getEventId() +")");
 		
-		return "redirect:/survey-test/clone-form?eventId=" + dto.getEventId();
+		return "forward:/admin/surveys/form?eventId=" + dto.getEventId();
 	}
 }
