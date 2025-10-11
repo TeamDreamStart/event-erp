@@ -17,7 +17,6 @@ public interface UserService {
 	
 	//naver
 	public Map<String, String> getNaverUser(String accessToken);
-	public void saveOrUpdateNaverUser(Map<String, String> naverUser);
-
+	public UserDTO saveOrUpdateNaverUser(Map<String, String> naverUser);
 	public String getAccessToken(String code, String state);
 }

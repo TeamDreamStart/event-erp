@@ -49,7 +49,7 @@
 				<!-- 로그인 상태 -->
 				<sec:authorize access="isAuthenticated()">
 					<span> <strong><sec:authentication
-								property="principal.username" /></strong> 님 환영합니다 👋
+								property="principal.name" /></strong> 님 환영합니다 👋
 					</span>
 					<a class="btn" href="<c:url value='/myinfo'/>">my info</a>
 					<!-- 로그아웃은 POST + CSRF -->

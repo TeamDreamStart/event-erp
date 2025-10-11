@@ -1,11 +1,17 @@
 package kr.co.dreamstart.controller;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -84,8 +90,6 @@ public class UserController {
 	@GetMapping("/login")
 	public String loginForm(Model model) {
 		log.info("GET /login - 로그인 폼 진입");
-		String location = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=e1dafd936102e43b285b3a9893988593&redirect_uri=http://localhost:8080/map-test";
-		model.addAttribute("location", location);
 		return "test/loginTest";
 	}
 	
@@ -101,26 +105,22 @@ public class UserController {
 	    String code = request.getParameter("code");
 	    String state = request.getParameter("state");
 
-	    // 1. access token 발급
 	    String accessToken = userService.getAccessToken(code, state);
-
-	    // 2. 네이버 사용자 정보 조회
 	    Map<String, String> naverUser = userService.getNaverUser(accessToken);
+	    UserDTO user = userService.saveOrUpdateNaverUser(naverUser);
 
-	    // 3. DB insert/update
-	    userService.saveOrUpdateNaverUser(naverUser);
+	    // 권한 직접 생성 (ROLE_USER 기본)
+	    List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
 
-	    // 4. 세션에 로그인 정보 저장
-	    session.setAttribute("loginUser", naverUser);
+	    // 로그인 세션 생성
+	    UsernamePasswordAuthenticationToken authentication =
+	            new UsernamePasswordAuthenticationToken(user, null, authorities);
 
-	    return "redirect:/"; // 메인 페이지
+	    SecurityContextHolder.getContext().setAuthentication(authentication);
+	    session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+
+	    return "redirect:/"; // 로그인 후 메인 페이지로
 	}
-	
-//	@PostMapping("/login")
-//	public String login(@RequestParam String) {
-//		log.info("dnd");
-//		return null;
-//	}
 	
 	
 	

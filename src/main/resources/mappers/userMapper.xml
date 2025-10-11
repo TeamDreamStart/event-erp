@@ -223,26 +223,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="joinNaver" parameterType="userDTO"
 		useGeneratedKeys="true" keyProperty="userId">
 		insert into `user`
-		(`sns_id`,`name`,`email
-		`,`gender`,`birth_date`,`created_at`,`is_active`)
-		values(#{snsId},#{name},#{email },#{gender},#{birthDate},now(),1)
+		(`sns_id`,`name`,`email`,`gender`,`birth_date`,`phone`,`created_at`,`is_active`)
+		values(#{snsId},#{name},#{email},#{gender},#{birthDate},#{phone},now(),1)
 	</insert>
 	
 	<select id="findByEmail" resultMap="userMap">
 		select * from user where email = #{email}
 	</select>
 
-	<!-- naver sns 회원정보 업데이트 -->
+	<!-- naver sns 기존회원 로그인시 회원정보 업데이트 -->
 	<update id="updateNaver" parameterType="userDTO">
-		UPDATE `user`
-		SET
-		`name` = #{name},
-		`email` = #{email},
-		`gender` = #{gender},
-		`birth_date` =
-		#{birthDate},
-		`updated_at` = NOW()
-		WHERE `sns_id` = #{snsId}
+	UPDATE `user`
+	SET
+	`name` = #{name},
+	`email` = #{email},
+	`gender` = #{gender},
+	`birth_date` =
+	#{birthDate},
+	`phone` = #{phone},
+	`updated_at` = NOW(),
+	`last_login_at` = NOW()
+	WHERE `sns_id` = #{snsId} or `email` = #{email}
 	</update>
 
 

@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +23,9 @@ import kr.co.dreamstart.dto.PageVO;
 import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.dto.UserRoleDTO;
 import kr.co.dreamstart.mapper.UserMapper;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -60,152 +63,149 @@ public class UserServiceImpl implements UserService {
 
 		return map;
 	}
-	
+
 	public UserDTO userDetail(long userId) {
 		return userMapper.findByUserId(userId);
 	}
-	
-	// 1. access token으로 네이버 API 호출
+
+	// NAVER API 1. access token으로 네이버 API 호출
 	public Map<String, String> getNaverUser(String accessToken) {
-	    String header = "Bearer " + accessToken;
-	    String apiURL = "https://openapi.naver.com/v1/nid/me";
-	    try {
-	    	URI uri = new URI(apiURL);
-	    	URL url = uri.toURL();  // URI → URL 변환
-	    	HttpURLConnection con = (HttpURLConnection) url.openConnection();
-	        con.setRequestMethod("GET");
-	        con.setRequestProperty("Authorization", header);
+		String header = "Bearer " + accessToken;
+		String apiURL = "https://openapi.naver.com/v1/nid/me";
+		try {
+			URI uri = new URI(apiURL);
+			URL url = uri.toURL(); // URI → URL 변환
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("GET");
+			con.setRequestProperty("Authorization", header);
 
-	        BufferedReader br;
-	        if(con.getResponseCode() == 200) {
-	            br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-	        } else {
-	            br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-	        }
+			BufferedReader br;
+			if (con.getResponseCode() == 200) {
+				br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			} else {
+				br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+			}
 
-	        String inputLine;
-	        StringBuffer response = new StringBuffer();
-	        while ((inputLine = br.readLine()) != null) {
-	            response.append(inputLine);
-	        }
-	        br.close();
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+			while ((inputLine = br.readLine()) != null) {
+				response.append(inputLine);
+			}
+			br.close();
 
-	        // JSON 파싱 (Jackson 또는 Gson)
-	        ObjectMapper mapper = new ObjectMapper();
-	        JsonNode root = mapper.readTree(response.toString());
-	        JsonNode user = root.path("response");
+			// JSON 파싱 (Jackson 또는 Gson)
+			ObjectMapper mapper = new ObjectMapper();
+			System.out.println("네이버 API 응답 : " + response.toString());
+			JsonNode root = mapper.readTree(response.toString());
+			JsonNode user = root.path("response");
 
-	        Map<String,String> result = new HashMap<>();
-	        result.put("snsId", user.path("id").asText());
-	        result.put("email", user.path("email").asText());
-	        result.put("name", user.path("name").asText());
-	        result.put("gender", user.path("gender").asText()); // F or M or U(unknown)
-	        result.put("birthyear", user.path("birthyear").asText()); // "1996"
-	        result.put("birthday", user.path("birthday").asText());   // "02-27"
-	        result.put("mobile", user.path("mobile").asText());       // "010-1234-5678"
+			Map<String, String> result = new HashMap<>();
+			result.put("snsId", user.path("id").asText());
+			result.put("email", user.path("email").asText());
+			result.put("name", user.path("name").asText());
+			result.put("gender", user.path("gender").asText()); // F or M or U(unknown)
+			result.put("birthyear", user.path("birthyear").asText()); // "1996"
+			result.put("birthday", user.path("birthday").asText()); // "02-27"
+			result.put("mobile", user.path("mobile").asText()); // "010-1234-5678"
 
-	        return result;
+			return result;
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return null;
-	    }
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-	// 2. DB 처리
-	public void saveOrUpdateNaverUser(Map<String, String> naverUser) {
-	    UserDTO user = userMapper.findBySnsId(naverUser.get("snsId"));
-	    if(user == null) {
-	        // 이메일로 기존 회원 조회
-	        user = userMapper.findByEmail(naverUser.get("email"));
-	    }
-	    
-	    if(user == null) {
-	        // 신규 회원
-	        UserDTO newUser = new UserDTO();
-	        newUser.setSnsId(naverUser.get("snsId"));
-	        newUser.setName(naverUser.get("name"));
-	        newUser.setEmail(naverUser.get("email"));
-	        String gender = naverUser.get("gender");
-	        if(gender.equals("F")) {
-	        	newUser.setGender(0);	        	
-	        }else  if(gender.equals("M")){
-	        	newUser.setGender(1);	        	
-	        }
-	        String birthDate = naverUser.get("birthyear")+"-"+naverUser.get("birthday");
-	        newUser.setBirthDate(birthDate);
-	        //010-0000-0000
-	        newUser.setPhone(naverUser.get("mobile"));
-	        userMapper.join(newUser);//회원가입
-	        
-	        //회원 롤 추가 (일반회원)
-	        userMapper.joinRole(newUser.getUserId());
-	    } else {
-	        // 기존 회원 정보 업데이트
-	    	user.setSnsId(naverUser.get("snsId"));
-	        user.setName(naverUser.get("name"));
-	        user.setEmail(naverUser.get("email"));
-	     // gender 처리
-	        String gender = naverUser.get("gender");
-	        if("F".equals(gender)) {
-	            user.setGender(0);
-	        } else if("M".equals(gender)) {
-	            user.setGender(1);
-	        } else {
-	            user.setGender(2); // unknown
-	        }
+	// Naver API 2. DB 처리
+	@Transactional
+	public UserDTO saveOrUpdateNaverUser(Map<String, String> naverUser) {
+		UserDTO user = userMapper.findBySnsId(naverUser.get("snsId"));
+		if (user == null) {
+			user = userMapper.findByEmail(naverUser.get("email"));
+		}
 
-	        // birthDate 처리
-	        String birthyear = naverUser.get("birthyear");
-	        String birthday = naverUser.get("birthday");
-	        String birthDate = "";
-	        if(birthyear != null && birthday != null) {
-	            birthDate = birthyear + "-" + birthday;
-	        }
-	        user.setBirthDate(birthDate);
+		if (user == null) {
+			// 신규 회원
+			UserDTO newUser = new UserDTO();
+			newUser.setSnsId(naverUser.get("snsId"));
+			newUser.setName(naverUser.get("name"));
+			newUser.setEmail(naverUser.get("email"));
 
-	        // phone 처리
-	        String mobile = naverUser.get("mobile");
-	        user.setPhone(mobile != null ? mobile : "010-0000-0000"); // 기본값 설정
-	        userMapper.updateNaver(user);
-	    }
+			String gender = naverUser.get("gender");
+			if ("F".equals(gender))
+				newUser.setGender(0);
+			else if ("M".equals(gender))
+				newUser.setGender(1);
+			else
+				newUser.setGender(2);
+
+			String birthDate = naverUser.get("birthyear") + "-" + naverUser.get("birthday");
+			newUser.setBirthDate(birthDate);
+			newUser.setPhone(naverUser.get("mobile"));
+
+			userMapper.joinNaver(newUser);
+			userMapper.joinRole(newUser.getUserId());
+			log.info("[USERSERVICE] 신규 회원 USER INFO : "+newUser);
+			return newUser;
+		} else {
+			// 기존회원
+			user.setSnsId(naverUser.get("snsId"));
+			user.setName(naverUser.get("name"));
+			user.setEmail(naverUser.get("email"));
+			String gender = naverUser.get("gender");
+			if ("F".equals(gender)) {
+				user.setGender(0);
+			} else if ("M".equals(gender)) {
+				user.setGender(1);
+			} else {
+				user.setGender(2);
+			}
+
+			String birthyear = naverUser.get("birthyear");
+			String birthday = naverUser.get("birthday");
+			if (birthyear != null && birthday != null)
+				user.setBirthDate(birthyear + "-" + birthday);
+
+			user.setPhone(naverUser.get("mobile"));
+			userMapper.updateNaver(user);
+			log.info("[USERSERVICE] 기존 회원 USER INFO : "+user);
+			return user;
+		}
 	}
 
 	@Override
 	public String getAccessToken(String code, String state) {
-	    String clientId = "9CN0AyXIHmflebLIalgz";
-	    String clientSecret = "3Hs13ybfZB";
-	    String redirectURI = null;
+		String clientId = "9CN0AyXIHmflebLIalgz";
+		String clientSecret = "3Hs13ybfZB";
+		String redirectURI = null;
 		try {
 			redirectURI = URLEncoder.encode("http://localhost:8080/naver/callback", "UTF-8");
 		} catch (UnsupportedEncodingException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-	    String apiURL = "https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id="
-	            + clientId + "&client_secret=" + clientSecret + "&redirect_uri=" + redirectURI
-	            + "&code=" + code + "&state=" + state;
+		String apiURL = "https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=" + clientId
+				+ "&client_secret=" + clientSecret + "&redirect_uri=" + redirectURI + "&code=" + code + "&state="
+				+ state;
 
-	    try {
-	        URL url = new URL(apiURL);
-	        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-	        con.setRequestMethod("GET");
-	        BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-	        String line, result = "";
-	        while ((line = br.readLine()) != null) {
-	            result += line;
-	        }
-	        br.close();
+		try {
+			URL url = new URL(apiURL);
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("GET");
+			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String line, result = "";
+			while ((line = br.readLine()) != null) {
+				result += line;
+			}
+			br.close();
 
-	        ObjectMapper mapper = new ObjectMapper();
-	        JsonNode node = mapper.readTree(result);
-	        return node.get("access_token").asText();
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return null;
-	    }
+			ObjectMapper mapper = new ObjectMapper();
+			JsonNode node = mapper.readTree(result);
+			return node.get("access_token").asText();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
-
-
 
 }
