@@ -25,7 +25,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 이벤트 페이징 -->
 	<select id="list" resultMap="eventMap">
-		select * from `event` 
+		select * 
+		from `event_erp`.`event` 
 		order by `event_id` DESC
 		limit #{cri.pageStart},#{cri.perPageNum}
 	</select>
@@ -33,8 +34,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 드롭다운용 : 이벤트 전체조회 -->
 	<select id="eventAll" resultMap="eventMap">
 		select
-			`event_id`, `title`, `start_date`, `end_date`
-		from `event`
+			`event_id`, `title`, `description`, `location`, 
+			`start_date`, `end_date`, `capacity`, `status`, 
+			`visibility`, `created_by`, 
+			`created_at`, `updated_at`, 
+			`is_paid`, `price`, `currency`, `category`
+		from `event_erp`.`event`
 		order by `start_date` desc
 	</select>
 	
@@ -54,4 +59,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{createBy}, NOW(), NOW(),
 			#{isPaid}, #{price}, #{currency}, #{category})
 	</insert>
+	
+	<!-- 이벤트 아이디로 조회 -->
+	<select id="findById" parameterType="long" resultMap="eventMap">
+		select 
+			e.`event_id`, e.`title`, e.`description`, e.`location`,
+			e.`start_date`, e.`end_date`, e.`capacity`,
+			e.`status`, e.`visibility`, e.`poster_url`,
+			e.`is_paid` as is_paid,
+			e.`price`, e.`currency`, e.`category`
+		from `event_erp`.`event` e
+		where e.`event_id` = #{eventId}
+		limit 1
+	</select>
+	
+	<!-- 이벤트 종료 시각 조회 -->
+	<select id="findEndDateByEventId" parameterType="long" resultType="java.time.LocalDateTime">
+		select e.`end_date`
+		from `event_erp`.`event` e
+		where e.`event_id` = #{eventId}
+		limit 1
+	</select>
 </mapper>

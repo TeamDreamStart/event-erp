@@ -105,30 +105,30 @@ public class TestController {
 		return "test/mapTest";
 	}
 
-	@GetMapping("/pay-test")
-	public String pay(Model model) {
-		EventDTO event = new EventDTO();
-		event.setEventId(1L);
-		event.setTitle("Spring Festival 2025");
-		event.setDescription("봄맞이 특별 공연");
-		event.setLocation("서울 강남구 코엑스");
-		event.setStartDate("2025-10-05");
-		event.setEndDate("2025-10-05");
-		event.setCapacity(200);
-		event.setStatus("OPEN");
-		event.setVisibility("PUBLIC");
-		event.setPosterUrl("C:/teamDS/upload/test.png");
-		event.setCreatedBy(100L);
-		event.setCreatedAt("2025-09-19");
-		event.setUpdatedAt("2025-09-19");
-
-		model.addAttribute("event", event);
-
-		// 가격은 임의로 만원
-		model.addAttribute("price", 100);
-
-		return "test/payTest";
-	}
+//	@GetMapping("/pay-test")
+//	public String pay(Model model) {
+//		EventDTO event = new EventDTO();
+//		event.setEventId(1L);
+//		event.setTitle("Spring Festival 2025");
+//		event.setDescription("봄맞이 특별 공연");
+//		event.setLocation("서울 강남구 코엑스");
+//		event.setStartDate("2025-10-05");
+//		event.setEndDate("2025-10-05");
+//		event.setCapacity(200);
+//		event.setStatus("OPEN");
+//		event.setVisibility("PUBLIC");
+//		event.setPosterUrl("C:/teamDS/upload/test.png");
+//		event.setCreatedBy(100L);
+//		event.setCreatedAt("2025-09-19");
+//		event.setUpdatedAt("2025-09-19");
+//
+//		model.addAttribute("event", event);
+//
+//		// 가격은 임의로 만원
+//		model.addAttribute("price", 100);
+//
+//		return "test/payTest";
+//	}
 
 	@GetMapping("/kakao-test")
 	public String kakaoTest(Model model) {

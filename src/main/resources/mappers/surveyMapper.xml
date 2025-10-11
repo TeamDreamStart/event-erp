@@ -139,11 +139,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</where>
 	</select>
 	
-	<!-- 응답개수 -->
+	<!-- 응답개수(응답 제출한 유저 수, 중복 제거) -->
 	<select id="responseCount" parameterType="long" resultType="int">
-		select count(*)
-		from event_erp.`survey_response`
-		where `survey_id` = #{surveyId}
+		select count(distinct r.`user_id`)
+		from event_erp.`survey_response` r
+		where r.`survey_id` = #{surveyId}
 	</select>
 
 	<!-- 상세 1건 -->
@@ -160,6 +160,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from
 		`event_erp`.`survey` s
 		where s.`survey_id` = #{surveyId}
+	</select>
+	
+	<!-- user_id로 사용자 이름 조회 -->
+	<select id="findUserNameById" resultType="string" parameterType="long">
+		select u.`name`
+		from `user` u
+		where u.`user_id` = #{userId}
+		limit 1
 	</select>
 	
 	<!-- surveyId로 이벤트 제목만 가져오기 -->
@@ -334,7 +342,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		`template_key`)
 		select
 		#{eventId}, concat('[복제] ', s.`title`),
-		s.`description`, 'OPEN',
+		s.`description`, #{status, jdbcType=VARCHAR, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
 		s.`is_anonymous`, s.`survey_id`,
 		e.`end_date`, <!-- 
 			이벤트 종료 시각과 동시에 오픈 -->
@@ -357,7 +365,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 인라인 클론 : 헤더만 생성 -->
 	<insert id="insertSurveyHeaderFromInline"
-		parameterType="CloneInlineReqDTO">
+		parameterType="CloneInlineReqDTO" useGeneratedKeys="true" keyProperty="newSurveyId">
 		insert into `event_erp`.`survey`
 		(`event_id`, `title`, `description`,
 		`status`,
@@ -366,8 +374,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		`created_by`, `created_at`, `update_at`, `is_template`,
 		`template_key`)
 		values
-		(#{eventId}, #{title}, #{description}, 'OPEN',
-		#{isAnonymous}, #{templateId},
+		(#{eventId}, #{title}, #{description}, 
+		#{status, jdbcType=VARCHAR, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+		COALESCE(#{isAnonymous}, 0), #{templateId},
 		#{openAt}, #{closeAt},
 		#{userId}, NOW(),
 		NOW(), 0, NULL)
@@ -513,5 +522,93 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			end as pct
 		from base b
 		order by b.question_id, b.option_id 
+	</select>
+	
+	<!-- 이벤트 예약자수(모자) : 설문이 속한 이벤트의 확정 인원 -->
+	<select id="applicantCountBySurvey" parameterType="long" resultType="int">
+		select count(*)
+		from `event_erp`.`reservation` v
+		where v.`event_id` = (
+			select s.`event_id` 
+			from `event_erp`.`survey` s
+			where s.`survey_id` = #{surveyId}
+		)
+		and v.`status` = 'CONFIRMED'
+	</select>
+	
+	<!-- 상단카드용 (응답자/예약자/응답률 한번에) -->
+	<select id="topRate" parameterType="long" resultType="map">
+		with s as (
+			select `event_id`
+			from `event_erp`.`survey`
+			where `survey_id` = #{surveyId}
+		),
+		resp as (
+			select count(distinct `user_id`) as responders
+			from `event_erp`.`survey_response`
+			where `survey_id` = #{surveyId}
+		),
+		appl as (
+			select count(*) as applicants
+			from `event_erp`.`reservation` v
+			join s on s.`event_id` = v.`event_id`
+			where v.`status` = 'CONFIRMED'
+		)
+		select
+			a.applicants, r.responders,
+			case when a.applicants = 0 then 0
+				else round(100.0 * r.responders / a.applicants, 1)
+			end as rate_pct
+		from appl a, resp r
+	</select>
+	
+	<!-- 문항/보기 통계(분모 = 신청자수) - 신청자수 대비 + (응답자/신청자) -->
+	<select id="surveyStatusAgainstApplicants" parameterType="long" resultType="map">
+		with ev as (
+			select `event_id`
+			from `event_erp`.`survey`
+			where `survey_id` = #{surveyId}
+		),
+		appl as (
+			select count(*) as applicants
+			from `event_erp`.`reservation` v
+			join ev on ev.`event_id` = v.`event_id`
+			where v.`status` = 'CONFIRMED'
+		),
+		base as (
+			select 
+				q.`question_id`,
+				q.`question` as q_title,
+				q.`required` as q_required, 
+				o.`option_id`, 
+				o.`label`, 
+				count(a.`answer_id`) as cnt
+			from `event_erp`.`survey_question` q
+			join `event_erp`.`survey_option` o
+				on o.`question_id` =  q.`question_id`
+			left join `event_erp`.`survey_answer` a
+				on a.`question_id` = q.`question_id`
+				and a.`option_id` = o.`option_id`
+			where q.`survey_id` = #{surveyId}
+			group by 
+				q.`question_id`, 
+				q.`question`,
+				q.`required`,
+				o.`option_id`, 
+				o.`label`
+		)
+		select 
+			b.`question_id`,
+			b.q_title,
+			b.q_required, 
+			b.`option_id`, 
+			b.`label`, 
+			b.cnt,
+			a.applicants as denom,
+			case when a.applicants = 0 then 0
+				else round(100.0 * b.cnt / a.applicants, 1)
+			end as pct_applicants
+		from base b cross join appl a
+		order by b.`question_id`, b.`option_id`
 	</select>
 </mapper>

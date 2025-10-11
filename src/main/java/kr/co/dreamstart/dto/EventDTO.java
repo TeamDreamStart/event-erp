@@ -1,6 +1,7 @@
 package kr.co.dreamstart.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import lombok.Data;
 
@@ -10,15 +11,15 @@ public class EventDTO {
     private String title;
     private String description;
     private String location;
-    private String startDate;
-    private String endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private int capacity;
     private String status;      // OPEN, CLOSED, CANCELLED
     private String visibility;  // PUBLIC, PRIVATE, UNLISTED
     private String posterUrl;
     private long createdBy;
-    private String createdAt;
-    private String updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private boolean isPaid;
     private BigDecimal price;
     private String currency;
