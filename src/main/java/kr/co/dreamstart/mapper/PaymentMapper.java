@@ -9,5 +9,7 @@ import kr.co.dreamstart.dto.PaymentDTO;
 @Mapper
 public interface PaymentMapper {
 
-	public List<PaymentDTO> paymentList();
+	public List<PaymentDTO> list();
+	
+	public int insert(PaymentDTO paymentDTO);
 }

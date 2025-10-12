@@ -181,7 +181,6 @@ public class UserServiceImpl implements UserService {
 		try {
 			redirectURI = URLEncoder.encode("http://localhost:8080/naver/callback", "UTF-8");
 		} catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		String apiURL = "https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=" + clientId

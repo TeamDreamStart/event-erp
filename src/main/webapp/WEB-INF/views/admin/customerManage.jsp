@@ -24,6 +24,16 @@
 
 <!-- Custom styles for this template-->
 <link href="/resources/css/sb-admin-2.min.css" rel="stylesheet">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<style>
+.active>a.page-link {
+	background-color: #4e73df !important;
+	border-color: #4e73df !important;
+	color: #fff !important;
+}
+</style>
 </head>
 <body id="page-top">
 	<script>
@@ -64,36 +74,8 @@
 
 					<div
 						style="display: flex; height: 45px; justify-content: space-between">
-						<%-- <form action="/admin/${boardType }" method="get">
-							<input type="hidden" name="searchType" value="${searchType}">
-							<input type="hidden" name="keyword" value="${keyword}"> <select
-								name="visibility"
-								class="custom-select custom-select-sm form-control form-control-sm"
-								style="width: 135px">
-								<option value="ALL">전체글 보기</option>
-								<option value="PUBLIC">공개글만 보기</option>
-								<option value="PRIVATE">비공개글만 보기</option>
-							</select>
-							<button class="btn btn-primary" type="submit">선택</button>
-						</form>
-
-
-						<form action="/admin/${boardType }" method="get">
-							<input type="hidden" name="visibility" value="${visibility }">
-							<select name="searchType"
-								class="custom-select custom-select-sm form-control form-control-sm"
-								style="width: 65px">
-								<option value="all" selected>전체&nbsp;&nbsp;&nbsp;</option>
-								<option value="title">제목</option>
-								<option value="content">내용</option>
-							</select> <input
-								style="color: #6e707e; background-color: #fff; background-clip: padding-box; border: 1px solid #d1d3e2;"
-								type="text" name="keyword" value="${param.keyword}"
-								placeholder="검색어를 입력하세요.">
-							<button class="btn btn-primary" type="submit">검색</button>
-						</form> --%>
+						<!-- search -->
 						<form action="/admin/user-manage" method="get" class="search-form">
-
 							<!-- role -->
 							<select name="role">
 								<option value="">전체</option>
@@ -108,20 +90,18 @@
 								<option value="userName">아이디</option>
 								<option value="email">이메일</option>
 								<option value="phone">전화번호</option>
-								<option value="gender">성별</option>
 								<option value="createdAt">가입일자</option>
 							</select>
 
-							<!-- keyword 입력 -->
+							<!-- keyword -->
 							<input type="text" name="keyword" placeholder="검색어 입력"
 								id="keywordInput" />
 
-							<!-- 날짜 검색 -->
+							<!-- startDate endDate -->
 							<div id="dateRange" style="display: none;">
 								<input type="date" name="startDate"> <input type="date"
 									name="endDate">
 							</div>
-
 							<button type="submit">검색</button>
 						</form>
 
@@ -159,7 +139,7 @@
 									<th>가입일</th>
 									<th>마지막 로그인</th>
 									<th>상태</th>
-									<th>회원 유형</th>
+									<th>회원등급</th>
 									<th></th>
 								</tr>
 							</thead>
@@ -167,7 +147,14 @@
 								<c:forEach var="userDTO" items="${userList }">
 									<tr>
 										<td>${userDTO.userId}</td>
-										<td>${userDTO.userName}</td>
+										<c:if test="${not empty userDTO.userName}">
+											<td>${userDTO.userName}</td>
+										</c:if>
+										<c:if
+											test="${empty userDTO.userName || not empty userDTO.snsId}">
+											<td><img style="width: 40px"
+												src="/resources/img/naver/btnG_아이콘사각.png" alt="네이버로그인이미지"></td>
+										</c:if>
 										<td>${userDTO.email}</td>
 										<td>${userDTO.name}</td>
 										<td>${userDTO.phone}</td>
@@ -191,35 +178,30 @@
 						</table>
 						<!-- paging -->
 						<div class="dataTables_paginate paging_simple_numbers">
-							<ul class="pagination" style="justify-content: center">
+							<ul class="pagination justify-content-center">
 								<c:if test="${pageVO.prev}">
 									<li><a class="page-link"
-										href="/admin/${boardType }?page=1&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&laquo;&laquo;</a></li>
-									<li><a class="paginate_button page-item previous"
-										href="/admin/${boardType }?page=${pageVO.startPage - 1}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&laquo;</a></li>
+										href="/admin/user-manage?page=1&perPageNum=${cri.perPageNum}&searchType=${searchType}&keyword=${keyword}&role=${role}&startDate=${startDate}&endDate=${endDate}">&laquo;&laquo;</a></li>
+									<li><a class="page-link"
+										href="/admin/user-manage?page=${pageVO.startPage - 1}&perPageNum=${cri.perPageNum}&searchType=${searchType}&keyword=${keyword}&role=${role}&startDate=${startDate}&endDate=${endDate}">&laquo;</a></li>
 								</c:if>
 
 								<c:forEach begin="${pageVO.startPage}" end="${pageVO.endPage}"
 									var="idx">
-									<li class="${pageVO.cri.page == idx ? 'active' : ''}"><a
+									<li class="page-item ${pageVO.cri.page == idx ? 'active' : ''}"><a
 										class="page-link"
-										href="/admin/${boardType }?page=${idx}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">${idx}</a></li>
+										href="/admin/user-manage?page=${idx}&perPageNum=${cri.perPageNum}&searchType=${searchType}&keyword=${keyword}&role=${role}&startDate=${startDate}&endDate=${endDate}">${idx}</a></li>
 								</c:forEach>
 
 								<c:if test="${pageVO.next}">
-									<li><a class="paginate_button page-item next"
-										href="/admin/${boardType }?page=${pageVO.endPage + 1}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&raquo;</a></li>
 									<li><a class="page-link"
-										href="/admin/${boardType }?page=${pageVO.totalPage}&visibility=${visibility}&searchType=${searchType}&keyword=${keyword}">&raquo;&raquo;</a></li>
+										href="/admin/user-manage?page=${pageVO.endPage + 1}&perPageNum=${cri.perPageNum}&searchType=${searchType}&keyword=${keyword}&role=${role}&startDate=${startDate}&endDate=${endDate}">&raquo;</a></li>
+									<li><a class="page-link"
+										href="/admin/user-manage?page=${pageVO.totalPage}&perPageNum=${cri.perPageNum}&searchType=${searchType}&keyword=${keyword}&role=${role}&startDate=${startDate}&endDate=${endDate}">&raquo;&raquo;</a></li>
 								</c:if>
 							</ul>
 						</div>
 						<!-- paging end -->
-						<div style="display: flex; justify-content: flex-end;">
-							<a type="button" href="/admin/${boardType }/form"
-								class="btn btn-success">새로 작성</a>
-							<div></div>
-						</div>
 					</div>
 
 				</div>

@@ -39,7 +39,7 @@ public class AdminController {
 
 	@Autowired
 	private FileService fileService;
-	
+
 	@Autowired
 	private UserService userService;
 
@@ -191,43 +191,41 @@ public class AdminController {
 		return "redirect:/admin/qna/" + postId;
 	}
 
-	//
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	// userList
 	@GetMapping("/user-manage")
-	public String userManage(Criteria cri,@RequestParam(required = false) Integer role,
+	public String userManage(Criteria cri, @RequestParam(required = false) Integer role,
 			@RequestParam(required = false) String searchType, @RequestParam(required = false) String keyword,
 			@RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
 			Model model) {
-		Map<String,Object> map = userService.userList(cri, role, searchType, keyword, startDate, endDate);
+		Map<String, Object> map = userService.userList(cri, role, searchType, keyword, startDate, endDate);
 		model.addAttribute("userList", map.get("userList"));
 		model.addAttribute("totalUserCount", map.get("totalUserCount"));
 		model.addAttribute("pageVO", map.get("pageVO"));
 		model.addAttribute("cri", map.get("cri"));
-		
-		//검색조건
+
+		// 검색조건
 		model.addAttribute("role", role);
 		model.addAttribute("searchType", searchType);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("startDate", startDate);
 		model.addAttribute("endDate", endDate);
-		
+
 		return "/admin/customerManage";
 	}
-	
+
 	@GetMapping("/user-manage/{userId}")
-	public String userDetail(@PathVariable("userId")long userId,Model model) {
+	public String userDetail(@PathVariable("userId") long userId, Model model) {
 		UserDTO userDTO = userService.userDetail(userId);
 		model.addAttribute("userDTO", userDTO);
 		return "/admin/customerDetailForm";
 	}
-	
-	//update
+
+	// update
 	@PostMapping("/user-manage/{userId}")
-	public String userForm(@PathVariable("userId")long userId,UserDTO userDTO,RedirectAttributes rttr) {
-		
-		
-		return "redirect:/user-manage/"+userId;
+	public String userForm(@PathVariable("userId") long userId, UserDTO userDTO, RedirectAttributes rttr) {
+
+		return "redirect:/user-manage/" + userId;
 	}
-	
 
 }

@@ -18,9 +18,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="created_at" property="createdAt" />
 	</resultMap>
 
-	<select id="paymentList" resultMap="paymentMap">
-		select * from `payment`
+	<select id="list" resultMap="paymentMap">
+		select * from `payment` order by `payment_id` desc
 	</select>
+
+	<insert id="insert" parameterType="paymentDTO">
+		insert into `payment` (
+		`reservation_id`, `amount`, `method`, `status`, `paid_at`,
+		`approve_no`,
+		`pg_tid`, `memo`, `created_at`
+		) VALUES (
+		#{reservationId}, #{amount}, #{method}, #{status},
+		#{paidAt},
+		#{approveNo}, #{pgTid}, #{memo}, now()
+		)
+	</insert>
+
 
 
 </mapper>

@@ -39,6 +39,7 @@ import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.EventDTO;
 import kr.co.dreamstart.dto.FileAssetDTO;
 import kr.co.dreamstart.dto.PageVO;
+import kr.co.dreamstart.dto.PaymentDTO;
 import kr.co.dreamstart.dto.SurveyDTO;
 import kr.co.dreamstart.dto.SurveyOptionDTO;
 import kr.co.dreamstart.dto.SurveyQuestionDTO;
@@ -46,6 +47,7 @@ import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.mapper.BoardMapper;
 import kr.co.dreamstart.mapper.FileAssetMapper;
 import kr.co.dreamstart.mapper.UserMapper;
+import kr.co.dreamstart.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnailator;
 import kr.co.dreamstart.mapper.EventMapper;
@@ -71,6 +73,9 @@ public class TestController {
 
 	@Autowired
 	private EventMapper eventMapper;
+	
+	@Autowired
+	private PaymentService paymentService;
 
 	@GetMapping("/list-test")
 	public String userList(@RequestParam(required = false) Integer userId, Criteria cri, Model model) {
@@ -129,6 +134,22 @@ public class TestController {
 
 		return "test/payTest";
 	}
+	
+	@PostMapping("/payment/complete")
+	@ResponseBody
+	public Map<String, Object> paymentComplete(@RequestBody PaymentDTO paymentDTO) {
+	    Map<String, Object> result = new HashMap<>();
+	    try {
+	        paymentService.savePayment(paymentDTO);
+	        System.out.println("[TEST] payment result : "+paymentDTO);
+	        result.put("result", "success");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        result.put("result", "fail");
+	    }
+	    return result;
+	}
+
 
 	@GetMapping("/kakao-test")
 	public String kakaoTest(Model model) {
