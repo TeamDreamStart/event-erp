@@ -14,7 +14,12 @@ public class CustomUserDetails extends User {
 							Boolean enabled,
 							Collection<? extends GrantedAuthority> authorities) {
 		// 부모(User) 생성자: enabled, accountNonExpired, credentialsNonExpired, accountNonLocked
-		super(username, password, enabled, true, true, true, authorities);
+		super(
+				username, 
+				password, 
+				enabled != null ? enabled : true, 
+				true, true, true, 
+				authorities);
 		this.userId = userId;
 		// TODO Auto-generated constructor stub
 	}

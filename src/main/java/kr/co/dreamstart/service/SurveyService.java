@@ -24,7 +24,7 @@ public interface SurveyService {
 	public SurveyDTO findSurvey(Long surveyId);
 	public List<SurveyQuestionDTO> questionList(Long surveyId);
 	public List<SurveyOptionDTO> optionList(Long surveyId);
-	public Map<Long, List<SurveyOptionDTO>> optionsByQuestion (Long surveyId);
+	public Map<Long, List<SurveyOptionDTO>> optionsByQuestion (Long questionId);
 	
 	// 상세조회 (이벤트 제목 포함)
 	public String findEventTitleBySurveyId(Long surveyId);

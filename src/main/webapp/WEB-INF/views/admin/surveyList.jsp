@@ -531,9 +531,9 @@
             </td>
             <td class="col-dt">
               <c:choose>
-                <c:when test="${s.updateAt != null}">
-                  <span class="date"><c:out value="${s.updateAt.toLocalDate()}"/></span>
-                  <span class="time"><c:out value="${s.updateAt.toLocalTime()}"/></span>
+                <c:when test="${s.updatedAt != null}">
+                  <span class="date"><c:out value="${s.updatedAt.toLocalDate()}"/></span>
+                  <span class="time"><c:out value="${s.updatedAt.toLocalTime()}"/></span>
                 </c:when>
                 <c:otherwise>-</c:otherwise>
               </c:choose>
@@ -604,9 +604,9 @@
             </td>
             <td class="col-dt">
               <c:choose>
-                <c:when test="${s.updateAt != null}">
-                  <span class="date"><c:out value="${s.updateAt.toLocalDate()}"/></span>
-                  <span class="time"><c:out value="${s.updateAt.toLocalTime()}"/></span>
+                <c:when test="${s.updatedAt != null}">
+                  <span class="date"><c:out value="${s.updatedAt.toLocalDate()}"/></span>
+                  <span class="time"><c:out value="${s.updatedAt.toLocalTime()}"/></span>
                 </c:when>
                 <c:otherwise>-</c:otherwise>
               </c:choose>

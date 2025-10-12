@@ -15,16 +15,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result column="visibility" property="visibility" />
  		<result column="poster_url" property="posterUrl" />
  		<result column="created_by" property="createdBy" />
+ 		<result column="created_by_name" property="createdByName" />
+ 		<result column="updated_by" property="updatedBy" />
+ 		<result column="updated_by_name" property="updatedByName" />
  		<result column="created_at" property="createdAt" />
  		<result column="updated_at" property="updatedAt" />
- 		<result column="is_paid" property="isPaid"/>
+ 		<result column="is_paid" property="paid"/>
  		<result column="price" property="price"/>
  		<result column="currency" property="currency"/>
  		<result column="category" property="category"/>
  	</resultMap>
 
 	<!-- 이벤트 페이징 -->
-	<select id="list" resultMap="eventMap">
+	<select id="page" resultMap="eventMap">
 		select * 
 		from `event_erp`.`event` 
 		order by `event_id` DESC
@@ -32,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<!-- 드롭다운용 : 이벤트 전체조회 -->
-	<select id="eventAll" resultMap="eventMap">
+	<select id="all" resultMap="eventMap">
 		select
 			`event_id`, `title`, `description`, `location`, 
 			`start_date`, `end_date`, `capacity`, `status`, 
@@ -43,31 +46,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		order by `start_date` desc
 	</select>
 	
-	<!-- 신규등록 -->
-	<insert id="insert" parameterType="EventDTO"
-			useGeneratedKeys="true" keyProperty="eventId" keyColumn="event_id">
-		insert into event_erp.`event`
-			(`title`, `description`, `location`, `start_date`, `end_date`, 
-			`capacity`, `status`, `visibility`, `poster_url`, `created_by`, 
-			`created_at`, `updated_at`, `is_paid`, `price`, `currency`, `category`)
-		values
-			(#{title}, #{description}, #{location}, 
-			<!-- datetime_local -> DATETIME 변환 -->
-			STR_TO_DATE(#{start_date}, '%Y-%m-%dT%H:%i'),
-			STR_TO_DATE(#{end_date}, '%Y-%m-%dT%H:%i'),
-			#{capacity}, #{status}, #{visible}, #{posterUrl},
-			#{createBy}, NOW(), NOW(),
-			#{isPaid}, #{price}, #{currency}, #{category})
-	</insert>
-	
-	<!-- 이벤트 아이디로 조회 -->
+	<!-- 이벤트 아이디로 단건 조회 -->
 	<select id="findById" parameterType="long" resultMap="eventMap">
 		select 
 			e.`event_id`, e.`title`, e.`description`, e.`location`,
 			e.`start_date`, e.`end_date`, e.`capacity`,
 			e.`status`, e.`visibility`, e.`poster_url`,
-			e.`is_paid` as is_paid,
-			e.`price`, e.`currency`, e.`category`
+			e.`created_by`, e.`created_by_name`,
+			e.`updated_by`, e.`updated_by_name`,
+			e.`created_at`, e.`updated_at`, 
+			e.`is_paid`, e.`price`, e.`currency`, e.`category`
 		from `event_erp`.`event` e
 		where e.`event_id` = #{eventId}
 		limit 1
@@ -80,4 +68,63 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where e.`event_id` = #{eventId}
 		limit 1
 	</select>
+
+	<!-- 총건수 -->
+	<select id="count" resultType="int">
+		select count(*)
+		from `event_erp`.`event`
+	</select>
+
+	<!-- 신규등록 (name 컬럼은 db 트리거가 채움) -->
+	<insert id="insert" parameterType="EventDTO"
+			useGeneratedKeys="true" keyProperty="eventId">
+		insert into `event_erp`.`event`
+			(`title`, `description`, `location`, `start_date`, `end_date`, 
+			`capacity`, `status`, `visibility`, `poster_url`, 
+			`created_by`, `updated_by`, `is_paid`, 
+			`price`, `currency`, `category`)
+		values
+			(
+			#{title}, #{description}, #{location}, #{startDate}, #{endDate},
+			#{capacity}, #{status}, #{visibility}, #{posterUrl},
+			#{createdBy}, #{updatedBy}, #{paid}, 
+			#{price}, #{currency}, #{category})
+	</insert>
+	
+	<!-- 수정 (name 컬럼은 db 트리거가 채움) -->
+	<update id="update" parameterType="EventDTO">
+		update `event_erp`.`event`
+			set `title` = #{title},
+				`description` = #{description}, 
+				`location` = #{location}, 
+				`start_date` = #{startDate}, 
+				`end_date` = #{endDate}, 
+				`capacity` = #{capacity}, 
+				`status` = #{status}, 
+				`visibility` = #{visibility}, 
+				`poster_url` = #{posterUrl}, 
+				`updated_by` = #{updatedBy},
+				`is_paid` = #{paid}, 
+				`price` = #{price}, 
+				`currency` = #{currency}, 
+				`category` = #{category}
+		where `event_id` = #{eventId}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete">
+		delete from `event_erp`.`event`
+		where `event_id` = #{eventId}
+	</delete>
+	
+	<!-- 자동 상태 전환 : end_date 지난 open -> close -->
+	<update id="closeExpiredEvents">
+		<![CDATA[
+			update `event_erp`.`event`
+				set `status` = 'CLOSED',
+					`updated_at` = NOW()
+			where `status` = 'OPEN'
+				and `end_date` <= NOW()
+		]]>
+	</update>
 </mapper>

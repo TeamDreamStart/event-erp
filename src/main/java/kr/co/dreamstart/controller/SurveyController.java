@@ -20,6 +20,7 @@ import kr.co.dreamstart.dto.SurveyDTO;
 import kr.co.dreamstart.dto.SurveyOptionDTO;
 import kr.co.dreamstart.dto.SurveyQuestionDTO;
 import kr.co.dreamstart.mapper.EventMapper;
+import kr.co.dreamstart.service.EventService;
 import kr.co.dreamstart.service.SurveyService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +32,7 @@ public class SurveyController {
 	@Autowired
 	SurveyService surveyService;
 	@Autowired
-	EventMapper eventMapper; // 임시 나중에 서비스로 바꿔야됨
+	EventService eventService; // 임시 나중에 서비스로 바꿔야됨
 	
 	// 설문목록(이벤트필터 + 검색 + 페이징 파라미터만 받음)
 	@GetMapping("/surveys")
@@ -144,7 +145,7 @@ public class SurveyController {
 							Model model) {
 		// 공통목록
 		model.addAttribute("templates", surveyService.fixedTemplates());
-		model.addAttribute("eventList", eventMapper.eventAll());
+		model.addAttribute("eventList", eventService.all());
 		
 		// 프리필/사전선택은 서비스에서 계산
 		Map<String, Object> prefill = surveyService.cloneFormPrefill(templateId, eventId, surveyId);

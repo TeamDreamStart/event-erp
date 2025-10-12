@@ -25,11 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class SurveyServiceImpl implements SurveyService {
-	@Autowired
-	private SurveyMapper surveyMapper;
-	
-	@Autowired
-	private EventMapper eventMapper;
+
+	private final SurveyMapper surveyMapper;
+	private final EventMapper eventMapper;
 	
 	// 조회/유지보수
 	@Override
@@ -69,11 +67,11 @@ public class SurveyServiceImpl implements SurveyService {
 	}
 
 	@Override
-	public Map<Long, List<SurveyOptionDTO>> optionsByQuestion(Long surveyId) {
+	public Map<Long, List<SurveyOptionDTO>> optionsByQuestion(Long questionId) {
 		// TODO Auto-generated method stub
 		Map<Long, List<SurveyOptionDTO>> map = new LinkedHashMap<>();
 		
-		for (SurveyQuestionDTO q : questionList(surveyId)) {
+		for (SurveyQuestionDTO q : questionList(questionId)) {
 			map.put(q.getQuestionId(), optionList(q.getQuestionId()));
 		}
 		return map;

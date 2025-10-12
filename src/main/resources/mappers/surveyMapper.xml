@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="close_at" property="closeAt" />
 		<result column="created_by" property="createdBy" />
 		<result column="created_at" property="createdAt" />
-		<result column="update_at" property="updateAt" />
+		<result column="updated_at" property="updatedAt" />
 		<result column="is_template" property="isTemplate" />
 		<result column="template_key" property="templateKey" />
 	</resultMap>
@@ -67,7 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		s.`clone_from_survey_id`,
 		s.`open_at`, s.`close_at`,
 		s.`created_by`,
-		s.`created_at`, s.`update_at`,
+		s.`created_at`, s.`updated_at`,
 		s.`is_template`, s.`template_key`
 		from
 		`event_erp`.`survey` s
@@ -84,7 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		s.`status`, s.`is_anonymous`, s.`clone_from_survey_id`,
 		s.`open_at`,
 		s.`close_at`,
-		s.`created_by`, s.`created_at`, s.`update_at`,
+		s.`created_by`, s.`created_at`, s.`updated_at`,
 		s.`is_template`, s.`template_key`
 		from `event_erp`.`survey` s
 		<where>
@@ -155,7 +155,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		s.`clone_from_survey_id`,
 		s.`open_at`, s.`close_at`,
 		s.`created_by`,
-		s.`created_at`, s.`update_at`,
+		s.`created_at`, s.`updated_at`,
 		s.`is_template`, s.`template_key`
 		from
 		`event_erp`.`survey` s
@@ -338,7 +338,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		`is_anonymous`, `clone_from_survey_id`,
 		`open_at`,
 		`close_at`,
-		`created_by`, `created_at`, `update_at`, `is_template`,
+		`created_by`, `created_at`, `updated_at`, `is_template`,
 		`template_key`)
 		select
 		#{eventId}, concat('[복제] ', s.`title`),
@@ -371,7 +371,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		`status`,
 		`is_anonymous`, `clone_from_survey_id`,
 		`open_at`, `close_at`,
-		`created_by`, `created_at`, `update_at`, `is_template`,
+		`created_by`, `created_at`, `updated_at`, `is_template`,
 		`template_key`)
 		values
 		(#{eventId}, #{title}, #{description}, 
