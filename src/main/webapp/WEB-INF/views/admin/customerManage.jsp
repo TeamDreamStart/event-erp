@@ -75,7 +75,7 @@
 					<div
 						style="display: flex; height: 45px; justify-content: space-between">
 						<!-- search -->
-						<form action="/admin/user-manage" method="get" class="search-form">
+						<form action="/admin/customers" method="get" class="search-form">
 							<!-- role -->
 							<select name="role">
 								<option value="">전체</option>
@@ -169,9 +169,14 @@
 										<c:if test="${userDTO.isActive eq '1'}">
 											<td>활동중</td>
 										</c:if>
-										<td>${userDTO.roleName}</td>
+										<c:if test="${userDTO.roleName eq 'admin'}">
+											<td style="color: blue">관리자</td>
+										</c:if>
+										<c:if test="${userDTO.roleName eq 'member'}">
+											<td>일반회원</td>
+										</c:if>
 										<td><a class="btn btn-primary"
-											href="/admin/user-manage/${userDTO.userId }">수정/상세</a></td>
+											href="/admin/customers/${userDTO.userId }">수정/상세</a></td>
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -181,23 +186,23 @@
 							<ul class="pagination justify-content-center">
 								<c:if test="${pageVO.prev}">
 									<li><a class="page-link"
-										href="/admin/user-manage?page=1&perPageNum=${cri.perPageNum}&searchType=${searchType}&keyword=${keyword}&role=${role}&startDate=${startDate}&endDate=${endDate}">&laquo;&laquo;</a></li>
+										href="/admin/customers?page=1&perPageNum=${cri.perPageNum}&searchType=${searchType}&keyword=${keyword}&role=${role}&startDate=${startDate}&endDate=${endDate}">&laquo;&laquo;</a></li>
 									<li><a class="page-link"
-										href="/admin/user-manage?page=${pageVO.startPage - 1}&perPageNum=${cri.perPageNum}&searchType=${searchType}&keyword=${keyword}&role=${role}&startDate=${startDate}&endDate=${endDate}">&laquo;</a></li>
+										href="/admin/customers?page=${pageVO.startPage - 1}&perPageNum=${cri.perPageNum}&searchType=${searchType}&keyword=${keyword}&role=${role}&startDate=${startDate}&endDate=${endDate}">&laquo;</a></li>
 								</c:if>
 
 								<c:forEach begin="${pageVO.startPage}" end="${pageVO.endPage}"
 									var="idx">
 									<li class="page-item ${pageVO.cri.page == idx ? 'active' : ''}"><a
 										class="page-link"
-										href="/admin/user-manage?page=${idx}&perPageNum=${cri.perPageNum}&searchType=${searchType}&keyword=${keyword}&role=${role}&startDate=${startDate}&endDate=${endDate}">${idx}</a></li>
+										href="/admin/customers?page=${idx}&perPageNum=${cri.perPageNum}&searchType=${searchType}&keyword=${keyword}&role=${role}&startDate=${startDate}&endDate=${endDate}">${idx}</a></li>
 								</c:forEach>
 
 								<c:if test="${pageVO.next}">
 									<li><a class="page-link"
-										href="/admin/user-manage?page=${pageVO.endPage + 1}&perPageNum=${cri.perPageNum}&searchType=${searchType}&keyword=${keyword}&role=${role}&startDate=${startDate}&endDate=${endDate}">&raquo;</a></li>
+										href="/admin/customers?page=${pageVO.endPage + 1}&perPageNum=${cri.perPageNum}&searchType=${searchType}&keyword=${keyword}&role=${role}&startDate=${startDate}&endDate=${endDate}">&raquo;</a></li>
 									<li><a class="page-link"
-										href="/admin/user-manage?page=${pageVO.totalPage}&perPageNum=${cri.perPageNum}&searchType=${searchType}&keyword=${keyword}&role=${role}&startDate=${startDate}&endDate=${endDate}">&raquo;&raquo;</a></li>
+										href="/admin/customers?page=${pageVO.totalPage}&perPageNum=${cri.perPageNum}&searchType=${searchType}&keyword=${keyword}&role=${role}&startDate=${startDate}&endDate=${endDate}">&raquo;&raquo;</a></li>
 								</c:if>
 							</ul>
 						</div>

@@ -5,77 +5,70 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="">
-<meta name="author" content="">
+<title>회원 상세보기</title>
 
-<title>Admin-userDetail/Form</title>
-
-<!-- Custom fonts for this template-->
 <link href="/resources/vendor/fontawesome-free/css/all.min.css"
-	rel="stylesheet" type="text/css">
-<link
-	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
 	rel="stylesheet">
-
-<!-- Custom styles for this template-->
 <link href="/resources/css/sb-admin-2.min.css" rel="stylesheet">
 
+<style>
+.section-title {
+	font-weight: bold;
+	font-size: 1.2rem;
+	margin-top: 30px;
+	margin-bottom: 15px;
+	color: #4e73df;
+	border-left: 4px solid #4e73df;
+	padding-left: 10px;
+}
+
+.table th {
+	white-space: nowrap;
+}
+</style>
 </head>
 <body id="page-top">
 
-	<!-- Page Wrapper -->
 	<div id="wrapper">
-		<!-- header -->
 		<jsp:include page="../adminIncludes/header.jsp" />
-		<!-- End of header -->
 
-		<!-- Begin Page Content -->
 		<div class="container-fluid">
+			<h1 class="h3 mb-4 text-gray-800">회원 상세정보</h1>
 
-			<!-- Page Heading -->
-			<h1 class="h3 mb-2 text-gray-800">UserDetail/Form</h1>
-
-			<!-- DataTales Example -->
+			<!-- 회원 기본정보 -->
 			<div class="card shadow mb-4">
 				<div class="card-header py-3">
-					<h6 class="m-0 font-weight-bold text-primary">userDetail/Form</h6>
+					<h6 class="m-0 font-weight-bold text-primary">USER DETAIL</h6>
 				</div>
 				<div class="card-body">
-					<form action="/user-manage/${userDTO.userId }" method="post">
+					<form action="/admin/customers/${userDTO.userId}" method="post">
 						<input type="hidden" name="userId" value="${userDTO.userId}" />
-
 						<div class="row mb-3">
-							<div class="col-md-6">
-								<label class="form-label fw-bold">아이디 (username)</label> <input
-									type="text" class="form-control" name="userName"
-									value="${userDTO.userName}" readonly />
+							<div class="col-md-4">
+								<label class="form-label fw-bold">아이디</label> <input type="text"
+									class="form-control" name="userName"
+									value="${userDTO.userName}" readonly>
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-4">
 								<label class="form-label fw-bold">이름</label> <input type="text"
-									class="form-control" name="name" value="${userDTO.name}" />
+									class="form-control" name="name" value="${userDTO.name}">
 							</div>
-						</div>
-
-						<div class="row mb-3">
-							<div class="col-md-6">
+							<div class="col-md-4">
 								<label class="form-label fw-bold">이메일</label> <input
 									type="email" class="form-control" name="email"
-									value="${userDTO.email}" />
-							</div>
-							<div class="col-md-6">
-								<label class="form-label fw-bold">전화번호</label> <input
-									type="text" class="form-control" name="phone"
-									value="${userDTO.phone}" />
+									value="${userDTO.email}" readonly>
 							</div>
 						</div>
 
 						<div class="row mb-3">
 							<div class="col-md-4">
+								<label class="form-label fw-bold">전화번호</label> <input
+									type="text" class="form-control" name="phone"
+									value="${userDTO.phone}">
+							</div>
+							<div class="col-md-4">
 								<label class="form-label fw-bold">성별</label> <select
-									class="form-select" name="gender">
+									class="form-select form-control" name="gender">
 									<option value="0" ${userDTO.gender == 0 ? 'selected' : ''}>여성</option>
 									<option value="1" ${userDTO.gender == 1 ? 'selected' : ''}>남성</option>
 								</select>
@@ -83,93 +76,167 @@
 							<div class="col-md-4">
 								<label class="form-label fw-bold">생년월일</label> <input
 									type="date" class="form-control" name="birthDate"
-									value="${userDTO.birthDate}" />
+									value="${userDTO.birthDate}">
 							</div>
+						</div>
+
+						<div class="row mb-3">
 							<div class="col-md-4">
 								<label class="form-label fw-bold">상태</label> <select
-									class="form-select" name="isActive">
+									class="form-select form-control" name="isActive">
 									<option value="1" ${userDTO.isActive == 1 ? 'selected' : ''}>활동중</option>
 									<option value="0" ${userDTO.isActive == 0 ? 'selected' : ''}>비활성화</option>
 								</select>
 							</div>
-						</div>
-
-						<div class="row mb-3">
-							<div class="col-md-6">
+							<div class="col-md-4">
 								<label class="form-label fw-bold">가입일</label> <input type="text"
-									class="form-control" value="${userDTO.createdAt}" readonly />
+									class="form-control" value="${userDTO.createdAt}" readonly>
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-4">
 								<label class="form-label fw-bold">최근 로그인</label> <input
 									type="text" class="form-control" value="${userDTO.lastLoginAt}"
-									readonly />
+									readonly>
 							</div>
 						</div>
-
 						<div class="row mb-3">
-							<div class="col-md-6">
-								<label class="form-label fw-bold">역할(Role)</label> <select
-									class="form-select" name="roleName">
-									<option value="ADMIN"
-										${userDTO.roleName == 'ADMIN' ? 'selected' : ''}>관리자</option>
-									<option value="MEMBER"
-										${userDTO.roleName == 'MEMBER' ? 'selected' : ''}>일반회원</option>
-								</select>
+							<div class="col-md-4">
+								<label class="form-label fw-bold">회원 유형</label> <input
+									type="text" class="form-control" name="roleName"
+									value="${userDTO.roleName == 'ADMIN' ? '관리자' : '일반회원'}"
+									readonly disabled>
+							</div>
+							<div class="col-md-4">
+								<label class="form-label fw-bold">SNS여부</label> <input
+									type="email" class="form-control" name="snsId"
+									value="${userDTO.snsId}" readonly>
+							</div>
+							<div class="col-md-4">
+								<label class="form-label fw-bold">최근 수정일</label> <input
+									type="email" class="form-control" name="updatedAt"
+									value="${userDTO.updatedAt}" readonly>
 							</div>
 						</div>
-
-						<div class="text-center mt-4">
-							<button type="submit" class="btn btn-primary">
-								<i class="fas fa-save"></i> 수정 저장
-							</button>
-							<a href="/admin/user-manage" class="btn btn-light border ms-2">
-								취소 </a>
+						<div class="text-center">
+							<button type="submit" class="btn btn-primary">수정</button>
+							<a href="/admin/customers" class="btn btn-secondary ms-2">취소</a>
 						</div>
 					</form>
 				</div>
 			</div>
 
+			<!-- 설문조사 정보 -->
+			<h5 class="section-title">회원 설문조사 내역</h5>
+			<div class="card shadow mb-4">
+				<div class="card-body p-0">
+					<table class="table table-hover mb-0">
+						<thead class="table-light">
+							<tr>
+								<th>설문 제목</th>
+								<th>응답 여부</th>
+								<th>응답일</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="survey" items="${surveyList}">
+								<tr>
+									<td>${survey.title}</td>
+									<td><c:choose>
+											<c:when test="${survey.responded}">응답완료</c:when>
+											<c:otherwise>미응답</c:otherwise>
+										</c:choose></td>
+									<td>${survey.respondedAt}</td>
+								</tr>
+							</c:forEach>
+							<c:if test="${empty surveyList}">
+								<tr>
+									<td colspan="3" class="text-center text-muted">할당된 설문이
+										없습니다.</td>
+								</tr>
+							</c:if>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<!-- 예약 및 결제 정보 -->
+			<h5 class="section-title">예약 및 결제 정보</h5>
+			<div class="card shadow mb-4">
+				<div class="card-body p-0">
+					<table class="table table-striped mb-0">
+						<thead class="table-light">
+							<tr>
+								<th>예약번호</th>
+								<th>이벤트명</th>
+								<th>예약일</th>
+								<th>상태</th>
+								<th>인원</th>
+								<th>결제금액</th>
+								<th>결제상태</th>
+								<th>결제수단</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="r" items="${reservationList}">
+								<tr>
+									<td>${r.reservationId}</td>
+									<td>${r.eventTitle}</td>
+									<td>${r.reservationDate}</td>
+									<td>${r.status}</td>
+									<td>${r.headcount}</td>
+									<td>${r.payment.amount}</td>
+									<td>${r.payment.status}</td>
+									<td>${r.payment.method}</td>
+								</tr>
+							</c:forEach>
+							<c:if test="${empty reservationList}">
+								<tr>
+									<td colspan="8" class="text-center text-muted">예약 내역이
+										없습니다.</td>
+								</tr>
+							</c:if>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<!-- QNA 정보 -->
+			<h5 class="section-title">QNA 작성 내역</h5>
+			<div class="card shadow mb-4">
+				<div class="card-body p-0">
+					<table class="table table-hover mb-0">
+						<thead class="table-light">
+							<tr>
+								<th>제목</th>
+								<th>작성일</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="qna" items="${qnaList}">
+								<tr>
+									<td>${qna.title}</td>
+									<td>${qna.createdAt}</td>
+									<td><a href="/admin/qna/${qna.postId}"
+										class="btn btn-sm btn-outline-primary">이동</a></td>
+								</tr>
+							</c:forEach>
+							<c:if test="${empty qnaList}">
+								<tr>
+									<td colspan="3" class="text-center text-muted">작성한 QNA가
+										없습니다.</td>
+								</tr>
+							</c:if>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
-		<!-- /.container-fluid -->
 
+		<jsp:include page="../adminIncludes/footer.jsp" />
 	</div>
-	<!-- End of Main Content -->
 
-	<!-- Footer -->
-	<jsp:include page="../adminIncludes/footer.jsp" />
-	<!-- End of Footer -->
-
-	</div>
-	<!-- End of Content Wrapper -->
-
-	</div>
-	<!-- End of Page Wrapper -->
-
-	<!-- Scroll to Top Button-->
-	<a class="scroll-to-top rounded" href="#page-top"> <i
-		class="fas fa-angle-up"></i>
-	</a>
-
-	<!-- Logout Modal-->
-	<jsp:include page="../adminIncludes/logoutModal.jsp" />
-	<!-- End of Logout Modal-->
-
-	<!-- Bootstrap core JavaScript-->
 	<script src="/resources/vendor/jquery/jquery.min.js"></script>
 	<script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-	<!-- Core plugin JavaScript-->
-	<script src="/resources/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-	<!-- Custom scripts for all pages-->
 	<script src="/resources/js/sb-admin-2.min.js"></script>
-
-	<!-- Page level plugins -->
-	<script src="/resources/vendor/datatables/jquery.dataTables.min.js"></script>
-	<script src="/resources/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-	<!-- Page level custom scripts -->
-	<script src="/resources/js/demo/datatables-demo.js"></script>
-
 </body>
 </html>

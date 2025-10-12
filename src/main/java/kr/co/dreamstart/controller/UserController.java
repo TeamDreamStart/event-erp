@@ -99,7 +99,7 @@ public class UserController {
 	    return "redirect:/";   // 로그아웃 후 메인페이지 이동
 	}
 
-	
+	//네이버 로그인 api DB 업데이트 + Spring security
 	@RequestMapping("/login/naver/callback")
 	public String naverCallback(HttpServletRequest request, HttpSession session) {
 	    String code = request.getParameter("code");

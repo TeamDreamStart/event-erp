@@ -193,7 +193,7 @@ public class AdminController {
 
 	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	// userList
-	@GetMapping("/user-manage")
+	@GetMapping("/customers")
 	public String userManage(Criteria cri, @RequestParam(required = false) Integer role,
 			@RequestParam(required = false) String searchType, @RequestParam(required = false) String keyword,
 			@RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
@@ -214,7 +214,7 @@ public class AdminController {
 		return "/admin/customerManage";
 	}
 
-	@GetMapping("/user-manage/{userId}")
+	@GetMapping("/customers/{userId}")
 	public String userDetail(@PathVariable("userId") long userId, Model model) {
 		UserDTO userDTO = userService.userDetail(userId);
 		model.addAttribute("userDTO", userDTO);
@@ -222,7 +222,7 @@ public class AdminController {
 	}
 
 	// update
-	@PostMapping("/user-manage/{userId}")
+	@PostMapping("/customers/{userId}")
 	public String userForm(@PathVariable("userId") long userId, UserDTO userDTO, RedirectAttributes rttr) {
 
 		return "redirect:/user-manage/" + userId;
