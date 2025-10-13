@@ -63,9 +63,9 @@ button{
     margin-bottom: 20px;
 }
 
-.logo{
+.logo-link{
     font-family: 'peristiwa';
-    font-size: 36px;
+    font-size: 64px;
     font-style: italic;
     color: #222;
     display: inline-block;
@@ -91,25 +91,28 @@ button{
 
 /*mypage (얇은 텍스트)*/
 .btn-mypage{
-    font-size: 30px; /*글씨 크기 조정*/
+    font-size: 20px; /*글씨 크기 조정*/
     font-weight: 400; /*얇기*/
     padding: 8px 15px; /*login 박스와 높이 맞추기 위해 패딩 추가*/
     color: #222;
     background-color: #FFFFFF;
-    border: 1px;
+    border: 1px solid #FFFFFF;
+    margin: 0;
+    border-right: none;
 }
 .btn-login{
-    font-size: 30px;
+    font-size: 20px;
     font-weight: 400;
     color: #FFFFFF;
     background-color: #222;
     padding: 8px 15px;
     text-align: center;
     line-height: 1;
+    margin: 0;
 }
 
 .user-actions a:last-child{
-    font-weight: bold;
+    /*font-weight: bold;*/
     border-left: 1px solid #222;
     padding-left: 15px;
 }
@@ -133,7 +136,7 @@ button{
 
 .help-area{
     position: absolute;
-    top: 90px;
+    top: 140px;
     right: 20px;
     z-index: 5;
     text-align: right;
@@ -142,15 +145,15 @@ button{
 }
 
 .help-button{
-    font-weight: 400;
+    font-weight: 300;
     font-size: 30px;
     padding: 5px 0;
-    width: 100%;
-    text-align: right;
+    width: auto;
+    text-align: left;
 }
 .help-text {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     position: absolute;
     top: 100%; /*help 버튼 바로 아래*/
     right: 0;
@@ -162,6 +165,8 @@ button{
     margin-bottom: 5px;
     font-size: 14px;
     font-weight: bold;
+    gap: 8px;
+
 }
 .help-search.hidden {
     display: none
@@ -184,7 +189,7 @@ button{
 .header-nav{
     display: flex;
     gap: 40px;
-    font-size: px;
+    font-size: 30px;
     font-weight: 300;
     padding-left: 20px;
 }
@@ -216,25 +221,31 @@ button{
     display: flex;
     justify-content: center;
     margin-bottom: 50px;
-    border: 1px solid#222;
+    border:none;  /*테두리 제거*/
     max-width: 450px;
     margin: 50px auto;
-    background-color:#E5E2DB;
     gap: 10px;
 }
 .search-input {
     width: 300px;
-    padding: 10px 15px;
+    padding: 15px 20px;
+    background-color:#CBD4C2;
     border: 1px solid #222;
-    font-size: 14px;
-    background-color: #CBD4C2;
-    color: #222;
+    border-radius: 15px;
+    flex-grow: 1;
+    box-shadow: none;
+    outline: none;
+    font-size: 18px;
+    color:#222 ;
+    opacity: 1;
 }
 .search-btn {
     padding: 10px 20px;
     background-color: #CBD4C2;
     border: 1px solid #222;
-    font-size: 14px;
+    border-radius: 15px;
+    font-size: 18px;
+    outline: none;
 }
 
 /* 게시판 테이블 */
@@ -245,9 +256,9 @@ button{
     text-align: center;
 }
 .notice-table thead th {
-    font-weight: 500;
+    font-weight: bold;
     padding: 15px 0;
-    border-top: 1px solid #222; /* 상단 굵은 선 */
+    /*border-top: 1px solid #222; /* 상단 굵은 선 */
     border-bottom: 1px solid #222; /* 하단 얇은 선 */
 }
 .notice-table tbody td {
@@ -257,9 +268,11 @@ button{
     font-size: 15px;
 }
 .notice-table tbody td:first-child{
-    text-align: left;
-    padding-left: 10px;
+    text-align: center;
+    width: 5%;
+    padding-left: 0px;
 }
+
 .notice-table tbody tr:hover {
     background-color: #FFFFFF;
     cursor: pointer;
@@ -302,7 +315,7 @@ button{
 
 .pagination li a{
     padding: 5px 10px;
-    font-size: 16px;
+    font-size: 18px;
     color: #999;
     display: block;
     transition: color 0.2s;
@@ -310,7 +323,6 @@ button{
 
 .pagination li.active a{
     font-weight: bold;
-    border-bottom: 2px solid #222;
     color: #222;
 }
 .nav-arrow {
@@ -349,7 +361,7 @@ button{
 } 
 		</style>
 
-    <title>공지사항 목록</title>
+    <title>noticelist</title>
 </head>
 <body>
 	<header class="header">
