@@ -87,32 +87,12 @@
         // 1. 새 비밀번호 필드 가져오기
         const newPasswordInput = document.getElementById('newPassword');
         const newPassword = newPasswordInput.value;
-        const newPasswordErrorEl = document.getElementById('newPassword-error'); // 오류 메시지 표시할 요소 ID 수정
+        const newPasswordErrorEl = document.getElementById('newPassword-error');
 
         // 2. 새 비밀번호 확인 필드 가져오기
         const confirmNewPasswordInput = document.getElementById('confirm-newPassword');
         const confirmNewPassword = confirmNewPasswordInput.value;
-        const confirmNewPasswordErrorEl = document.getElementById('confirm-newPassword-error'); // 오류 메시지 표시할 요소 ID 수정
-
-        // 3. 비밀번호 형식 유효성 검사 (영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10~16자)
-        // 정규식 설명:
-        // ^                 : 문자열의 시작
-        // (?=.*[a-zA-Z])    : 최소 하나의 영문자 (대소문자 구분 없음) 포함
-        // (?=.*\d)          : 최소 하나의 숫자 포함
-        // (?=.*[!@#$%^&*])  : 최소 하나의 특수문자 포함 (여기서는 예시로 일부 특수문자만 포함)
-        // ................ : 위 3가지 조건 중 2가지 이상을 만족시키려면 복합적인 정규식이 필요합니다.
-        //                  : 여기서는 '2가지 이상 조합' 조건이 이미지와 다소 모호하여, 
-        //                  : '영문, 숫자, 특수문자 모두 포함'으로 가정하고 정규식을 작성합니다.
-        //                  : 만약 2가지 이상 조합이라면 정규식 수정이 필요합니다. (예시 정규식 아래 추가)
-        // {10,16}           : 총 길이가 10자 이상 16자 이하
-        // $                 : 문자열의 끝
-
-        // 이미지의 헬프 텍스트: "(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10~16자)" 에 맞는 정규식
-        // 1. 영문+숫자
-        // 2. 영문+특수문자
-        // 3. 숫자+특수문자
-        // 4. 영문+숫자+특수문자
-        // 이 모든 케이스를 만족하는 정규식을 구성하는 것이 가장 정확합니다.
+        const confirmNewPasswordErrorEl = document.getElementById('confirm-newPassword-error');
         const passwordPattern = new RegExp(
             /^(?:(?=.*[a-zA-Z])(?=.*\d)|(?=.*[a-zA-Z])(?=.*[!@#$%^&*])|(?=.*\d)(?=.*[!@#$%^&*])|(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*]))[a-zA-Z\d!@#$%^&*]{8,16}$/
         );

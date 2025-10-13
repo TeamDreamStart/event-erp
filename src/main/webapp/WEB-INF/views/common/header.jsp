@@ -5,7 +5,6 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script src="/js/main.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet"/>
 <title>header</title>
 <style>
