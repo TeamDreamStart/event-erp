@@ -6,6 +6,6 @@ import kr.co.dreamstart.dto.PaymentDTO;
 
 @Service
 public interface PaymentService {
-	public void savePayment(PaymentDTO dto);
+	public int savePayment(PaymentDTO dto);
 
 }

@@ -3,6 +3,7 @@ package kr.co.dreamstart.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -73,9 +74,10 @@ public class TestController {
 
 	@Autowired
 	private EventMapper eventMapper;
-	
+
 	@Autowired
 	private PaymentService paymentService;
+
 
 	@GetMapping("/list-test")
 	public String userList(@RequestParam(required = false) Integer userId, Criteria cri, Model model) {
@@ -112,42 +114,37 @@ public class TestController {
 
 	@GetMapping("/pay-test")
 	public String pay(Model model) {
-		EventDTO event = new EventDTO();
-		event.setEventId(1L);
-		event.setTitle("Spring Festival 2025");
-		event.setDescription("봄맞이 특별 공연");
-		event.setLocation("서울 강남구 코엑스");
-		event.setStartDate("2025-10-05");
-		event.setEndDate("2025-10-05");
-		event.setCapacity(200);
-		event.setStatus("OPEN");
-		event.setVisibility("PUBLIC");
-		event.setPosterUrl("C:/teamDS/upload/test.png");
-		event.setCreatedBy(100L);
-		event.setCreatedAt("2025-09-19");
-		event.setUpdatedAt("2025-09-19");
+		// 결제정보 입력 form 에서 전달
+		EventDTO eventDTO = eventMapper.selectByEventId(6);
+//		eventDTO.setEventId(1L);
+//		eventDTO.setTitle("Spring Festival 2025");
+//		eventDTO.setDescription("봄맞이 특별 공연");
+//		eventDTO.setLocation("서울 강남구 코엑스");
+//		eventDTO.setStartDate("2025-10-05");
+//		eventDTO.setEndDate("2025-10-05");
+//		eventDTO.setCapacity(200);
+//		eventDTO.setStatus("OPEN");
+//		eventDTO.setVisibility("PUBLIC");
+//		eventDTO.setPosterUrl("C:/teamDS/upload/test.png");
+//		eventDTO.setCreatedBy(100L);
+//		eventDTO.setCreatedAt("2025-09-19");
+//		eventDTO.setUpdatedAt("2025-09-19");
 
-		model.addAttribute("event", event);
+		model.addAttribute("eventDTO", eventDTO);
 
-		// 가격은 임의로 만원
-		model.addAttribute("price", 100);
-
-		return "test/payTest";
+		return "/test/payTest";
 	}
-	
-	@PostMapping("/payment/complete")
-	@ResponseBody
-	public Map<String, Object> paymentComplete(@RequestBody PaymentDTO paymentDTO) {
-	    Map<String, Object> result = new HashMap<>();
-	    try {
-	        paymentService.savePayment(paymentDTO);
-	        System.out.println("[TEST] payment result : "+paymentDTO);
-	        result.put("result", "success");
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        result.put("result", "fail");
-	    }
-	    return result;
+
+	@RequestMapping(value="/payment/complete", method=RequestMethod.POST)
+	public String paymentComplete(PaymentDTO payment, RedirectAttributes rttr) {
+	    System.out.println("Controller 호출됨");
+	    payment.setReservationId(1);
+	    System.out.println(payment);
+
+	    int result = paymentService.savePayment(payment);
+	    rttr.addFlashAttribute("result", result > 0 ? "success" : "fail");
+
+	    return "redirect:/pay-test"; // 결과 JSP
 	}
 
 
@@ -164,8 +161,5 @@ public class TestController {
 
 		return "test/map-test";
 	}
-
-
-
 
 }

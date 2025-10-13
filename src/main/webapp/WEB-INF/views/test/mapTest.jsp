@@ -5,45 +5,60 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>카카오맵 테스트</title>
 
-<link href="https://bootswatch.com/3/paper/bootstrap.min.css"
-	rel="stylesheet">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<!-- services 라이브러리 불러오기 -->
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=services"></script>
-<!-- Kakao Maps SDK (autoload=true 상태) -->
+<!-- ✅ services 라이브러리 꼭 추가! -->
 <script type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7526ffde91bc93805d89c790abf0b705"></script>
+	src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=ee21816e3b6c14b1f71c1db0b4fbc881"></script>
+
 </head>
 <body>
-	<div class="container">
-		<!-- 지도 -->
-		<h2>회원 위치 지도</h2>
-		<div id="map"
-			style="width: 100%; height: 400px; border: 1px solid #ccc;"></div>
-	</div>
+	<p>지도야</p>
+	<div id="map" style="width: 100%; height: 350px;"></div>
 
-	<!-- 지도 생성 스크립트 -->
-	<script type="text/javascript">
-		// DOM이 준비된 후 실행 (안정성을 위해 jQuery 사용)
-		$(document).ready(function() {
-			var container = document.getElementById('map');
-			var options = {
-				center : new kakao.maps.LatLng(33.450701, 126.570667), // 지도 중심
-				level : 3
-			// 지도 확대 레벨
-			};
-			var map = new kakao.maps.Map(container, options);
+	<script>
+		var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
 
-			// 예시: 마커 추가
-			var markerPosition = new kakao.maps.LatLng(33.450701, 126.570667);
+		var mapContainer = document.getElementById('map');
+		var mapOption = {
+			center: new kakao.maps.LatLng(37.566826, 126.9786567),
+			level: 3
+		};
+
+		var map = new kakao.maps.Map(mapContainer, mapOption);
+
+		// ✅ 장소 검색 객체 생성 (services 라이브러리 필수)
+		var ps = new kakao.maps.services.Places();
+
+		ps.keywordSearch('이태원 맛집', placesSearchCB);
+
+		function placesSearchCB(data, status, pagination) {
+			if (status === kakao.maps.services.Status.OK) {
+				var bounds = new kakao.maps.LatLngBounds();
+
+				for (var i = 0; i < data.length; i++) {
+					displayMarker(data[i]);
+					bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+				}
+				map.setBounds(bounds);
+			} else {
+				console.log("검색 실패 상태:", status);
+			}
+		}
+
+		function displayMarker(place) {
 			var marker = new kakao.maps.Marker({
-				position : markerPosition
+				map: map,
+				position: new kakao.maps.LatLng(place.y, place.x)
 			});
-			marker.setMap(map);
-		});
+
+			kakao.maps.event.addListener(marker, 'click', function() {
+				infowindow.setContent(
+					'<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>'
+				);
+				infowindow.open(map, marker);
+			});
+		}
 	</script>
 </body>
 </html>

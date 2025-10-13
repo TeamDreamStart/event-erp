@@ -20,7 +20,10 @@ public class PaymentDTO {
     private LocalDateTime cancelledAt;
     private LocalDateTime createdAt;
     
-    public enum PaymentMethod { CARD, KAKAO, NAVER, BANK }
-    public enum PaymentStatus { PAID, REFUNDED, FAILED, CANCELLED }
+    //포트원 api 고유ID
+    private String impUid;
+//    
+//    public enum PaymentMethod { CARD, KAKAO, NAVER, BANK }
+//    public enum PaymentStatus { PAID, REFUNDED, FAILED, CANCELLED }
 
 }

@@ -19,11 +19,8 @@ public class PaymentServiceImpl implements PaymentService {
 	
 	@Override
     @Transactional
-    public void savePayment(PaymentDTO dto) {
-        // 결제 상태를 enum과 맞춰줌
-        if ("paid".equalsIgnoreCase(dto.getStatus())) dto.setStatus("PAID");
-        if ("card".equalsIgnoreCase(dto.getMethod())) dto.setMethod("CARD");
-        mapper.insert(dto);
+    public int savePayment(PaymentDTO dto) {
+        return mapper.insert(dto);
     }
 }
 	

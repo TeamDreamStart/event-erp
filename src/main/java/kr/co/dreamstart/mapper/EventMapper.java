@@ -19,5 +19,7 @@ public interface EventMapper {
 	// 신규이벤트등록
 	public int insert(EventDTO dto);
 	
+	// Payment 테스트용으로 임시로 만들었음
+	public EventDTO selectByEventId(long eventId);
 	
 }

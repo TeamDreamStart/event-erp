@@ -54,4 +54,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{createBy}, NOW(), NOW(),
 			#{isPaid}, #{price}, #{currency}, #{category})
 	</insert>
+	
+	<select id="selectByEventId" resultMap="eventMap">
+	select * from `event` where `event_id` = #{eventId}
+	</select>
 </mapper>
