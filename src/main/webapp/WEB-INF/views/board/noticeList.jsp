@@ -74,22 +74,38 @@ button{
 
 .header-right{
     display: flex;
-    align-items: center;
-    padding-top: 5px; /*help 버튼 높이와 맞추기 위한 미세 조정*/
+    gap: 0px;
+    /*align-items: center;
     position: absolute;
-    top: 25px;
+    top: 15px;
     right: 20px;
-    gap: 15px;
+    z-index: 10;*/
 }
 
+.user-actions{
+    display: flex;
+    align-items: center;
+    gap: 0px; /*mypage와 login 사이 간격*/
+    margin-top: 10px; /*help 영역과의 수직 위치 맞추기*/
+}
+
+/*mypage (얇은 텍스트)*/
 .btn-mypage{
-    font-size: 14px;
-    border-right: 1px solid #ddd;
-    padding-right: 15px;
+    font-size: 30px; /*글씨 크기 조정*/
+    font-weight: 400; /*얇기*/
+    padding: 8px 15px; /*login 박스와 높이 맞추기 위해 패딩 추가*/
+    color: #222;
+    background-color: #FFFFFF;
+    border: 1px;
 }
 .btn-login{
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 30px;
+    font-weight: 400;
+    color: #FFFFFF;
+    background-color: #222;
+    padding: 8px 15px;
+    text-align: center;
+    line-height: 1;
 }
 
 .user-actions a:last-child{
@@ -104,11 +120,11 @@ button{
 
 .header-nav{
     display: flex;
-    justify-content: flex-start;
+    /*justify-content: flex-start;*/
     gap: 40px; 
     font-size: 30px;
-    font-weight:  87px;
-    padding: 30px 0 10px 200px;
+    font-weight: 300;
+    padding-left: 20px;
 }
 
 .header-nav a:hover{
@@ -116,16 +132,18 @@ button{
 }
 
 .help-area{
-    position: relative;
-    top: 15px;
-    right: 20px; /* header-right와 겹치므로 조정이 필요함 */
+    position: absolute;
+    top: 90px;
+    right: 20px;
+    z-index: 5;
     text-align: right;
-    width: 150px; /* 영역 확보 */
+    width: auto;
+    /*padding: 8px 15px; /*mypage와 login과 같은 높이 확보*/
 }
 
 .help-button{
-    font-weight: bold;
-    font-size: 14px;
+    font-weight: 400;
+    font-size: 30px;
     padding: 5px 0;
     width: 100%;
     text-align: right;
@@ -166,8 +184,8 @@ button{
 .header-nav{
     display: flex;
     gap: 40px;
-    font-size: 18px;
-    font-weight: 500;
+    font-size: px;
+    font-weight: 300;
     padding-left: 20px;
 }
 
@@ -187,21 +205,10 @@ button{
 .page-title {
     text-align: center;
     font-size: 30px;
-    font-weight: 300;
+    font-weight: bold;
     margin: 80px 0 40px 0;
     position: relative;
     padding-bottom: 10px;
-}
-.page-title::after { /* 제목 아래 얇은 선 */
-    content: '';
-    display: block;
-    width: 50px;
-    height: 1px;
-    background-color: #222;
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
 }
 
 /* 검색창 */
@@ -209,6 +216,10 @@ button{
     display: flex;
     justify-content: center;
     margin-bottom: 50px;
+    border: 1px solid#222;
+    max-width: 450px;
+    margin: 50px auto;
+    background-color:#E5E2DB;
     gap: 10px;
 }
 .search-input {
@@ -217,6 +228,7 @@ button{
     border: 1px solid #222;
     font-size: 14px;
     background-color: #CBD4C2;
+    color: #222;
 }
 .search-btn {
     padding: 10px 20px;
@@ -341,37 +353,34 @@ button{
 </head>
 <body>
 	<header class="header">
-      <div class="header-top">
-      <span class="header-left">
-         <a href="/" class="logo-link"><span class="logo">D</span></a>
-         </span>
-         <span class="header-right">
-            <span class="user-actions"> 
-               <button class="login-button">login
-                  <li>
-                     <a href="#">로그인</a>
-                     <a href="#">로그아웃</a>
-                     <a href="#">회원가입</a>
-                  </li>h
-               </button>
-			   <button class="help-button">Help</button>
-               <a href="#">mypage</a>
-            </span>
-         </span>
-      </div>
-         <nav class="header-nav"> 
-            <a href="#">Visit</a>
-            <a href="#">Event</a>
-            <a href="#">Reservation</a>
-         </nav>
-		<div class="help-area">
-			<a href="#" class="help-text">Help</a>
-			<div class="help-search">
-				<input type="text" placeholder="notice" class="help-input">
-				<input type="text" placeholder="Q&A" class="help-input small">
-		 	</div>
-		 </div>
-	 </header>
+    <div class="header-top">
+        <span class="header-left">
+            <a href="/" class="logo-link"><span class="logo">D</span></a>
+        </span>
+        
+                <span class="header-right">
+            <div class="user-actions"> 
+                <a href="#" class="btn-mypage">mypage</a> 
+                <a href="#" class="btn-login">login</a> 
+            </div>
+        </span>
+    </div> 
+    
+        <nav class="header-nav"> 
+        <a href="#">Visit</a>
+        <a href="#">Event</a>
+        <a href="#">Reservation</a>
+    </nav>
+    
+        <div class="help-area">
+        <button class="help-button">Help</button>
+        
+                <div class="help-dropdown">
+            <a href="#" class="help-item">Notice</a>
+            <a href="#" class="help-item">Q&A</a>
+        </div>
+    </div>
+</header>
 
 	
     <main class="main-content">
@@ -388,6 +397,7 @@ button{
                     <th>제목</th>
                     <th>등록일자</th>
                     <th>조회수</th>
+
                 </tr>
             </thead>
             <tbody>
