@@ -17,8 +17,10 @@ public interface UserMapper {
 	// 관리자 - 회원 검색
 	public List<UserDTO> search(@Param("cri") Criteria cri,@Param("role") Integer role,@Param("searchType") String searchType,
 			@Param("keyword") String keyword, @Param("startDate") String startDate, @Param("endDate") String endDate);
+	// 관리자 - 회원 수 조회
 	public int count();
 
+	// 관리자 - 검색 회원 수 조회
 	public int searchCount(@Param("role") Integer role,@Param("searchType") String searchType,
 			@Param("keyword") String keyword, @Param("startDate") String startDate, @Param("endDate") String endDate);
 	// user+userRole+role(roleName)
@@ -29,7 +31,9 @@ public interface UserMapper {
 	public int joinNaver(UserDTO userDTO);
 	public int updateNaver(UserDTO userDTO);
 	
-	// 관리자 - 회원 수 조회
+	//관리자 - 회원 정보 업데이트
+	public int adminUserUpdate(UserDTO userDTO);
+	public int adminUserRoleUpdate(@Param("roleId")int roleId,@Param("userId")long userId); //0:관리자(ADMIN) 1:일반회원(MEMBER)
 
 	// 회원가입
 	public int join(UserDTO userDTO);
@@ -63,6 +67,7 @@ public interface UserMapper {
 	// 사용자 비번 업데이트
 	public int updatePasswordById(@Param("userId") long userId, @Param("password") String password);
 
+	//
 	public UserDTO findByEmail(String string);
 
 }

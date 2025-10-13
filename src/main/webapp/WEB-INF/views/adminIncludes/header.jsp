@@ -69,7 +69,7 @@
 	<hr class="sidebar-divider">
 
 	<!-- Heading -->
-	<div class="sidebar-heading">Addons</div>
+	<div class="sidebar-heading">MANAGE</div>
 	<!-- Nav Item - Pages Collapse Menu -->
 	<li class="nav-item"><a class="nav-link collapsed" href="#"
 		data-toggle="collapse" data-target="#collapsePages"
@@ -107,14 +107,14 @@
 	<li class="nav-item"><a class="nav-link collapsed" href="#"
 		data-toggle="collapse" data-target="#collapseBoard"
 		aria-expanded="true" aria-controls="collapseBoard"> <i
-			class="fas fa-fw fa-folder"></i> <span>NOTICE</span>
+			class="fas fa-fw fa-folder"></i> <span>Boards</span>
 	</a>
 		<div id="collapseBoard" class="collapse"
 			aria-labelledby="headingPages" data-parent="#accordionSidebar">
 			<div class="bg-white py-2 collapse-inner rounded">
-				<h6 class="collapse-header">Notice</h6>
-				<a class="collapse-item" href="/admin/notices">Notice List</a> <a
-					class="collapse-item" href="/admin/notices/form">Notice Form</a>
+				<h6 class="collapse-header">Board Manage</h6>
+				<a class="collapse-item" href="/admin/notices">Notices</a> <a
+					class="collapse-item" href="/admin/qna">Q&A</a>
 			</div>
 		</div></li>
 
@@ -122,10 +122,8 @@
 	<!-- <li class="nav-item"><a class="nav-link" href="/admin/notices">
 			<i class="fas fa-fw fa-table"></i> <span>NOTICE</span>
 	</a></li> -->
-	<li class="nav-item"><a class="nav-link" href="/admin/qna"> <i
-			class="fas fa-fw fa-table"></i> <span>Q&A</span></a></li>
-	<li class="nav-item"><a class="nav-link" href="/admin/user-manage"> <i
-			class="fas fa-fw fa-table"></i> <span>USER</span></a></li>
+	<li class="nav-item"><a class="nav-link" href="/admin/customers"> <i
+			class="fas fa-fw fa-table"></i> <span>Customers</span></a></li>
 
 	<!-- Divider -->
 	<hr class="sidebar-divider d-none d-md-block">

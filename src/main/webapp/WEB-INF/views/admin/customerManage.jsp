@@ -65,26 +65,31 @@
 			<div class="card shadow mb-4">
 				<div class="card-header py-3">
 					<h6 class="m-0 font-weight-bold text-primary"
-						style="font-size: 2rem;">USERLIST</h6>
+						style="font-size: 2rem;">Customer Manage</h6>
 				</div>
 				<div class="card-body">
 					<div style="display: flex; justify-content: flex-end;">
-						<span>${totalCount}</span>
+					<c:if test="${empty keyword && empty role}">
+						<span>총 회원수 : ${totalUserCount}</span>					
+					</c:if>
+					<c:if test="${not empty keyword || not empty role }">
+						<span>검색된 회원수 : ${totalUserCount}</span>					
+					</c:if>
 					</div>
 
 					<div
-						style="display: flex; height: 45px; justify-content: space-between">
+						style="display: flex; height: 45px; justify-content: flex-end">
 						<!-- search -->
 						<form action="/admin/customers" method="get" class="search-form">
 							<!-- role -->
-							<select name="role">
-								<option value="">전체</option>
+							<select style="width:100px" name="role" class="custom-select custom-select-sm form-control form-control-sm">
+								<option value="">회원유형</option>
 								<option value="0">관리자</option>
 								<option value="1">일반회원</option>
 							</select>
 
 							<!-- searchType -->
-							<select name="searchType" id="searchType">
+							<select  style="width:100px"  name="searchType" id="searchType" class="custom-select custom-select-sm form-control form-control-sm">
 								<option value="ALL">전체</option>
 								<option value="userId">회원번호</option>
 								<option value="userName">아이디</option>
@@ -95,14 +100,15 @@
 
 							<!-- keyword -->
 							<input type="text" name="keyword" placeholder="검색어 입력"
-								id="keywordInput" />
+								id="keywordInput" style="color: #6e707e; background-color: #fff; background-clip: padding-box; border: 1px solid #d1d3e2;"/>
 
 							<!-- startDate endDate -->
 							<div id="dateRange" style="display: none;">
 								<input type="date" name="startDate"> <input type="date"
 									name="endDate">
 							</div>
-							<button type="submit">검색</button>
+							<button type="submit" class="btn btn-primary">검색</button>
+							<a href="/admin/customers"type="button" class="btn btn-secondary">검색 초기화</a>
 						</form>
 
 						<script>
@@ -152,8 +158,8 @@
 										</c:if>
 										<c:if
 											test="${empty userDTO.userName || not empty userDTO.snsId}">
-											<td><img style="width: 40px"
-												src="/resources/img/naver/btnG_아이콘사각.png" alt="네이버로그인이미지"></td>
+											<td><img style="height: 40px"
+												src="/resources/img/naver/btnG_축약형.png" alt="네이버로그인이미지"></td>
 										</c:if>
 										<td>${userDTO.email}</td>
 										<td>${userDTO.name}</td>
@@ -167,12 +173,12 @@
 											<td style="color: red">비활성화</td>
 										</c:if>
 										<c:if test="${userDTO.isActive eq '1'}">
-											<td>활동중</td>
+											<td>활성화</td>
 										</c:if>
-										<c:if test="${userDTO.roleName eq 'admin'}">
+										<c:if test="${userDTO.roleName eq 'ADMIN'}">
 											<td style="color: blue">관리자</td>
 										</c:if>
-										<c:if test="${userDTO.roleName eq 'member'}">
+										<c:if test="${userDTO.roleName eq 'MEMBER'}">
 											<td>일반회원</td>
 										</c:if>
 										<td><a class="btn btn-primary"

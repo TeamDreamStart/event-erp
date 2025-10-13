@@ -3,515 +3,612 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.dreamstart.mapper.SurveyMapper">
-	<!-- 응답 결과 -->
-	<resultMap type="SurveyAnswerDTO" id="answerMap">
-		<id column="answer_id" property="answerId" />
-		<result column="response_id" property="responseId" />
-		<result column="question_id" property="questionId" />
-		<result column="option_id" property="optionId" />
-		<result column="answer_text" property="answerText" />
-	</resultMap>
+   <!-- 응답 결과 -->
+   <resultMap type="SurveyAnswerDTO" id="answerMap">
+      <id column="answer_id" property="answerId" />
+      <result column="response_id" property="responseId" />
+      <result column="question_id" property="questionId" />
+      <result column="option_id" property="optionId" />
+      <result column="answer_text" property="answerText" />
+   </resultMap>
 
-	<!-- 설문조사 메타 (제목, 설명, 익명여부 등) -->
-	<resultMap type="SurveyDTO" id="surveyMap">
-		<id column="survey_id" property="surveyId" />
-		<result column="event_id" property="eventId" />
-		<result column="title" property="title" />
-		<result column="description" property="description" />
-		<result column="status" property="status" />
-		<result column="is_anonymous" property="isAnonymous" />
-		<result column="clone_from_survey_id" property="cloneFromSurveyId" />
-		<result column="open_at" property="openAt" />
-		<result column="close_at" property="closeAt" />
-		<result column="created_by" property="createdBy" />
-		<result column="created_at" property="createdAt" />
-		<result column="update_at" property="updateAt" />
-		<result column="is_template" property="isTemplate" />
-		<result column="template_key" property="templateKey" />
-	</resultMap>
+   <!-- 설문조사 메타 (제목, 설명, 익명여부 등) -->
+   <resultMap type="SurveyDTO" id="surveyMap">
+      <id column="survey_id" property="surveyId" />
+      <result column="event_id" property="eventId" />
+      <result column="title" property="title" />
+      <result column="description" property="description" />
+      <result column="status" property="status" />
+      <result column="is_anonymous" property="isAnonymous" />
+      <result column="clone_from_survey_id" property="cloneFromSurveyId" />
+      <result column="open_at" property="openAt" />
+      <result column="close_at" property="closeAt" />
+      <result column="created_by" property="createdBy" />
+      <result column="created_at" property="createdAt" />
+      <result column="updated_at" property="updatedAt" />
+      <result column="is_template" property="isTemplate" />
+      <result column="template_key" property="templateKey" />
+   </resultMap>
 
-	<!-- 객관식 보기 -->
-	<resultMap type="SurveyOptionDTO" id="optionMap">
-		<id column="option_id" property="optionId" />
-		<result column="question_id" property="questionId" />
-		<result column="label" property="label" />
-		<result column="opt_value" property="optValue" />
-	</resultMap>
+   <!-- 객관식 보기 -->
+   <resultMap type="SurveyOptionDTO" id="optionMap">
+      <id column="option_id" property="optionId" />
+      <result column="question_id" property="questionId" />
+      <result column="label" property="label" />
+      <result column="opt_value" property="optValue" />
+   </resultMap>
 
-	<!-- 문항 리스트 -->
-	<resultMap type="SurveyQuestionDTO" id="questionMap">
-		<id column="question_id" property="questionId" />
-		<result column="survey_id" property="surveyId" />
-		<result column="question" property="question" />
-		<result column="type" property="type" />
-		<result column="required" property="required" />
-		<result column="effective_required"
-			property="effectiveRequired" />
-	</resultMap>
+   <!-- 문항 리스트 -->
+   <resultMap type="SurveyQuestionDTO" id="questionMap">
+      <id column="question_id" property="questionId" />
+      <result column="survey_id" property="surveyId" />
+      <result column="question" property="question" />
+      <result column="type" property="type" />
+      <result column="required" property="required" />
+      <result column="effective_required"
+         property="effectiveRequired" />
+   </resultMap>
 
-	<!-- 응답 이력 -->
-	<resultMap type="SurveyResponseDTO" id="responseMap">
-		<id column="response_id" property="responseId" />
-		<result column="survey_id" property="surveyId" />
-		<result column="user_id" property="userId" />
-		<result column="responded_at" property="respondedAt" />
-	</resultMap>
-	
-	<!-- 조회 -->
-	<!-- 상단 고정 4개 템플릿 -->
-	<select id="fixedTemplates" resultMap="surveyMap">
-		select
-		s.`survey_id`,
-		s.`event_id`, s.`title`, s.`description`,
-		s.`status`, s.`is_anonymous`,
-		s.`clone_from_survey_id`,
-		s.`open_at`, s.`close_at`,
-		s.`created_by`,
-		s.`created_at`, s.`update_at`,
-		s.`is_template`, s.`template_key`
-		from
-		`event_erp`.`survey` s
-		where s.`is_template` = 1
-		order by
-		s.`template_key` asc, s.`survey_id` asc
-		limit 4
-	</select>
+   <!-- 응답 이력 -->
+   <resultMap type="SurveyResponseDTO" id="responseMap">
+      <id column="response_id" property="responseId" />
+      <result column="survey_id" property="surveyId" />
+      <result column="user_id" property="userId" />
+      <result column="responded_at" property="respondedAt" />
+   </resultMap>
+   
+   <!-- 조회 -->
+   <!-- 상단 고정 4개 템플릿 -->
+   <select id="fixedTemplates" resultMap="surveyMap">
+      select
+      s.`survey_id`,
+      s.`event_id`, s.`title`, s.`description`,
+      s.`status`, s.`is_anonymous`,
+      s.`clone_from_survey_id`,
+      s.`open_at`, s.`close_at`,
+      s.`created_by`,
+      s.`created_at`, s.`updated_at`,
+      s.`is_template`, s.`template_key`
+      from
+      `event_erp`.`survey` s
+      where s.`is_template` = 1
+      order by
+      s.`template_key` asc, s.`survey_id` asc
+      limit 4
+   </select>
 
-	<!-- 일반 목록(고정 제외) + 필터 + 페이징 -->
-	<select id="surveyPage" resultMap="surveyMap">
-		select
-		s.`survey_id`, s.`event_id`, s.`title`, s.`description`,
-		s.`status`, s.`is_anonymous`, s.`clone_from_survey_id`,
-		s.`open_at`,
-		s.`close_at`,
-		s.`created_by`, s.`created_at`, s.`update_at`,
-		s.`is_template`, s.`template_key`
-		from `event_erp`.`survey` s
-		<where>
-			s.`is_template` = 0
-			<if test="eventId != null"> and s.`event_id` = #{eventId} </if>
+   <!-- 일반 목록(고정 제외) + 필터 + 페이징 -->
+   <select id="surveyPage" resultMap="surveyMap">
+      select
+      s.`survey_id`, s.`event_id`, s.`title`, s.`description`,
+      s.`status`, s.`is_anonymous`, s.`clone_from_survey_id`,
+      s.`open_at`,
+      s.`close_at`,
+      s.`created_by`, s.`created_at`, s.`updated_at`,
+      s.`is_template`, s.`template_key`
+      from `event_erp`.`survey` s
+      <where>
+         s.`is_template` = 0
+         <if test="eventId != null"> and s.`event_id` = #{eventId} </if>
 
-			<!-- field/keyword/anon -->
-			<if test="field == 'title' and keyword != null and keyword != ''">
-				AND s.`title` LIKE CONCAT('%', #{keyword}, '%')
-			</if>
-			<if test="field == 'status' and keyword != null and keyword != ''">
-				AND s.`status` = #{keyword}
-			</if>
-			<if test="field == 'anon' and anon != null">
-				AND s.`is_anonymous` = #{anon}
-			</if>
-			<if
-				test="(field == null or field == 'all') and keyword != null and keyword != ''">
-				AND (s.`title` LIKE CONCAT('%', #{keyword}, '%')
-				OR
-				s.`description` LIKE CONCAT('%', #{keyword}, '%'))
-			</if>
-		</where>
-		ORDER BY s.`created_at` DESC
-		LIMIT #{cri.pageStart}, #{cri.perPageNum}
-	</select>
-
-
-	<!-- 총 개수 total -->
-	<select id="surveyCount" resultType="int">
-		SELECT COUNT(*)
-		FROM `event_erp`.`survey` s
-		<where>
-			s.`is_template` = 0
-			<if test="eventId != null"> AND s.`event_id` = #{eventId} </if>
-
-			<if test="field == 'title' and keyword != null and keyword != ''">
-				AND s.`title` LIKE CONCAT('%', #{keyword}, '%')
-			</if>
-			<if test="field == 'status' and keyword != null and keyword != ''">
-				AND s.`status` = #{keyword}
-			</if>
-			<if test="field == 'anon' and anon != null">
-				AND s.`is_anonymous` = #{anon}
-			</if>
-			<if
-				test="(field == null or field == 'all') and keyword != null and keyword != ''">
-				AND (s.`title` LIKE CONCAT('%', #{keyword}, '%')
-				OR
-				s.`description` LIKE CONCAT('%', #{keyword}, '%'))
-			</if>
-		</where>
-	</select>
-	
-	<!-- 응답개수 -->
-	<select id="responseCount" parameterType="long" resultType="int">
-		select count(*)
-		from event_erp.`survey_response`
-		where `survey_id` = #{surveyId}
-	</select>
-
-	<!-- 상세 1건 -->
-	<select id="findSurvey" resultMap="surveyMap">
-		select
-		s.`survey_id`,
-		s.`event_id`, s.`title`, s.`description`,
-		s.`status`, s.`is_anonymous`,
-		s.`clone_from_survey_id`,
-		s.`open_at`, s.`close_at`,
-		s.`created_by`,
-		s.`created_at`, s.`update_at`,
-		s.`is_template`, s.`template_key`
-		from
-		`event_erp`.`survey` s
-		where s.`survey_id` = #{surveyId}
-	</select>
-	
-	<!-- surveyId로 이벤트 제목만 가져오기 -->
-	<select id="findEventTitleBySurveyId" parameterType="long" resultType="string">
-		select e.`title`
-		from `event_erp`.`survey` s
-		left join `event_erp`.`event` e on e.`event_id` = s.`event_id`
-		where s.`survey_id` = #{surveyId}
-	</select>
-
-	<!-- 문항리스트 -->
-	<select id="questionList" parameterType="long"
-		resultMap="questionMap">
-		select q.`question_id`, q.`survey_id`, q.`question`,
-		q.`type`, q.`required`, q.`effective_required`
-		from
-		`event_erp`.`survey_question` q
-		where q.`survey_id` =
-		#{surveyId}
-		order
-		by q.`question_id` asc
-	</select>
+         <!-- field/keyword/anon -->
+         <if test="field == 'title' and keyword != null and keyword != ''">
+            AND s.`title` LIKE CONCAT('%', #{keyword}, '%')
+         </if>
+         <if test="field == 'status' and keyword != null and keyword != ''">
+            AND s.`status` = #{keyword}
+         </if>
+         <if test="field == 'anon' and anon != null">
+            AND s.`is_anonymous` = #{anon}
+         </if>
+         <if
+            test="(field == null or field == 'all') and keyword != null and keyword != ''">
+            AND (s.`title` LIKE CONCAT('%', #{keyword}, '%')
+            OR
+            s.`description` LIKE CONCAT('%', #{keyword}, '%'))
+         </if>
+      </where>
+      ORDER BY s.`created_at` DESC
+      LIMIT #{cri.pageStart}, #{cri.perPageNum}
+   </select>
 
 
-	<!-- 보기리스트 -->
-	<select id="optionList" parameterType="long"
-		resultMap="optionMap">
-		select o.`option_id`, o.`question_id`, o.`label`,
-		o.`opt_value`
-		from `event_erp`.`survey_option` o
-		where o.`question_id` =
-		#{questionId}
-		order by o.`opt_value` ASC, o.`option_id` ASC
-	</select>
+   <!-- 총 개수 total -->
+   <select id="surveyCount" resultType="int">
+      SELECT COUNT(*)
+      FROM `event_erp`.`survey` s
+      <where>
+         s.`is_template` = 0
+         <if test="eventId != null"> AND s.`event_id` = #{eventId} </if>
 
-	<!-- 문항 다건의 보기 일괄 조회 -->
-	<select id="findOptionsByQuestionIds" parameterType="list"
-		resultMap="optionMap">
-		select o.`option_id`, o.`question_id`, o.`label`, o.`opt_value`
-		from
-		`event_erp`.`survey_option` o
-		where o.`question_id` IN
-		<foreach collection="list" item="qid" open="(" separator=","
-			close=")">
-			#{qid}
-		</foreach>
-		order by o.`question_id` ASC, o.`opt_value` ASC, o.`option_id` ASC
-	</select>
+         <if test="field == 'title' and keyword != null and keyword != ''">
+            AND s.`title` LIKE CONCAT('%', #{keyword}, '%')
+         </if>
+         <if test="field == 'status' and keyword != null and keyword != ''">
+            AND s.`status` = #{keyword}
+         </if>
+         <if test="field == 'anon' and anon != null">
+            AND s.`is_anonymous` = #{anon}
+         </if>
+         <if
+            test="(field == null or field == 'all') and keyword != null and keyword != ''">
+            AND (s.`title` LIKE CONCAT('%', #{keyword}, '%')
+            OR
+            s.`description` LIKE CONCAT('%', #{keyword}, '%'))
+         </if>
+      </where>
+   </select>
+   
+   <!-- 응답개수(응답 제출한 유저 수, 중복 제거) -->
+   <select id="responseCount" parameterType="long" resultType="int">
+      select count(distinct r.`user_id`)
+      from event_erp.`survey_response` r
+      where r.`survey_id` = #{surveyId}
+   </select>
 
-	<!-- 특정 문항에 5점 기본옵션(1~5) 없으면 보충 -->
-	<insert id="ensureLikert5ForQuestion" parameterType="long">
-		insert into
-		`event_erp`.`survey_option` (`question_id`, `label`, `opt_value`)
-		select
-		#{questionId},
-		v.label,
-		v.val
-		from (
-		select '매우 그렇지 않다' as label,
-		'1' as val
-		union all select '그렇지 않다', '2'
-		union all select '보통', '3'
-		union all select '그렇다', '4'
-		union all select '매우 그렇다', '5'
-		) v
-		left join
-		`event_erp`.`survey_option` o
-		on o.`question_id` = #{questionId}
-		and
-		o.`opt_value` = v.val
-		where o.`option_id` IS NULL
-	</insert>
+   <!-- 상세 1건 -->
+   <select id="findSurvey" resultMap="surveyMap">
+      select
+      s.`survey_id`,
+      s.`event_id`, s.`title`, s.`description`,
+      s.`status`, s.`is_anonymous`,
+      s.`clone_from_survey_id`,
+      s.`open_at`, s.`close_at`,
+      s.`created_by`,
+      s.`created_at`, s.`updated_at`,
+      s.`is_template`, s.`template_key`
+      from
+      `event_erp`.`survey` s
+      where s.`survey_id` = #{surveyId}
+   </select>
+   
+   <!-- user_id로 사용자 이름 조회 -->
+   <select id="findUserNameById" resultType="string" parameterType="long">
+      select u.`name`
+      from `user` u
+      where u.`user_id` = #{userId}
+      limit 1
+   </select>
+   
+   <!-- surveyId로 이벤트 제목만 가져오기 -->
+   <select id="findEventTitleBySurveyId" parameterType="long" resultType="string">
+      select e.`title`
+      from `event_erp`.`survey` s
+      left join `event_erp`.`event` e on e.`event_id` = s.`event_id`
+      where s.`survey_id` = #{surveyId}
+   </select>
 
-	<!-- 설문 단위로 'type=scale_5' 문항들에 5점 옵션 보충 -->
-	<insert id="ensureLikert5ForSurvey" parameterType="long">
-		insert into
-		`event_erp`.`survey_option` (`question_id`, `label`, `opt_value`)
-		select
-		q.`question_id`,
-		v.label,
-		v.val
-		from `event_erp`.`survey_question`
-		q
-		join (
-		select '매우 그렇지 않다' as label, '1' as val
-		union all select '그렇지
-		않다', '2'
-		union all select '보통', '3'
-		union all select '그렇다', '4'
-		union all
-		select '매우 그렇다', '5'
-		) v
-		left join `event_erp`.`survey_option` o
-		on
-		o.`question_id` = q.`question_id`
-		and o.`opt_value` = v.val
-		where
-		q.`survey_id` = #{surveyId}
-		and q.`type` = 'SCALE_5'
-		and o.`option_id`
-		IS NULL
-	</insert>
-
+   <!-- 문항리스트 -->
+   <select id="questionList" parameterType="long"
+      resultMap="questionMap">
+      select q.`question_id`, q.`survey_id`, q.`question`,
+      q.`type`, q.`required`, q.`effective_required`
+      from
+      `event_erp`.`survey_question` q
+      where q.`survey_id` =
+      #{surveyId}
+      order
+      by q.`question_id` asc
+   </select>
 
 
-	<!-- useGeneratedKeys : INSERT 후에 DB가 만든 AUTO_INCREMENT PK를 바로 DTO 필드에 넣어주려고 
-		쓰는 옵션 / 템플릿 깊은 복제에서 문항을 INSERT 하면 새 question_id 가 생기고, 그걸 바로 이어서 보기 INSERT에 
-		question_id로 써야 하거든. cloneSurvey(설문 헤더 복제)는 파라미터를 DTO로 안 받으니까 LAST_INSERT_ID() 
-		로 새 survey_id를 따오는 방식이 더 깔끔해. (네가 만든 방식 그대로 OK) -->
-	<!-- 새문항 insert -->
-	<insert id="insertQuestion" parameterType="SurveyQuestionDTO"
-		useGeneratedKeys="true" keyProperty="questionId"
-		keyColumn="question_id">
-		insert into `event_erp`.`survey_question`(`survey_id`,
-		`question`, `type`, `required`)
-		values (#{surveyId}, #{question},
-		#{type}, #{required})
-	</insert>
+   <!-- 보기리스트 -->
+   <select id="optionList" parameterType="long"
+      resultMap="optionMap">
+      select o.`option_id`, o.`question_id`, o.`label`,
+      o.`opt_value`
+      from `event_erp`.`survey_option` o
+      where o.`question_id` =
+      #{questionId}
+      order by o.`opt_value` ASC, o.`option_id` ASC
+   </select>
 
-	<!-- 새보기 insert -->
-	<insert id="insertOption" parameterType="SurveyOptionDTO"
-		useGeneratedKeys="true" keyProperty="optionId" keyColumn="option_id">
-		insert into
-		`event_erp`.`survey_option`(`question_id`, `label`, `opt_value`)
-		values(#{questionId}, #{label}, #{optValue})
-	</insert>
+   <!-- 문항 다건의 보기 일괄 조회 -->
+   <select id="findOptionsByQuestionIds" parameterType="list"
+      resultMap="optionMap">
+      select o.`option_id`, o.`question_id`, o.`label`, o.`opt_value`
+      from
+      `event_erp`.`survey_option` o
+      where o.`question_id` IN
+      <foreach collection="list" item="qid" open="(" separator=","
+         close=")">
+         #{qid}
+      </foreach>
+      order by o.`question_id` ASC, o.`opt_value` ASC, o.`option_id` ASC
+   </select>
+
+   <!-- 특정 문항에 5점 기본옵션(1~5) 없으면 보충 -->
+   <insert id="ensureLikert5ForQuestion" parameterType="long">
+      insert into
+      `event_erp`.`survey_option` (`question_id`, `label`, `opt_value`)
+      select
+      #{questionId},
+      v.label,
+      v.val
+      from (
+      select '매우 그렇지 않다' as label,
+      '1' as val
+      union all select '그렇지 않다', '2'
+      union all select '보통', '3'
+      union all select '그렇다', '4'
+      union all select '매우 그렇다', '5'
+      ) v
+      left join
+      `event_erp`.`survey_option` o
+      on o.`question_id` = #{questionId}
+      and
+      o.`opt_value` = v.val
+      where o.`option_id` IS NULL
+   </insert>
+
+   <!-- 설문 단위로 'type=scale_5' 문항들에 5점 옵션 보충 -->
+   <insert id="ensureLikert5ForSurvey" parameterType="long">
+      insert into
+      `event_erp`.`survey_option` (`question_id`, `label`, `opt_value`)
+      select
+      q.`question_id`,
+      v.label,
+      v.val
+      from `event_erp`.`survey_question`
+      q
+      join (
+      select '매우 그렇지 않다' as label, '1' as val
+      union all select '그렇지
+      않다', '2'
+      union all select '보통', '3'
+      union all select '그렇다', '4'
+      union all
+      select '매우 그렇다', '5'
+      ) v
+      left join `event_erp`.`survey_option` o
+      on
+      o.`question_id` = q.`question_id`
+      and o.`opt_value` = v.val
+      where
+      q.`survey_id` = #{surveyId}
+      and q.`type` = 'SCALE_5'
+      and o.`option_id`
+      IS NULL
+   </insert>
 
 
-	<!-- 클론시 복제용 문항/보기 -->
-	<!-- 사용자 응답 제출시 -->
-	<!-- 응답 헤더 저장 -->
-	<insert id="insertResponse" useGeneratedKeys="true"
-		keyProperty="responseId" keyColumn="response_id">
-		insert into
-		`event_erp`.`survey_response`
-		(`survey_id`, `user_id`, `responded_at`)
-		values(#{surveyId},#{userId},NOW())
-	</insert>
 
-	<!-- 응답상세저장 -->
-	<insert id="insertAnswer">
-		insert into `event_erp`.`survey_answer`
-		(`response_id`, `question_id`, `option_id`, `answer_text`)
-		values(#{responseId}, #{questionId}, #{optionId}, #{answerText})
-	</insert>
+   <!-- useGeneratedKeys : INSERT 후에 DB가 만든 AUTO_INCREMENT PK를 바로 DTO 필드에 넣어주려고 
+      쓰는 옵션 / 템플릿 깊은 복제에서 문항을 INSERT 하면 새 question_id 가 생기고, 그걸 바로 이어서 보기 INSERT에 
+      question_id로 써야 하거든. cloneSurvey(설문 헤더 복제)는 파라미터를 DTO로 안 받으니까 LAST_INSERT_ID() 
+      로 새 survey_id를 따오는 방식이 더 깔끔해. (네가 만든 방식 그대로 OK) -->
+   <!-- 새문항 insert -->
+   <insert id="insertQuestion" parameterType="SurveyQuestionDTO"
+      useGeneratedKeys="true" keyProperty="questionId"
+      keyColumn="question_id">
+      insert into `event_erp`.`survey_question`(`survey_id`,
+      `question`, `type`, `required`)
+      values (#{surveyId}, #{question},
+      #{type}, #{required})
+   </insert>
 
-
-	<!-- 설문 수정은 클론만 허용 (원본 보호 가드) - 코드 실수해도 db가 한번더 막아줌 -->
-	<update id="updateSurveyHeader">
-		update `event_erp`.`survey`
-		<set>
-			<if test="title != null">`title` = #{title}, </if>
-			<if test="description != null">`description` = #{description}, </if>
-			<if test="isAnonymous != null">`is_anonymous` = #{isAnonymous}, </if>
-		</set>
-		where `survey_id` = #{surveyId}
-		and `is_template` = 0
-		and
-		`clone_from_survey_id` is not null
-	</update>
+   <!-- 새보기 insert -->
+   <insert id="insertOption" parameterType="SurveyOptionDTO"
+      useGeneratedKeys="true" keyProperty="optionId" keyColumn="option_id">
+      insert into
+      `event_erp`.`survey_option`(`question_id`, `label`, `opt_value`)
+      values(#{questionId}, #{label}, #{optValue})
+   </insert>
 
 
-	<!-- 템플릿 클론(고정된 4개의 템플릿 외 다 일반설문으로 분리 - 목적성을 위해) -->
-	<insert id="cloneSurvey" parameterType="CloneInlineReqDTO">
-		insert into `event_erp`.`survey`
-		(`event_id`, `title`, `description`,
-		`status`,
-		`is_anonymous`, `clone_from_survey_id`,
-		`open_at`,
-		`close_at`,
-		`created_by`, `created_at`, `update_at`, `is_template`,
-		`template_key`)
-		select
-		#{eventId}, concat('[복제] ', s.`title`),
-		s.`description`, 'OPEN',
-		s.`is_anonymous`, s.`survey_id`,
-		e.`end_date`, <!-- 
-			이벤트 종료 시각과 동시에 오픈 -->
-		DATE_ADD(e.`end_date`, INTERVAL 7 DAY), <!-- 종료 7일간 오픈 -->
-		#{userId}, NOW(), NOW(), 0, NULL
-		from `event_erp`.`survey`
-		s
-		join
-		`event_erp`.`event` e on e.`event_id` = #{eventId}
-		where
-		s.`survey_id` =
-		#{templateId} and s.`is_template` = 1
+   <!-- 클론시 복제용 문항/보기 -->
+   <!-- 사용자 응답 제출시 -->
+   <!-- 응답 헤더 저장 -->
+   <insert id="insertResponse" useGeneratedKeys="true"
+      keyProperty="responseId" keyColumn="response_id">
+      insert into
+      `event_erp`.`survey_response`
+      (`survey_id`, `user_id`, `responded_at`)
+      values(#{surveyId},#{userId},NOW())
+   </insert>
 
-		<!-- 새로 생성된 NewsurveyId -->
-		<selectKey keyProperty="newSurveyId" resultType="long"
-			order="AFTER">
-			select LAST_INSERT_ID()
-		</selectKey>
-	</insert>
+   <!-- 응답상세저장 -->
+   <insert id="insertAnswer">
+      insert into `event_erp`.`survey_answer`
+      (`response_id`, `question_id`, `option_id`, `answer_text`)
+      values(#{responseId}, #{questionId}, #{optionId}, #{answerText})
+   </insert>
 
-	<!-- 인라인 클론 : 헤더만 생성 -->
-	<insert id="insertSurveyHeaderFromInline"
-		parameterType="CloneInlineReqDTO">
-		insert into `event_erp`.`survey`
-		(`event_id`, `title`, `description`,
-		`status`,
-		`is_anonymous`, `clone_from_survey_id`,
-		`open_at`, `close_at`,
-		`created_by`, `created_at`, `update_at`, `is_template`,
-		`template_key`)
-		values
-		(#{eventId}, #{title}, #{description}, 'OPEN',
-		#{isAnonymous}, #{templateId},
-		#{openAt}, #{closeAt},
-		#{userId}, NOW(),
-		NOW(), 0, NULL)
 
-		<!-- 새로 생성된 NewsurveyId -->
-		<selectKey keyProperty="newSurveyId" resultType="long"
-			order="AFTER">
-			select LAST_INSERT_ID()
-		</selectKey>
-	</insert>
+   <!-- 설문 수정은 클론만 허용 (원본 보호 가드) - 코드 실수해도 db가 한번더 막아줌 -->
+   <update id="updateSurveyHeader">
+      update `event_erp`.`survey`
+      <set>
+         <if test="title != null">`title` = #{title}, </if>
+         <if test="description != null">`description` = #{description}, </if>
+         <if test="isAnonymous != null">`is_anonymous` = #{isAnonymous}, </if>
+      </set>
+      where `survey_id` = #{surveyId}
+      and `is_template` = 0
+      and
+      `clone_from_survey_id` is not null
+   </update>
 
-	<!-- 설문 단위로 옵션 조회 -->
-	<select id="optionListBySurveyId" resultMap="optionMap">
-		select
-		o.`option_id`, o.`question_id`, o.`label`, o.`opt_value`
-		from
-		`event_erp`.`survey_option` o
-		join `event_erp`.`survey_question` q on
-		q.`question_id` = o.`question_id`
-		where q.`survey_id` = #{surveyId}
-		order by q.`question_id` ASC, o.`opt_value` ASC, o.`option_id` ASC
-	</select>
 
-	<!-- db에서 일괄 복제해서 사용하는 쿼리 -->
-	<insert id="cloneQuestionsFromTemplate">
-		insert into
-		`event_erp`.`survey_question`(`survey_id`, `question`, `type`,
-		`required`)
-		select
-		#{newSurveyId}, q.`question`, q.`type`, q.`required`
-		from
-		`event_erp`.`survey_question` q
-		where q.`survey_id` = #{templateId}
-		order by q.`question_id`
-	</insert>
-	<insert id="cloneOptionsFromTemplate">
-		insert into
-		`event_erp`.`survey_option`(`question_id`, `label`, `opt_value`)
-		with
-		old_q as (
-		select q.`question_id`, ROW_NUMBER() OVER (order by
-		q.`question_id`) rn
-		from `event_erp`.`survey_question` q
-		where
-		q.`survey_id` = #{templateId}
-		),
-		new_q as (
-		select q.`question_id`,
-		ROW_NUMBER() OVER (order by q.`question_id`) rn
-		from
-		`event_erp`.`survey_question` q
-		where q.`survey_id` = #{newSurveyId}
-		)
-		select nq.`question_id`, o.`label`,
-		o.`opt_value`
-		from
-		`event_erp`.`survey_option` o
-		join old_q oq on
-		oq.`question_id` =
-		o.`question_id`
-		join new_q nq on nq.`rn` = oq.`rn`
-		order by
-		nq.`question_id`, o.`opt_value`
-	</insert>
+   <!-- 템플릿 클론(고정된 4개의 템플릿 외 다 일반설문으로 분리 - 목적성을 위해) -->
+   <insert id="cloneSurvey" parameterType="CloneInlineReqDTO">
+      insert into `event_erp`.`survey`
+      (`event_id`, `title`, `description`,
+      `status`,
+      `is_anonymous`, `clone_from_survey_id`,
+      `open_at`,
+      `close_at`,
+      `created_by`, `created_at`, `updated_at`, `is_template`,
+      `template_key`)
+      select
+      #{eventId}, concat('[복제] ', s.`title`),
+      s.`description`, #{status, jdbcType=VARCHAR, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+      s.`is_anonymous`, s.`survey_id`,
+      e.`end_date`, <!-- 
+         이벤트 종료 시각과 동시에 오픈 -->
+      DATE_ADD(e.`end_date`, INTERVAL 7 DAY), <!-- 종료 7일간 오픈 -->
+      #{userId}, NOW(), NOW(), 0, NULL
+      from `event_erp`.`survey`
+      s
+      join
+      `event_erp`.`event` e on e.`event_id` = #{eventId}
+      where
+      s.`survey_id` =
+      #{templateId} and s.`is_template` = 1
 
-	<!-- 웅답이 한 건도 달리지 않은 것만 정리 -->
-	<delete id="deleteOptionsByQuestionId">
-		delete o
-		from `event_erp`.`survey_option` o
-		left join
-		`event_erp`.`survey_answer` a on a.`option_id` = o.`option_id`
-		where
-		o.`question_id` = #{questionId}
-		and a.`option_id` IS NULL
-	</delete>
+      <!-- 새로 생성된 NewsurveyId -->
+      <selectKey keyProperty="newSurveyId" resultType="long"
+         order="AFTER">
+         select LAST_INSERT_ID()
+      </selectKey>
+   </insert>
 
-	<!-- 응답 없고 클론본일 때: 옵션 삭제 -->
-	<delete id="deleteCloneOptions" parameterType="long">
-		<!-- 응답 없는 클론 설문만 삭제 (질문/보기 -> 설문 순) -->
-		delete o from `event_erp`.`survey_option` o
-		join
-		`event_erp`.`survey_question` q on q.`question_id` = o.`question_id`
-		join `event_erp`.`survey` s on s.`survey_id` = q.`survey_id`
-		left join
-		`event_erp`.`survey_response` r on r.`survey_id` = s.`survey_id`
-		where
-		s.`survey_id` = #{surveyId}
-		and s.`clone_from_survey_id` IS NOT NULL
-		and r.`response_id` IS NULL
-	</delete>
+   <!-- 인라인 클론 : 헤더만 생성 -->
+   <insert id="insertSurveyHeaderFromInline"
+      parameterType="CloneInlineReqDTO" useGeneratedKeys="true" keyProperty="newSurveyId">
+      insert into `event_erp`.`survey`
+      (`event_id`, `title`, `description`,
+      `status`,
+      `is_anonymous`, `clone_from_survey_id`,
+      `open_at`, `close_at`,
+      `created_by`, `created_at`, `updated_at`, `is_template`,
+      `template_key`)
+      values
+      (#{eventId}, #{title}, #{description}, 
+      #{status, jdbcType=VARCHAR, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+      COALESCE(#{isAnonymous}, 0), #{templateId},
+      #{openAt}, #{closeAt},
+      #{userId}, NOW(),
+      NOW(), 0, NULL)
 
-	<!-- 응답 없고 클론본일 때: 질문 삭제 -->
-	<delete id="deleteCloneQuestions" parameterType="long">
-		delete q from
-		`event_erp`.`survey_question` q
-		join `event_erp`.`survey` s on
-		s.`survey_id` = q.`survey_id`
-		left join `event_erp`.`survey_response` r
-		on r.`survey_id`= s.`survey_id`
-		where s.`survey_id` = #{surveyId}
-		and
-		s.`clone_from_survey_id` IS NOT NULL
-		and r.`response_id` IS NULL
-	</delete>
+      <!-- 새로 생성된 NewsurveyId -->
+      <selectKey keyProperty="newSurveyId" resultType="long"
+         order="AFTER">
+         select LAST_INSERT_ID()
+      </selectKey>
+   </insert>
 
-	<!-- 응답 없고 클론본일 때: 설문 헤더 삭제 -->
-	<delete id="deleteCloneSurvey" parameterType="long">
-		delete s from
-		`event_erp`.`survey` s
-		left join `event_erp`.`survey_response` r on
-		r.`survey_id` = s.`survey_id`
-		where s.`survey_id` = #{surveyId}
-		and
-		s.`clone_from_survey_id` IS NOT NULL
-		and r.`response_id` IS NULL
-	</delete>
-	
-	<!-- 문항/보기 통계  : 보기별 응답수/퍼센트 -->
-	<select id="surveyStatus" parameterType="long" resultType="map">
-		with base as (
-			select
-				q.question_id,
-				o.option_id,
-				o.label,
-				count(a.`answer_id`) as cnt
-			from `event_erp`.`survey_question` q
-			join `event_erp`.`survey_option` o on o.question_id = q.question_id
-			left join `event_erp`.`survey_answer` a
-					on a.question_id = q.question_id and a.option_id = o.option_id
-			where q.`survey_id` = #{surveyId}
-			group by q.question_id, o.option_id, o.label
-		)
-		select
-			b.question_id,
-			b.option_id,
-			b.label,
-			b.cnt,
-			sum(b.cnt) over (PARTITION BY b.question_id) as q_total,
-			case
-				when sum(b.cnt) over (PARTITION BY b.question_id) = 0 then 0
-				else round(100.0 * b.cnt / 
-							sum(b.cnt) over (PARTITION BY b.question_id), 1)
-			end as pct
-		from base b
-		order by b.question_id, b.option_id 
-	</select>
+   <!-- 설문 단위로 옵션 조회 -->
+   <select id="optionListBySurveyId" resultMap="optionMap">
+      select
+      o.`option_id`, o.`question_id`, o.`label`, o.`opt_value`
+      from
+      `event_erp`.`survey_option` o
+      join `event_erp`.`survey_question` q on
+      q.`question_id` = o.`question_id`
+      where q.`survey_id` = #{surveyId}
+      order by q.`question_id` ASC, o.`opt_value` ASC, o.`option_id` ASC
+   </select>
+
+   <!-- db에서 일괄 복제해서 사용하는 쿼리 -->
+   <insert id="cloneQuestionsFromTemplate">
+      insert into
+      `event_erp`.`survey_question`(`survey_id`, `question`, `type`,
+      `required`)
+      select
+      #{newSurveyId}, q.`question`, q.`type`, q.`required`
+      from
+      `event_erp`.`survey_question` q
+      where q.`survey_id` = #{templateId}
+      order by q.`question_id`
+   </insert>
+   <insert id="cloneOptionsFromTemplate">
+      insert into
+      `event_erp`.`survey_option`(`question_id`, `label`, `opt_value`)
+      with
+      old_q as (
+      select q.`question_id`, ROW_NUMBER() OVER (order by
+      q.`question_id`) rn
+      from `event_erp`.`survey_question` q
+      where
+      q.`survey_id` = #{templateId}
+      ),
+      new_q as (
+      select q.`question_id`,
+      ROW_NUMBER() OVER (order by q.`question_id`) rn
+      from
+      `event_erp`.`survey_question` q
+      where q.`survey_id` = #{newSurveyId}
+      )
+      select nq.`question_id`, o.`label`,
+      o.`opt_value`
+      from
+      `event_erp`.`survey_option` o
+      join old_q oq on
+      oq.`question_id` =
+      o.`question_id`
+      join new_q nq on nq.`rn` = oq.`rn`
+      order by
+      nq.`question_id`, o.`opt_value`
+   </insert>
+
+   <!-- 웅답이 한 건도 달리지 않은 것만 정리 -->
+   <delete id="deleteOptionsByQuestionId">
+      delete o
+      from `event_erp`.`survey_option` o
+      left join
+      `event_erp`.`survey_answer` a on a.`option_id` = o.`option_id`
+      where
+      o.`question_id` = #{questionId}
+      and a.`option_id` IS NULL
+   </delete>
+
+   <!-- 응답 없고 클론본일 때: 옵션 삭제 -->
+   <delete id="deleteCloneOptions" parameterType="long">
+      <!-- 응답 없는 클론 설문만 삭제 (질문/보기 -> 설문 순) -->
+      delete o from `event_erp`.`survey_option` o
+      join
+      `event_erp`.`survey_question` q on q.`question_id` = o.`question_id`
+      join `event_erp`.`survey` s on s.`survey_id` = q.`survey_id`
+      left join
+      `event_erp`.`survey_response` r on r.`survey_id` = s.`survey_id`
+      where
+      s.`survey_id` = #{surveyId}
+      and s.`clone_from_survey_id` IS NOT NULL
+      and r.`response_id` IS NULL
+   </delete>
+
+   <!-- 응답 없고 클론본일 때: 질문 삭제 -->
+   <delete id="deleteCloneQuestions" parameterType="long">
+      delete q from
+      `event_erp`.`survey_question` q
+      join `event_erp`.`survey` s on
+      s.`survey_id` = q.`survey_id`
+      left join `event_erp`.`survey_response` r
+      on r.`survey_id`= s.`survey_id`
+      where s.`survey_id` = #{surveyId}
+      and
+      s.`clone_from_survey_id` IS NOT NULL
+      and r.`response_id` IS NULL
+   </delete>
+
+   <!-- 응답 없고 클론본일 때: 설문 헤더 삭제 -->
+   <delete id="deleteCloneSurvey" parameterType="long">
+      delete s from
+      `event_erp`.`survey` s
+      left join `event_erp`.`survey_response` r on
+      r.`survey_id` = s.`survey_id`
+      where s.`survey_id` = #{surveyId}
+      and
+      s.`clone_from_survey_id` IS NOT NULL
+      and r.`response_id` IS NULL
+   </delete>
+   
+   <!-- 문항/보기 통계  : 보기별 응답수/퍼센트 -->
+   <select id="surveyStatus" parameterType="long" resultType="map">
+      with base as (
+         select
+            q.question_id,
+            o.option_id,
+            o.label,
+            count(a.`answer_id`) as cnt
+         from `event_erp`.`survey_question` q
+         join `event_erp`.`survey_option` o on o.question_id = q.question_id
+         left join `event_erp`.`survey_answer` a
+               on a.question_id = q.question_id and a.option_id = o.option_id
+         where q.`survey_id` = #{surveyId}
+         group by q.question_id, o.option_id, o.label
+      )
+      select
+         b.question_id,
+         b.option_id,
+         b.label,
+         b.cnt,
+         sum(b.cnt) over (PARTITION BY b.question_id) as q_total,
+         case
+            when sum(b.cnt) over (PARTITION BY b.question_id) = 0 then 0
+            else round(100.0 * b.cnt / 
+                     sum(b.cnt) over (PARTITION BY b.question_id), 1)
+         end as pct
+      from base b
+      order by b.question_id, b.option_id 
+   </select>
+   
+   <!-- 이벤트 예약자수(모자) : 설문이 속한 이벤트의 확정 인원 -->
+   <select id="applicantCountBySurvey" parameterType="long" resultType="int">
+      select count(*)
+      from `event_erp`.`reservation` v
+      where v.`event_id` = (
+         select s.`event_id` 
+         from `event_erp`.`survey` s
+         where s.`survey_id` = #{surveyId}
+      )
+      and v.`status` = 'CONFIRMED'
+   </select>
+   
+   <!-- 상단카드용 (응답자/예약자/응답률 한번에) -->
+   <select id="topRate" parameterType="long" resultType="map">
+      with s as (
+         select `event_id`
+         from `event_erp`.`survey`
+         where `survey_id` = #{surveyId}
+      ),
+      resp as (
+         select count(distinct `user_id`) as responders
+         from `event_erp`.`survey_response`
+         where `survey_id` = #{surveyId}
+      ),
+      appl as (
+         select count(*) as applicants
+         from `event_erp`.`reservation` v
+         join s on s.`event_id` = v.`event_id`
+         where v.`status` = 'CONFIRMED'
+      )
+      select
+         a.applicants, r.responders,
+         case when a.applicants = 0 then 0
+            else round(100.0 * r.responders / a.applicants, 1)
+         end as rate_pct
+      from appl a, resp r
+   </select>
+   
+   <!-- 문항/보기 통계(분모 = 신청자수) - 신청자수 대비 + (응답자/신청자) -->
+   <select id="surveyStatusAgainstApplicants" parameterType="long" resultType="map">
+      with ev as (
+         select `event_id`
+         from `event_erp`.`survey`
+         where `survey_id` = #{surveyId}
+      ),
+      appl as (
+         select count(*) as applicants
+         from `event_erp`.`reservation` v
+         join ev on ev.`event_id` = v.`event_id`
+         where v.`status` = 'CONFIRMED'
+      ),
+      base as (
+         select 
+            q.`question_id`,
+            q.`question` as q_title,
+            q.`required` as q_required, 
+            o.`option_id`, 
+            o.`label`, 
+            count(a.`answer_id`) as cnt
+         from `event_erp`.`survey_question` q
+         join `event_erp`.`survey_option` o
+            on o.`question_id` =  q.`question_id`
+         left join `event_erp`.`survey_answer` a
+            on a.`question_id` = q.`question_id`
+            and a.`option_id` = o.`option_id`
+         where q.`survey_id` = #{surveyId}
+         group by 
+            q.`question_id`, 
+            q.`question`,
+            q.`required`,
+            o.`option_id`, 
+            o.`label`
+      )
+      select 
+         b.`question_id`,
+         b.q_title,
+         b.q_required, 
+         b.`option_id`, 
+         b.`label`, 
+         b.cnt,
+         a.applicants as denom,
+         case when a.applicants = 0 then 0
+            else round(100.0 * b.cnt / a.applicants, 1)
+         end as pct_applicants
+      from base b cross join appl a
+      order by b.`question_id`, b.`option_id`
+   </select>
 </mapper>

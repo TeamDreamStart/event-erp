@@ -145,7 +145,7 @@ public class UserServiceImpl implements UserService {
 
 			userMapper.joinNaver(newUser);
 			userMapper.joinRole(newUser.getUserId());
-			log.info("[USERSERVICE] 신규 회원 USER INFO : "+newUser);
+			log.info("[USERSERVICE] 신규 회원 USER INFO : " + newUser);
 			return newUser;
 		} else {
 			// 기존회원
@@ -168,7 +168,7 @@ public class UserServiceImpl implements UserService {
 
 			user.setPhone(naverUser.get("mobile"));
 			userMapper.updateNaver(user);
-			log.info("[USERSERVICE] 기존 회원 USER INFO : "+user);
+			log.info("[USERSERVICE] 기존 회원 USER INFO : " + user);
 			return user;
 		}
 	}
@@ -205,6 +205,28 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	public Map<String, Object> adminUserUpdate(UserDTO userDTO, int roleId) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		int result = -1;
+		result = userMapper.adminUserUpdate(userDTO);
+		if (result > 0) {
+			log.info("[USERSERVICE] ADMIN - USER UPDATE SUCCESS / USERID : "+userDTO.getUserId());
+			result = userMapper.adminUserRoleUpdate(roleId, userDTO.getUserId());
+			if (result > 0) {
+				log.info("[USERSERVICE] ADMIN - USER ROLE UPDATE SUCCESS / USERID : "+userDTO.getUserId());
+				map.put("result", "success");
+			} else {
+				log.warn("[USERSERVICE] ADMIN - USER ROLE UPDATE FAIL / USERID : "+userDTO.getUserId());
+				map.put("result", "fail");
+			}
+		} else {
+			log.warn("[USERSERVICE] ADMIN - USER UPDATE FAIL / USERID : "+userDTO.getUserId());
+			map.put("result", "fail");
+		}
+		return map;
 	}
 
 }

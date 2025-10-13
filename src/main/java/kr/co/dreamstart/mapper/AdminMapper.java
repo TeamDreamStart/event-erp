@@ -9,4 +9,5 @@ import kr.co.dreamstart.dto.AdminActionLogDTO;
 @Mapper
 public interface AdminMapper {
 	public List<AdminActionLogDTO> adminActionList();
+	public int recordAdminLog(AdminActionLogDTO logDTO);
 }

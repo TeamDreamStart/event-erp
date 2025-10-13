@@ -24,6 +24,13 @@
 
 <!-- Custom styles for this template-->
 <link href="/resources/css/sb-admin-2.min.css" rel="stylesheet">
+<style>
+.active>a.page-link {
+	background-color: #4e73df !important;
+	border-color: #4e73df !important;
+	color: #fff !important;
+}
+</style>
 </head>
 <body id="page-top">
 <script>
@@ -94,6 +101,7 @@
 								type="text" name="keyword" value="${param.keyword}"
 								placeholder="검색어를 입력하세요.">
 							<button class="btn btn-primary" type="submit">검색</button>
+							<a href="/admin/${boardType }"type="button" class="btn btn-secondary">검색 초기화</a>
 						</form>
 					</div>
 					<div class="table-responsive">

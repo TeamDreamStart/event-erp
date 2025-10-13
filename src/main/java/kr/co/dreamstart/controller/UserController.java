@@ -89,15 +89,17 @@ public class UserController {
 //	로그인
 	@GetMapping("/login")
 	public String loginForm(Model model) {
-		log.info("GET /login - 로그인 폼 진입");
+		log.info("GET / login - 로그인 폼 진입");
 		return "test/loginTest";
 	}
 	
-	@RequestMapping("/logout")
-	public String logout(HttpSession session) {
-	    session.invalidate(); // 세션 전체 무효화
-	    return "redirect:/";   // 로그아웃 후 메인페이지 이동
-	}
+	// Spring security 로그아웃 설정으로 가능
+//	@RequestMapping("/logout")
+//	public String logout(HttpSession session) {
+//	    session.invalidate(); // 세션 전체 무효화
+//	    log.info("logout - 세션 만료");
+//	    return "redirect:/";   // 로그아웃 후 메인페이지 이동
+//	}
 
 	//네이버 로그인 api DB 업데이트 + Spring security
 	@RequestMapping("/login/naver/callback")

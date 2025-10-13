@@ -28,6 +28,16 @@
 </style>
 </head>
 <body id="page-top">
+	<script>
+		const result = '${empty result ? "" : result}';
+		const resultType = '${empty resultType ? "" : resultType}';
+
+		if (result === 'success') {
+			alert(`성공적으로 ${resultType}되었습니다.`);
+		} else if (result === 'fail') {
+			alert(`${resultType}이(가) 실패하였습니다.`);
+		}
+	</script>
 
 	<div id="wrapper">
 		<jsp:include page="../adminIncludes/header.jsp" />
@@ -38,26 +48,46 @@
 			<!-- 회원 기본정보 -->
 			<div class="card shadow mb-4">
 				<div class="card-header py-3">
-					<h6 class="m-0 font-weight-bold text-primary">USER DETAIL</h6>
+					<h6 class="m-0 font-weight-bold text-primary">USER
+						DETAIL/UPDATE</h6>
 				</div>
 				<div class="card-body">
 					<form action="/admin/customers/${userDTO.userId}" method="post">
-						<input type="hidden" name="userId" value="${userDTO.userId}" />
+						<input type="hidden" name="${_csrf.parameterName}"
+							value="${_csrf.token}" />
+						<div class="row mb-3">
+							<div class="col-md-4">
+								<label class="form-label fw-bold">No.</label> <input
+									class="form-control" type="text" name="userId"
+									value="${userDTO.userId}" disabled>
+							</div>
+
+							<c:if test="${not empty userDTO.snsId}">
+								<div class="col-md-4">
+									<label class="form-label fw-bold">SNS 회원</label><br> <img
+										style="width: 40px" alt="네이버 로그인 이미지"
+										src="/resources/img/naver/btnG_아이콘사각.png">
+								</div>
+							</c:if>
+
+						</div>
 						<div class="row mb-3">
 							<div class="col-md-4">
 								<label class="form-label fw-bold">아이디</label> <input type="text"
 									class="form-control" name="userName"
-									value="${userDTO.userName}" readonly>
-							</div>
-							<div class="col-md-4">
-								<label class="form-label fw-bold">이름</label> <input type="text"
-									class="form-control" name="name" value="${userDTO.name}">
+									value="${userDTO.userName}" disabled>
 							</div>
 							<div class="col-md-4">
 								<label class="form-label fw-bold">이메일</label> <input
 									type="email" class="form-control" name="email"
-									value="${userDTO.email}" readonly>
+									value="${userDTO.email}" disabled>
 							</div>
+							<div class="col-md-4">
+								<label class="form-label fw-bold">이름</label> <input type="text"
+									class="form-control" name="name" value="${userDTO.name}"
+									disabled>
+							</div>
+
 						</div>
 
 						<div class="row mb-3">
@@ -82,43 +112,104 @@
 
 						<div class="row mb-3">
 							<div class="col-md-4">
-								<label class="form-label fw-bold">상태</label> <select
-									class="form-select form-control" name="isActive">
-									<option value="1" ${userDTO.isActive == 1 ? 'selected' : ''}>활동중</option>
-									<option value="0" ${userDTO.isActive == 0 ? 'selected' : ''}>비활성화</option>
-								</select>
-							</div>
-							<div class="col-md-4">
 								<label class="form-label fw-bold">가입일</label> <input type="text"
-									class="form-control" value="${userDTO.createdAt}" readonly>
+									class="form-control" value="${userDTO.createdAt}" disabled>
 							</div>
 							<div class="col-md-4">
 								<label class="form-label fw-bold">최근 로그인</label> <input
 									type="text" class="form-control" value="${userDTO.lastLoginAt}"
-									readonly>
-							</div>
-						</div>
-						<div class="row mb-3">
-							<div class="col-md-4">
-								<label class="form-label fw-bold">회원 유형</label> <input
-									type="text" class="form-control" name="roleName"
-									value="${userDTO.roleName == 'ADMIN' ? '관리자' : '일반회원'}"
-									readonly disabled>
-							</div>
-							<div class="col-md-4">
-								<label class="form-label fw-bold">SNS여부</label> <input
-									type="email" class="form-control" name="snsId"
-									value="${userDTO.snsId}" readonly>
+									disabled>
 							</div>
 							<div class="col-md-4">
 								<label class="form-label fw-bold">최근 수정일</label> <input
 									type="email" class="form-control" name="updatedAt"
-									value="${userDTO.updatedAt}" readonly>
+									value="${userDTO.updatedAt}" disabled>
 							</div>
 						</div>
+						<div class="row mb-3">
+							<div class="col-md-4">
+								<label class="form-label fw-bold">회원 유형</label> <select
+									id="roleSelect" class="form-select form-control" name="roleId"
+									style="${userDTO.roleName == 'ADMIN' ? 'background-color:#e6f0ff;' : ''}">
+									<option value="0" style="background-color:#e6f0ff"
+										${userDTO.roleName == 'ADMIN' ? 'selected' : ''}>관리자</option>
+									<option value="1" style="background-color:white"
+										${userDTO.roleName == 'MEMBER' ? 'selected' : ''}>일반회원</option>
+								</select>
+							</div>
+
+							<script>
+								document
+										.addEventListener(
+												"DOMContentLoaded",
+												function() {
+													const select = document
+															.getElementById("roleSelect");
+
+													function updateRoleColor() {
+														if (select.value === "0") { // 관리자 선택 시
+															select.style.backgroundColor = "#e6f0ff"; // 연한 파란색
+														} else { // 일반회원 선택 시
+															select.style.backgroundColor = "";
+														}
+													}
+
+													updateRoleColor(); // 초기 상태 적용
+													select.addEventListener(
+															"change",
+															updateRoleColor);
+												});
+							</script>
+
+
+
+							<div class="col-md-4">
+								<label class="form-label fw-bold">SNS 인증 아이디</label> <input
+									type="email" class="form-control" name="snsId"
+									value="${userDTO.snsId}" disabled>
+							</div>
+							<div class="col-md-4">
+								<label class="form-label fw-bold">상태</label> <select
+									id="isActiveSelect" class="form-select form-control"
+									name="isActive"
+									style="${userDTO.isActive == 0 ? 'background-color:#ffe6e6;' : ''}">
+									<option value="1"
+										style="background-color: white;"
+										${userDTO.isActive == 1 ? 'selected' : ''}>활성화</option>
+									<option value="0"
+										style="background-color: #ffe6e6;"
+										${userDTO.isActive == 0 ? 'selected' : ''}>비활성화</option>
+								</select>
+							</div>
+
+							<script>
+								document
+										.addEventListener(
+												"DOMContentLoaded",
+												function() {
+													const select = document
+															.getElementById("isActiveSelect");
+
+													function updateSelectColor() {
+														if (select.value === "0") {
+															select.style.backgroundColor = "#ffe6e6"; // 연한 빨강 배경
+														} else {
+															select.style.backgroundColor = "";
+														}
+													}
+
+													updateSelectColor(); // 페이지 처음 로드 시 적용
+													select.addEventListener(
+															"change",
+															updateSelectColor); // 바뀔 때마다 적용
+												});
+							</script>
+
+						</div>
 						<div class="text-center">
-							<button type="submit" class="btn btn-primary">수정</button>
-							<a href="/admin/customers" class="btn btn-secondary ms-2">취소</a>
+							<button type="submit" class="btn btn-primary"
+								onclick="return confirm('수정한 결과를 저장하시겠습니까?');">저장</button>
+							<a href="/admin/customers" class="btn btn-secondary ms-2">목록</a>
 						</div>
 					</form>
 				</div>

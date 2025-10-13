@@ -55,10 +55,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		u.sns_id,
 		r.role_name
 		FROM user u
-		JOIN user_role ur ON u.user_id =
+		JOIN
+		user_role ur ON u.user_id =
 		ur.user_id
 		JOIN
-		role r ON ur.role_id = r.role_id
+		role r ON ur.role_id =
+		r.role_id
 		order by
 		`user_id` desc
 		limit
@@ -90,6 +92,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where u.user_id =
 		#{userId}
 	</select>
+
 	<!-- 관리자 - 회원 상세정보 -->
 	<select id="findBySnsId" parameterType="String"
 		resultMap="userMap">
@@ -116,6 +119,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{sns_id}
 	</select>
 
+	<!-- 관리자 - 회원 정보 검색 -->
 	<select id="search" resultMap="userMap">
 		SELECT
 		u.user_id,
@@ -181,12 +185,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{cri.pageStart},#{cri.perPageNum}
 	</select>
 
-	<!-- 회원 수 조회 -->
+	<!-- 관리자 - 전체 회원 수 조회 (페이징) -->
 	<select id="count" resultType="int">
 		select count(*) from `user`
 	</select>
 
-	<!-- 전체 회원 수 조회 -->
+	<!-- 관리자 - 검색 회원 수 조회 (페이징) -->
 	<select id="searchCount" resultType="int">
 		SELECT COUNT(*)
 		FROM user u
@@ -236,31 +240,47 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</choose>
 		</where>
 	</select>
-	<!-- naver sns 로그인/회원가입 -->
+
+	<!-- 관리자 - 회원 정보 업데이트 -->
+	<update id="adminUserUpdate" parameterType="UserDTO">
+		update `user` set
+		`phone`=#{phone},`gender`=#{gender},`birth_date`=#{birthDate},`is_active`=#{isActive},`updated_at` = now()
+		where `user_id` = #{userId}
+	</update>
+	<!-- 관리자 - 회원 유형(ROLE) 업데이트 -->
+	<update id="adminUserRoleUpdate">
+		update `user_role` set
+		`role_id` = #{roleId},`assigned_at` = now()
+		where `user_id` = #{userId}
+	</update>
+
+	<!-- naver api 로그인/회원가입 -->
 	<insert id="joinNaver" parameterType="userDTO"
 		useGeneratedKeys="true" keyProperty="userId">
 		insert into `user`
 		(`sns_id`,`name`,`email`,`gender`,`birth_date`,`phone`,`created_at`,`is_active`)
 		values(#{snsId},#{name},#{email},#{gender},#{birthDate},#{phone},now(),1)
 	</insert>
-	
+
+	<!-- naver api 기존회원/신규회원 구분시 사용 -->
 	<select id="findByEmail" resultMap="userMap">
-		select * from user where email = #{email}
+		select * from user where
+		email = #{email}
 	</select>
 
-	<!-- naver sns 기존회원 로그인시 회원정보 업데이트 -->
+	<!-- naver api 기존회원 로그인시 회원정보 업데이트 -->
 	<update id="updateNaver" parameterType="userDTO">
-	UPDATE `user`
-	SET
-	`name` = #{name},
-	`email` = #{email},
-	`gender` = #{gender},
-	`birth_date` =
-	#{birthDate},
-	`phone` = #{phone},
-	`updated_at` = NOW(),
-	`last_login_at` = NOW()
-	WHERE `sns_id` = #{snsId} or `email` = #{email}
+		UPDATE `user`
+		SET
+		`name` = #{name},
+		`email` = #{email},
+		`gender` = #{gender},
+		`birth_date` =
+		#{birthDate},
+		`phone` = #{phone},
+		`updated_at` = NOW(),
+		`last_login_at` = NOW()
+		WHERE `sns_id` = #{snsId} or `email` = #{email}
 	</update>
 
 
@@ -273,7 +293,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	<!-- 회원가입시 일반회원 권한 부여 -->
 	<insert id="joinRole" parameterType="long">
-		insert into `user_role`
+		insert into `user_role` (`user_id`,`role_id`,`assigned_at`)
 		values (#{userId},1,now())
 	</insert>
 

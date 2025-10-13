@@ -17,7 +17,7 @@ public class SurveyDTO {
     private LocalDateTime closeAt;
     private Long createdBy;
     private LocalDateTime createdAt;
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
     private Integer isTemplate;
     private String templateKey;
     

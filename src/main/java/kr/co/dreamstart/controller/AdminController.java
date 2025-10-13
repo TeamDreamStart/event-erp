@@ -21,11 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import kr.co.dreamstart.dto.AdminActionLogDTO;
 import kr.co.dreamstart.dto.BoardCommentDTO;
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.FileAssetDTO;
 import kr.co.dreamstart.dto.UserDTO;
+import kr.co.dreamstart.service.AdminService;
 import kr.co.dreamstart.service.BoardService;
 import kr.co.dreamstart.service.FileService;
 import kr.co.dreamstart.service.UserService;
@@ -42,6 +44,9 @@ public class AdminController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private AdminService adminService;
 
 	// main
 	@GetMapping("")
@@ -123,6 +128,15 @@ public class AdminController {
 		Map<String, Object> map = boardService.postInsert(request, postDTO, uploadFile);
 		rttr.addFlashAttribute("result", map.get("result"));
 		rttr.addFlashAttribute("resultType", "등록");
+		
+		//INSERT UPDATE DELETE 관리자 활동로그 남기기@@@@@@@@@@@@@@@@@@
+//		AdminActionLogDTO logDTO = new AdminActionLogDTO();
+//		logDTO.setAdminId(0);//security principal?
+//		logDTO.setTargetType("");
+//		logDTO.setTargetId(0);
+//		logDTO.setAction("INSERT");
+//		logDTO.setReason(null);
+//		adminService.recordAdminLog(logDTO);
 		return "redirect:/admin/{boardType}/" + map.get("postId");
 	}
 
@@ -214,6 +228,7 @@ public class AdminController {
 		return "/admin/customerManage";
 	}
 
+	//회원 설문조사내역, 예약및 결제정보, Qna 작성내역 조회결과 추가 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	@GetMapping("/customers/{userId}")
 	public String userDetail(@PathVariable("userId") long userId, Model model) {
 		UserDTO userDTO = userService.userDetail(userId);
@@ -223,9 +238,11 @@ public class AdminController {
 
 	// update
 	@PostMapping("/customers/{userId}")
-	public String userForm(@PathVariable("userId") long userId, UserDTO userDTO, RedirectAttributes rttr) {
-
-		return "redirect:/user-manage/" + userId;
+	public String userForm(@PathVariable("userId") long userId, UserDTO userDTO,@RequestParam int roleId, RedirectAttributes rttr) {
+		Map<String,Object> map = userService.adminUserUpdate(userDTO,roleId);
+		rttr.addFlashAttribute("result", map.get("result"));
+		rttr.addFlashAttribute("resultType", "회원정보 수정");
+		return "redirect:/admin/customers/" + userId;
 	}
 
 }
