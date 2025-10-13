@@ -117,6 +117,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where `event_id` = #{eventId}
 	</delete>
 	
+	<!-- 대표 이미지 경로만 업데이트 -->
+	<update id="updatePosterUrl">
+		update `event_erp`.`event`
+		set `poster_url` = #{posterUrl}
+		where `event_id` = #{eventId}
+	</update>
+	
 	<!-- 자동 상태 전환 : end_date 지난 open -> close -->
 	<update id="closeExpiredEvents">
 		<![CDATA[

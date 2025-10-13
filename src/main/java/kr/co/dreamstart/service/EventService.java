@@ -2,6 +2,10 @@ package kr.co.dreamstart.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.EventDTO;
 
@@ -21,7 +25,18 @@ public interface EventService {
 	public Long create(EventDTO dto); // 생성후 pk 반환
 	public int update(EventDTO dto);
 	public int delete(Long eventId);
+	public void deleteWithFiles(Long eventId);
 	
+	// 파일 포함 저장(대표 + 첨부n~)
+	Long saveWithFiles(EventDTO dto, MultipartFile image, MultipartFile[] files,
+					Long userId, HttpServletRequest request);
+	
+	// 대표이미지 url 지정
+	public void setPosterUrl(Long evenId, String posterUrl);
+
 	// 자동 상태 전환
 	public int closeExpiredEvents();
+	
+	// 자동 전환
+	public int autoCloseExpiredEvents();
 }

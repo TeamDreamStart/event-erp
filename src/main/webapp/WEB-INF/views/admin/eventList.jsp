@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,7 +38,7 @@
           <th>ID</th>
           <th>제목</th>
           <th>상태</th>
-          <th>공개범위</th>
+          <th>공개</th>
           <th>시작</th>
           <th>종료</th>
           <th>정원</th>
@@ -51,21 +50,14 @@
         <c:forEach var="e" items="${list}">
           <tr>
             <td>${e.eventId}</td>
-            <td>
-              <a href="<c:url value='/admin/events/${e.eventId}'/>">
-                ${e.title}
-              </a>
-            </td>
+            <td><a href="<c:url value='/admin/events/${e.eventId}'/>">${e.title}</a></td>
             <td>${e.status}</td>
             <td>${e.visibility}</td>
             <td>${e.startDate}</td>
             <td>${e.endDate}</td>
             <td>${e.capacity}</td>
             <td>${e.createdBy}</td>
-            <td>
-              <a href="<c:url value='/admin/events/form?eventId=${e.eventId}'/>">수정</a>
-              <!-- 삭제는 POST로 처리 권장 (폼/CSRF 포함) -->
-            </td>
+            <td><a href="<c:url value='/admin/events/form?id=${e.eventId}'/>">수정</a></td>
           </tr>
         </c:forEach>
       </tbody>
@@ -75,7 +67,6 @@
 
 <!-- 페이징 -->
 <div class="paging" style="margin-top:12px;">
-  <!-- 이전 블록 -->
   <c:choose>
     <c:when test="${pageVO.prev}">
       <a href="<c:url value='/admin/events?page=${pageVO.startPage - 1}&perPageNum=${pageVO.cri.perPageNum}'/>">&laquo;</a>
@@ -85,13 +76,11 @@
     </c:otherwise>
   </c:choose>
 
-  <!-- 페이지 번호 -->
   <c:forEach var="p" begin="${pageVO.startPage}" end="${pageVO.endPage}">
     <a href="<c:url value='/admin/events?page=${p}&perPageNum=${pageVO.cri.perPageNum}'/>"
        class="${pageVO.cri.page == p ? 'on' : ''}">${p}</a>
   </c:forEach>
 
-  <!-- 다음 블록 -->
   <c:choose>
     <c:when test="${pageVO.next}">
       <a href="<c:url value='/admin/events?page=${pageVO.endPage + 1}&perPageNum=${pageVO.cri.perPageNum}'/>">&raquo;</a>
@@ -101,6 +90,5 @@
     </c:otherwise>
   </c:choose>
 </div>
-
 </body>
 </html>

@@ -41,7 +41,8 @@
     <!-- standard -->
     <!-- 파일 업로드를 처리하는데 쓰이는 StandardServletMultipartResolver 빈을 설정 -->
     <beans:bean id="multipartResolver"
-                class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
+                class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+    </beans:bean>
 
     <!-- openapi 정의하는데 필요한 정적 리소스 -->
     <mvc:resources mapping="/docs/**"       location="/docs/"/>

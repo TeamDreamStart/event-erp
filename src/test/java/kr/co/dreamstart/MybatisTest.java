@@ -2,6 +2,7 @@ package kr.co.dreamstart;
 
 import static org.junit.Assert.*; // ���� ����ҰŶ� static����
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
@@ -18,8 +19,10 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
@@ -37,6 +40,7 @@ import kr.co.dreamstart.mapper.BoardMapper;
 import kr.co.dreamstart.mapper.EventMapper;
 import kr.co.dreamstart.mapper.SurveyMapper;
 import kr.co.dreamstart.mapper.UserMapper;
+import kr.co.dreamstart.service.EventService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/spring/root-context.xml" })
@@ -52,6 +56,9 @@ public class MybatisTest {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private EventService eventService;
 
 	@Test
 	public void testFactory() {
@@ -325,6 +332,42 @@ public class MybatisTest {
 			log.error("templateQaIntegrityTest error", e);
 			fail(e.getMessage());
 		}
+	}
+	
+	@Test
+	@Transactional
+	@Rollback
+	public void insert_and_find_ok() {
+		// arran
+		Long loginUserId = 1L;
+		EventDTO dto = new EventDTO();
+		dto.setTitle("서비스-생성-라운드트립");
+		dto.setDescription("service save test");
+		dto.setLocation("Seoul");
+		dto.setStartDate(LocalDateTime.now().plusDays(1));
+		dto.setEndDate(dto.getStartDate().plusHours(2));
+		dto.setCapacity(50);
+		dto.setStatus("OPEN");
+		dto.setVisibility("PUBLIC");
+		dto.setPosterUrl(null);
+		dto.setCurrency("KRW");
+		dto.setCategory("SHOW");
+		dto.setPaid(false);
+		
+		log.info("[GIVEN] dto={}", dto);
+		
+		// when
+		Long newId = eventService.save(dto, loginUserId);
+		log.info("[WHEN] save id={}", newId);
+		EventDTO loaded = eventService.findById(newId);
+		log.info("[THEN] loaded={}", loaded);
+		
+		// then
+		assertNotNull(newId);
+		assertNotNull(loaded);
+		assertEquals(newId, loaded.getEventId());
+		assertEquals("서비스-생성-라운드트립", loaded.getTitle());
+		assertEquals("OPEN", loaded.getStatus());
 	}
 
 }

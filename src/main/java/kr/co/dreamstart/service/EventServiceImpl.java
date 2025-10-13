@@ -1,15 +1,18 @@
 package kr.co.dreamstart.service;
 
+import javax.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.mysql.cj.x.protobuf.MysqlxCrud.Update;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.EventDTO;
+import kr.co.dreamstart.dto.FileAssetDTO;
 import kr.co.dreamstart.mapper.EventMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class EventServiceImpl implements EventService {
 
 	private final EventMapper eventMapper;
+	private final FileService fileService;
 
 	@Override
 	public List<EventDTO> page(Criteria cri) {
@@ -108,17 +112,63 @@ public class EventServiceImpl implements EventService {
 		// TODO Auto-generated method stub
 		return eventMapper.closeExpiredEvents();
 	}
-	
-	
-	// 30분마다 자동 마감 전환
-	@Scheduled(cron = "0 */30 * * * *")
-	public void autoCloseExpiredEvents() {
-		int affected = closeExpiredEvents();
-		if (affected > 0) {
-			// 로그로 모니터링
-			log.info("[Evnt] 자동 상태 전환(CLOSED) {}건", affected);
+
+	@Override
+	public Long saveWithFiles(EventDTO dto, MultipartFile image, MultipartFile[] files, Long userId,
+			HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		// 1) 이벤트 메타 저장/수정
+		Long id = save(dto, userId);
+		
+		// 2) 파일 합쳐서 fileService에 위임 
+		List<MultipartFile> all = new ArrayList<>();
+		if (image != null && !image.isEmpty()) all.add(image);
+		if (files != null) {
+			for (MultipartFile f : files) {
+				if (f != null && !f.isEmpty()) {
+					all.add(f);
+				}
+			}
+		}
+		if (!all.isEmpty()) {
+			fileService.saveFiles(request, all.toArray(new MultipartFile[0]), "EVENT", id);
+		}
+		// 3) 첫번째 이미지 파일을 대표로 지정 (없으면 패스)
+		List<FileAssetDTO> saved = fileService.list("EVENT", id);
+		for (FileAssetDTO fa : saved) {
+			if (fa.getMimeType() != null && fa.getMimeType().toLowerCase().startsWith("image")) {
+				String coverUrl = "/resources/uploadTemp/" + fa.getStoredPath()+ "/"
+								+ fa.getUuid() + "_" + fa.getOriginalName();
+				setPosterUrl(id, coverUrl);
+				break;
+			}
 		}
 		
+		return id;
+	}
+
+	@Override
+	@Transactional
+	public void deleteWithFiles(Long eventId) {
+		// TODO Auto-generated method stub
+		// 파일/db참조 먼저 정리
+		fileService.deleteByOwner("EVENT", eventId);
+		// 이벤트 삭제
+		eventMapper.delete(eventId);
 	}
 	
+	@Override
+	@Transactional
+	public void setPosterUrl(Long evenId, String posterUrl) {
+		// TODO Auto-generated method stub
+		eventMapper.updatePosterUrl(evenId, posterUrl);
+		
+	}
+
+	// 30분 마다 자동 갱신
+	@Override
+	public int autoCloseExpiredEvents() {
+		// TODO Auto-generated method stub
+		return eventMapper.closeExpiredEvents();
+	}
 }

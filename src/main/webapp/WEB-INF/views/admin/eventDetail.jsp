@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,7 +24,7 @@ dt { font-weight:700 }
     <dt>제목</dt><dd>${event.title}</dd>
     <dt>설명</dt><dd><pre style="white-space:pre-wrap">${event.description}</pre></dd>
     <dt>장소</dt><dd>${event.location}</dd>
-    <dt>시작/종료</dt><dd>${startView} ~ ${endView}</dd>
+    <dt>시작/종료</dt><dd>${event.startDate} ~ ${event.endDate}</dd>
     <dt>정원</dt><dd>${event.capacity}</dd>
     <dt>상태</dt><dd>${event.status}</dd>
     <dt>공개</dt><dd>${event.visibility}</dd>
@@ -38,7 +37,7 @@ dt { font-weight:700 }
     <dt>유료/가격</dt><dd>${event.paid ? '유료' : '무료'} / ${event.price} ${event.currency}</dd>
     <dt>카테고리</dt><dd>${event.category}</dd>
     <dt>작성자</dt><dd>${event.createdBy}</dd>
-    <dt>생성/수정</dt><dd>${createdView} / ${updatedView}</dd>
+    <dt>생성/수정</dt><dd>${event.createdAt} / ${event.updatedAt}</dd>
   </dl>
 </body>
 </html>

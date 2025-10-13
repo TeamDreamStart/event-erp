@@ -35,5 +35,8 @@ public interface EventMapper {
 	// end_date 지난 open 이벤트를 closed로 일괄 전환하고 영양 건수 리턴
 	public int closeExpiredEvents();
 	
-	// 
+	// 대표 이미지 경로만 업데이트
+	public int updatePosterUrl(@Param("eventId") Long eventId,
+							@Param("posterUrl") String posterUrl);
+
 }
