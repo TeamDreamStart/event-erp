@@ -1,28 +1,32 @@
 package kr.co.dreamstart.controller;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.EventDTO;
 import kr.co.dreamstart.dto.PageVO;
+import kr.co.dreamstart.dto.PaymentDTO;
 import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.mapper.BoardMapper;
+import kr.co.dreamstart.mapper.FileAssetMapper;
 import kr.co.dreamstart.mapper.UserMapper;
+import kr.co.dreamstart.service.PaymentService;
+import lombok.extern.slf4j.Slf4j;
+import kr.co.dreamstart.mapper.EventMapper;
+import kr.co.dreamstart.mapper.SurveyMapper;
 
+@Slf4j
 @Controller
+//@RequestMapping("/test")
 public class TestController {
 
 	@Autowired
@@ -30,6 +34,19 @@ public class TestController {
 
 	@Autowired
 	private BoardMapper boardMapper;
+
+	@Autowired
+	private FileAssetMapper fileMapper;
+
+	@Autowired
+	private SurveyMapper surveyMapper;
+
+	@Autowired
+	private EventMapper eventMapper;
+
+	@Autowired
+	private PaymentService paymentService;
+
 
 	@GetMapping("/list-test")
 	public String userList(@RequestParam(required = false) Integer userId, Criteria cri, Model model) {
@@ -58,64 +75,53 @@ public class TestController {
 		return "test/listTest";
 	}
 
-	@PostMapping("/upload")
-	public String handleFileUpload(@RequestParam("imageFile") MultipartFile file) {
-		if (file.isEmpty()) {
-			return "redirect:test/list-test"; // 업로드 실패 처리
-		}
-
-		// 외부 경로 (이미 존재하는 디렉토리 사용 or 코드에서 생성)
-		String uploadDir = "C:/teamDS/upload";
-		File dir = new File(uploadDir);
-		if (!dir.exists()) {
-			dir.mkdirs(); // 없으면 자동 생성
-		}
-
-		String fileName = file.getOriginalFilename();
-		File dest = new File(uploadDir, fileName);
-
-		try {
-			file.transferTo(dest);
-			// DB에는 웹에서 접근 가능한 상대경로만 저장
-			// 예: "/upload/파일명"
-		} catch (IOException e) {
-			e.printStackTrace();
-			return "redirect:/list-test";
-		}
-
-		return "redirect:test/list-test";
-	}
-
 	@GetMapping("/map-test")
-	public String map() {
-
+	public String map(Model model) {
+		model.addAttribute("location", "경기 수원시 팔달구 덕영대로895번길 9-1");
+		model.addAttribute("latitude", "37.2689226891878");
+		model.addAttribute("longitude", "126.99991127117");
+		model.addAttribute("title", "가을페스티벌");
+		
 		return "test/mapTest";
 	}
 
-	@GetMapping("/pay-test")
-	public String pay(Model model) {
-		EventDTO event = new EventDTO();
-		event.setEventId(1L);
-		event.setTitle("Spring Festival 2025");
-		event.setDescription("봄맞이 특별 공연");
-		event.setLocation("서울 강남구 코엑스");
-		event.setStartDate("2025-10-05");
-		event.setEndDate("2025-10-05");
-		event.setCapacity(200);
-		event.setStatus("OPEN");
-		event.setVisibility("PUBLIC");
-		event.setPosterUrl("C:/teamDS/upload/test.png");
-		event.setCreatedBy(100L);
-		event.setCreatedAt("2025-09-19");
-		event.setUpdatedAt("2025-09-19");
+//	@GetMapping("/pay-test")
+//	public String pay(Model model) {
+//		EventDTO event = new EventDTO();
+//		event.setEventId(1L);
+//		event.setTitle("Spring Festival 2025");
+//		event.setDescription("봄맞이 특별 공연");
+//		event.setLocation("서울 강남구 코엑스");
+//		event.setStartDate("2025-10-05");
+//		event.setEndDate("2025-10-05");
+//		event.setCapacity(200);
+//		event.setStatus("OPEN");
+//		event.setVisibility("PUBLIC");
+//		event.setPosterUrl("C:/teamDS/upload/test.png");
+//		event.setCreatedBy(100L);
+//		event.setCreatedAt("2025-09-19");
+//		event.setUpdatedAt("2025-09-19");
+//
+//		model.addAttribute("event", event);
+//
+//		// 가격은 임의로 만원
+//		model.addAttribute("price", 100);
+//
+//		return "test/payTest";
+//	}
 
-		model.addAttribute("event", event);
+	@RequestMapping(value="/payment/complete", method=RequestMethod.POST)
+	public String paymentComplete(PaymentDTO payment, RedirectAttributes rttr) {
+	    System.out.println("Controller 호출됨");
+	    payment.setReservationId(1);
+	    System.out.println(payment);
 
-		// 가격은 임의로 만원
-		model.addAttribute("price", 100);
+	    int result = paymentService.savePayment(payment);
+	    rttr.addFlashAttribute("result", result > 0 ? "success" : "fail");
 
-		return "test/payTest";
+	    return "redirect:/pay-test"; // 결과 JSP
 	}
+
 
 	@GetMapping("/kakao-test")
 	public String kakaoTest(Model model) {
@@ -130,24 +136,26 @@ public class TestController {
 
 		return "test/map-test";
 	}
-
-	@GetMapping("/board-test")
-	public String boardTest(/* @RequestParam(required = false) String search, */ Criteria cri, Model model) {
-		PageVO pageVO = new PageVO();
-		pageVO.setCri(cri);
-		List<BoardPostDTO> boardList = boardMapper.list(cri);
-		model.addAttribute("boardList", boardList);
-		// 페이징에 필요한 값을 객체로 전달
-		model.addAttribute("pageVO", pageVO);
-		// 맨 뒤 페이지
-		int lastPage = (int) pageVO.getTotal() / cri.getPerPageNum();
-		if (pageVO.getTotal() % cri.getPerPageNum() != 0) {
-			lastPage += 1;
-		}
-		model.addAttribute("lastPage", lastPage);
-		model.addAttribute("cri", cri);
-		return "test/boardTest";
+	
+	@GetMapping("/find-password")
+	public String findPass() {
+		return "/account/findPassword";
 	}
+
+	@GetMapping("/reset-password")
+	public String reseTest() {
+		return "/account/resetPassword";
+	}
+	@GetMapping("/error")
+	public String errorTest() {
+		return "/common/error";
+	}
+	@GetMapping("/access-denied")
+	public String accessTest() {
+		return "/common/accessDenied";
+	}
+
+
 	@GetMapping("/notices/{id}")
 	public String noticeDetail() {
 		return "/board/noticeDetail";

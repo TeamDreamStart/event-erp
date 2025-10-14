@@ -15,7 +15,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="created_at" property="createdAt" />
 	</resultMap>
 
-	<select id="adminActionList" resultMap="adminActionLogMap"> 
-	select * from `admin_action_log`
+	<select id="adminActionList" resultMap="adminActionLogMap">
+		select * from `admin_action_log`
 	</select>
+
+	<insert id="recordAdminLog" parameterType="AdminActionLogDTO">
+		insert into
+		`admin_action_log`
+		(`admin_id`,`target_type`,`target_id`,`action`,`reason`,`created_at`)
+		values(#{adminId},#{targetType},#{targetId},#{action},#{reason},now())
+	</insert>
+
+
 </mapper>

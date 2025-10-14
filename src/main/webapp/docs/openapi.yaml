@@ -1,0 +1,264 @@
+# =============================
+# Dreamstart Admin API (starter)
+# =============================
+# 이건 OpenAPI 3.0 문서. 내가/팀이 헷갈리지 말라고 쓰는 API 사용설명서(=계약서).
+# - 목표: 프론트/백엔드 같은 규칙으로 작업하게 만들기
+# - 방식: 지금 필요한 것만 먼저 쓰고, 계속 업데이트(살아있는 문서)
+# - 참고: 이건 문서고, 실제 검증은 서버 코드(@Controller, Bean Validation 등)에서 돈다
+# - 엔드포인트 = 메서드(POST/GET 등) + 주소(URI). 예) POST /admin/api/surveys/clone-inline
+
+openapi: 3.0.3
+info:
+  title: Dreamstart Admin API
+  version: 0.1.0  # 스펙 바뀌면 여기 숫자 올리기(팀 합의)
+  description: |
+    관리자용 설문 API. 여기 적힌 대로 요청/응답 맞추면 끝.
+
+# --------------------------------------------------------
+# 문서 그룹(tags) = Swagger UI 왼쪽에 보이는 카테고리 목록
+# - 새 리소스(Users, Events 등) 추가하려면 여기다가 똑같이 name/description만 추가하면 됨
+#   예)
+#   - name: Users
+#     description: 사용자 관리
+#   - name: Events
+#     description: 이벤트 관리
+# --------------------------------------------------------
+tags:
+  - name: Surveys
+    description: 설문 관련
+
+# 서버 주소(스테이징/운영 생기면 추가)
+servers:
+  - url: http://localhost:8080
+    description: 로컬 톰캣
+
+# ==========================================
+# ============  SURVEY 정의 시작  ===========
+# ==========================================
+
+paths:
+  # --- 설문 템플릿 복제 + 문항 일부 수정(관리자) ---
+  /admin/api/surveys/clone-inline:
+    post:
+      tags: [Surveys]  # ← 위 tags.name이랑 일치해야 함
+      summary: 템플릿 복제 + 인라인 수정
+      description: |
+        템플릿 설문을 이벤트로 복제. 요청 본문에 문항 넣으면 복제하면서 바로 반영.
+      requestBody:
+        required: true  # 본문 필수
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloneInlineReqDTO'
+            examples:
+              basic:
+                summary: 최소 예시
+                value:
+                  templateId: 11
+                  eventId: 7
+                  userId: 101
+                  questions:
+                    - type: SCALE_5
+                      question: '행사 전반에 얼마나 만족하셨나요?'
+                      required: true
+                      options: []
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean, example: true }
+                  surveyId: { type: integer, format: int64, example: 101 }
+              examples:
+                success:
+                  value: { ok: true, surveyId: 101 }
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  # --- 설문 목록(관리자) ---
+  /admin/api/surveys:
+    get:
+      tags: [Surveys]
+      summary: 설문 목록(페이징/검색)
+      description: 관리자 화면에서 쓰는 리스트 API
+      parameters:
+        - in: query
+          name: eventId
+          description: 특정 이벤트의 설문만 (선택)
+          schema: { type: integer, format: int64 }
+        - in: query
+          name: page
+          description: 페이지(1부터)
+          schema: { type: integer, minimum: 1, default: 1 }
+        - in: query
+          name: size
+          description: 페이지당 개수(최대 100)
+          schema: { type: integer, minimum: 1, maximum: 100, default: 10 }
+        - in: query
+          name: keyword
+          description: 검색어(제목/설명)
+          schema: { type: string }
+        - in: query
+          name: field
+          description: 검색 필드
+          schema: { type: string, enum: [title, description, all] }
+        - in: query
+          name: anon
+          description: 익명/비익명 필터(1/0)
+          schema: { type: integer, enum: [0,1] }
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean, example: true }
+                  total: { type: integer, example: 42 }
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/SurveyDTO' }
+              examples:
+                sample-from-db:  # ← 실제 DB 레코드 기반 (너가 준 값)
+                  summary: DB 샘플 레코드 기반
+                  value:
+                    ok: true
+                    total: 1
+                    items:
+                      - surveyId: 3
+                        eventId: null
+                        title: "[익명] 사내 이벤트 만족도 템플릿"
+                        description: "내/외부 직원 대상 오프라인 / 온라인 이벤트에서 공통으로 쓰는 설문 템플릿 (5문항용)"
+                        status: "ARCHIVED"
+                        isAnonymous: 1
+                        cloneFromSurveyId: null
+                        openAt: null
+                        closeAt: null
+                        createdBy: 258
+                        createdAt: "2025-09-22T15:42:42"
+                        updatedAt: "2025-09-23T14:22:50"
+                        isTemplate: 1
+                        templateKey: "OFFICE_LECTURE_ISANON"
+        '400': { $ref: '#/components/responses/BadRequest' }
+
+components:
+  # 표준 400 에러(실패 시 이렇게 줘라)
+  responses:
+    BadRequest:
+      description: 잘못된 요청(파라미터/검증/JSON 파싱 등)
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          examples:
+            invalid-enum:
+              summary: enum 값 틀림
+              value:
+                ok: false
+                error: InvalidEnumValue
+                field: questions[0].type
+                allowed: [SINGLE, MULTI, SCALE_5, TEXT]
+                message: 'type 값이 허용 목록에 없음'
+            json-parse:
+              summary: JSON 파싱 실패
+              value:
+                ok: false
+                error: InvalidBody
+                message: 'QuestionType에 "scale-5" 못 넣음'
+
+  # 요청/응답 바디 스키마
+  schemas:
+    # --- 요청 DTO ---
+    CloneInlineReqDTO:
+      type: object
+      required: [templateId, eventId, userId, questions]
+      properties:
+        templateId: { type: integer, format: int64, description: '복제할 템플릿 ID' }
+        eventId:    { type: integer, format: int64, description: '대상 이벤트 ID' }
+        userId:     { type: integer, format: int64, description: '요청자(관리자) ID' }
+        questions:
+          type: array
+          description: '복제 시 반영할 문항 목록(없으면 템플릿 그대로)'
+          items: { $ref: '#/components/schemas/QuestionPayloadDTO' }
+
+    QuestionPayloadDTO:
+      type: object
+      required: [type, question]
+      properties:
+        type: { $ref: '#/components/schemas/QuestionType' }
+        question:
+          type: string
+          example: '행사 전반에 얼마나 만족하셨나요?'
+        required:
+          type: boolean
+          default: true
+        options:
+          description: 'MULTI/SINGLE/SCALE_5에서 사용. TEXT는 옵션 없음.'
+          type: array
+          items:
+            type: object
+            properties:
+              optionId: { type: integer, format: int64, nullable: true }
+              label:    { type: string }
+              value:    { type: string }
+
+    # --- 응답 DTO ---
+    SurveyDTO:
+      type: object
+      properties:
+        surveyId:   { type: integer, format: int64, example: 3 }
+        eventId:    { type: integer, format: int64, nullable: true, example: null }
+        title:      { type: string, example: "[익명] 사내 이벤트 만족도 템플릿" }
+        description: { type: string, nullable: true, example: "내/외부 직원 대상 오프라인 / 온라인 이벤트에서 공통으로 쓰는 설문 템플릿 (5문항용)" }
+        status:     { type: string, example: "ARCHIVED" }
+        isAnonymous: { type: integer, enum: [0,1], example: 1 }
+        cloneFromSurveyId: { type: integer, format: int64, nullable: true, example: null }
+        openAt:     { type: string, format: date-time, nullable: true, example: null }
+        closeAt:    { type: string, format: date-time, nullable: true, example: null }
+        createdBy:  { type: integer, format: int64, example: 258 }
+        createdAt:  { type: string, format: date-time, example: "2025-09-22T15:42:42" }
+        updatedAt:  { type: string, format: date-time, example: "2025-09-23T14:22:50" }
+        isTemplate: { type: integer, enum: [0,1], example: 1 }
+        templateKey: { type: string, nullable: true, example: "OFFICE_LECTURE_ISANON" }
+
+    # --- 공용 enum/에러 ---
+    QuestionType:
+      type: string
+      description: |
+        허용 값(정확히 일치):
+        - SINGLE
+        - MULTI
+        - SCALE_5
+        - TEXT
+      enum: [SINGLE, MULTI, SCALE_5, TEXT]
+
+    Error:
+      type: object
+      properties:
+        ok: { type: boolean, example: false }
+        error: { type: string, example: 'ValidationError' }
+        field: { type: string, nullable: true, example: 'questions[0].type' }
+        allowed:
+          type: array
+          items: { type: string }
+        message: { type: string }
+
+# ==========================================
+# ============   SURVEY 정의 끝   ===========
+# ==========================================
+
+# ========== 메모 ==========
+# - 새 API 필요하면 위처럼 섹션(정의 시작/끝) 크게 달고, paths/components.schemas에 맞춰 추가
+# - 예시(examples) 꼭 넣기(테스트 편함)
+# - enum 바뀌면 팀에 공지 + 버전 올리기(info.version)
+# - Swagger UI에서 보기: /swagger-ui/index.html (url: /docs/openapi.yaml로 읽게 세팅)
+
+# --------------------------------------------------------
+# ▼▼▼ 여기부터 각자 담당 리소스 섹션 작성하면 됨(같은 포맷으로 복붙해서) ▼▼▼
+#   - 위 tags에 name/description 추가하는 거 잊지 말고
+#   - paths/components.schemas 구조만 맞추면 됨
+# --------------------------------------------------------
+

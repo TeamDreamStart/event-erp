@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.dreamstart.mapper.GuestMapper">
+
+<!-- 비회원 예약/예약조회 -->
+	<resultMap type="GuestDTO" id="guestMap">
+		<id column="guest_id" property="guestId"/>
+		<result column="name" property="name"/>
+		<result column="password" property="password"/>
+		<result column="created_at" property="createdAt"/>
+	</resultMap>
+</mapper>

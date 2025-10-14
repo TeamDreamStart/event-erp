@@ -1,6 +1,6 @@
 package kr.co.dreamstart.controller;
 
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,57 +11,52 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
-import kr.co.dreamstart.mapper.BoardMapper;
+import kr.co.dreamstart.service.BoardService;
 
 @Controller
 public class BoardController {
 
-	// 1. BoardMapper 주입 (DAO 역할)
 	@Autowired
-	private BoardMapper boardMapper; // BoardMapper 인터페이스 객체를 주입
+	private BoardService service;
 
 	// 공지사항 목록
 	@GetMapping("/notices")
-	public String noticeList(@RequestParam(required = false) String search, Criteria cri, Model model) {
+	public String noticeList(@RequestParam(required = false) String searchType,
+			@RequestParam(required = false) String keyword, Criteria cri, Model model) {
+		Map<String, Object> map = service.postList(cri, "NOTICE", "PUBLIC", searchType, keyword);
+		model.addAttribute("totalCount", map.get("totalCount"));
+		model.addAttribute("postList", map.get("postList"));
+		model.addAttribute("pageVO", map.get("pageVO"));
+		model.addAttribute("cri", map.get("cri"));
 
-		// 2. Mapper를 직접 호출하여 데이터(BoardPostDTO 목록)를 가져옴
-		// * 주의: 현재 Mapper XML에는 페이징만 있고 검색 로직이 없으므로, 검색(@RequestParam String search)은
-		// 일단 무시됩니다.
-		// * 주의: 페이징 정보(PageVO)를 생성하고 model에 추가하는 로직도 현재 Controller에 없습니다.
-		// 테이블 출력만 우선으로 하려면 list만 가져옵니다.
-
-		List<BoardPostDTO> boardList = boardMapper.list(cri); // Mapper의 list() 호출
-		model.addAttribute("boardList", boardList); // JSP에서 사용할 이름 "boardList"로 저장
-
-		// 3. (옵션) 임시로 PageVO 객체를 model에 넣어줘야 JSTL 오류가 안 납니다.
-		// pageVO 객체가 null이면 JSP의 페이징 부분에서 오류가 발생합니다.
-		// **실제 PageVO 로직은 Service에서 처리해야 하지만, 임시로 빈 객체 전달**
-		// 이 부분은 복잡해질 수 있으므로, 일단은 boardList만 전달하고
-		// JSP의 페이징 코드를 잠시 주석 처리하고 테스트하는 것이 더 빠를 수 있습니다.
-
-		return "/board/noticeList";
+		System.out.println("postList");
+		return "test/boardTest"; // 테스트용 페이지
+//		return "/board/noticeList";
 	}
 
 	// 공지사항 상세보기
-	@GetMapping("/notices/{boardId}")
-	public String noticeDetail(@PathVariable("boardId") long boardId, Model model) {
-
+	@GetMapping("/notices/{postId}")
+	public String noticeDetail(@PathVariable("postId") long postId, Model model) {
+		Map<String, Object> map = service.postDetail("NOTICE", postId);
+		model.addAttribute("postDTO", map.get("postDTO"));
+		model.addAttribute("prevDTO", map.get("prevDTO"));
+		model.addAttribute("nextDTO", map.get("nextDTO"));
 		return "/board/noticeDetail";
 	}
 
-	// 관리자 공지사항 등록
-	@GetMapping("/admin/notices/form")
-	public String noticeForm() {
-
-		return "/board/noticeForm";
-	}
-
-	// 관리자 공지사항 수정
-	@GetMapping("/admin/notices/{boardId}/update")
-	public String noticeUpdate(@PathVariable("") long boardId, Model model) {
-
-		return "/board/noticeForm";
-	}
+//	// 관리자 공지사항 등록
+//	@GetMapping("/admin/notices/form")
+//	public String noticeForm() {
+//
+//		return "/board/noticeForm";
+//	}
+//
+//	// 관리자 공지사항 수정
+//	@GetMapping("/admin/notices/{postId}/update")
+//	public String noticeUpdate(@PathVariable("") long postId, Model model) {
+//
+//		return "/board/noticeForm";
+//	} => admin Controller로 이동
 
 	// Q&A 목록
 	@GetMapping("/qna")
@@ -71,8 +66,8 @@ public class BoardController {
 	}
 
 	// Q&A 상세보기
-	@GetMapping("/qna/{boardId}")
-	public String qnaDetail(@PathVariable("boardId") long boardId, Model model) {
+	@GetMapping("/qna/{postId}")
+	public String qnaDetail(@PathVariable("postId") long postId, Model model) {
 
 		return "/board/qnaDetail";
 	}
@@ -86,7 +81,7 @@ public class BoardController {
 
 	// Q&A 수정
 	@GetMapping("/qna/{boardId}/update")
-	public String qnaUpdate(@PathVariable("boardId") long boardId, Model model) {
+	public String qnaUpdate(@PathVariable("postId") long postId, Model model) {
 
 		return "/board/qnaForm";
 	}

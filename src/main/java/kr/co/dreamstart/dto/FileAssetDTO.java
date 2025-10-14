@@ -12,4 +12,6 @@ public class FileAssetDTO {
     private String mimeType;
     private long sizeBytes;
     private String createdAt;
+    private String uuid;
+    private boolean image; //이미지 여부 확인
 }

@@ -12,11 +12,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="name" property="name" />
 		<result column="email" property="email" />
 		<result column="phone" property="phone" />
+		<result column="gender" property="gender" />
 		<result column="last_login_at" property="lastLoginAt" />
 		<result column="created_at" property="createdAt" />
 		<result column="updated_at" property="updatedAt" />
+		<result column="birth_date" property="birthDate" />
 		<result column="is_active" property="isActive" />
+		<!-- sns -->
+		<result column="sns_id" property="snsId" />
+		<!-- role table join -->
+		<result column="role_name" property="roleName" />
 	</resultMap>
+
 
 	<!-- 회원권한 -->
 	<resultMap type="UserRoleDTO" id="userRoleMap">
@@ -33,27 +40,321 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 관리자 - 회원 전체 목록 + 페이징 -->
 	<select id="list" resultMap="userMap">
-		select *
-		from `user`
-		order by `user_id` desc
+		SELECT
+		u.user_id,
+		u.username,
+		u.name,
+		u.email,
+		u.gender,
+		u.phone,
+		u.birth_date,
+		u.created_at,
+		u.updated_at,
+		u.last_login_at,
+		u.is_active,
+		u.sns_id,
+		r.role_name
+		FROM user u
+		JOIN
+		user_role ur ON u.user_id =
+		ur.user_id
+		JOIN
+		role r ON ur.role_id =
+		r.role_id
+		order by
+		`user_id` desc
 		limit
 		#{cri.pageStart},#{cri.perPageNum}
 	</select>
-	
-	<!-- 회원 수 조회 -->
+
+	<!-- 관리자 - 회원 상세정보 -->
+	<select id="findByUserId" parameterType="long"
+		resultMap="userMap">
+		SELECT
+		u.user_id,
+		u.username,
+		u.name,
+		u.email,
+		u.gender,
+		u.phone,
+		u.birth_date,
+		u.created_at,
+		u.updated_at,
+		u.last_login_at,
+		u.is_active,
+		u.sns_id,
+		r.role_name
+		FROM user u
+		JOIN user_role ur ON u.user_id =
+		ur.user_id
+		JOIN
+		role r ON ur.role_id = r.role_id
+		where u.user_id =
+		#{userId}
+	</select>
+
+	<!-- 관리자 - 회원 상세정보 -->
+	<select id="findBySnsId" parameterType="String"
+		resultMap="userMap">
+		SELECT
+		u.user_id,
+		u.username,
+		u.name,
+		u.email,
+		u.gender,
+		u.phone,
+		u.birth_date,
+		u.created_at,
+		u.updated_at,
+		u.last_login_at,
+		u.is_active,
+		u.sns_id,
+		r.role_name
+		FROM user u
+		JOIN user_role ur ON u.user_id =
+		ur.user_id
+		JOIN
+		role r ON ur.role_id = r.role_id
+		where u.sns_id =
+		#{sns_id}
+	</select>
+
+	<!-- 관리자 - 회원 정보 검색 -->
+	<select id="search" resultMap="userMap">
+		SELECT
+		u.user_id,
+		u.username,
+		u.name,
+		u.email,
+		u.gender,
+		u.phone,
+		u.birth_date,
+		u.created_at,
+		u.updated_at,
+		u.last_login_at,
+		u.is_active,
+		u.sns_id,
+		r.role_name
+		FROM user u
+		JOIN user_role ur ON u.user_id =
+		ur.user_id
+		JOIN role r ON ur.role_id = r.role_id
+		<where>
+			<!-- role 선택 -->
+			<if test="role != null">
+				AND ur.role_id = #{role}
+			</if>
+			<!-- searchType별 검색 -->
+			<choose>
+				<when
+					test="searchType == 'ALL' and keyword != null and keyword != ''">
+					AND (
+					u.username LIKE CONCAT('%', #{keyword}, '%')
+					OR u.name
+					LIKE CONCAT('%', #{keyword}, '%')
+					OR u.email LIKE CONCAT('%',
+					#{keyword}, '%')
+					OR u.phone LIKE CONCAT('%', #{keyword}, '%')
+					OR
+					u.gender LIKE CONCAT('%', #{keyword}, '%')
+					)
+				</when>
+				<when test="searchType == 'userId'">
+					AND u.user_id = #{keyword}
+				</when>
+				<when test="searchType == 'userName'">
+					AND u.username LIKE CONCAT('%', #{keyword}, '%')
+				</when>
+				<when test="searchType == 'email'">
+					AND u.email LIKE CONCAT('%', #{keyword}, '%')
+				</when>
+				<when test="searchType == 'phone'">f
+					AND u.phone LIKE CONCAT('%', #{keyword}, '%')
+				</when>
+				<when test="searchType == 'gender'">
+					AND u.gender = #{keyword}
+				</when>
+				<when
+					test="searchType == 'createdAt' and startDate != null and endDate != null">
+					AND DATE(u.created_at) BETWEEN #{startDate} AND #{endDate}
+				</when>
+			</choose>
+		</where>
+		ORDER BY u.created_at DESC
+		limit
+		#{cri.pageStart},#{cri.perPageNum}
+	</select>
+
+	<!-- 관리자 - 전체 회원 수 조회 (페이징) -->
 	<select id="count" resultType="int">
 		select count(*) from `user`
 	</select>
-	
+
+	<!-- 관리자 - 검색 회원 수 조회 (페이징) -->
+	<select id="searchCount" resultType="int">
+		SELECT COUNT(*)
+		FROM user u
+		JOIN user_role ur ON u.user_id = ur.user_id
+		JOIN role r ON ur.role_id = r.role_id
+		<where>
+			<if test="role != null">
+				AND ur.role_id = #{role}
+			</if>
+
+			<choose>
+				<when
+					test="searchType == 'ALL' and keyword != null and keyword != ''">
+					AND (
+					u.username LIKE CONCAT('%', #{keyword}, '%')
+					OR u.name
+					LIKE
+					CONCAT('%', #{keyword}, '%')
+					OR u.email LIKE CONCAT('%',
+					#{keyword},
+					'%')
+					OR u.phone LIKE CONCAT('%', #{keyword}, '%')
+					OR
+					u.gender LIKE
+					CONCAT('%', #{keyword}, '%')
+					)
+				</when>
+				<when test="searchType == 'userId'">
+					AND u.user_id = #{keyword}
+				</when>
+				<when test="searchType == 'userName'">
+					AND u.username LIKE CONCAT('%', #{keyword}, '%')
+				</when>
+				<when test="searchType == 'email'">
+					AND u.email LIKE CONCAT('%', #{keyword}, '%')
+				</when>
+				<when test="searchType == 'phone'">
+					AND u.phone LIKE CONCAT('%', #{keyword}, '%')
+				</when>
+				<when test="searchType == 'gender'">
+					AND u.gender = #{keyword}
+				</when>
+				<when
+					test="searchType == 'createdAt' and startDate != null and endDate != null">
+					AND DATE(u.created_at) BETWEEN #{startDate} AND #{endDate}
+				</when>
+			</choose>
+		</where>
+	</select>
+
+	<!-- 관리자 - 회원 정보 업데이트 -->
+	<update id="adminUserUpdate" parameterType="UserDTO">
+		update `user` set
+		`phone`=#{phone},`gender`=#{gender},`birth_date`=#{birthDate},`is_active`=#{isActive},`updated_at` = now()
+		where `user_id` = #{userId}
+	</update>
+	<!-- 관리자 - 회원 유형(ROLE) 업데이트 -->
+	<update id="adminUserRoleUpdate">
+		update `user_role` set
+		`role_id` = #{roleId},`assigned_at` = now()
+		where `user_id` = #{userId}
+	</update>
+
+	<!-- naver api 로그인/회원가입 -->
+	<insert id="joinNaver" parameterType="userDTO"
+		useGeneratedKeys="true" keyProperty="userId">
+		insert into `user`
+		(`sns_id`,`name`,`email`,`gender`,`birth_date`,`phone`,`created_at`,`is_active`)
+		values(#{snsId},#{name},#{email},#{gender},#{birthDate},#{phone},now(),1)
+	</insert>
+
+	<!-- naver api 기존회원/신규회원 구분시 사용 -->
+	<select id="findByEmail" resultMap="userMap">
+		select * from user where
+		email = #{email}
+	</select>
+
+	<!-- naver api 기존회원 로그인시 회원정보 업데이트 -->
+	<update id="updateNaver" parameterType="userDTO">
+		UPDATE `user`
+		SET
+		`name` = #{name},
+		`email` = #{email},
+		`gender` = #{gender},
+		`birth_date` =
+		#{birthDate},
+		`phone` = #{phone},
+		`updated_at` = NOW(),
+		`last_login_at` = NOW()
+		WHERE `sns_id` = #{snsId} or `email` = #{email}
+	</update>
+
+
 	<!-- 회원가입시 생성되는 user_id 키 값 -> dto.getUserId() -->
-	<insert id="join" parameterType="UserDTO" useGeneratedKeys="true" keyProperty="userId">
-		insert into `user` 
-		(`username`,`password`,`name`,`email`,`created_at`,`is_active`) 
+	<insert id="join" parameterType="UserDTO"
+		useGeneratedKeys="true" keyProperty="userId">
+		insert into `user`
+		(`username`,`password`,`name`,`email`,`created_at`,`is_active`)
 		values(#{userName},#{password},#{name},#{email},now(),1)
 	</insert>
 	<!-- 회원가입시 일반회원 권한 부여 -->
 	<insert id="joinRole" parameterType="long">
-		insert into `user_role` values (#{userId},0,now())
+		insert into `user_role` (`user_id`,`role_id`,`assigned_at`)
+		values (#{userId},1,now())
 	</insert>
 
+	<!-- 로그인 영역 -->
+	<!-- 로그인 단건 조회 -->
+	<select id="findByUsername" parameterType="string"
+		resultMap="userMap">
+		select
+		`user_id`, `username`, `password`, `name`, `email`,
+		`phone`, `last_login_at`, `created_at`, `updated_at`,
+		`is_active`,
+		`gender`, `birth_date`
+		from `user`
+		where `username` = #{username}
+	</select>
+
+	<!-- 로그인 - 아이디 또는 이메일로 사용자 1명 조회 -->
+	<select id="findByLogin" parameterType="string"
+		resultMap="userMap">
+		select
+		`user_id`, `username`, `password`, `name`, `email`,
+		`phone`, `last_login_at`, `created_at`, `updated_at`,
+		`is_active`,
+		`gender`, `birth_date`
+		from `user`
+		where `username` = #{login} or email
+		= #{login}
+		limit 1
+	</select>
+
+	<!-- 로그인 - 권한 이름 리스트(ROLE_USER/ROLE_ADMIN) -->
+	<select id="findRoleNameByUserId" parameterType="long"
+		resultType="string">
+		select r.`role_name`
+		from `user_role` ur
+		join `role` r on
+		ur.`role_id` = r.`role_id`
+		where ur.`user_id` = #{userId}
+	</select>
+
+	<!-- 로그인 성공 시 마지막 로그인 시각 업데이트 -->
+	<update id="updateLastLoginAt" parameterType="long">
+		update `user` set
+		`last_login_at` = NOW(),
+		`updated_at` = NOW()
+		where `user_id` =
+		#{userId}
+	</update>
+
+	<!-- 비밀번호 암호화 매번 다른 값으로 생성 -->
+	<select id="findUsersNeedingHash" resultType="UserDTO">
+		select `user_id` as userId, `username`
+		from `user`
+		where `password` IS
+		NULL OR `password` not like '$2%'  <!-- bcrypt 아님 대상 -->
+	</select>
+
+	<update id="updatePasswordById">
+		update `user`
+		set `password` = #{password},
+		`updated_at` = NOW()
+		where `user_id` = #{userId}
+	</update>
 </mapper>

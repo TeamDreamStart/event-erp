@@ -1,23 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-5.3.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
 	<!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- 유저아이디/이메일 찾기위한 @survice 등록을 위해 -->
+	<context:component-scan
+		base-package="kr.co.dreamstart.service, kr.co.dreamstart.controller, kr.co.dreamstart.security" />
+
 
 	<!-- DB 연결 설정 DB 생성하고 경로 수정합시다! -->
 
 
 
-	   <bean id="dataSource"
-      class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-      <property name="driverClassName"
-         value="com.mysql.cj.jdbc.Driver" />
-      <property name="url"
-         value="jdbc:mysql://mbc-sw.iptime.org:4200/event_erp?serverTimezone=UTC" />
-      <property name="username" value="dreamS" />
-      <property name="password" value="emflacnfqkfxlaghkdlxld!" />
-   </bean>
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="com.mysql.cj.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:mysql://mbc-sw.iptime.org:4200/event_erp?serverTimezone=Asia/Seoul" />
+		<property name="username" value="dreamS" />
+		<property name="password" value="emflacnfqkfxlaghkdlxld!" />
+	</bean>
+
+	<!-- 패스워드 인코딩 -->
+	<bean id="passwordEncoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+		<constructor-arg value="10" />
+	</bean>
+
 
 	<!-- SqlSessionFactory 설정 -->
 	<bean id="sqlSessionFactory"
@@ -57,12 +76,28 @@
 				<prop key="mail.smtp.starttls.enable">true</prop>
 				<prop key="mail.smtp.auth">true</prop>
 				<prop key="mail.debug">true</prop>
-				<!-- gmail/naver 용 설정 
-				<prop key="mail.smtps.ssl.checkserveridentity">true</prop> 
+				<!-- gmail/naver 용 설정 <prop key="mail.smtps.ssl.checkserveridentity">true</prop> 
 					<prop key="mail.smtps.ssl.trust">*</prop> <prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop> -->
 			</props>
 		</property>
 	</bean>
 
+	<!-- @Scheduled 활성화 -->
+	<task:annotation-driven
+		scheduler="eventScheduler" />
 
+	<!-- 스케줄러 스레드풀 -->
+	<bean id="eventScheduler"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler">
+		<property name="poolSize" value="2" />
+		<property name="threadNamePrefix" value="event-scheduler-" />
+	</bean>
+	
+	<!-- 트랜젝션 매니저 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" >
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 어노테이션 트랜잭션 활성화 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
 </beans>

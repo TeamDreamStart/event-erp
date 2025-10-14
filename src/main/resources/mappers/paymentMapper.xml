@@ -16,11 +16,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="pg_tid" property="pgTid" />
 		<result column="memo" property="memo" />
 		<result column="created_at" property="createdAt" />
+		
+		<result column="imp_uid" property="impUid" />
 	</resultMap>
 
-	<select id="paymentList" resultMap="paymentMap">
-		select * from `payment`
+	<select id="list" resultMap="paymentMap">
+		select * from `payment` order by
+		`payment_id` desc
+		limit
+		#{cri.pageStart},#{cri.perPageNum}
 	</select>
+
+
+	<insert id="insert" parameterType="paymentDTO">
+		insert into `payment`
+		(`reservation_id`, `amount`, `method`, `status`, `approve_no`, `pg_tid`, `imp_uid`,
+		`memo`, `paid_at`, `created_at`)
+		VALUES
+		(#{reservationId}, #{amount}, #{method}, #{status}, #{approveNo}, #{pgTid}, #{impUid},
+		#{memo}, now(), now())
+	</insert>
+
 
 
 </mapper>

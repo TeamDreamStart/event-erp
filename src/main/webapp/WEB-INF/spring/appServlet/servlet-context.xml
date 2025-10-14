@@ -1,38 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans
-	xmlns="http://www.springframework.org/schema/mvc"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:beans="http://www.springframework.org/schema/beans"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
-		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xmlns:mvc="http://www.springframework.org/schema/mvc"
+             xsi:schemaLocation="
+               http://www.springframework.org/schema/mvc     https://www.springframework.org/schema/mvc/spring-mvc.xsd
+               http://www.springframework.org/schema/beans   https://www.springframework.org/schema/beans/spring-beans.xsd
+               http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
-	<!-- DispatcherServlet Context: defines this servlet's request-processing 
-		infrastructure -->
+    <!-- DispatcherServlet Context: defines this servlet's request-processing
+        infrastructure -->
 
-	<!-- Enables the Spring MVC @Controller programming model -->
-	<annotation-driven />
+    <!-- @GetMapping/@RequestMapping 등 활성화 -->
+    <!-- Enables the Spring MVC @Controller programming model -->
+    <mvc:annotation-driven conversion-service="conversionService"/>
 
-	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
-		up static resources in the ${webappRoot}/resources directory -->
-	<resources mapping="/resources/**" location="/resources/" />
+    <!-- 정적 자원 매핑 (/resources/**) -->
+    <!-- Handles HTTP GET requests for /resources/** by efficiently serving
+        up static resources in the ${webappRoot}/resources directory -->
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
 
-	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
-		in the /WEB-INF/views directory -->
-	<beans:bean
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<beans:property name="prefix" value="/WEB-INF/views/" />
-		<beans:property name="suffix" value=".jsp" />
+    <!-- 뷰 리졸버 (JSP 경로) -->
+    <!-- Resolves views selected for rendering by @Controllers to .jsp resources
+        in the /WEB-INF/views directory -->
+    <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <beans:property name="prefix" value="/WEB-INF/views/"/>
+        <beans:property name="suffix" value=".jsp"/>
+    </beans:bean>
 
+    <!-- 컨트롤러/컴포넌트 스캔 -->
+    <context:component-scan base-package="kr.co.dreamstart"/>
+
+    <!-- common -->
+    <!--
+    <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <beans:property name="maxUploadSize" value="10485760"/>  최대 10MB
+    </beans:bean>
+    -->
+
+    <!-- standard -->
+    <!-- 파일 업로드를 처리하는데 쓰이는 StandardServletMultipartResolver 빈을 설정 -->
+    <beans:bean id="multipartResolver"
+                class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+    </beans:bean>
+
+    <!-- openapi 정의하는데 필요한 정적 리소스 -->
+    <mvc:resources mapping="/docs/**"       location="/docs/"/>
+    <mvc:resources mapping="/swagger-ui/**" location="/swagger-ui/"/>
+
+    <!-- LocalDateTime <-> 'yyyy-MM-dd''T''HH:mm' 전역 포맷터 -->
+	<beans:bean id="conversionService"
+	            class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+	    <beans:property name="formatterRegistrars">
+	        <beans:set>
+	            <beans:bean class="org.springframework.format.datetime.standard.DateTimeFormatterRegistrar">
+	                <beans:property name="dateTimeFormatter">
+	                    <beans:bean class="java.time.format.DateTimeFormatter" factory-method="ofPattern">
+	                        <beans:constructor-arg value="yyyy-MM-dd'T'HH:mm"/>
+	                    </beans:bean>
+	                </beans:property>
+	            </beans:bean>
+	        </beans:set>
+	    </beans:property>
 	</beans:bean>
 
-	<context:component-scan
-		base-package="kr.co.dreamstart" />
 
-
-	<beans:bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<beans:property name="maxUploadSize" value="10485760" /> <!-- 최대 10MB -->
-	</beans:bean>
 </beans:beans>

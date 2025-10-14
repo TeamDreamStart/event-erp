@@ -1,5 +1,7 @@
 package kr.co.dreamstart.dto;
 
+import java.util.Date;
+
 import lombok.Data;
 
 @Data
@@ -9,10 +11,15 @@ public class BoardPostDTO {
     private String title;
     private String content;
     private long userId;
-    private boolean isPinned;
+    private int pinned;
     private String visibility;
     private int viewCount;
-    private String createdAt;
-    private String updatedAt;
+    private Date  createdAt;
+    private Date  updatedAt;
     private String publishedAt;
+    
+    
+    //댓글 개수
+    private int commentCount;
+    
 }

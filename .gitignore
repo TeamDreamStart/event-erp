@@ -30,5 +30,8 @@ target/m2e-wtp/web-resources/META-INF/MANIFEST.MF
 /was-logs/
 /was-logs/*.log
 /was-logs/*.txt
-/was-logs/*.gz
 
+*.txt
+*.txt
+/target
+/was-logs

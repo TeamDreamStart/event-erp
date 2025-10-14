@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class UserRoleDTO {
 	private long userId;
-	private int roleId;
+	private int roleId; // 0: ADMIN 1:MEMBER
 	private String assignedAt;
 }

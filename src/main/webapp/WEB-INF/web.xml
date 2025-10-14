@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+<web-app version="3.1" xmlns="http://java.sun.com/xml/ns/javaee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-
-	<!-- The definition of the Root Spring Container shared by all Servlets 
-		and Filters -->
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/spring/root-context.xml</param-value>
-	</context-param>
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_3_1.xsd"
+	id="WebApp_ID">
 
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->
 	<listener>
@@ -27,13 +21,24 @@
 			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
+		<!-- 지은님!! 이거 서블릿 중복되면 오류난다해서 여기로 옮김! 동일 내용이라서!! 
+			이주석은 읽으면 삭제해도됨...! -->
+		<!-- 파일 업로드 기능에 대한 설정 -->
+		<multipart-config>
+			<!-- 톰캣이 해당 임시 파일 찾지를 못함 -> OS기본 TEMP 사용으로 변경 -->
+			<location>C:\\upload\\temp</location> <!-- 파일이 임시로 저장될 위치 -->
+			<max-file-size>20971520</max-file-size> <!-- 최대 파일 크기: 20MB (1MB * 20) -->
+			<max-request-size>41943040</max-request-size><!-- 최대 요청 크기: 40MB -->
+			<!-- 파일 크기가 이 값보다 크면 디스크에 기록되고, 그렇지 않으면 메모리에 기록된다 -->
+			<file-size-threshold>20971520</file-size-threshold>
+		</multipart-config>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	
+
 	<!-- 한글 필터 설정 -->
 	<filter>
 		<filter-name>encodingFilter</filter-name>
@@ -51,7 +56,37 @@
 	<filter-mapping>
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
-	</filter-mapping>	
+	</filter-mapping>
 	<!-- 한글 필터 설정 END -->
+
+	<!-- security 필터 설정 -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- 스프링 시큐리티 설정 파일 오류 처리용 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/spring/root-context.xml
+			/WEB-INF/spring/security-context.xml
+		</param-value>
+	</context-param>
+	
+	<!-- 에러관련 -->
+	<error-page>
+	    <error-code>404</error-code>
+	    <location>/error/404</location>
+	</error-page>
+
+	<error-page>
+	    <error-code>500</error-code>
+	    <location>/error/500</location>
+	</error-page>
 
 </web-app>
