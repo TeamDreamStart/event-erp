@@ -57,7 +57,7 @@ public class UserController {
 	@PostMapping("/join")
 	public String joinSubmit(@ModelAttribute("user") UserDTO form, RedirectAttributes ra) {
 		// 새로 가입한 가입자의 비밀번호 -> 해시로 바꿔치기
-		 form.setPassword(passwordEncoder.encode(form.getPassword()));
+		form.setPassword(passwordEncoder.encode(form.getPassword()));
 		
 		int result = mapper.join(form);
 		if (result == 1) {
@@ -78,13 +78,11 @@ public class UserController {
 		return "test/loginTest";
 	}
 	
-//	@PostMapping("/login")
-//	public String login(@RequestParam String) {
-//		log.info("dnd");
-//		return null;
-//	}
-	
-	
+// 정적템플릿 (login.html) 요청이 오면 시큐리티 로그인 페이지로 넘김 (어드민용)
+	@GetMapping("/login.html")
+	public String redirectLoginHtml() {
+		return "redirect:/login?mode=admin";
+	}
 	
 	
 	

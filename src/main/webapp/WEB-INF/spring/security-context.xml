@@ -47,15 +47,19 @@
 			always-use-default-target="false"
 			authentication-success-handler-ref="customLoginSuccessHandler"
 			authentication-failure-handler-ref="authFailureHandler" />
-
-		<security:logout logout-url="/logout"
-			logout-success-url="/" 
-			invalidate-session="true"
-			delete-cookies="JSESSIONID" />
+		
+		<!-- 로그아웃 : 판단 -> customLogoutSuccessHandler -->
+		<security:logout 
+			logout-url="/logout"
+            invalidate-session="true"
+            delete-cookies="JSESSIONID"
+            success-handler-ref="customLogoutSuccessHandler" />
 
 	<!-- 권한없음 403페이지 -->
 	<security:access-denied-handler error-page="/error/403" />
 	</security:http>
+	
+	
 	
 	<!-- 로그인 실패 -->
 	<bean id="authFailureHandler"
@@ -101,5 +105,7 @@
 	<bean
 		class="org.springframework.security.authentication.event.LoggerListener" />
 
-	
+	<!-- 로그아웃 성공 빈 등록 -->
+	 <bean id="customLogoutSuccessHandler"
+        class="kr.co.dreamstart.security.CustomLogoutSuccessHandler" />
 </beans>
