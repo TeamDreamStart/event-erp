@@ -20,6 +20,7 @@ import kr.co.dreamstart.dto.SurveyDTO;
 import kr.co.dreamstart.dto.SurveyOptionDTO;
 import kr.co.dreamstart.dto.SurveyQuestionDTO;
 import kr.co.dreamstart.mapper.EventMapper;
+import kr.co.dreamstart.service.EventService;
 import kr.co.dreamstart.service.SurveyService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +32,7 @@ public class SurveyController {
 	@Autowired
 	SurveyService surveyService;
 	@Autowired
-	EventMapper eventMapper; // 임시 나중에 서비스로 바꿔야됨
+	EventService eventService; // 임시 나중에 서비스로 바꿔야됨
 	
 	// 설문목록(이벤트필터 + 검색 + 페이징 파라미터만 받음)
 	@GetMapping("/surveys")
@@ -91,12 +92,24 @@ public class SurveyController {
 		List<SurveyQuestionDTO> questions = surveyService.questionList(surveyId);
 		Map<Long, List<SurveyOptionDTO>> optionsByQ = surveyService.optionsByQuestion(surveyId);
 		int responses = surveyService.responseCount(surveyId); // 응답횟수
+	
+		// 문항/보기 통계 (분모)
+		List<Map<String, Object>> rows = surveyService.surveyStatusAgainstApplicants(surveyId);
+		
+		// 응답률 카드
+		Map<String, Object> top = surveyService.topRate(surveyId);
 		
 		// 고정 템플릿 여부 : 1~4번이거나, DB에 플래그/키로 템플릿임이 확인되면 true
 		boolean fixedIdRange = (surveyId != null && surveyId >= 1 && surveyId <= 4);
 		boolean templateFlag = (survey != null && (survey.getIsTemplate() != null && survey.getIsTemplate() == 1));
 		boolean hasTplKey = (survey != null && survey.getTemplateKey() != null && !survey.getTemplateKey().isBlank());
 		boolean isTemplate = fixedIdRange || templateFlag || hasTplKey;
+		
+		// 생성자 이름 적용
+		String createdName = null;
+		if (survey != null && survey.getCreatedBy() != null) {
+			createdName = surveyService.findUserNameById(survey.getCreatedBy());
+		}
 		
 		model.addAttribute("survey", survey);
 		model.addAttribute("eventTitle", eventTitle);
@@ -106,6 +119,9 @@ public class SurveyController {
 		model.addAttribute("optionsByQ", optionsByQ);
 		model.addAttribute("responses", responses);
 		model.addAttribute("isTemplate", isTemplate);
+		model.addAttribute("rows", rows);
+		model.addAttribute("top", top);
+		model.addAttribute("createdName", createdName);
 		
 		log.info("[GET /admin/surveys/{}] isTemplate={}, responses={}", surveyId, isTemplate, responses);
 		return "/admin/surveyDetail";
@@ -124,10 +140,17 @@ public class SurveyController {
 	// 2) 폼화면(주소창에는 /admin/surveys/form 만 보임)
 	@GetMapping("/surveys/form")
 	public String cloneForm(@RequestParam(required = false) Long eventId,
+							@RequestParam(required = false) Long templateId,
+							@RequestParam(required = false) Long surveyId,
 							Model model) {
+		// 공통목록
 		model.addAttribute("templates", surveyService.fixedTemplates());
-		model.addAttribute("eventList", eventMapper.eventAll());
-		model.addAttribute("eventId", eventId);
+		model.addAttribute("eventList", eventService.all());
+		
+		// 프리필/사전선택은 서비스에서 계산
+		Map<String, Object> prefill = surveyService.cloneFormPrefill(templateId, eventId, surveyId);
+		model.addAllAttributes(prefill);
+		
 		return "/admin/surveyCloneForm";
 		
 	}

@@ -231,5 +231,37 @@
     },
     });
 </script>
+<!-- 유리쓰 마죠리카 -->
+    <div class="user-actions">
+      <!-- 로그인 상태 -->
+      <sec:authorize access="isAuthenticated()">
+        <span><strong><sec:authentication property="principal.username" /></strong> 님 환영합니다 👋</span>
+        <a class="btn" href="<c:url value='/myinfo'/>">my info</a>
+        <form method="post" action="<c:url value='/logout'/>" style="margin:0">
+  			<input type="hidden" name="from" value="member"/>
+  	  <sec:csrfInput/>
+  	  <button type="submit" class="btn btn-primary">logout</button>
+		</form>
+
+      </sec:authorize>
+
+      <!-- 비로그인 상태 -->
+      <sec:authorize access="isAnonymous()">
+        <%-- 회원 로그인 강제: /login?mode=member --%>
+        <a class="btn btn-primary" href="<c:url value='/login'><c:param name='mode' value='member'/></c:url>">login</a>
+        <a class="btn" href="<c:url value='/join'/>">join</a>
+      </sec:authorize>
+    </div>
+  </div>
+</header>
+
+<article>
+  <a href="<c:url value='/list-test'/>">회원목록 테스트</a>
+  <a href="<c:url value='/board-test'/>">게시판 테스트</a>
+  <%-- 어드민 진입은 /admin 으로 두세요. 보안 필터가 SavedRequest 설정하고 관리자 로그인 뷰로 이동함 --%>
+  <a href="<c:url value='/admin'/>">어드민페이지</a>
+  <a href="<c:url value='/admin/surveys'/>">어드민용 설문조사 리스트</a>
+</article>
+<!-- 유리쓰 마죠리카 -->
 </body>
 </html>

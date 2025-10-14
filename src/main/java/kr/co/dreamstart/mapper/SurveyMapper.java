@@ -45,8 +45,9 @@ public interface SurveyMapper {
 	// 이벤트 예약지 카운트 : 설문 -> 이벤트 역참조
 	public int applicantCountBySurvey(@Param("surveyId") Long surveyId);
 	//상단 카드용 응답률
-	public Map<String, Object> topRate(@Param("surveyId") Long syrveyId);
-	
+	public Map<String, Object> topRate(@Param("surveyId") Long surveyId);
+	// 문항별 통계(분모) : 매우나쁨~매우좋음 가로바 + 퍼센트/응답자수, 모수 = 이벤트신청자수
+	public List<Map<String, Object>> surveyStatusAgainstApplicants(@Param("surveyId") Long surveyId);
 	
 	/* ===== 수정/삭제(복제본만가능) ===== */
 	// 업데이트
@@ -87,6 +88,8 @@ public interface SurveyMapper {
 	// 문항 다건의 보기 일괄 조회
 	public List<SurveyOptionDTO> findOptionsByQuestionIds(@Param("list") List<Long> questionIds);
 
+	// 폼 진입용프리필/사전선택 계산
+	public Map<String, Object> cloneFormPrefill(Long templateId, Long eventId, Long surveyId);
 
 
 	

@@ -84,4 +84,9 @@
 		<appender-ref ref="DB_SUMMARY_FILE" />
 	</logger>
 
+	<logger
+		name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"
+		level="DEBUG" />
+
+
 </configuration>

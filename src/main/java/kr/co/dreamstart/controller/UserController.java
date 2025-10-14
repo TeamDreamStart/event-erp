@@ -125,6 +125,11 @@ public class UserController {
 	}
 	
 	
+// 정적템플릿 (login.html) 요청이 오면 시큐리티 로그인 페이지로 넘김 (어드민용)
+	@GetMapping("/login.html")
+	public String redirectLoginHtml() {
+		return "redirect:/login?mode=admin";
+	}
 	
 	
 	

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:security="http://www.springframework.org/schema/security"
-       xsi:schemaLocation="
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="
          http://www.springframework.org/schema/beans
          http://www.springframework.org/schema/beans/spring-beans.xsd
          http://www.springframework.org/schema/security
@@ -10,20 +10,34 @@
 
 	<!-- 리소스파일/PG사 웹훅 등은 보안 필터 제외(CSRF 이슈 방지) -->
 	<security:http pattern="/resources/**" security="none" />
+	
+	<!-- 메서드 단위 권한 체크 활성화 -->
+	<security:global-method-security pre-post-annotations="enabled" />
+	
 	<!-- 애플리케이션의 HTTP 보안을 구성 - use-expressions="true"속성을 사용하면 보안 구성에서 Spring 
 		Expression Language(SpEL)를 사용할 수 있으므로 더욱 유연하고 동적인 권한 부여 규칙을 구현 -->
 	<security:http use-expressions="true">
 		<security:csrf /> <!-- CSRF(Cross-Site Request Forgery) 보호와 관련 -->
 
 		<!-- 전부공개(임시) -->
-		<security:intercept-url pattern="/**"
-			access="permitAll" />
+		<!-- <security:intercept-url pattern="/**" access="permitAll" /> -->
+
+		<!-- 1) 관리자 전용 url -->
+		<security:intercept-url pattern="/admin/**"
+			access="hasRole('ADMIN')" />
+			
+		<!-- 2) 회원 로그인시 (추가필요) -->
+		<security:intercept-url pattern="/mypage/**"
+			access="isAuthenticated()" />
+			
+		<!-- 3) 나머지는 전체공개 -->
+		<security:intercept-url pattern="/**" access="permitAll" />
 
 		<!-- 로그인/로그아웃 -->
 		<!-- default-target-url="/" : 로그인 성공 후 이동 경로 -->
 		<!-- always-use-default-target="false" - 저장된 요청 있으면 그쪽으로 복귀 (이게 핵심) -->
-		<!-- 아이디, 이메일 둘다 사용가능하게 하기 위해 : username-parameter="login"
-			아이디만 가능하게 할경우 : username-parameter="username" -->
+		<!-- 아이디, 이메일 둘다 사용가능하게 하기 위해 : username-parameter="login" 아이디만 가능하게 할경우 
+			: username-parameter="username" -->
 		<security:form-login 
 			login-page="/login"
 			login-processing-url="/login" 
@@ -33,37 +47,51 @@
 			always-use-default-target="false"
 			authentication-success-handler-ref="customLoginSuccessHandler"
 			authentication-failure-handler-ref="authFailureHandler" />
+		
+		<!-- 로그아웃 : 판단 -> customLogoutSuccessHandler -->
+		<security:logout 
+			logout-url="/logout"
+            invalidate-session="true"
+            delete-cookies="JSESSIONID"
+            success-handler-ref="customLogoutSuccessHandler" />
 
-		<security:logout logout-url="/logout"
-			logout-success-url="/" invalidate-session="true"
-			delete-cookies="JSESSIONID" />
-			
+	<!-- 권한없음 403페이지 -->
+	<security:access-denied-handler error-page="/error/403" />
 	</security:http>
+	
+	
+	
 	<!-- 로그인 실패 -->
-	<bean id="authFailureHandler" class="org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler">
+	<bean id="authFailureHandler"
+		class="org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler">
 		<property name="exceptionMappings">
 			<props>
 				<!-- 비활성 계정만 -->
-				<prop key="org.springframework.security.authentication.DisabledException">
+				<prop
+					key="org.springframework.security.authentication.DisabledException">
 					/login?error=disabled
 				</prop>
 				<!-- 나머지 오류는 하나의 메시지로 통일 -->
-				<prop key="org.springframework.security.core.userdetails.UsernameNotFoundException">
+				<prop
+					key="org.springframework.security.core.userdetails.UsernameNotFoundException">
 					/login?error
 				</prop>
-				<prop key="org.springframework.security.authentication.BadCredentialsException">
+				<prop
+					key="org.springframework.security.authentication.BadCredentialsException">
 					/login?error
 				</prop>
 			</props>
-		</property>	
+		</property>
 	</bean>
 	
-	
+
 	<!-- db에 있는 패스워드값 찾아서 암호화로 가져오기 -->
 	<!-- org.springframework.security.core.userdetails.UserDetailsService 사용 -->
 	<security:authentication-manager>
-		<security:authentication-provider user-service-ref="userDetailsService">
-			<security:password-encoder ref="passwordEncoder" />
+		<security:authentication-provider
+			user-service-ref="userDetailsService">
+			<security:password-encoder
+				ref="passwordEncoder" />
 		</security:authentication-provider>
 	</security:authentication-manager>
 
@@ -72,8 +100,12 @@
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
 		<constructor-arg value="10" />
 	</bean>
-	
-	<!-- 로그인 로그 성공 남기기 위한 코드 -->
-	<bean class="org.springframework.security.authentication.event.LoggerListener" />
 
+	<!-- 로그인 로그 성공 남기기 위한 코드 -->
+	<bean
+		class="org.springframework.security.authentication.event.LoggerListener" />
+
+	<!-- 로그아웃 성공 빈 등록 -->
+	 <bean id="customLogoutSuccessHandler"
+        class="kr.co.dreamstart.security.CustomLogoutSuccessHandler" />
 </beans>

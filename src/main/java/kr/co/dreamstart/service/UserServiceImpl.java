@@ -23,14 +23,14 @@ import kr.co.dreamstart.dto.PageVO;
 import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.dto.UserRoleDTO;
 import kr.co.dreamstart.mapper.UserMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
-	@Autowired
-	private UserMapper userMapper;
+	private final UserMapper userMapper;
 
 	@Override
 	public Map<String, Object> userList(Criteria cri, Integer role, String searchType, String keyword, String startDate,
@@ -227,6 +227,33 @@ public class UserServiceImpl implements UserService {
 			map.put("result", "fail");
 		}
 		return map;
+
+	
+	@Override
+	@Transactional
+	public long register(UserDTO form) {
+		// TODO Auto-generated method stub
+		userMapper.join(form);
+		userMapper.joinRole(form.getUserId());
+		return form.getUserId();
+	}
+
+	@Override
+	public UserDTO findByLogin(String login) {
+		// TODO Auto-generated method stub
+		return userMapper.findByLogin(login);
+	}
+
+	@Override
+	public List<String> findRoleNames(Long userId) {
+		// TODO Auto-generated method stub
+		return userMapper.findRoleNameByUserId(userId);
+	}
+
+	@Override
+	public void touchLastLogin(Long userId) {
+		// TODO Auto-generated method stub
+		userMapper.updateLastLoginAt(userId);
 	}
 
 }
