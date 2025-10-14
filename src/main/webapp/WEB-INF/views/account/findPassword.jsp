@@ -10,7 +10,7 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/findPassword.css">
 </head>
 <body>
-      <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+    <jsp:include page="/WEB-INF/views/common/header.jsp"/>
     <main>
     <div class="container">
         <h2>Find</h2>
