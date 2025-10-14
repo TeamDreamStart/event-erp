@@ -307,6 +307,9 @@ button{
     justify-content: center;
     gap: 15px;
     align-items: center;
+	color: #888888;
+	font-size: 18px;
+	transition: 0.2s;
 }
 
 .pagination li{
@@ -338,6 +341,12 @@ button{
 .page-number.active {
     font-weight: bold;
     border-bottom: 2px solid #333; /* 현재 페이지 강조 */
+}
+
+.pagination a:hover{
+	color: #222; /* 텍스트를 검은색으로 변경 */
+    background-color: transparent; /* 배경색 변경 없음 */
+    cursor: pointer;
 }
 
 /* 4. Footer 영역 스타일 */

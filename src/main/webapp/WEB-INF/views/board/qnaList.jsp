@@ -212,31 +212,82 @@ button{
     justify-content: center;
     margin-bottom: 50px;
     border:none;  /*테두리 제거*/
-    max-width: 450px;
+    max-width: 888px;
     margin: 50px auto;
-    gap: 10px;
+    gap: 43px;
 }
+
+/*검색 입력창*/
 .search-input {
-    width: 300px;
-    padding: 15px 20px;
+    width: 733px;
+    height: 60px;
+    box-sizing: border-box;
+    padding: 0px 20px;
     background-color:#CBD4C2;
     border: 1px solid #222;
     border-radius: 15px;
-    flex-grow: 1;
+    flex-grow: 0;
     box-shadow: none;
     outline: none;
     font-size: 18px;
     color:#222 ;
     opacity: 1;
 }
+
+   .search-input::placeholder{
+        color: #888888;
+        opacity: 1;
+    }
+
+/*검색 버튼*/
 .search-btn {
-    padding: 10px 20px;
+    width: 112px;
+    height: 60px;
+    box-sizing: border-box;
+    padding: 0px;
     background-color: #CBD4C2;
     border: 1px solid #222;
     border-radius: 15px;
     font-size: 18px;
     outline: none;
+    font-weight: bold;
+
+      /* 텍스트 정렬 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /*버튼 텍스트 색상*/
+    color: #222;
 }
+
+.qna-list-container{
+    max-width: 888px;
+    height: 584px;
+    margin: 0 auto;
+    border: 1px solid #FAF9F6;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    background-color: #FAF9F6;
+    overflow-y: auto;
+}
+
+.qna-header{
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 15px 20px 15px 50px;
+    border-bottom: 1px solid #222;
+    background-color: #E5E2DB;
+}
+
+.qna-header > div:nth-child(1){width: 50%; text-align: left;} /*제목*/
+.qna-header > div:nth-child(2){width: 15%; text-align: center;} /*작성자*/
+.qna-header > div:nth-child(3){width: 15%; text-align: center;} /*등록일자*/
+.qna-header > div:nth-child(4){width: 10%; text-align: center;} /*상태*/
+
+
+
 
 /* 게시판 테이블 */
 .notice-table {
@@ -248,7 +299,6 @@ button{
 .notice-table thead th {
     font-weight: bold;
     padding: 15px 0;
-    border-top: 2px solid #222; /* 상단 굵은 선 */
     border-bottom: 1px solid #222; /* 하단 얇은 선 */
 	font-size: 14px;
 }
@@ -257,17 +307,17 @@ button{
     border-bottom: 1px solid #AFAFAF;
     color: #222;
     font-size: 15px;
-	vertical-align: top;
+	vertical-align: middle;
 }
 
-.notice-table th:nth-child(1) { width: auto; } /* 제목 (나머지 공간 전부) */
+.notice-table th:nth-child(1) { width: auto; text-align: left; } /* 제목 (나머지 공간 전부) */
 .notice-table th:nth-child(2), .notice-table td:nth-child(2) { width: 15%; } /* 작성자 */
 .notice-table th:nth-child(3), .notice-table td:nth-child(3) { width: 12%; } /* 등록일자 */
 .notice-table th:nth-child(4), .notice-table td:nth-child(4) { width: 10%; font-weight: bold; } /* 상태 */
 
 
 .notice-table tbody td:nth-child(1){
-	text-align: left; /*제목은 왼쪽 정렬*/
+	text-align: left; 
 	padding-left: 20px;
 }
 
@@ -280,10 +330,10 @@ button{
 }
 
 .notice-table td a::before{
-	content: Q;
+	content: 'Q';
 	margin-right: 10px;
 	font-size: 22px;
-	color: #FAF9F6;
+	color: #888888;
 }
 .notice-table td p{
 	margin: 5px 0 0 35px;
@@ -294,10 +344,10 @@ button{
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: -webkit-box;
-	-webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+	 -webkit-line-clamp: 2;
+     -webkit-box-orient: vertical;
     line-height: 1.5;
-    max-height: 3em; /* 1.5 * 2 = 3em */
+    max-height: 3em; 
 }
 
 
@@ -309,16 +359,19 @@ button{
 .notice-table tbody tr:hover {
     background-color: #FFFFFF;
     cursor: pointer;
-}
+}*/
 
 /* 답변대기 상태 강조 */
-.notice-table td:nth-child(4):contains('답변대기'){ 
-    color: #888888; 
-}
+.status-waiting {
+    color: #888888 !important; 
+    font-weight: bold;
+    }
+
 
 /* 답변완료 상태 강조 */
-.notice-table td:nth-child(4):contains('답변완료') {
-    color: #0088ff; /* 파란색 계열 */
+.status-complete { 
+    color: #0088ff !important;
+    font-weight: bold;
 }
 
 
@@ -331,49 +384,42 @@ button{
 .pagination {
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 16px;
     align-items: center;
-	color: #888888;
-	font-size: 18px;
-	transition: 0.2s;
 }
 
-.pagination li{
-    display: inline-block;
-}
-
-.pagination li a{
+.pagination a{
     padding: 5px 10px;
     font-size: 18px;
-    color: #999;
-    display: block;
+    color: #888888;
     transition: color 0.2s;
 }
 
-.pagination li.active a{
+.pagination a .active{
     font-weight: bold;
-    color: #222;
-}
-.nav-arrow {
-    font-size: 20px;
-    color: #999;
-}
-.page-number {
-    padding: 5px 10px;
-    font-size: 16px;
-    border: 1px solid transparent;
-    transition: all 0.2s;
-}
-.page-number.active {
-    font-weight: bold;
-    border-bottom: 2px solid #333; /* 현재 페이지 강조 */
+    /*color: #0088ff;
+    text-decoration: underline;*/
 }
 
 .pagination a:hover{
-	color: #222; /* 텍스트를 검은색으로 변경 */
-    background-color: transparent; /* 배경색 변경 없음 */
+    color: #222;
     cursor: pointer;
 }
+/*.pagination a:not(.active){
+    color: #888888;
+}*/
+
+
+/*.pagination a .page-number{
+    color: #888888;
+}
+
+.pagination a .page-number:hover{
+    color: #222;
+    cursor: pointer;
+}*/
+
+
 
 /* 4. Footer 영역 스타일 */
 .footer {
@@ -428,8 +474,8 @@ button{
 	<div class="page-title">Q&A</div>
    <!--검색창-->
    <div class="search-bar">
-	<input type="text" placeholder="제목/작성자/등록일자 검색">
-	<button>검색</button>
+	<input type="text" class="search-input" placeholder="제목/작성자/등록일자 검색">
+	<button class="search-btn">검색</button>
    </div>
    </div>
    <!--공지사항 테이블-->
@@ -454,7 +500,7 @@ button{
 			</td>
 			<td>김*현</td>
 			<td>2025-09-17</td>
-			<td>답변대기</td>
+			<td><span class="status-waiting">답변대기</span></td>
 		</tr>
 		<tr>
 			<td>
@@ -467,7 +513,7 @@ button{
 			</td>
 			<td>이*청</td>
 			<td>2025-09-17</td>
-			<td>답변대기</td>
+			<td><span class="status-waiting">답변대기</span></td>
 		</tr>
 		<tr>
 			<td>
@@ -480,7 +526,7 @@ button{
 			</td>
 			<td>조*서</td>
 			<td>2025-09-18</td>
-			<td>답변완료</td>
+			<td><span class="status-complete">답변완료</span></td>
 		</tr>
 		<tr>
 			<td>
@@ -493,7 +539,7 @@ button{
 			</td>
 			<td>윤*은</td>
 			<td>2025-09-18</td>
-			<td>답변완료</td>
+			<td><span class="status-complete">답변완료</span></td>
 		</tr>
 		<tr>
 			<td>
@@ -506,7 +552,7 @@ button{
 			</td>
 			<td>서*리</td>
 			<td>2025-09-19</td>
-			<td>답변완료</td>
+			<td><span class="status-complete">답변완료</span></td>
 		</tr>
 		<tr>
 			<td>
@@ -519,7 +565,7 @@ button{
 			</td>
 			<td>정*비</td>
 			<td>2025-09-19</td>
-			<td>답변완료</td>
+			<td><span class="status-complete">답변완료</span></td>
 		</tr>
 		<tr>
 			<td>
@@ -532,7 +578,7 @@ button{
 				</td>
 			<td>김*호</td>
 			<td>2025-09-20</td>
-			<td>답변완료</td>
+			<td><span class="status-complete">답변완료</span></td>
 		</tr>
 		<tr>
 			<td>
@@ -545,14 +591,14 @@ button{
 				</td>
 			<td>김*모</td>
 			<td>2025-09-20</td>
-			<td>답변완료</td>
+			<td><span class="status-complete">답변완료</span></td>
 		</tr>
 	</tbody>
    </table>
     <!--페이지네이션-->
    <div class="pagination">
 	 <a href="#">&lt;</a>
-	 <a href="#">1</a>
+        <a href="#" class="active">1</a>
 	 <a href="#">2</a>
 	 <a href="#">3</a>
 	 <a href="#">&gt;</a>
