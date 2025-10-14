@@ -346,6 +346,7 @@ public class MybatisTest {
 		for(UserDTO userDTO : userList) {
 			System.out.println(userDTO);
 		}
+	}
 	@Transactional
 	@Rollback
 	public void insert_and_find_ok() {

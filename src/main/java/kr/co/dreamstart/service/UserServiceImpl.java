@@ -227,6 +227,7 @@ public class UserServiceImpl implements UserService {
 			map.put("result", "fail");
 		}
 		return map;
+	}
 
 	
 	@Override
