@@ -109,7 +109,7 @@ public class UserController {
 
 	    String accessToken = userService.getAccessToken(code, state);
 	    Map<String, String> naverUser = userService.getNaverUser(accessToken);
-	    UserDTO user = userService.saveOrUpdateNaverUser(naverUser);
+	    UserDTO user = userService.saveOrUpdateNaverUser(naverUser);//DB 신규 INSERT,기존회원 UPDATE
 
 	    // 권한 직접 생성 (ROLE_USER 기본)
 	    List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));

@@ -85,7 +85,5 @@
 			<file-size-threshold>20971520</file-size-threshold>
 		</multipart-config>
 	</servlet>
-	<!-- JSON 변환기 등록 -->
-	<mvc:annotation-driven />
 
 </web-app>

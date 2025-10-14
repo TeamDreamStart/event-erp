@@ -23,4 +23,8 @@ public class EventDTO {
     private BigDecimal price;
     private String currency;
     private String category;
+    
+    //주소로 받아오는 위도, 경도
+    private BigDecimal latitude;
+    private BigDecimal longitude;
 }

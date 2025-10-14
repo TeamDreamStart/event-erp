@@ -10,7 +10,7 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/findPassword.css">
 </head>
 <body>
-    <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+      <jsp:include page="/WEB-INF/views/common/header.jsp"/>
     <main>
     <div class="container">
         <h2>Find</h2>
@@ -38,9 +38,8 @@
                         <button type="button" class="btn-verify">확인</button>
                     </div>
                     </div>
-
-                    <div class="end-btn">
-                        <button button onclick="history.back()" class="btn-cancle">취소</button>
+                                        <div class="end-btn">
+                        <button onclick="history.back()" class="btn-cancle">취소</button>
                         <button type="submit" class="btn-find-uid">로그인</button>
                     </div>
                 </form>
@@ -64,9 +63,8 @@
                         <button type="button" class="btn-verify">확인</button>
                     </div>
                     </div>
-
-                    <div class="end-btn">
-                        <button button onclick="history.back()" class="btn-cancle">취소</button>
+                                        <div class="end-btn">
+                        <button onclick="history.back()" class="btn-cancle">취소</button>
                         <button type="submit" class="btn-find-pass">비밀번호 찾기</button>
                     </div>
                 </form>
@@ -79,7 +77,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
-
     tabButtons.forEach(button => {
         button.addEventListener('click', function() {
             const targetId = this.dataset.tab;

@@ -21,6 +21,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result column="price" property="price"/>
  		<result column="currency" property="currency"/>
  		<result column="category" property="category"/>
+
+		<!-- 위도, 경도 --> 		
+ 		<result column="latitude" property="latitude"/>
+ 		<result column="longitude" property="longitude"/>
  	</resultMap>
 
 	<!-- 이벤트 페이징 -->
@@ -44,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into event_erp.`event`
 			(`title`, `description`, `location`, `start_date`, `end_date`, 
 			`capacity`, `status`, `visibility`, `poster_url`, `created_by`, 
-			`created_at`, `updated_at`, `is_paid`, `price`, `currency`, `category`)
+			`created_at`, `updated_at`, `is_paid`, `price`, `currency`, `category`,`latitude`,`longitude`)
 		values
 			(#{title}, #{description}, #{location}, 
 			<!-- datetime_local -> DATETIME 변환 -->
@@ -52,7 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			STR_TO_DATE(#{end_date}, '%Y-%m-%dT%H:%i'),
 			#{capacity}, #{status}, #{visible}, #{posterUrl},
 			#{createBy}, NOW(), NOW(),
-			#{isPaid}, #{price}, #{currency}, #{category})
+			#{isPaid}, #{price}, #{currency}, #{category},#{latitude},#{longitude})
 	</insert>
 	
 	<select id="selectByEventId" resultMap="eventMap">

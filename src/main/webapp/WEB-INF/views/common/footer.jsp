@@ -34,18 +34,11 @@
 </style>
 </head>
 <body>
-
-	<header> </header>
-
-	<nav></nav>
-
-	<article>
-		<h1>Hello world!</h1>
-
-		<P>The time on the server is serverTime.</P>
-
-	</article>
-
-	<footer> </footer>
+<footer class="footer">
+		<p class="address">수원시 팔달구 덕영대로 895번길 11</p>
+		<p class="call">대표전화. 031-420-4204</p>
+		<hr class="footer-hr">
+		<p class="other">@jfdfhfksehfkjsnckaul</p>
+	</footer>
 </body>
 </html>
