@@ -152,11 +152,15 @@ public class MybatisTest {
 		// @Autowiredprivate MailSender mailSender;
 		// JavaMailSenderImpl을 직접 만들어서 사용 (Spring Bean 없이)
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		mailSender.setHost("sandbox.smtp.mailtrap.io"); // Mailtrap에서 받은 값
-		mailSender.setPort(2525); // 또는 587, 465 등
-		mailSender.setUsername("5fb50ec1a37392"); // Mailtrap에서 복사한 username
-		mailSender.setPassword("41fd5116fea25f"); // Mailtrap에서 복사한 password
+//		mailSender.setHost("sandbox.smtp.mailtrap.io"); // Mailtrap에서 받은 값
+//		mailSender.setPort(2525); // 또는 587, 465 등
+//		mailSender.setUsername("5fb50ec1a37392"); // Mailtrap에서 복사한 username
+//		mailSender.setPassword("41fd5116fea25f"); // Mailtrap에서 복사한 password
 
+		mailSender.setHost("smtp.gmail.com");
+		mailSender.setPort(587);
+		mailSender.setUsername("yoonje515@gmail.com");
+		mailSender.setPassword("nqvp pkxd fmcb sgio");
 		Properties props = mailSender.getJavaMailProperties();
 		props.put("mail.transport.protocol", "smtp");
 		props.put("mail.smtp.auth", "true");
@@ -168,8 +172,8 @@ public class MybatisTest {
 		try {
 			MimeMessage msg = mailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(msg, false, "UTF-8");
-			helper.setFrom("from@example.com"); // 임의 주소(받는사람이 Mailtrap에서 확인)
-			helper.setTo("to@example.com"); // 임의 주소 (메일 트랩에서 수신)
+			helper.setFrom("teamDS@dreamstart.com"); // 임의 주소(받는사람이 Mailtrap에서 확인)
+			helper.setTo("yje_515@naver.com"); // 임의 주소 (메일 트랩에서 수신)
 			helper.setSubject("[테스트] Mailtrap + Email Api 테스트- 임시 비밀번호 발송");
 			helper.setText("임시 비밀번호는 [" + tmpPass + "]입니다.", false);
 

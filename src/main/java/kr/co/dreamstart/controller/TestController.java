@@ -1,6 +1,8 @@
 package kr.co.dreamstart.controller;
 
 import java.util.List;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,7 @@ import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.mapper.BoardMapper;
 import kr.co.dreamstart.mapper.FileAssetMapper;
 import kr.co.dreamstart.mapper.UserMapper;
+import kr.co.dreamstart.service.EmailSenderService;
 import kr.co.dreamstart.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import kr.co.dreamstart.mapper.EventMapper;
@@ -46,6 +49,9 @@ public class TestController {
 
 	@Autowired
 	private PaymentService paymentService;
+	
+	@Autowired
+	private EmailSenderService emailService;
 
 
 	@GetMapping("/list-test")
@@ -123,14 +129,60 @@ public class TestController {
 	}
 
 
-	@GetMapping("/kakao-test")
-	public String kakaoTest(Model model) {
-		String location = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=e1dafd936102e43b285b3a9893988593&redirect_uri=http://localhost:8080/map-test";
-		model.addAttribute("location", location);
-
-		return "test/kakaoTest";
+	
+	
+	//이메일 인증 -> 아이디찾기,비밀번호 재설정 테스트
+	
+	@GetMapping("/email-test")
+	public String emailGET(Model model,
+			@RequestParam(required=false)String email,
+			@RequestParam(required=false)String findType) {
+			if(email!=null && !email.isEmpty()) {
+				//이메일로 회원 존재여부 확인
+				UserDTO userDTO = userMapper.findByEmail(email);
+				if(userDTO!=null) {
+					String code = emailService.sendEmail(email);
+					//codeCheck용
+					model.addAttribute("code", code);
+					model.addAttribute("email", email);
+					log.info("[TEST] EMAIL CODE : "+code);
+				}else { // 회원이 존재하지 않을 시
+					model.addAttribute("result", "fail");
+					model.addAttribute("msg", "해당 이메일로 가입된 회원이 존재하지 않습니다.");
+				}
+			}
+		return "/test/emailTest";
+	}
+	@PostMapping("/email-test")
+	public String emailPOST(RedirectAttributes rttr) {
+		
+		
+		return "redirect:/codeMatch";
+	}
+	
+	@GetMapping("/codeMatch")
+	public String codeGET(Model model) {
+		return null;
+		
+	}
+	@PostMapping("/codeMatch")
+	public String codePOST(RedirectAttributes rttr) {
+		return "redirect:/login";
+		
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@PostMapping("https://kauth.kakao.com/oauth/token")
 	public String kakaoTokenTest() {
 
