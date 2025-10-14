@@ -86,20 +86,20 @@ public class UserController {
 	}
 	
 	
-//	로그인
+	//	로그인
 	@GetMapping("/login")
 	public String loginForm() {
 		log.info("GET /login - 로그인 폼 진입");
-		return "/account/login";
+		return "test/loginTest";
 	}
 	
-	// Spring security 로그아웃 설정으로 가능
-//	@RequestMapping("/logout")
-//	public String logout(HttpSession session) {
-//	    session.invalidate(); // 세션 전체 무효화
-//	    log.info("logout - 세션 만료");
-//	    return "redirect:/";   // 로그아웃 후 메인페이지 이동
-//	}
+	
+	// 정적템플릿 (login.html) 요청이 오면 시큐리티 로그인 페이지로 넘김 (어드민용)
+	@GetMapping("/login.html")
+	public String redirectLoginHtml() {
+		return "redirect:/login?mode=admin";
+	}
+
 
 	//네이버 로그인 api DB 업데이트 + Spring security
 	@RequestMapping("/login/naver/callback")
@@ -124,12 +124,6 @@ public class UserController {
 	    return "redirect:/"; // 로그인 후 메인 페이지로
 	}
 	
-	
-// 정적템플릿 (login.html) 요청이 오면 시큐리티 로그인 페이지로 넘김 (어드민용)
-	@GetMapping("/login.html")
-	public String redirectLoginHtml() {
-		return "redirect:/login?mode=admin";
-	}
 	
 	
 	
