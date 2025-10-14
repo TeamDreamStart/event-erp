@@ -108,6 +108,10 @@
 .footer .other{
 	margin-bottom: 28px;
 }
+/* 임시 */
+.placeholder img{
+	width:150px;
+}
 </style>
 </head>
 <body>  
@@ -115,7 +119,7 @@
     <main>
         <section class="main-visual">
             <figure>
-                <img src="<c:url value='/resources/img/grand.jpg'/>" alt="메인 베너입니다." class="visual-image"/>
+                <img src="<c:url value='/resources/img/main-visual-2.jpg'/>" alt="메인 베너입니다." class="visual-image"/>
                 <figcaption class="hidden">할아버지 할머니가 미술관 구경하는 배너</figcaption>
             </figure><hr class="hr2">
             <div class="museum-status">
@@ -136,7 +140,7 @@
 				<div class="placeholder">
 				</div>
 				<figure class="event-1">
-					<img src="<c:url value='/resources/img/event1.jpg'/>" alt="전시 1을 넣습니다."/>
+					<img src="<c:url value='/resources/img/events/event1.jpg'/>" alt="전시 1을 넣습니다."/>
 					<figcaption class="hidden">포스터 이미지</figcaption>
 				</figure>
 				<p class="title">오전과 오후 사이</p>
@@ -144,21 +148,21 @@
 				<article class="event-card swiper-slide">
 				<div class="placeholder"></div>
 				<figure class="event-2">
-					<img src="<c:url value='/resources/img/event2.jpg'/>" alt="전시 2를 넣습니다."/>
+					<img src="<c:url value='/resources/img/events/event2.jpg'/>" alt="전시 2를 넣습니다."/>
 				</figure>
 				<p class="title">도로 위의 밤</p>
 				</article>
 				<article class="event-card swiper-slide">
 				<div class="placeholder"></div>
 				<figure class="event-3">
-					<img src="<c:url value='/resources/img/event3.jpg'/>" alt="전시 3을 넣습니다."/>
+					<img src="<c:url value='/resources/img/events/event3.jpg'/>" alt="전시 3을 넣습니다."/>
 				</figure>
 				<p class="title">시선</p>
 				</article>
 				<article class="event-card swiper-slide">
 				<div class="placeholder"></div>
 				<figure class="event-4">
-					<img src="<c:url value='/resources/img/event4.jpg'/>" alt="전시 4를 넣습니다."/>
+					<img src="<c:url value='/resources/img/events/event4.jpg'/>" alt="전시 4를 넣습니다."/>
 				</figure>
 				<p class="title">머무를 곳</p>
 				</article>
@@ -258,7 +262,7 @@
 <article>
   <a href="<c:url value='/list-test'/>">회원목록 테스트</a>
   <a href="<c:url value='/board-test'/>">게시판 테스트</a>
-  <%-- 어드민 진입은 /admin 으로 두세요. 보안 필터가 SavedRequest 설정하고 관리자 로그인 뷰로 이동함 --%>
+  <%-- 어드민 진입은 /admin 으로 두세요. 보안 필터가 SavedRequest 설정하고 관리자 로그인 뷰로 이동함  네 알겠습니당--%>
   <a href="<c:url value='/admin'/>">어드민페이지</a>
   <a href="<c:url value='/admin/surveys'/>">어드민용 설문조사 리스트</a>
 </article>
