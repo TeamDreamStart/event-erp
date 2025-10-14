@@ -3,6 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sec"
 uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+이게 
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -32,6 +34,7 @@ uri="http://www.springframework.org/security/tags"%>
     margin: 0 auto;
     margin-bottom: 60px;
     width: 36%;
+    max-width: 500px;
 }
 	.tab-content {
 		display: none;
@@ -134,7 +137,7 @@ br {
     padding: 0;
     line-height: 0;
 }
-.btn-send-code, .btn-verify, .btn-find-uid, .btn-find-pass, .btn-cancle {
+.btn-register .btn-send-code, .btn-verify, .btn-find-uid, .btn-find-pass, .btn-cancle {
     padding: 6px 2px;
     width: 100px;
     border-radius: 12px;
@@ -144,13 +147,18 @@ br {
     flex-shrink: 0;
     font-weight: bold;
 } 
-.btn-send-code, .btn-verify, .btn-find-uid, .btn-find-pass {
+.btn .btn-send-code, .btn-verify, .btn-find-uid, .btn-find-pass {
     border: 1px solid #8FAFED;
     background-color: #BFD4F9;
 }
 .btn-cancle{
     border: 1px solid #AFAFAF;
     background-color: #F2F0EF;
+    margin-right: 16px;
+}
+.btn-register{
+    border: 1px solid #8FAFED;
+    background-color: #BFD4F9;
     margin-right: 16px;
 }
 
@@ -206,8 +214,8 @@ br {
 				
                 <div class="end-btn">
                     <button button onclick="history.back()" class="btn btn-cancle">취소</button>
-					<button type="submit" class="btn btn-find-uid">로그인</button>
 					<a href="/join" class="btn btn-register">회원가입</a>
+					<button type="submit" class="btn btn-find-uid">로그인</button>
 				</div>
                 </form>
             </div>
