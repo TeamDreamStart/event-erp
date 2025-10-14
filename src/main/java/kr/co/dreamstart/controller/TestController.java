@@ -156,4 +156,12 @@ public class TestController {
 	}
 
 
+	@GetMapping("/notices/{id}")
+	public String noticeDetail() {
+		return "/board/noticeDetail";
+	}
+	@GetMapping("/qna/{id}")
+	public String qnaDetail() {
+		return "/board/qnaDetail";
+	}
 }

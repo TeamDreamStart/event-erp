@@ -380,5 +380,5 @@ public class MybatisTest {
 		assertEquals("서비스-생성-라운드트립", loaded.getTitle());
 		assertEquals("OPEN", loaded.getStatus());
 	}
-
+	
 }
