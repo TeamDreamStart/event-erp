@@ -57,7 +57,7 @@ public class UserController {
 	@PostMapping("/join")
 	public String joinSubmit(@ModelAttribute("user") UserDTO form, RedirectAttributes ra) {
 		// 새로 가입한 가입자의 비밀번호 -> 해시로 바꿔치기
-		 form.setPassword(passwordEncoder.encode(form.getPassword()));
+		form.setPassword(passwordEncoder.encode(form.getPassword()));
 		
 		int result = mapper.join(form);
 		if (result == 1) {
@@ -75,7 +75,7 @@ public class UserController {
 	@GetMapping("/login")
 	public String loginForm() {
 		log.info("GET /login - 로그인 폼 진입");
-		return "test/loginTest";
+		return "/account/login";
 	}
 	
 //	@PostMapping("/login")

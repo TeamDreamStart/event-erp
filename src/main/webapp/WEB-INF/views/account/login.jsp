@@ -1,295 +1,333 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="sec"
+uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<script src="<c:url value='/js/main.js'/>"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet"/>
 <title>login</title>
+<link rel="stylesheet" type="text/css" href="/resources/css/findPassword.css">
 <style>
-    @font-face {
-    font-family: 'Peristiwa';
-    src: url('/resources/css/font/Peristiwa.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-}
     body {
         background-color: #E5E2DB;
-        color: #222222;
-        font-family: 'Montserrat', sans-serif;
-        font-size: medium;
-        margin: 0;
-        padding: 0 120px 60px; 
-        line-height: 1;
+		color: #222222;
+		font-family: 'Montserrat', sans-serif;
+		font-size: medium;
+		margin: 0;
+		padding: 0 120px 60px; 
+		line-height: 1;
+	}
+	main {
+		margin-top: 0; 
+		padding: 0; 
+	}
+	h2{
+		margin-bottom: 40px;
+	}
+	.find-main {
+    /* find-main을 화면 가운데 정렬 */
+    margin: 0 auto;
+    margin-bottom: 60px;
+    width: 36%;
+}
+	.tab-content {
+		display: none;
+		background-color: #FAF9F6;
+		border: 1px solid #222222;
+		height: auto;
+		border-top: none;
+		border-radius: 12px;
+		font-family: 'Montserrat', sans-serif;
+		font-size: 12px;
+		padding: 48px 20px;
+	}
+	
+	/* active 클래스가 붙으면 보이도록 설정 */
+	.tab-content.active {
+		display: block;
     }
-    .header {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        /* header 내부 패딩을 0으로 설정하여 body의 120px 패딩을 내부 컨텐츠의 기준으로 사용 */
-        padding: 20px 0 0; 
-        min-height: 120px;
-        background-color: transparent;
-        height: auto;
-    }
-    .header-top { 
-        display: flex; 
-        justify-content: space-between; 
-        align-items: flex-start; 
-        width: 100%; 
-        position: static; 
-        height: auto;
-        padding-bottom: 20px;
-    }
-
-.header-left {
-    /* 로고를 감싸는 역할만 함 */
+.tab-header {
+	display: flex;
 }
-.logo-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-}
-
-.logo {
-    font-family: 'Peristiwa', cursive;
-    font-size: 40px;
-}
-
-.header-right {
-    display: flex;
-    align-items: flex-start;
-}
-
-.user-actions {
-    display: flex;
-    align-items: center;
-    position: relative;
-    height: 38px;
-    font-size: 20px;
-}
-.mypage-link {
-    background-color: #ffffff;
-    border: none;
-    font-family: 'Montserrat', sans-serif;
-    color: #595959;
+	.tab-btn {
+		/* 버튼 기본 스타일 */
+        padding: 12px 80px;
     cursor: pointer;
-    padding: 8px 16px; /* 내부 패딩 */
-    border-radius: 0px;
-    text-decoration: none;
-    margin-right: 10px;
-    display: inline-flex;
-    justify-content: center; 
-    align-items: center;
-    min-width: 92px; 
-    height: 100%;
-    box-sizing: border-box;
-    font-size: 16px;
-    
-}
-
-.mypage-link:hover {
-    background-color: #e0e0e0;
-}
-
-/* login 버튼 스타일 */
-.btn-login {
-    text-decoration: none;
-    background-color: #222222;
-    color: #E5E2DB;
+    background-color: #CBD4C2;
     border: none;
+    color: #888888;
+    border-radius: 12px;
+    width: 50%;
     font-family: 'Montserrat', sans-serif;
-    cursor: pointer;
-    padding: 8px 16px; /* mypage-link와 동일한 패딩 유지 */
-    border-radius: 0px; /* 모서리 각지게 */
-    display: inline-flex; /* flex를 사용하여 텍스트 중앙 정렬 및 높이 제어 */
-    justify-content: center; /* 텍스트 가로 중앙 정렬 */
-    align-items: center; /* 텍스트 세로 중앙 정렬 */
-    min-width: 92px; 
-    height: 100%; /* 부모 .user-actions의 높이에 맞춤 */
-    box-sizing: border-box; /* 패딩과 보더가 너비에 포함 */
-    font-size: 16px;
+    font-size: 12px;
 }
-
-.btn-login:hover {
-    background-color: #555;
-}
-
-    .header-nav {
-        display: flex;
-        width: 100%; 
-        align-items: center;
-        justify-content: space-between; 
-        margin-bottom: 12px;
-        left: 0;
-        font-size: 20px;
-    }
-
-    .header-nav a {
-        text-decoration: none;
-        color: #222222; 
-        margin-right: 30px;
-        font-weight: 500;
-        cursor: pointer;
-    }
-    .header-nav a:hover{
-        color: #08f;
-    }
-
-    .header-nav a:last-child {
-        margin-right: 0; 
-    }
-
-    .dropdown-container {
-        position: relative;
-        margin-left: auto; 
-    }
-    /* Help 레이블을 header-nav의 flex 흐름 밖으로 뺌 */
-    .help {
-        font-size: 20px;
-        font-weight: 500;
-        color: #222222;
-        cursor: pointer;
-    }
-    .menu {
-        list-style: none; 
-        margin: 0;
-        position: absolute;
-        /* Help 오른쪽 끝에 정렬 */
-        right: 0; 
-        top: 100%; 
-        background-color: #ffffff; 
-        border: 1px solid #ccc; 
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
-        z-index: 104; 
-        
-        display: none; 
-        padding-left: 21px;
-        padding-bottom: 21px;
-        padding-right: 96px;
-    }
-    
-    /* Help 텍스트에 호버 시 메뉴 표시 */
-    .dropdown-container:hover .menu{
-        display: block;
-    }
-    
-    .menu li {
-        padding-top: 25px;
-        font-size: 16px;
-        color: #222222;
-        white-space: nowrap;
-        text-align: left;
-    }
-    .menu li a {
-        text-decoration: underline;
-    }
-    
-    .menu a:hover{
-        background-color: transparent;
-        cursor: pointer;
-        color: #08f; 
-    }
-
-    .hr1 {
-        border: none;
-        border-top: 1px solid #222222;
-        margin-bottom: 0;
-        margin-top: 0;
-        width: 100%; 
-        box-sizing: border-box;
-        margin-bottom: 50px;
-    }
-    main {
-        margin-top: 0; 
-        padding: 0; 
-    }
-    .login-title{
-        font-size: 20px;
-        margin: 0;
+	.tab-btn.active {
+        /* 활성화된 버튼 스타일 */
+        background-color: #FAF9F6;
+		border: 1px solid #222222;
+		color: #222222;
         font-weight: bold;
+		border-bottom: none;
+		margin-bottom: -1px;
+		font-family: 'Montserrat', sans-serif;
+		font-size: 12px;
+        
     }
-	.footer{
-	padding-left: 36px;
-	padding-right: 36px;
-	margin-top: 100px;
-	border: 1px solid #222222;
-	justify-content: left;
-	background-color: #CBD4C2;
-    font-size: 16px;
+.find-uid-form, .find-password-form{
+    margin: 0 auto 16px auto; 
+    display: block; 
+    max-width: 380px; 
 }
-.footer .address{
-	margin-top: 64px;
-	margin-bottom: 16px;
+
+/* 라벨 스타일: 왼쪽 정렬 */
+.find-uid-form label, .find-password-form label {
+    display: block;
+    width: 100%;
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 0; /* 라벨 자체의 하단 마진 제거 */
+    padding-bottom: 0;
+    line-height: 1; /* 라벨의 높이 최소화 */
 }
-.footer hr{
-	margin-bottom: 28px;
-	margin-top: 28px;
-	height: 1px;
-	border: none;
-    border-top: 1px solid #222222;
+
+/* input-group: input과 버튼을 나란히 배치 (줄바꿈 방지) */
+.input-group{
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: -5px;
+    justify-content: flex-start; 
+    gap: 4px ;
 }
-.footer .other{
-	margin-bottom: 28px;
+br{
+	margin: 0;
+	padding: 0;
+	line-height: 0;
+}
+
+input::placeholder{
+    color: #D9D9D9;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+}
+
+input#email_uid, #verificationCode_uid, #email_pw, #verificationCode_pw{
+    padding-left: 4px;
+    margin-top: 0;
+    border-radius: 3px;
+    border: 1px solid #222222;
+    text-align: left;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+input[type=text]{
+    width: 260px;
+    height: 32px;
+    box-sizing: border-box;
+}
+br {
+    margin-top: -4px;
+    padding: 0;
+    line-height: 0;
+}
+.btn-send-code, .btn-verify, .btn-find-uid, .btn-find-pass, .btn-cancle {
+    padding: 6px 2px;
+    width: 100px;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-weight: bold;
+} 
+.btn-send-code, .btn-verify, .btn-find-uid, .btn-find-pass {
+    border: 1px solid #8FAFED;
+    background-color: #BFD4F9;
+}
+.btn-cancle{
+    border: 1px solid #AFAFAF;
+    background-color: #F2F0EF;
+    margin-right: 16px;
+}
+
+/* 하단 버튼 영역 가운데 정렬 */
+.end-btn{
+    margin: 58px auto 0 auto;
+    display: block;
+    width: fit-content;
+    text-align: center;
+}
+.error-message {
+    display: block; /* 줄바꿈 */
+    color: red; /* 빨간색 글씨 */
+    font-size: 11px;
+    margin-top: 4px;
+    height: 15px; /* 메시지가 없을 때 공간 확보 방지 */
+    text-align: left; /* 왼쪽 정렬 */
+    user-select: none;
+    cursor: default;
 }
 </style>
 </head>
 <body>
-<header class="header">
-		<div class="header-top">
-			<span class="header-left">
-				<a href="/" class="logo-link"><span class="logo">D</span></a>
-			</span>
-			<span class="header-right">
-				<span class="user-actions">
-					<a href="/my-info" class="mypage-link">my page</a>
-					<a href="/login" class="btn-login">login</a>
-				</span>
-			</span>
-		</div>
-			<nav class="header-nav">
-				<a href="#">Visit</a>
-				<a href="/events">Event</a>
-				<a href="/reservations/guest-check">Reservation</a>
-                <div class="dropdown-container">
-                    <label class="help">Help</label>
-                    <ul class="menu">
-                        <li><a href="/notices">Notice</a></li>
-                        <li><a href="/qna">Q&A</a></li>
-                    </ul>
-                </div>
-            </nav>
-            <hr class="hr1">
-	</header>
-	<main>
-	<div class="container">
-		<h2 class="login-title">Login</h2>
-		<div class="login-section">
-			<form action="#" method="post">
-				<div class="login-form">
-					<label for="username">아이디</label>
-					<input type="text" name="username" id="username" placeholder="아이디를 입력하세요." required>
-					<label for="password">비밀번호</label>
-					<input type="password" name="password" id="password" placeholder="비밀번호를 입력하세요." required>
-				</div>
-				<div class="find-link">
+    <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+    <main>
+    <div class="container">
+        <h2>Login</h2>
+        <div class="find-main">
+            <div class="tab-header">
+                <button type="button" class="tab-btn active" data-tab="uid-section-content">회원으로 로그인하기</button>
+                <button type="button" class="tab-btn" data-tab="password-section-content">비회원으로 예약조회</button>
+            </div>
+            
+            <div id="uid-section-content" class="tab-content active">
+                <form action="/${postDTO.username}" method="post">
+                    <div class="find-uid-form">
+                    <label for="email_uid">이메일</label><br>
+                    <div class="input-group">
+                        <input type="text" name="userEmail" id="email_uid" placeholder="이메일을 입력하세요." required>
+                    </div>
+                    <span id="email-uid-message" class="error-message"></span>
+                    </div>
+                    
+                    <div class="find-uid-form">
+                    <label for="verificationCode_uid">비밀번호</label><br>
+                    <div class="input-group">
+                        <input type="password" id="verificationCode_uid" name="verificationCode" placeholder="비밀번호를 입력하세요." required>
+                    </div>
+                    </div>
+                    <div class="find-link">
 					<a href="/find-password">아이디 · 비밀번호 찾기</a>
 				</div>
-				<div class="login-button">
-					<button type="submit" class="btn btn-login">로그인</button>
+				
+                <div class="end-btn">
+                    <button button onclick="history.back()" class="btn btn-cancle">취소</button>
+					<button type="submit" class="btn btn-find-uid">로그인</button>
 					<a href="/join" class="btn btn-register">회원가입</a>
 				</div>
-			</form>
-		</div>
-	</div>
-</main>
-<footer class="footer">
-		<p class="address">수원시 팔달구 덕영대로 895번길 11</p>
-		<p class="call">대표전화. 031-420-4204</p>
-		<hr class="footer-hr">
-		<p class="other">@jfdfhfksehfkjsnckaul</p>
-	</footer>
+                </form>
+            </div>
+            
+            <div id="password-section-content" class="tab-content">
+                <form action="/${postDTO.name}" method="post">
+                    <div class="find-password-form">
+                    <label for="email_pw">이메일</label><br>
+                    <div class="input-group">
+                        <input type="text" name="userEmail" id="email_pw" placeholder="이메일을 입력하세요." required>
+                    </div>
+                    <span id="email-pw-message" class="error-message"></span>
+                    </div>
+                    
+                    <div class="find-password-form">
+                    <label for="verificationCode_pw">비밀번호</label><br>
+                    <div class="input-group">
+                        <input type="text" id="verificationCode_pw" name="verificationCode" placeholder="비밀번호를 입력하세요." required>
+                    </div>
+                    </div>
+
+                    <div class="end-btn">
+                        <button button onclick="history.back()" class="btn btn-cancle">취소</button>
+                        <button type="submit" class="btn btn-find-pass">로그인</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> <hr>
+    </main>
+    <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.dataset.tab;
+
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            const targetContent = document.getElementById(targetId);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        });
+    });
+
+    // 메시지를 표시하거나 숨기는 함수 (참고하신 로직 기반)
+    function showMessage(elementId, message, isError) {
+        const messageElement = document.getElementById(elementId);
+        if (messageElement) {
+            messageElement.textContent = message;
+            messageElement.style.color = isError ? 'red' : 'green';
+        }
+    }
+
+    // 모든 이메일 메시지 숨기는 함수
+    function hideAllEmailMessages() {
+        showMessage('email-uid-message', '', false);
+        showMessage('email-pw-message', '', false);
+    }
+    
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    const sendCodeUidBtn = document.querySelector('#uid-section-content .btn-send-code');
+    const sendCodePwBtn = document.querySelector('#password-section-content .btn-send-code');
+
+    if (sendCodeUidBtn) {
+        sendCodeUidBtn.addEventListener('click', function() {
+            const messageId = 'email-uid-message';
+            const emailInput = document.getElementById('email_uid');
+            const email = emailInput.value.trim();
+            
+            // 기존 메시지 숨김
+            showMessage(messageId, '', false); 
+
+            if (email === "") {
+                showMessage(messageId, '이메일을 입력해 주세요.', true);
+                emailInput.focus();
+                return;
+            }
+
+            if (!isValidEmail(email)) {
+                showMessage(messageId, '올바른 이메일 형식이 아닙니다. 다시 확인해 주세요.', true);
+                emailInput.focus();
+                return;
+            }
+        });
+    }
+
+    if (sendCodePwBtn) {
+        sendCodePwBtn.addEventListener('click', function() {
+            const messageId = 'email-pw-message';
+            const emailInput = document.getElementById('email_pw');
+            const email = emailInput.value.trim();
+            
+            // 기존 메시지 숨김
+            showMessage(messageId, '', false);
+
+            if (email === "") {
+                showMessage(messageId, '이메일을 입력해 주세요.', true);
+                emailInput.focus();
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                showMessage(messageId, '올바른 이메일 형식이 아닙니다. 다시 확인해 주세요.', true);
+                emailInput.focus();
+                return;
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>

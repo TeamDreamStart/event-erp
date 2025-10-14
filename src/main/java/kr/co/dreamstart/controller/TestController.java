@@ -689,4 +689,8 @@ public class TestController {
 		return "/common/accessDenied";
 	}
 
+//@GetMapping("/login")
+//	public String loginTest() {
+//		return "/account/login";
+//	}
 }
