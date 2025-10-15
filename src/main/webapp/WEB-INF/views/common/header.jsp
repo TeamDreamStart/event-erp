@@ -47,6 +47,7 @@
 .logo {
     font-family: 'Peristiwa', cursive;
     font-size: 40px;
+    caret-color: transparent;
 }
 
 .header-right {

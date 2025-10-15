@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
+    uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -58,59 +58,61 @@
         margin: 5px 0;
     }
 
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-}
-.section-header h2{
-    font-size: 20px;
-    font-weight: bold;
-    
-}
-		.hr2{
-			border: none;
-		border-top: 1px solid #222222;
-		margin-bottom: 0;
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+    .section-header h2{
+        font-size: 20px;
+        font-weight: bold;
+        user-select: none;
+        cursor: default;
+    }
+    .hr2{
+        border: none;
+        border-top: 1px solid #222222;
+        margin-bottom: 0;
         margin-top: 50px;
         width: 100%; 
         box-sizing: border-box;
-		}
-		.footer{
-	padding: 0px 36px;
-	margin-top: 68px;
-	border: 1px solid #222222;
-	justify-content: left;
-	background-color: #CBD4C2;
-	color: #222222;
-}
-.footer{
-	padding-left: 36px;
-	padding-right: 36px;
-	margin-top: 100px;
-	border: 1px solid #222222;
-	justify-content: left;
-	background-color: #CBD4C2;
-    font-size: 16px;
-}
-.footer .address{
-	margin-top: 64px;
-	margin-bottom: 16px;
-}
-.footer hr{
-	margin-bottom: 28px;
-	margin-top: 28px;
-	height: 1px;
-	border: none;
-    border-top: 1px solid #222222;
-}
-.footer .other{
-	margin-bottom: 28px;
-}
+    }
+
+    .horizontal-scroll-section.exhibitions {
+        margin-bottom: 60px;
+    }
+
+    .event-card {
+        text-align: center;
+    }
+
+    .event-card figure {
+        margin: 0;
+        width: 100%;
+        height: auto; 
+    }
+
+    .event-card figure img {
+        width: 100%;
+        height: auto; 
+        display: block;
+        border-radius: 8px;
+        border: 1px solid #222222;
+    }
+
+    .event-card .title {
+        margin-top: 15px;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .swiper-button-next, .swiper-button-prev {
+        color: #222222 !important;
+    }
 </style>
 </head>
-<body>  
+<body>  
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
     <main>
         <section class="main-visual">
@@ -124,45 +126,46 @@
             </div>
         </section>
 
-		<!-- Swiper -->
-	<section class="horizontal-scroll-section exhibitions">
-		<div class="section-header">
-			<h2>Event</h2>
-		</div>
+    <section class="horizontal-scroll-section exhibitions">
+        <div class="section-header">
+            <h2>Event</h2>
+        </div>
 
 <div #swiperRef="" class="swiper mySwiper">
     <div class="swiper-wrapper">
     <article class="event-card swiper-slide">
-				<div class="placeholder">
-				</div>
-				<figure class="event-1">
-					<img src="<c:url value='/resources/img/event1.jpg'/>" alt="전시 1을 넣습니다."/>
-					<figcaption class="hidden">포스터 이미지</figcaption>
-				</figure>
-				<p class="title">오전과 오후 사이</p>
-				</article>
-				<article class="event-card swiper-slide">
-				<div class="placeholder"></div>
-				<figure class="event-2">
-					<img src="<c:url value='/resources/img/event2.jpg'/>" alt="전시 2를 넣습니다."/>
-				</figure>
-				<p class="title">도로 위의 밤</p>
-				</article>
-				<article class="event-card swiper-slide">
-				<div class="placeholder"></div>
-				<figure class="event-3">
-					<img src="<c:url value='/resources/img/event3.jpg'/>" alt="전시 3을 넣습니다."/>
-				</figure>
-				<p class="title">시선</p>
-				</article>
-				<article class="event-card swiper-slide">
-				<div class="placeholder"></div>
-				<figure class="event-4">
-					<img src="<c:url value='/resources/img/event4.jpg'/>" alt="전시 4를 넣습니다."/>
-				</figure>
-				<p class="title">머무를 곳</p>
-				</article>
+                <div class="placeholder">
                 </div>
+                <figure class="event-1">
+                    <img src="<c:url value='/resources/img/event1.jpg'/>" alt="전시 1을 넣습니다."/>
+                    <figcaption class="hidden">포스터 이미지</figcaption>
+                </figure>
+                <p class="title">오전과 오후 사이</p>
+                </article>
+                <article class="event-card swiper-slide">
+                <div class="placeholder"></div>
+                <figure class="event-2">
+                    <img src="<c:url value='/resources/img/event2.jpg'/>" alt="전시 2를 넣습니다."/>
+                </figure>
+                <p class="title">도로 위의 밤</p>
+                </article>
+                <article class="event-card swiper-slide">
+                <div class="placeholder"></div>
+                <figure class="event-3">
+                    <img src="<c:url value='/resources/img/event3.jpg'/>" alt="전시 3을 넣습니다."/>
+                </figure>
+                <p class="title">시선</p>
+                </article>
+                <article class="event-card swiper-slide">
+                <div class="placeholder"></div>
+                <figure class="event-4">
+                    <img src="<c:url value='/resources/img/event4.jpg'/>" alt="전시 4를 넣습니다."/>
+                </figure>
+                <p class="title">머무를 곳</p>
+                </article>
+                </div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
 </div>
 
     <section class="calendar-section">
