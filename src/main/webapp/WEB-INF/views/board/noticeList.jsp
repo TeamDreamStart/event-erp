@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="/webapp/resources/css/noticeList.css">
 
 <style>
-.body {
+body {
 	font-family: 'Montserrat';
 	margin: 0;
 	padding: 0;
@@ -382,35 +382,12 @@ button {
 <title>noticelist</title>
 </head>
 <body>
-	<header class="header">
-		   
-		<div class="header-top">
-			        <span class="header-left">             <a href="/"
-				class="logo-link"><span class="logo">D</span></a>        
-			</span>                         <span class="header-right">        
-				<div class="user-actions">
-					                <a href="#" class="btn-mypage">mypage</a>          
-					      <a href="#" class="btn-login">login</a>            
-				</div>        
-			</span>    
-		</div>
-		           
-		<nav class="header-nav">
-			        <a href="#">Visit</a>         <a href="#">Event</a>         <a
-				href="#">Reservation</a>    
-		</nav>
-		           
-		<div class="help-area">
-			       
-			<button class="help-button">Help</button>
-			                       
-			<div class="help-dropdown">
-				            <a href="#" class="help-item">Notice</a>             <a
-					href="#" class="help-item">Q&A</a>        
-			</div>
-			   
-		</div>
+	
+	<header>
+	
+			<jsp:include page="/WEB-INF/views/common/header.jsp" flush="true" />
 	</header>
+	
 
 
 	<main class="main-content">
@@ -477,13 +454,8 @@ button {
 			</ul>
 		</div>
 	</main>
-
-	<footer class="footer">
-		<div class="footer-content">
-			<p>수원시 팔달구 덕영대로 895번길 11</p>
-			<p>대표전화. 031-420-4204</p>
-			<p class="social-link">@jfdfhfksehfkjsnckaul</p>
-		</div>
+	<footer>
+			<jsp:include page="/WEB-INF/views/common/footer.jsp" flush="true" />
 	</footer>
 </body>
 </html>

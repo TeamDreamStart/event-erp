@@ -170,4 +170,9 @@ public class BoardServiceImpl implements BoardService {
 		return mapper.commentDelete(commentId);
 	}
 
+	@Override
+	public List<BoardPostDTO> selectPostByUserID(long userId) {
+		return mapper.selectPostByUserID(userId);
+	}
+
 }

@@ -25,6 +25,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.co.dreamstart.dto.AdminJoinDTO;
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.EventDTO;
@@ -35,6 +36,7 @@ import kr.co.dreamstart.dto.SurveyQuestionDTO;
 import kr.co.dreamstart.dto.SurveyResponseDTO;
 import kr.co.dreamstart.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
+import kr.co.dreamstart.mapper.AdminMapper;
 import kr.co.dreamstart.mapper.BoardMapper;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
@@ -61,6 +63,9 @@ public class MybatisTest {
 	@Autowired
 	private EventService eventService;
 
+	@Autowired
+	private AdminMapper adminMapper;
+	
 	@Test
 	public void testFactory() {
 		assertNotNull("sqlFactory is Null", sqlFactory); // ����
@@ -384,6 +389,12 @@ public class MybatisTest {
 		assertEquals(newId, loaded.getEventId());
 		assertEquals("서비스-생성-라운드트립", loaded.getTitle());
 		assertEquals("OPEN", loaded.getStatus());
+	}
+	
+	@Test
+	public void sasdTest() {
+		List<AdminJoinDTO> dto = adminMapper.selectReservationPaymentByUserId(278);
+		System.out.println(dto);
 	}
 	
 }

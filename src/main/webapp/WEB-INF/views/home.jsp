@@ -391,7 +391,7 @@ body {
 		<section class="main-visual" aria-labelledby="mv-heading">
 			<h2 id="mv-heading" class="sr-only">메인 소개</h2>
 			<figure>
-				<img src="<c:url value='/resources/img/grand.jpg'/>"
+				<img src="<c:url value='/resources/img/main-visual-2.jpg'/>"
 					alt="박물관 내부 전시관을 관람하는 모습 (운영시간 오전 10:30 ~ 오후 6:00)">
 			</figure>
 			<hr class="visual-hr" aria-hidden="true">

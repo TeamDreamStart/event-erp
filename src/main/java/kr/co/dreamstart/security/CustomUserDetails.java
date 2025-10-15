@@ -27,4 +27,8 @@ public class CustomUserDetails extends User {
 	public Long getUserId() {
 		return userId;
 	}
+	
+    public String getName() {
+        return super.getUsername(); // principal.name으로 접근 가능하게!
+    }
 }

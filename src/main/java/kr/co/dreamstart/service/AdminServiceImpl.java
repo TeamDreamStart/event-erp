@@ -1,9 +1,12 @@
 package kr.co.dreamstart.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.co.dreamstart.dto.AdminActionLogDTO;
+import kr.co.dreamstart.dto.AdminJoinDTO;
 import kr.co.dreamstart.mapper.AdminMapper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,6 +26,11 @@ public class AdminServiceImpl implements AdminService {
 		}else {
 			log.warn("[ADMINSERVICE] ADMIN ACTION LOG FAIL");
 		}
+	}
+
+	@Override
+	public List<AdminJoinDTO> selectReservationPaymentByUserId(long userId) {
+		return adminMapper.selectReservationPaymentByUserId(userId);
 	}
 
 }

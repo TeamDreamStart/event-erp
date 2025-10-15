@@ -136,60 +136,6 @@ public class TestController {
 
 	
 	
-	//이메일 인증 테스트
-	@GetMapping("/find-password")
-	public String emailGET(Model model,@RequestParam(required=false)String findType,
-			@RequestParam(required=false)String email) {
-			if(email!=null && !email.isEmpty()) {
-				//이메일로 회원 존재여부 확인
-				UserDTO userDTO = userMapper.findByEmail(email);
-				if(userDTO!=null) {
-					String code = emailService.sendEmail(email);
-					//codeCheck용
-					model.addAttribute("code", code);
-					model.addAttribute("email", email);
-					model.addAttribute("msg", "인증번호가 발송되었습니다.");
-					log.info("[TEST] EMAIL CODE : "+code);
-					model.addAttribute("result", "success");
-					model.addAttribute("findType", findType);
-				}else { // 회원이 존재하지 않을 시
-					model.addAttribute("result", "fail");
-					model.addAttribute("msg", "해당 이메일로 가입된 회원이 존재하지 않습니다.");
-					log.info("[TEST] UNKOWN EMAIL");
-				}
-			}
-		return "/account/findPassword";
-	}
-	@PostMapping("/find-password")
-	public String emailPOST(RedirectAttributes rttr,String email,String findType) {
-		//인증번호 일치시 넘어옴
-		//findType에 따라 redirect 다르게 분기
-		if(findType.equals("findId")) { // 이메일에 따른 아이디값 전달
-			String userName = userService.findUserNameByEmail(email);
-			rttr.addFlashAttribute("findUserName",userName);
-			return "redirect:/find-password";//alert로 아이디 알려줌
-		}else { // 이메일에 따른 아이디 비밀번호 재설정창으로 이동
-			rttr.addFlashAttribute("email", email); //input hidden으로 값 넣어서 이걸로 userDTO 불러와서 password Update 할 수 있게 처리
-			return "redirect:/reset-password"; // 
-		}
-	}
-	
-	@GetMapping("/reset-password")
-	public String resetGET() {
-		return "/account/resetPassword";
-	}
-	
-	@PostMapping("/reset-password")
-	public String resetPOST(@RequestParam("email") String email,@RequestParam("newPass") String newPass) {
-		
-		
-		BCryptPasswordEncoder encoder =  new BCryptPasswordEncoder();
-		newPass = encoder.encode(newPass);
-		
-		userService.resetPassword(email,newPass);
-		//변경성공 alert
-		return "redirect:/login";
-	}
 	
 
 	

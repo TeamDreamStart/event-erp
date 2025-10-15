@@ -276,7 +276,7 @@ main {
 			<div class="notice-content">
 				<c:if test="${not empty fileList }">
 					<c:forEach var="fileDTO" items="${fileList}">
-						<img
+						<img style="width:100%"
 							src="${pageContext.request.contextPath}/resources/uploadTemp/${fileDTO.storedPath}/${fileDTO.uuid}_${fileDTO.originalName}"
 							alt="${fileDTO.originalName}">
 					</c:forEach>
