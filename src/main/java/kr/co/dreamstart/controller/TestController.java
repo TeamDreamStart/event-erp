@@ -131,12 +131,10 @@ public class TestController {
 
 	
 	
-	//이메일 인증 -> 아이디찾기,비밀번호 재설정 테스트
-	
+	//이메일 인증 테스트
 	@GetMapping("/email-test")
 	public String emailGET(Model model,
-			@RequestParam(required=false)String email,
-			@RequestParam(required=false)String findType) {
+			@RequestParam(required=false)String email) {
 			if(email!=null && !email.isEmpty()) {
 				//이메일로 회원 존재여부 확인
 				UserDTO userDTO = userMapper.findByEmail(email);
@@ -145,10 +143,13 @@ public class TestController {
 					//codeCheck용
 					model.addAttribute("code", code);
 					model.addAttribute("email", email);
+					model.addAttribute("msg", "인증번호가 발송되었습니다.");
 					log.info("[TEST] EMAIL CODE : "+code);
+					model.addAttribute("result", "success");
 				}else { // 회원이 존재하지 않을 시
 					model.addAttribute("result", "fail");
 					model.addAttribute("msg", "해당 이메일로 가입된 회원이 존재하지 않습니다.");
+					log.info("[TEST] UNKOWN EMAIL");
 				}
 			}
 		return "/test/emailTest";
