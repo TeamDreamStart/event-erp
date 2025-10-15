@@ -19,11 +19,11 @@
     line-height: 1.6;
 }
 
-.main-container{
+.main-content{
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    background-color: white;
+    background-color: #E5E2DB;
 }
 
 a{

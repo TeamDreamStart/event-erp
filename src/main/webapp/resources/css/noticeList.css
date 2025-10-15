@@ -2,7 +2,7 @@
     font-family: 'Montserrat';
     margin: 0;
     padding: 0;
-    background-color: #F5F5F5;
+    background-color: #E5E2DB;
     color: #222;
     line-height: 1.6;
 }
@@ -43,7 +43,7 @@
     padding-left: 15px;
 }
 
-login-button{
+.login-button{
     font-weight: bold;
 }
 
@@ -231,15 +231,15 @@ login-button{
 
 /* 4. Footer 영역 스타일 */
 .footer {
-    background-color: #e0f2e0; /* 연한 녹색 계열 배경 */
-    color: #333;
+    background-color: #CBD4C2; /* 연한 녹색 계열 배경 */
+    color: #222;
     padding: 30px 0;
     margin-top: 80px;
     text-align: center;
 }
 .footer p {
     margin: 5px 0;
-    font-size: 14px;
+    font-size: 20px;
 }
 .footer-hr {
     display: none; /* 디자인에 hr이 없으므로 숨김 처리 */
