@@ -7,9 +7,7 @@ import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.FileAssetDTO;
 import kr.co.dreamstart.mapper.FileAssetMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +25,6 @@ import net.coobird.thumbnailator.Thumbnailator;
 @Slf4j
 @Service
 public class FileServiceImpl implements FileService {
-
-	private final String uploadFolder = "C:\\upload";
 
 	@Autowired
 	private FileAssetMapper mapper;
@@ -41,6 +36,7 @@ public class FileServiceImpl implements FileService {
 
 
 	@Override
+	@Transactional // 실패방지
 	public void saveFiles(HttpServletRequest request ,MultipartFile[] uploadFile, String ownerType, Long ownerId) {
 		// 파일 받을 리스트
 		List<FileAssetDTO> fileList = new ArrayList<>();
@@ -163,6 +159,7 @@ public class FileServiceImpl implements FileService {
 		return false;
 	}
 	
+	@Transactional
 	public void deleteFiles(List<Long> deleteFileList) {
 		if (deleteFileList.size() > 0 && !deleteFileList.isEmpty()) {
 			int result = -1;
@@ -189,6 +186,7 @@ public class FileServiceImpl implements FileService {
 
 
 	@Override
+	@Transactional
 	public int deleteByOwner(String ownerType, long ownerId) {
 		return mapper.deleteByOwner(ownerType, ownerId);
 	}
