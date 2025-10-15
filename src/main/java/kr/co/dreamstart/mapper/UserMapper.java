@@ -67,8 +67,12 @@ public interface UserMapper {
 	// 사용자 비번 업데이트
 	public int updatePasswordById(@Param("userId") long userId, @Param("password") String password);
 
-	//
+	// 이메일로 사용자 단건
 	public UserDTO findByEmail(String email);
+	
+	// 중복체크
+	public int existsByUserName(@Param("username") String username);
+	public int existsByEmail(@Param("email") String email);
 
 
 }

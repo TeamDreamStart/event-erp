@@ -386,4 +386,38 @@ public class MybatisTest {
 		assertEquals("OPEN", loaded.getStatus());
 	}
 	
+	// 회원 가입 관련 테스트
+	@Test
+	public void existsByUserNameTest() {
+		// 이미 존재하는 계정일 경우
+		String existing = "admin";
+		int cnt = userMapper.existsByUserName(existing);
+		assertTrue("should exist, but count was" + cnt, cnt > 0);
+		log.info("[EXISTS-USERNAME] {} -> count={}", existing,cnt);
+	}
+	@Test
+	public void existsByUserName_notExistsTest() {
+		// 존재하지 않는 계정일 경우
+		String notExisting = "없지롱";
+		int cnt = userMapper.existsByUserName(notExisting);
+		assertEquals("non-existing username should be 0", 0, cnt);
+		log.info("[NOT EXISTS-USERNAME] {} -> {}", notExisting, cnt);
+	}
+	@Test
+	public void existsByEmailTest() {
+		// 이미 존재하는 이메일일 경우
+		String existing = "smoke@example.com";
+		int cnt = userMapper.existsByEmail(existing);
+		assertTrue("email should exist, but count was" + cnt, cnt > 0);
+		log.info("[EXISTS-EMAIL] {} -> {}", existing, cnt);
+	}
+	@Test
+	public void existsByEmail_notExistsTest() {
+		// 존재하는 이메일일 경우
+		String notExisting = "start1233456@naver.com";
+		int cnt = userMapper.existsByEmail(notExisting);
+		assertEquals("non-existing email should be 0", 0, cnt);
+		log.info("[NOT EXISTS-EMAIL] {} -> {}", notExisting, cnt);
+	}
+	
 }

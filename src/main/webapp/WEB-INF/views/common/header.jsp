@@ -125,6 +125,9 @@
 						<a
 							href="<c:url value='/login'><c:param name='mode' value='member'/></c:url>"
 							class="btn-login">login</a>
+						<a
+							href="<c:url value='/join'><c:param name='mode' value='member'/></c:url>"
+							class="btn-join">join</a>
 					</sec:authorize>
 				</div>
 			</div>

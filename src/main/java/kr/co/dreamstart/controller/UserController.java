@@ -48,29 +48,10 @@ public class UserController {
 		return "account/join"; // JSP 경로 반환
 	}
 	
-//	회원가입 처리 (개인정보 보호를 위해 post)
-//	프론트에서 유효성검증 + 형식이 맞지 않을경우 폼에 빨간줄로 경고 뜨게 작동하는 방식
-//	@PostMapping("/join")
-//	public String joinSubmit(@ModelAttribute("user") UserDTO form, RedirectAttributes ra) {
-//		log.info("POST /join - email={}", form.getEmail());
-//		try {
-//			int result = mapper.join(form);
-//			if (result == 1) { // 성공 -> 로그인페이지로
-//				ra.addFlashAttribute("msg", "회원가입이 완료되었습니다.");
-//				return "redirect:/login";
-//			} else { // 가입 실패 -> insert 실행 하지 않음
-//				log.warn("[JOIN] insert result=0");
-//				return "account/join";
-//			}
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//			log.error("[JOIN] DB error",e);
-//			return "account/join";
-//		}
-//	}
-	
 	@PostMapping("/join")
 	public String joinSubmit(@ModelAttribute("user") UserDTO form, RedirectAttributes ra) {
+		
+		form.setEmail(form.getEmail() == null ? null : form.getEmail().trim().toLowerCase());
 		// 새로 가입한 가입자의 비밀번호 -> 해시로 바꿔치기
 		form.setPassword(passwordEncoder.encode(form.getPassword()));
 		

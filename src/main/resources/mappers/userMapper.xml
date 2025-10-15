@@ -357,4 +357,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		`updated_at` = NOW()
 		where `user_id` = #{userId}
 	</update>
+	
+	<!-- 아이디/이메일 중복 체크 -> db 제약과 비교 / 아이디 : 대소문자 무시 -->
+	<select id="existsByUserName" parameterType="string" resultType="int">
+		select count(1) 
+		from `user` 
+		where `username` COLLATE utf8mb4_0900_ai_ci 
+			= #{username} COLLATE utf8mb4_0900_ai_ci
+	</select>
+	<select id="existsByEmail" parameterType="string" resultType="int">
+		select count(1) 
+		from `user` 
+		where `email` = LOWER (#{email})
+	</select>
 </mapper>
