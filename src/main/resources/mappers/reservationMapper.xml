@@ -26,5 +26,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{cri.pageStart},#{cri.perPageNum}
 	</select>
 	
+	<select id="select" resultType="reservationDTO">
+		select * from reservation
+		where reservation_id = #{reservationId}
+	</select>
+	
 	
 </mapper>

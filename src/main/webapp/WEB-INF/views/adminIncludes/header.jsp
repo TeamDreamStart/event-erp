@@ -96,11 +96,11 @@
 			class="fas fa-fw fa-chart-area"></i> <span>Charts</span></a></li>
 
 	<!-- 관리자 테이블 목록  -->
-	<li class="nav-item"><a class="nav-link" href="tables.html"> <i
+	<li class="nav-item"><a class="nav-link" href="/admin/event-manage"> <i
 			class="fas fa-fw fa-table"></i> <span>Event Manage</span></a></li>
-	<li class="nav-item"><a class="nav-link" href="tables.html"> <i
+	<li class="nav-item"><a class="nav-link" href="/admin/reservation-manage"> <i
 			class="fas fa-fw fa-table"></i> <span>Reservation Manage</span></a></li>
-	<li class="nav-item"><a class="nav-link" href="tables.html"> <i
+	<li class="nav-item"><a class="nav-link" href="/admin/payment-manage"> <i
 			class="fas fa-fw fa-table"></i> <span>Payment Manage</span></a></li>
 
 	<!-- Nav Item - Pages Collapse Menu -->
