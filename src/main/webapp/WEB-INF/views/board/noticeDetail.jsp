@@ -5,351 +5,280 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link href="https://www.dafont.com/peristiwa.font" rel="stylesheet"> 
+        <link href="https://fonts.cdnfonts.com/css/peristiwa" rel="stylesheet">
 		<link href="https://fonts.google.com/specimen/Montserrat" rel="stylesheet"> 
 		<link rel="stylesheet" href="/webapp/resources/css/noticeList.css">
 
       <style>
-.body{
-        font-family: 'Montserrat';
-        color: #222;
-        font-size: 16px;
-        margin: 0;
-        padding: 0;
-        line-height: 1.6;
-        background-color:#E5E2DB ;
-}
-
-a{
-    text-decoration: none;
-    color: inherit;
-}
-
-h1,h2,h3 .header a, .header-nav a{
-    font-weight: 300; 
-}
-
-/*헤더 스타일*/
-
-.header{
-   padding: 25px;
-   padding-bottom: 25px;
-   background-color: #F5F5F5;
-}
-  
-
-.header-top{
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start; /*로고와 우측 액션을 상단 정렬*/
-    position: relative;
-    margin-bottom: 30px;
-}
-
-.header-left{
+body {
+    /* 1. 페이지 바탕 색상: E5E2DB */
+    background-color: #E5E2DB;
+    font-family: 'Montserrat';
+    margin: 0;
+    padding: 0;
+    color: #222;
     display: flex;
     flex-direction: column;
+    align-items: center; /* 전체 콘텐츠 중앙 정렬 */
+    min-height: 100vh;
+}
+
+main {
+    width: 1440px; /* 메인 콘텐츠 너비 (헤더 너비와 일치) */
+    background-color: #E5E2DB; /* 메인 배경은 흰색으로 유지 */
+    padding-top: 50px; /* 상단 여백 */
+    box-sizing: border-box;
+    flex-grow: 1;
+}
+
+/* ---------------------------------------------------- */
+/* 헤더 스타일 조정 (피그마 치수 기반) */
+/* ---------------------------------------------------- */
+.header {
+    width: 1440px; /* 전체 너비 */
+    height: 135px; /* 피그마 이미지에서 확인되는 높이 */
+    background-color: #E5E2DB;
+    display: flex;
+    flex-direction: column;
+    padding: 0 100px;
+    box-sizing: border-box;
+    position: relative; /* 자식 요소 위치 지정을 위해 */
+}
+
+/*헤더 상단(로고,mypage, login)*/
+.header-top {   
+    display: flex;
+    justify-content: space-between; /* mypage, login 쪽을 오른쪽으로 */
+    align-items: center;
+    padding-top: 30px; /* 상단 여백 조정 */
+    padding-bottom: 10px;
 }
 
 .logo-link{
-    font-family: 'peristiwa';
-    font-size: 64px;
-    color: #222;
-    font-weight: 300;
-    letter-spacing: -2px;
-    padding-bottom: 25px;  /*네비게이션과의 간격*/
+   text-decoration: none;
 }
 
-.header-right{
+.logo {
+     font-family:'Peristiwa', sans-serif;
+     font-size:64px;
+     color: #222;
+     margin-left: 22px;
+     font-style: italic;
+}
+
+
+/*mtpage, login, help버튼 그룹*/
+.header-right {
     display: flex;
     align-items: center;
-    position: absolute;  /*절대 위치로 우측 상단에 고정*/
-    top: 0;
-    right: 40px;
-    font-size: 20px;
-    padding-top: 10px;
+    font-size: 16px;
+    position: relative;
 }
 
-
-/*로그인 버튼 스타일*/
-.user-action{  
-       display: flex;
-    align-items: center;
+/*mypage 버튼 스타일*/
+.header-right a {
+    color: #222;
+    text-decoration: none;
+    margin-right: 0;
+    padding: 8px 15px;
+    background-color: #FFFFFF;
+    /*border: 1px solid #FFFFFF;*/
 }
 
-.user-actions > a {
-    margin-left: 20px;
-}
-
-/*로그인 버튼 스타일*/
 .membership {
-    background: #222;
-    color: #fff;
+    width: 80px;
+    height: 34px;
     border: none;
     padding: 5px 15px;
-    font-size: 20px;
-    cursor: pointer;
-    margin-left: 20px;
-    font-weight: 400;
-}
-
-
-/*help,notice/qna 섹션 구현을 위한 추가 css*/
-   .header-nav{
-    display: flex;
-    gap: 40px;
-    font-size: 30px;
-    font-weight: 300;
-    padding-left: 20px;
-}
-
-.header-nav a{
-    padding-bottom: 10px;
-    transition: color 0.2s;
-}
-
-.header-nav a:hover{
-    color: #0088ff;
-}
-
-.header-help{
-    position: absolute;
-    top: 5px;
-    right: -10px;
-    font-size: 30px;
-    font-weight: 300;
-}
-
-.notice-qa-box{
-    position: absolute;
-    top: 50px; 
-    right: 40px; 
-    width: 100px;
-    text-align: center;
-    border: 1px solid #333333;
-    font-size: 14px;
-    padding: 5px 0;
-    z-index: 10; /* 다른 요소 위에 표시 */
-}
-
-.notice-qa-box a{
-    display: block;
-    padding: 3px 0;
-}
-
-
-/*메인 콘텐츠 notice 섹션*/
-main{
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-top: 30px;
-    position: relative;
-    background-color: #FAF9F6;
-    padding-bottom: 80px;
-}
-
-.notice-section{
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 40ox;  /*좌우 여백*/
-}
-
-.notice-section h2{
-    font-size: 30px;
-    margin-bottom: 50px;
-    text-align: center;
-    border-bottom: none;
-    padding-bottom: 5px;
+    border-radius: 5px;
+    margin-right: 0px;
     font-weight: bold;
-}
-
-
-/*공지 제목과 메타 정보*/
-.notice-header{
-    max-width: 800px;
-    border-bottom: 1px solid #222;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-}
-
-.notice-header h3{
-    font-size: 14px;
-    font-weight: 400;
-    margin: 0;
-}
-
-.notice-meta{
-    font-size: 16px;
-    color: #AFAFAF;
-    text-align: right;
-    margin-top: 5px;
-}
-
-
-/*공지 내용 박스*/
-.notice-content{
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 30px;
-    background-color: #F5F5F5;
-    border: 1px solid #222;
-}
-
-.notice-content p{
-    margin: 15px 0;
-    font-size: 14px;
-    line-height: 1.8;
-}
-
-.notice-content strong{
-    color: red; /*점검 시간은 빨간색으로 강조*/
-    font-weight: 600;
-}
-
-.nav-links-container{
-    margin-top: 40px; /* 공지 상자와의 간격 */
-    padding: 0; 
-    border-top: 2px solid #ddd; /* 상단 구분선 */
-    border-bottom: 2px solid #ddd; /* 하단 구분선 */
-    background-color: #FAF9F6; /* 배경색 */
-}
-
-/* 테이블 레이아웃을 사용하여 디자인 구현 */
-.nav-table {
-    width: 100%;
-    border-collapse: collapse; 
-    font-size: 15px;
-}
-
-.nav-table tr {
-    /* 첫 번째 행 아래에만 얇은 구분선 */
-    border-bottom: 1px solid #eee;
-}
-
-.nav-table tr:last-child {
-    border-bottom: none;
-}
-
-.link-label-cell {
-    /* 라벨 셀 스타일 */
-    width: 80px; 
-    font-weight: 500; 
-    color: #555;
-    padding: 15px 0;
-    text-align: center;
-    vertical-align: middle;
-    background-color: #f7f7f7; /* 라벨 배경색 */
-    border-right: 1px solid #eee; /* 라벨과 제목 사이 구분선 */
-    /* .notice-section에 20px 패딩이 있으므로, 여기서도 20px 보정 */
-    padding-left: 20px; 
-    padding-right: 20px;
-}
-
-.link-title-cell {
-    /* 제목 셀 스타일 */
-    padding: 15px 20px;
-    width: auto;
-}
-
-.link-title a{
-    color: #555; 
-    transition: color 0.2s, text-decoration 0.2s;
-    /* 제목이 길어져도 한 줄로 처리 */
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis; 
-    white-space: nowrap; 
-    font-weight: 400;
-}
-
-.link-title a:hover{
-    color: #2980B9;
-    text-decoration: underline;
-}
-
-/*목록 버튼*/
-.back-button-container{
-    max-width: 800px;
-    margin: 30px auto 0 auto;
-    text-align: right;
-} 
-
-.back-button{
-    background-color: #FAF9F6;
-    border: 1px solid #222;
-    color: #222;
-    padding: 10px 20px;
+    background-color: #222;
+    color: #FFFFFF;
     cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2, border-color 0.2s;
-    width: 108px;
-    height: 34px;
-    box-sizing: border-box;
 }
 
-.back-button:hover{
-    background-color: #FAF9F6;
-}
-
-.nav-links-container{
-    max-width: 800px;
-    margin: 30px auto 0 auto;
-    border-top: 1px solid #222; /* 구분선 */
-    font-size: 14px;
-}
-
-.nav-link-item{
+/* Notice / Q&A 박스 위치 및 스타일 */
+.header-help {
+    position: absolute;
+    right: 0;
+    top: 50px;
     display: flex;
-    padding: 10px 0;
-    border-bottom: 1px solid #ddd; /* 각 항목 구분선 */
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 30px;
+    font-weight: 500;
+}
+
+.header-help > a { /* 'Help' 텍스트 숨김 (피그마에 없는 요소이므로) */
+    display: block;
+    font-size: 24px;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    margin-right: 0;
+    position: relative;
+    top: 0; /* nav 라인에 수직 정렬을 위해 0으로 설정 */
+    padding: 10px 0; /* 네비게이션 항목과 비슷한 여백을 줘서 높이 맞추기 */
+}
+
+.notice-qa-box {
+    position: absolute;
+    top: 30px; /* login 버튼 라인 아래로 위치 조정 */
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.notice-qa-box a {
+    margin-left: 0;
+}
+
+/* 네비게이션 메뉴 스타일 */
+.header-nav {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
+    height: 45px;
+    position: relative;
+    padding-bottom: 5px;
+    width: 100%;
 }
 
-.nav-link-item:last-child{
-    border-bottom: none; /* 마지막 항목의 하단선 제거 */
-}
-
-.link-label{
-    width: 60px; /* 라벨 너비 고정 */
-    font-weight: 600;
+.header-nav a {
+    font-size: 30px;
+    font-weight: 500;
     color: #222;
-    padding-right: 15px;
-    box-sizing: border-box;
+    text-decoration: none;
+    margin-right: 0;
+    width: 150px;
     text-align: left;
 }
 
-.link-title a{
-    color: #555;
-    transition: color 0.2s;
-    overflow: hidden;
-    text-overflow: ellipsis; /* 텍스트가 길 경우 ... 처리 */
-    white-space: nowrap; /* 줄바꿈 방지 */
-    display: block;
-    max-width: 700px; /* 제목 최대 너비 */
+/* ---------------------------------------------------- */
+/* 공지사항 본문 섹션 스타일 */
+/* ---------------------------------------------------- */
+.notice-section {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    background-color: transparent;
+    padding-bottom: 100px;
 }
 
-.link-title a:hover{
-    color: #000;
-    text-decoration: underline;
-}
-
-/* 4. Footer 영역 스타일 */
-.footer {
-    background-color: #CBD4C2; /* 연한 녹색 계열 배경 */
-    color: #222;
-    padding: 30px 0;
-    margin-top: 80px;
+.notice-section h2 {
     text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    margin-top: 50px;
 }
-.footer-content p {
-    margin: 5px 0;
+
+.notice-header {
+    width: 888px;
+    margin: 0 auto;
+    text-align: center;
+    border-top: 1px solid #222;
+    padding-top: 26px;
+    padding-left: 40px;
+    padding-right: 40px;
+    box-sizing: border-box;
+}
+
+
+.notice-header h3 {
+    font-size: 14px;
+    color: #222;
+    font-weight: normal;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.notice-meta {
+    font-size: 16px;
+    color: #AFAFAF;
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+/* 공지사항 내용 상자 영역 */
+.notice-content {
+    width: 888px; 
+    height: 588px;
+    margin: 0 auto;
+    padding: 40px;
+    background-color: #FAF9F6;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    line-height: 1.6;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+.notice-content p {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    color: #222;
+}
+
+.notice-content strong {
+    font-weight: bold;
+}
+
+/* [시스템 점검 안내] 부분을 위한 스타일링 */
+.notice-content p:nth-child(4) { /* 시스템 점검 안내 p 태그 */
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 1px solid #AFAFAF; /* 2. 첫 번째 줄 색상: AFAFAF */
+    border-bottom: 1px solid #AFAFAF; /* 2. 두 번째 줄 색상: AFAFAF */
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* 목록 버튼 */
+.back-button-container {
+    width: 968px;
+    margin: 0 auto;
+    padding-top: 32px;
+    padding-right: 0px;
+    box-sizing: border-box;
+    text-align: right;
+}
+
+.back-button {
+    width: 106px;
+    height: 34px;
+    border-radius: 14px;
+    background-color: #fff;
+    border: 1px solid #222;
+    cursor: pointer;
     font-size: 14px;
 }
-.footer-hr {
-    display: none; /* 디자인에 hr이 없으므로 숨김 처리 */
+
+/* ---------------------------------------------------- */
+/* 푸터 스타일 (간단히 구조만 잡음) */
+/* ---------------------------------------------------- */
+.footer {
+    width: 1440px;
+    background-color: #CBD4C2;
+    padding: 20px 0;
+    text-align: center;
+    font-size: 14px;
+    color: #222;
+    margin-top: 50px; /* 메인 컨텐츠와의 간격 */
 }
-.footer p:last-child {
-    margin-top: 15px;
+
+.footer p {
+    margin: 5px 0;
+}
+
+.footer-hr {
+    border: none;
+    border-top: 1px solid #222;
+    width: 200px;
+    margin: 10px auto;
 } 
 
       </style>
@@ -362,7 +291,6 @@ main{
         <span class="header-left">
             <a href="/" class="logo-link"><span class="logo">D</span></a>
         </span>
-        
         <span class="header-right">
             <a href="#">mypage</a>
             <button class="membership">login</button>

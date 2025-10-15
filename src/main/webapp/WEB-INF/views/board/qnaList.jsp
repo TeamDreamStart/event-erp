@@ -5,218 +5,359 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<link href="https://www.dafont.com/peristiwa.font" rel="stylesheet"> 
+		<link href="https://fonts.cdnfonts.com/css/peristiwa" rel="stylesheet">
 		<link href="https://fonts.google.com/specimen/Montserrat" rel="stylesheet"> 
 		<link rel="stylesheet" href="/webapp/resources/css/noticeList.css">
 
 		<style>
-body {
-    /* 기본 폰트와 배경색 설정 */
-    font-family: 'Montserrat'; 
-    color: #222; 
+	.body{
+    font-family: 'Montserrat';
     margin: 0;
     padding: 0;
-    background-color:#E5E2DB;
+    background-color: #E5E2DB;
+    color: #222;
+    line-height: 1.6;
 }
 
-main {
-    /* 메인 콘텐츠 중앙 정렬 및 최대 너비 설정 */
+.main-container{
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 20px;
+    background-color: white;
 }
 
-/*==================================
-  2. 헤더 (Header) 스타일
-==================================*/
-.header {
-    max-width: 1200px;
-    border-bottom: 1px solid #222; 
-    padding: 20px 0;
-    margin-bottom: 50px;
-}
-
-.header-top {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-/* 로고 스타일 */
-.logo {
-    font-family:'peristiwa'; 
-    font-size: 64px;
-    font-weight: bold;
-    color: #222; 
-}
-
-.logo-link {
+a{
     text-decoration: none;
     color: inherit;
 }
 
-/* 유저 액션 (mypage, login) 스타일 */
-.user-actions a {
-  font-weight: bold;
+ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+button{
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    color: inherit;
+}
+
+.header{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    border-bottom: 1px solid #222;
+    background-color: white;
+}
+
+.header-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;/*자식 요소의 absoulute 기준점*/
+    margin-bottom: 20px;
+}
+
+.logo-link{
+    font-family: 'Peristiwa', sans-serif;
+    font-size: 64px;
+    font-style: italic;
+    color: #222;
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.header-right{
+    display: flex;
+    gap: 0px;
+    /*align-items: center;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    z-index: 10;*/
+}
+
+.user-actions{
+    display: flex;
+    align-items: center;
+    gap: 0px; /*mypage와 login 사이 간격*/
+    margin-top: 10px; /*help 영역과의 수직 위치 맞추기*/
+}
+
+/*mypage (얇은 텍스트)*/
+.btn-mypage{
+    font-size: 20px; /*글씨 크기 조정*/
+    font-weight: 400; /*얇기*/
+    padding: 8px 15px; /*login 박스와 높이 맞추기 위해 패딩 추가*/
+    color: #222;
+    background-color: #FFFFFF;
+    border: 1px solid #FFFFFF;
+    margin: 0;
+    border-right: none;
+}
+.btn-login{
+    font-size: 20px;
+    font-weight: 400;
+    color: #FFFFFF;
+    background-color: #222;
+    padding: 8px 15px;
+    text-align: center;
+    line-height: 1;
+    margin: 0;
+}
+
+.user-actions a:last-child{
+    /*font-weight: bold;*/
     border-left: 1px solid #222;
     padding-left: 15px;
 }
 
-.membership {
-    background-color: #222; 
-    color: #fff;
-    border: none;
-    padding: 8px 15px;
-    cursor: pointer;
-    font-size: 20px;
-    text-transform: uppercase;
-    position: relative; 
-    z-index: 10;
+.login-button{
+    font-weight: bold;
 }
 
-.user-actions {
+.header-nav{
     display: flex;
-    align-items: center;
-}
-
-/* GNB (Visit, Event, Reservation) 스타일 */
-.header-nav {
-    display: flex;
-    justify-content: flex-start;
+    /*justify-content: flex-start;*/
     gap: 40px; 
     font-size: 30px;
-    font-weight:  87px;
-    padding: 30px 0 10px 200px;
+    font-weight: 300;
+    padding-left: 20px;
 }
 
-.header-nav a {
-    text-decoration: none;
-    color: #222;
-    padding-bottom: 5px;
+.header-nav a:hover{
+    color: #FFFFFF;
 }
 
-.header-nav::after {
-    content: "Help";
-    position: absolute;
-    right: 20px;
+.help-button{
+    font-weight: 300;
     font-size: 30px;
-    color: #222;
+    padding: 5px 0;
+    width: auto;
+    text-align: left;
+}
+.help-text {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 100%; /*help 버튼 바로 아래*/
+    right: 0;
+    z-index: 10;
+    background-color: #FFFFFF;
+    border: 1px solid #222;
+    padding: 5px;
+    box-shadow: 0 2px 5px rgda(0,0,0,0.1);
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    gap: 8px;
+
+}
+.help-search.hidden {
+    display: none
+}
+.help-input {
+    width: 100px;
+    height: 20px;
+    border: 1px solid #ccc;
+    margin-bottom: 2px;
+    padding: 2px 5px;
+    font-size: 12px;
+    box-sizing: border-box;
 }
 
+.help-input.small {
+    width: 60px; /* Q&A 폭 좁게 */
+}
 
-/*==================================
-  3. Q&A 폼 (Form) 스타일
-==================================*/
+/*메인 네비게이션(visit, event, reservation*/
+.header-nav{
+    display: flex;
+    gap: 40px;
+    font-size: 30px;
+    font-weight: 300;
+    padding-left: 20px;
+}
+
+.header-nav a{
+    padding-bottom: 10px;
+    transition: color 0.2s;
+}
+
+.header-nav a:hover{
+    color: #0088ff;
+}
+/* 3. Main Content (qna) 스타일 */
+.main-content{
+    padding-top: 80px;
+}
+
 .page-title {
     text-align: center;
     font-size: 30px;
     font-weight: bold;
-    margin-bottom: 50px;
-    letter-spacing: 2px;
+    margin: 80px 0 40px 0;
+    position: relative;
+    padding-bottom: 10px;
 }
 
-.qna-from {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px 0;
-}
-
-.guide-text {
-    text-align: center;
-    font-size: 14px;
-    color: #222;
-    border: 1px solid #ccc; /* --light-border-color 대체 */
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 30px;
-}
-
-.form-group {
+/* 검색창 */
+.search-bar {
     display: flex;
-    margin-bottom: 15px;
-    border: 1px solid #ccc; /* --light-border-color 대체 */
+    justify-content: center;
+    margin-bottom: 50px;
+    border:none;  /*테두리 제거*/
+    max-width: 888px;
+    margin: 50px auto;
+    gap: 43px;
 }
 
-.form-label {
-    width: 80px;
-    background-color: #f7f7f7;
-    padding: 15px 10px;
-    text-align: center;
-    border-right: 1px solid #ccc; /* --light-border-color 대체 */
+/*검색 입력창*/
+.search-input {
+    width: 733px;
+    height: 60px;
     box-sizing: border-box;
-    font-size: 15px;
-}
-
-.form-group input,
-.form-group textarea {
-    flex-grow: 1;
-    border: none;
-    padding: 15px 20px;
-    font-size: 16px;
-    box-sizing: border-box;
-    resize: none;
+    padding: 0px 20px;
+    background-color:#CBD4C2;
+    border: 1px solid #222;
+    border-radius: 15px;
+    flex-grow: 0;
+    box-shadow: none;
     outline: none;
+    font-size: 18px;
+    color:#222 ;
+    opacity: 1;
 }
 
-.content-area {
-    margin-bottom: 30px;
-}
+   .search-input::placeholder{
+        color: #888888;
+        opacity: 1;
+    }
 
-.content-area textarea {
-    height: 150px;
-}
-
-/* 버튼 그룹 스타일 */
-.button-group {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.button-group button {
-    padding: 10px 25px;
-    margin: 0 5px;
-    border: 1px solid #ccc; /* --light-border-color 대체 */
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.btn-cancel {
-    background-color: #F2F0EF;
-    color: #222;
-}
-
-.btn-submit {
-    background-color: #BFD4F9; 
-    color: #fff;
-    /*border-color: #6a9cff;*/
-}
-
-
-/*==================================
-  4. 푸터 (Footer) 스타일
-==================================*/
-.footer {
-    background-color: #CBD4C2; /* 연한 녹색 계열 배경 */
-    color: #222;
-    padding: 30px 0;
-    margin-top: 80px;
-    text-align: center;
-}
-.footer p {
-    margin: 5px 0;
-    font-size: 20px;
-}
-.footer-hr {
-    display: none; /* 디자인에 hr이 없으므로 숨김 처리 */
-}
-.footer p:last-child {
-    margin-top: 15px;
+/*검색 버튼*/
+.search-btn {
+    width: 112px;
+    height: 60px;
+    box-sizing: border-box;
+    padding: 0px;
+    background-color: #CBD4C2;
+    border: 1px solid #222;
+    border-radius: 15px;
+    font-size: 18px;
+    outline: none;
     font-weight: bold;
-} 
+
+      /* 텍스트 정렬 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /*버튼 텍스트 색상*/
+    color: #222;
+}
+
+.qna-header{
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 0 0px 10px 0; /* 아래쪽 패딩으로 테이블과 간격 조정 */
+    margin: 0 auto;
+    max-width: 888px;
+    border-bottom: none;
+    background-color: transparent;
+}
+.qna-header > div:nth-child(1) { width: 50%; text-align: left; padding-left: 20px; } 
+.qna-header > div:nth-child(2) { width: 15%; text-align: center; } 
+.qna-header > div:nth-child(3) { width: 15%; text-align: center; } 
+.qna-header > div:nth-child(4) { width: 10%; text-align: center; } 
+
+/* ⭐️ Q&A 리스트 박스 컨테이너 (888x584 크기 및 스크롤) */
+.qna-list-container{
+    max-width: 888px;
+    height: 584px; 
+    margin: 10px auto 0 auto; /* 헤더 텍스트와 분리를 위한 상단 마진 */
+    border: 1px solid #AFAFAF; 
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    background-color: white; /* 리스트 배경색을 흰색으로 설정 */
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 허용 */
+}
+
+/* ⭐️ 공지사항 테이블 (notice-table CSS를 Q&A 리스트에 맞게 재정의) */
+.notice-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0; /* 컨테이너 내부에 맞춥니다. */
+    text-align: center;
+}
+/* 테이블 헤더는 HTML에서 제거되었으므로 thead 관련 CSS는 무시됩니다. */
+.notice-table tbody td {
+    padding: 12px 0;
+    border-bottom: 1px solid #AFAFAF;
+    color: #222;
+    font-size: 15px;
+    vertical-align: middle;
+}
+.notice-table tbody tr:last-child td {
+    border-bottom: none; /* 마지막 줄 아래 선 제거 */
+}
+
+/* 테이블 컬럼 너비 지정 (헤더 너비와 일치) */
+.notice-table td:nth-child(1) { width: 50%; text-align: left; padding-left: 20px; } /* 제목 */
+.notice-table td:nth-child(2) { width: 15%; } /* 작성자 */
+.notice-table td:nth-child(3) { width: 15%; } /* 등록일자 */
+.notice-table td:nth-child(4) { width: 10%; font-weight: bold; } /* 상태 */
+
+/* 질문 제목 링크 스타일 */
+.notice-table td a{
+    display: block; /* 전체 셀 클릭 가능하게 */
+    font-weight: 500;
+    color: #222;
+    padding: 0;
+    text-align: left;
+}
+.notice-table td a::before{
+    content: 'Q';
+    margin-right: 10px;
+    font-size: 18px; /* 크기 조정 */
+    color: #888888;
+    font-weight: bold;
+}
+/* 불필요한 P 태그 관련 CSS 제거 */
+
+/* 답변대기 상태 강조 */
+.status-waiting {
+    color: #888888; 
+    font-weight: bold;
+}
+/* 답변완료 상태 강조 */
+.status-complete { 
+    color: #0088ff;
+    font-weight: bold;
+}
+
+/* 페이지네이션 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    align-items: center;
+    margin-top: 40px;
+}
+.pagination a{padding: 5px 10px; font-size: 18px; color: #888888; transition: color 0.2s;}
+.pagination a.active{font-weight: bold;}
+.pagination a:hover{color: #222; cursor: pointer;}
+
+/* 4. Footer 영역 스타일 */
+.footer {background-color: #CBD4C2; color: #222; padding: 30px 0; margin-top: 80px; text-align: center;}
+.footer p {margin: 5px 0; font-size: 14px;}
+.footer-hr {display: none;}
+.footer p:last-child {margin-top: 15px; font-weight: bold;} 
 </style>
 </head>
 <body>

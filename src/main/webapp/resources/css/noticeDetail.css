@@ -40,7 +40,7 @@ h1,h2,h3 .header a, .header-nav a{
 }
 
 .logo-link{
-    font-family: 'peristiwa';
+    font-family:'Peristiwa', sans-serif;
     font-size: 64px;
     color: #222;
     font-weight: 300;
@@ -337,5 +337,4 @@ main{
 }
 .footer p:last-child {
     margin-top: 15px;
-    font-weight: bold;
 } 

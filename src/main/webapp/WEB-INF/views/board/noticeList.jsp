@@ -5,7 +5,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<link href="https://www.dafont.com/peristiwa.font" rel="stylesheet"> 
+        <link href="https://fonts.cdnfonts.com/css/peristiwa" rel="stylesheet">
 		<link href="https://fonts.google.com/specimen/Montserrat" rel="stylesheet"> 
 		<link rel="stylesheet" href="/webapp/resources/css/noticeList.css">
 
@@ -64,7 +64,7 @@ button{
 }
 
 .logo-link{
-    font-family: 'peristiwa';
+    font-family:'Peristiwa', sans-serif;
     font-size: 64px;
     font-style: italic;
     color: #222;
