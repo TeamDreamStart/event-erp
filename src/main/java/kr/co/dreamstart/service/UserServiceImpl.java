@@ -275,4 +275,22 @@ public class UserServiceImpl implements UserService {
 		return result;
 	}
 
+	// 중복체크
+	@Override
+	public boolean existsByUserName(String username) {
+		// TODO Auto-generated method stub
+		if (username == null || username.isBlank()) return false;
+		// 대소문자 무시 -> db에서 비교해서 수행 (제약 걸려있음)
+		return userMapper.existsByUserName(username.trim()) > 0;
+	}
+
+	@Override
+	public boolean existsByEmail(String email) {
+		// TODO Auto-generated method stub
+		if (email == null || email.isBlank()) return false;
+		// 이메일은 항상 소문자만 -> 파라미터를 소문자/트림해서 조회
+		String norm = email.trim().toLowerCase();
+		return userMapper.existsByEmail(norm) > 0;
+	}
+
 }

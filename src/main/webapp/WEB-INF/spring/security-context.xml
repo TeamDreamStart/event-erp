@@ -18,17 +18,17 @@
 		Expression Language(SpEL)를 사용할 수 있으므로 더욱 유연하고 동적인 권한 부여 규칙을 구현 -->
 	<security:http use-expressions="true">
 		<security:csrf /> <!-- CSRF(Cross-Site Request Forgery) 보호와 관련 -->
-
-		<!-- 전부공개(임시) -->
-		<!-- <security:intercept-url pattern="/**" access="permitAll" /> -->
+		
+		<!-- 0) 회원가입시 중복체크 -->
+		<security:intercept-url pattern="/api/users/**" access="permitAll" />
 
 		<!-- 1) 관리자 전용 url -->
-		<!-- <security:intercept-url pattern="/admin/**"
-			access="hasRole('ADMIN')" /> -->
+		<security:intercept-url pattern="/admin/**"
+			access="hasRole('ADMIN')" />
 			
 		<!-- 2) 회원 로그인시 (추가필요) -->
-		<!-- <security:intercept-url pattern="/mypage/**"
-			access="isAuthenticated()" /> -->
+		<security:intercept-url pattern="/mypage/**"
+			access="isAuthenticated()" />
 			
 		<!-- 3) 나머지는 전체공개 -->
 		<security:intercept-url pattern="/**" access="permitAll" />
