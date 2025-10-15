@@ -5,8 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-   <link href="https://fonts.cdnfonts.com/css/peristiwa" rel="stylesheet">
-	<link href="https://fonts.google.com/specimen/Montserrat" rel="stylesheet"> 
+    <link href="https://fonts.cdnfonts.com/css/peristiwa" rel="stylesheet">
     <link rel="stylesheet" href="qnaDetail.css">
 
 <style>
@@ -53,7 +52,7 @@ main {
     font-family:'Peristiwa', sans-serif;
     font-size: 64px;
     color: #222; 
-    margin-left: 22px;
+    margin-left: 20px;
 }
 
 .logo-link {
