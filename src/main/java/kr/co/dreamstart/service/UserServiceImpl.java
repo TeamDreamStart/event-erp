@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -255,6 +256,23 @@ public class UserServiceImpl implements UserService {
 	public void touchLastLogin(Long userId) {
 		// TODO Auto-generated method stub
 		userMapper.updateLastLoginAt(userId);
+	}
+
+	@Override
+	public String findUserNameByEmail(String email) {
+		return userMapper.findByEmail(email).getUserName();
+	}
+
+	@Override
+	public int resetPassword(String email,String newPass) {
+		int result = -1;
+		//비밀번호 Encoding -> update
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		newPass = encoder.encode(newPass);
+		long userId = userMapper.findByEmail(email).getUserId();
+		result = userMapper.updatePasswordById(userId,newPass);
+		log.info("[USERSERVICE] NEW PASSWORD : "+newPass);
+		return result;
 	}
 
 }

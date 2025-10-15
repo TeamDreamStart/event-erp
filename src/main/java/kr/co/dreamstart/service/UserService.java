@@ -31,4 +31,8 @@ public interface UserService {
 	public List<String> findRoleNames(Long userId);
 	// 마지막 로그인 시간 업데이트
 	public void touchLastLogin(Long userId);
+
+	public String findUserNameByEmail(String email);
+	
+	public int resetPassword(String email,String newPass);
 }

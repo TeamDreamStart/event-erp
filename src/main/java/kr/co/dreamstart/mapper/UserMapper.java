@@ -68,6 +68,7 @@ public interface UserMapper {
 	public int updatePasswordById(@Param("userId") long userId, @Param("password") String password);
 
 	//
-	public UserDTO findByEmail(String string);
+	public UserDTO findByEmail(String email);
+
 
 }

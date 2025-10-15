@@ -21,7 +21,7 @@
 		function checkCode(e) {
 			const codeCheck = document.querySelector('input[name="codeCheck"]').value
 					.trim();
-			const code = document.querySelector('input[name="code"]').value
+			const code = document.querySelector('input[name="verificationCode"]').value
 					.trim();
 
 			if (code === "") {
