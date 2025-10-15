@@ -8,7 +8,6 @@ uri="http://www.springframework.org/security/tags"%>
 <head>
 <meta charset="UTF-8">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
 <title>findPassword</title>
 <link rel="stylesheet" type="text/css" href="/resources/css/findPassword.css">
 </head>

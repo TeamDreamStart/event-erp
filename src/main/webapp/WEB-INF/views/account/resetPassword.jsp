@@ -89,7 +89,7 @@ input::placeholder{
 }
 
 .help-text {
-    font-size: 14px;
+    font-size: 12px;
     color: #D9D9D9;
     margin: 4px 0 0 0;
     text-align: left;
