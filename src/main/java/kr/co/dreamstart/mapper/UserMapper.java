@@ -41,10 +41,7 @@ public interface UserMapper {
 	// 회원가입시 일반회원 권한 부여
 	public int joinRole(@Param("userId") long userId);
 
-	/*
-	 * //회원가입 - 아이디 중복 확인 public String joinIdCheck(String userName); //회원가입 - 이메일
-	 * 중복 확인 public String joinEmailCheck(String email);
-	 * 
+	/* 
 	 * // 회원 정보 수정 public int updateUser(UserDTO userDTO); // 회원 비밀번호 변경 public int
 	 * updateUserPass(String password);
 	 * 

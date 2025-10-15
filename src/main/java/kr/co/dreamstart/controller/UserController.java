@@ -1,3 +1,11 @@
+/*
+ * Instanceof : 객체가 어떤 클래스인지, 어떤 클래스를 상속받았는지 확인하는데 사용하는 연산자
+ * 1. 발송 → 세션에 코드/검증여부 저장
+ * 2. 검증 → 세션에 true로 마크
+ * 3. 가입 → 세션에서 evVerified:<email>가 true인지 확인
+ * 4. 성공 시 정리 → removeAttribute(...)로 두 키 삭제
+ * */
+
 package kr.co.dreamstart.controller;
 
 import java.util.Collections;
@@ -53,9 +61,20 @@ public class UserController {
 	}
 	
 	@PostMapping("/join")
-	public String joinSubmit(@ModelAttribute("user") UserDTO form, RedirectAttributes ra) {
+	public String joinSubmit(@ModelAttribute("user") UserDTO form, 
+							RedirectAttributes ra,
+							HttpSession session) {
 		
-		form.setEmail(form.getEmail() == null ? null : form.getEmail().trim().toLowerCase());
+		String email = form.getEmail() == null ? null : form.getEmail().trim().toLowerCase();
+		form.setEmail(email);
+		
+		// 이메일 인증 완료 여부 확인
+		Object v = session.getAttribute("evVerified:" + email);
+		if (!(v instanceof Boolean || !(Boolean) v )) {
+			ra.addFlashAttribute("error", "이메일 인증을 먼저 완료해 주세요.");
+			return "redirect:/join";
+		}
+		
 		// 새로 가입한 가입자의 비밀번호 -> 해시로 바꿔치기
 		form.setPassword(passwordEncoder.encode(form.getPassword()));
 
@@ -63,6 +82,9 @@ public class UserController {
 		if (result == 1) {
 			userMapper.joinRole(form.getUserId());
 			ra.addFlashAttribute("msg", "회원가입 완료되었습니다.");
+			// 가입 성공시 세션 플래그 정리 -> 세션에 남아있는 메일, 인증번호 지우기
+			session.removeAttribute("ev" + email);
+			session.removeAttribute("evVerified" + email);
 			return "redirect:/login";
 		} else {
 			ra.addFlashAttribute("error", "회원가입 실패");

@@ -9,6 +9,7 @@
 package kr.co.dreamstart.api;
 
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.co.dreamstart.service.EmailSenderService;
 import kr.co.dreamstart.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserApiController {
 	private final UserService userService;
+	private final EmailSenderService emailSenderService;
 	
 	// 아이디가 존재하는지 체크
 	@GetMapping(value = "/check-username", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -42,4 +45,11 @@ public class UserApiController {
 		log.info("[EXISTS-EMAIL] email='{}' -> exists={}", email, exists);
 		return Map.of("ok", true, "exists", exists);
 	}
+	
+	
+	/* ========================
+	 * 이메일 인증 -> JSON 버전 
+	 * ======================== */
+	
+	
 }
