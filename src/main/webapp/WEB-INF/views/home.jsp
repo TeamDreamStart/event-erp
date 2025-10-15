@@ -428,23 +428,23 @@ body {
 							</c:when>
 							<c:when test="${e.category eq 'SHOW'}">
 								<c:set var="imgSrc"
-									value='${pageContext.request.contextPath}/resources/img/event1.jpg' />
+									value='${pageContext.request.contextPath}/resources/img/events/event1.jpg' />
 							</c:when>
 							<c:when test="${e.category eq 'WORKSHOP'}">
 								<c:set var="imgSrc"
-									value='${pageContext.request.contextPath}/resources/img/event2.jpg' />
+									value='${pageContext.request.contextPath}/resources/img/events/event2.jpg' />
 							</c:when>
 							<c:when test="${e.category eq 'SPEECH'}">
 								<c:set var="imgSrc"
-									value='${pageContext.request.contextPath}/resources/img/event3.jpg' />
+									value='${pageContext.request.contextPath}/resources/img/events/event3.jpg' />
 							</c:when>
 							<c:when test="${e.category eq 'MARKET'}">
 								<c:set var="imgSrc"
-									value='${pageContext.request.contextPath}/resources/img/event4.jpg' />
+									value='${pageContext.request.contextPath}/resources/img/events/event4.jpg' />
 							</c:when>
 							<c:otherwise>
 								<c:set var="imgSrc"
-									value='${pageContext.request.contextPath}/resources/img/event1.jpg' />
+									value='${pageContext.request.contextPath}/resources/img/events/event1.jpg' />
 							</c:otherwise>
 						</c:choose>
 
