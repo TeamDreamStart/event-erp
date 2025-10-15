@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +26,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,44 +55,71 @@ public class UserController {
 	@Autowired
 	private EmailSenderService emailService;
 
+
 //	회원가입
-	@GetMapping("/join")
-	public String joinForm(Model model) {
-		model.addAttribute("user", new UserDTO()); // 바인딩할 빈 객체 생성
+	@GetMapping("/join")		// 바인딩할 빈 객체 생성
+	public String joinForm(@ModelAttribute("user") UserDTO user, 
+						Model model,
+						HttpServletResponse resp,
+						HttpSession session) {
+
+		// 뒤로가기 복원 방지 : 캐시 금지
+		resp.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+		resp.addHeader("Pragma", "no-cache");
+		resp.setDateHeader("Expires", 0);
+		
+		// 플래시 모델이 없을때만 새객체 채워주기
+		if (!model.containsAttribute("user")) {
+			model.addAttribute("user", new UserDTO());
+		}
+		
 		log.info("GET /joinForm 호출"); // 로그 기록 (확인용)
 		return "account/join"; // JSP 경로 반환
 	}
 	
 	@PostMapping("/join")
-	public String joinSubmit(@ModelAttribute("user") UserDTO form, 
+	public String joinSubmit(@Valid @ModelAttribute("user") UserDTO form, 
+							BindingResult binding,
 							RedirectAttributes ra,
 							HttpSession session) {
-		
-		String email = form.getEmail() == null ? null : form.getEmail().trim().toLowerCase();
-		form.setEmail(email);
-		
-		// 이메일 인증 완료 여부 확인
-		Object v = session.getAttribute("evVerified:" + email);
-		if (!(v instanceof Boolean || !(Boolean) v )) {
-			ra.addFlashAttribute("error", "이메일 인증을 먼저 완료해 주세요.");
-			return "redirect:/join";
-		}
-		
-		// 새로 가입한 가입자의 비밀번호 -> 해시로 바꿔치기
-		form.setPassword(passwordEncoder.encode(form.getPassword()));
 
-		int result = userMapper.join(form);
-		if (result == 1) {
-			userMapper.joinRole(form.getUserId());
-			ra.addFlashAttribute("msg", "회원가입 완료되었습니다.");
-			// 가입 성공시 세션 플래그 정리 -> 세션에 남아있는 메일, 인증번호 지우기
-			session.removeAttribute("ev" + email);
-			session.removeAttribute("evVerified" + email);
-			return "redirect:/login";
-		} else {
-			ra.addFlashAttribute("error", "회원가입 실패");
+		// 성별 값 한번더 채크(0/1)
+		if (form.getGender() == null || (form.getGender() != 0 && form.getGender() != 1)) {
+			binding.rejectValue("gender", "gender.invalid", "성별을 올바르게 선택해 주세요.");
+			return "account/join";
+		}
+		
+		// 바인딩/검증 에러 -> 플래시에 싵고 PRG
+		if (binding.hasErrors()) {
+			ra.addFlashAttribute("user", form);
+			ra.addFlashAttribute("org.springframework.validation.BindingResult.user", binding);
 			return "redirect:/join";
 		}
+		
+		// 이메일 정규화 (공백제거 + 소문자)
+		String email = form.getEmail() == null ? null : form.getEmail().trim().toLowerCase();
+
+		// 이메일 인증 완료 여부 확인
+		String verifiedKey = "evVerified:" + email;
+		boolean verified = Boolean.TRUE.equals(session.getAttribute(verifiedKey));
+		if (!verified) {
+			ra.addAttribute("user", form);
+			ra.addAttribute("error", "이메일 인증을 먼저 완료해 주세요.");
+			return "redirect:/join";
+		}
+		
+		// 실제 가입 처리는 서비스에서 (포맷/인코딩 포함)
+		userService.register(form);
+
+		// 가입 성공시 세션 플래그 정리 -> 세션에 남아있는 메일, 인증번호 지우기
+		session.removeAttribute("ev:" + email);
+		session.removeAttribute("evVerified:" + email);
+
+		// join 페이지에서 모달 띄우도록 플래시 세팅
+		ra.addFlashAttribute("joinSuccess", true);
+
+		// join으로 리다이렉트 -> 모달 노출 -> 확인 누르면 /login 이동
+		return "redirect:/login";
 	}
 
 	// 로그인

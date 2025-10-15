@@ -203,7 +203,7 @@ public class MybatisTest {
 		try (SqlSession session = sqlFactory.openSession()) {
 			UserMapper mapper = session.getMapper(UserMapper.class);
 			UserDTO user = new UserDTO();
-			user.setUserName("insertTest8");
+			user.setUsername("insertTest8");
 			user.setPassword("1234");
 			user.setName("테스트8");
 			user.setEmail("insert8@test.com");
@@ -248,7 +248,7 @@ public class MybatisTest {
 		for(UserDTO u : targets) {
 			String hash = passwordEncoder.encode(raw);
 			userMapper.updatePasswordById(u.getUserId(), hash);
-			log.info("[RESET] userId={} username={} -> DONE", u.getUserId(), u.getUserName());
+			log.info("[RESET] userId={} username={} -> DONE", u.getUserId(), u.getUsername());
 		}
 		log.info("[RESET] completed.");
 	}
@@ -258,7 +258,7 @@ public class MybatisTest {
 	public void loginQueryByUsername() {
 		UserDTO dto = userMapper.findByLogin("admin");
 		assertNotNull(dto);
-		log.info("user={} email={}", dto.getUserName(), dto.getEmail());
+		log.info("user={} email={}", dto.getUsername(), dto.getEmail());
 	}
 
 	@Test

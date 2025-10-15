@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.UserDTO;
 
-@Service
 public interface UserService {
 	//관리자(ADMIN)
 	public Map<String,Object> userList(@Param("cri") Criteria cri,
