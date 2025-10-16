@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="qnaDetail.css">
 
 <style>
+/*==================================
+  1. 기본 레이아웃 및 폰트 설정
+==================================*/
 body {
     /* 기본 폰트와 배경색 설정 */
     font-family: 'Montserrat'; 
@@ -28,96 +31,7 @@ main {
 }
 
 /*==================================
-  2. 헤더 (Header) 스타일
-==================================*/
-.header {
-    max-width: 1200px;
-    border-bottom: 1px solid #222; 
-    padding: 20px 0;
-    margin-bottom: 50px;
-    position: relative;
-}
-
-.header-top {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    position: relative;
-}
-
-/* 로고 스타일 */
-.logo {
-    font-family:'Peristiwa', sans-serif;
-    font-size: 64px;
-    color: #222; 
-    margin-left: 20px;
-}
-
-.logo-link {
-    text-decoration: none;
-    color: inherit;
-}
-
-/* 유저 액션 (mypage, login) 스타일 */
-.user-actions a {
-   font-weight: bold;
-    border-left: 1px solid #222;
-    padding-left: 15px;
-}
-
-.membership {
-    background-color: #222; 
-    color: #fff;
-    border: none;
-    padding: 8px 15px;
-    cursor: pointer;
-    font-size: 20px;
-    text-transform: uppercase;
-    position: relative; 
-    z-index: 10;
-}
-
-.user-actions {
-    display: flex;
-    align-items: center;
-}
-
-/* GNB (Visit, Event, Reservation) 스타일 */
- .header-nav{
-    display: flex;
-    gap: 40px;
-    font-size: 30px;
-    font-weight: 300;
-    padding-left: 20px;
-    margin-bottom: 20px;
-}
-
-.header-nav a{
-   color: #222;
-    padding-bottom: 10px;
-    transition: color 0.2s;
-    text-decoration: none;
-}
-
-.header-nav a:hover{
-    color: #0088ff;
-}
-
-.header-help{
-    position: absolute;
-    top: 5px;
-    right: -10px;
-    font-size: 30px;
-    font-weight: 300;
-}
-
-
-/*==================================
-  3. Q&A 폼 (Form) 스타일
+  2. Q&A 폼 (Form) 스타일
 ==================================*/
 .page-title {
     text-align: center;
@@ -187,72 +101,36 @@ main {
 .button-group button {
     padding: 10px 25px;
     margin: 0 5px;
-    border: 1px solid #ccc; /* --light-border-color 대체 */
+    border: 1px solid #ccc; /* 버튼 테두리 */
     cursor: pointer;
     font-size: 14px;
 }
 
 .btn-cancel {
     background-color: #F2F0EF;
+    border: 1px solid #AFAFAF;
     color: #222;
 }
 
 .btn-submit {
-    background-color: #BFD4F9; 
-    color: #fff;
-    /*border-color: #6a9cff;*/
-}
-
-
-/*==================================
-  4. 푸터 (Footer) 스타일
-==================================*/
-.footer {
-    background-color: #CBD4C2; /* 연한 녹색 계열 배경 */
+     background-color: #BFD4F9;
+    border: 1px solid #8FAFED;
     color: #222;
-    padding: 30px 20px;
-    margin-top: 80px;
-    margin-bottom: 30px;
 }
 
-.footer p {
-    margin: 5px 0;
-    font-size: 14px;
-    text-align: left;
+.btn-list {
+    background-color: #F8F8F8;
+    border-color: #AFAFAF;
+    color: #222;
 }
-.footer-hr {
-    display: block;
-    width: 100%;
-    border: none;
-    border-top: 1px solid #222;
-    margin: 15px 0;
-}
-
-.footer p:last-child {
-    margin-top: 15px;
-} 
 
 </style>
 
 <title>qnadetail</title>
 </head>
 <body>
-	<header class="header">
-		<div class="header-top">
-			<span class="header-left"> <a href="/" class="logo-link"><span
-					class="logo">D</span></a>
-			</span> <span class="header-right"> <span class="user-actions">
-					<button class="membership">
-						Membership
-						<li><a href="#">로그인</a> <a href="#">로그아웃</a> <a href="#">회원가입</a>
-						</li>
-					</button> <a href="#">Tickets</a>
-			</span>
-			</span>
-		</div>
-		<nav class="header-nav">
-			<a href="#">Visit</a> <a href="#">Event</a> <a href="#">Notice</a>
-		</nav>
+	<header>
+		<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 	</header>
 
 	<div class="qna-form-container">
@@ -297,11 +175,9 @@ main {
 	</div>
 	<button onclick="location.href='/qna'" type="button">목록</button>
 
-	<footer class="footer">
-		<p>수원시 팔달구 덕영대로 895번길 11</p>
-		<p>대표전화. 031-420-4204</p>
-		<hr class="footer-hr">
-		<p>@jfdfhfksehfkjsnckaul</p>
-	</footer>
+	<footer>
+        <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
+    </footer>
+	
 </body>
 </html>

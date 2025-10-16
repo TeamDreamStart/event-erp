@@ -366,7 +366,7 @@ button {
 <body>
 	<header>
 
-		<jsp:include page="/WEB-INF/views/common/header.jsp" flush="true" />
+		<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 	</header>
 	<!--메인 컨테이너-->
 	<div class="container">
@@ -421,7 +421,7 @@ button {
 		<a href="#">&gt;</a>
 	</div>
 	<footer>
-			<jsp:include page="/WEB-INF/views/common/footer.jsp" flush="true" />
+			<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 	</footer>
 </body>
 </html>
