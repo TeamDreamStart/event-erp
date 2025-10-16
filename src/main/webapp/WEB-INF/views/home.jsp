@@ -1,511 +1,685 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
- pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
-<title>reservation Form</title>
+<title>home</title>
+
+<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
+<link
+	href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
+	rel="stylesheet">
+
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
+<script
+	src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+
 <style>
-body{
- background-color: #E5E2DB;
-  color: #222222;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
-  font-weight: normal;
-  margin: 0;
-  padding: 0 120px 60px;
-  line-height: 1;
+body {
+	background: #E5E2DB;
 }
-main {
-  margin-top: 0;
-  padding: 0;
+
+.main-visual figure {
+	margin: 0;
+	line-height: 0;
 }
-.container {
-width: 100%;
-  margin: 0 auto;
-  padding: 0;
+
+.museum-status {
+	text-align: right;
+	margin: 20px 0 0 ;
+	font-size: 20px;
+	user-select: none;
 }
+
+.visual-hr {
+	width: 100%;
+	height: 1px;
+	margin-top: 62px;
+	background-color: #222;
+}
+
 .section-header {
- position: relative;
- padding-top: 40px;
- margin-bottom: 40px;
- text-align: left;
-}
-.section-header h2{
- font-size: 20px;
- font-weight: bold;
- user-select: none;
- cursor: default;
- margin: 0;
- padding: 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 16px;
 }
 
-.reservation-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  max-width: 1000px;
-  margin: 0 auto;
-  background-color: #FAF9F6;
-  border: 1px solid #D9D9D9;
-  color: #222222;
-  overflow: hidden;
+.section-header h2 {
+	font-size: 30px;
+	font-weight: 700;
+	line-height: 40px;
 }
 
-.event-info {
-  padding: 30px;
-  min-height: 600px;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  caret-color: transparent;
-}
-.event-info::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: 0; /* 오른쪽 경계에 위치 */
-  transform: translateY(-50%); /* 정확한 수직 중앙 정렬 */
-  width: 1px;
-  height: 95%; /* 원하는 높이 95% 설정 */
-  background-color: #222222;
-  z-index: 1;
-}
-.form-input {
-  padding: 30px;
-  background-color: #FAF9F6;
-  min-height: 600px;
-  display: flex;
-  flex-direction: column;
+/* ===== Event 캐러셀 ===== */
+.swiper {
+	width: 100%;
 }
 
-.event-info h4,
-.form-input h4 {
-  font-size: 16px;
-  font-weight: bold;
-  margin-top: 0;
-  margin-bottom: 32px;
-  caret-color: transparent;
+.swiper-wrapper {
+	align-items: stretch;
 }
 
-.event-poster {
-  width: 100%;
-  text-align: left;
-  margin-bottom: 20px;
-}
-.event-poster img {
-  max-width: 200px;
-  height: auto;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.swiper-slide {
+	width: 310px;
+} /* 카드 폭 고정 */
+.event-card {
+	position: relative;
+	background: transparent;
+	height: 100%;
 }
 
-.event-details {
-  margin-bottom: 20px;
-}
-.event-details p {
-  font-size: 14px;
-  line-height: 1.4;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-}
-.event-details p i {
-  margin-right: 8px;
-  font-size: 14px;
-}
-.event-details .event-title {
-  font-size: 14px;
-  font-weight: bold;
-  margin-top: 10px;
-  margin-bottom: 15px;
+.event-card figure {
+	margin: 0;
 }
 
-.form-group {
-  margin-bottom: 12px;
-}
-.form-group#payment, #name{
-    margin-bottom: 20px;
-}
-.form-group label {
-  display: block;
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 4px;
-  caret-color: transparent;
-}
-.form-group input, .form-group select {
-  width: 100%;
-  padding: 8px 10px;
-  box-sizing: border-box;
-  font-size: 14px;
-  border-radius: 3px;
-  border: 1px solid #D9D9D9;
-  background-color: #D9D9D9;
+.event-card img {
+	width: 310px;
+	height: 438px;
+	object-fit: cover;
+	display: block;
 }
 
-.member-info-box {
-  background-color: #BFD4F9;
-  border: 1px solid #8FAFED;
-  border-radius: 12px;
-  padding: 8px 20px;
-  font-size: 14px;
-  line-height: 1.0;
-  margin-bottom: 44px;
-  caret-color: transparent;
-  font-weight: bold;
-}
-.member-info-box2 {
-  background-color: #FFFFC5;
-  border: 1px solid #FAFA8B;
-  border-radius: 12px;
-  padding: 8px 8px;
-  font-size: 14px;
-  line-height: 1.0;
-  margin-bottom: 44px;
-  caret-color: transparent;
+.event-card .overlay {
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, .55);
+	color: #fff;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	padding: 18px;
+	text-align: center;
+	opacity: 0;
+	transition: opacity .18s;
 }
 
-.total-price {
-  display: flex;
-  justify-content: space-between;
-  font-weight: bold;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px dashed #ccc;
-  font-size: 14px;
-  caret-color: transparent;
+.event-card:hover .overlay, .event-card:focus-within .overlay {
+	opacity: 1;
 }
 
-.agreement {
-  margin-top: 30px;
-  caret-color: transparent;
-}
-.agreement label {
-  display: block;
-  font-size: 12px;
-  margin-bottom: 10px;
+.overlay .ov-title {
+	font-size: 16px;
+	font-weight: 700;
 }
 
-.submit-btn {
-  text-align: right;
-  margin-top: 20px;
+.overlay .ov-meta {
+	font-size: 12px;
+	opacity: .9;
 }
-.submit-btn button {
-  padding: 8px 8px;
-  background-color: #BFD4F9;
-  border: 1px solid #8FAFED;
-  color: #222222;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 3px;
+
+.overlay .btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	height: 32px;
+	padding: 0 14px;
+	border: 1px solid #fff;
+	color: #fff;
+	background: transparent;
+	font-size: 12px;
+	cursor: pointer;
 }
-/* 추가된 에러 메시지 스타일 */
-.error-message {
-    display: block;
-    color: red;
-    font-size: 11px;
-    margin-top: 4px;
-    height: 15px;
-    text-align: left; 
-    user-select: none;
-    cursor: default;
-    visibility: hidden; /* 초기에는 숨김 처리 */
+
+.overlay .btn:hover {
+	background: #fff;
+	color: #000;
 }
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
+
+/* 커스텀 내비게이션(important 없이) */
+.events-prev, .events-next {
+	appearance: none;
+	background: none;
+	border: 0;
+	cursor: pointer;
+	font-size: 30px;
+	line-height: 40px;
+	color: #222;
 }
-.modal-content {
-    background-color: #FAF9F6; 
-    margin: 20% auto;
-    padding: 20px;
-    width: 90%;
-    max-width: 450px; /* 이미지와 유사한 폭으로 조정 */
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    position: relative;
-    text-align: left; /* 텍스트는 좌측 정렬 */
+
+.events-prev[disabled], .events-next[disabled] {
+	opacity: .35;
+	cursor: default;
 }
-.modal-body {
-    padding: 10px 0;
+
+.nav-btns {
+	display: flex;
+	gap: 46px;
+	align-items: center;
 }
-.modal-body p {
-    font-size: 16px;
-    color: #222222;
-    margin-bottom: 8px;
-    line-height: 1.4;
+
+/* ===== Calendar & Notice  레이아웃 ===== */
+/* 마지막 섹션 에서 푸터 밀기 140px */
+.calendar-section {
+	position: relative;
+	margin-bottom: 140px;
 }
-.modal-btn {
-    float: right;
-    padding: 5px 10px;
-    background-color: transparent;
-    border: none; 
-    color: #08f;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 4px;
-    margin-top: 10px;
-    font-size: 14px;
+
+.two-col {
+	display: grid;
+	grid-template-columns: 860px 480px; /* Calendar / Notice */
+	gap: 94px;
+	align-items: start;
 }
-.modal-body::after {
-    content: "";
-    display: table;
-    clear: both;
+
+.two-col < asid{
+	width: 486px;
+	position: absolute;
+	top: 0; right: 0;
 }
-.close-btn {
-    display: none;
+
+.notice-heading {
+	
 }
+
+.notice-wrap .item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 12px 0;
+	border-top: 1px solid #ddd;
+}
+
+.notice-wrap .item:first-child {
+	border-top: none;
+}
+
+.notice-wrap .thumb {
+	width: 76px;
+	height: 76px;
+	background: #d9d9d9;
+	flex: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 12px;
+}
+
+.notice-wrap .meta {
+	font-size: 14px;
+	line-height: 1.3;
+}
+
+.notice-wrap .meta .title {
+	font-weight: 600;
+	margin-bottom: 2px;
+}
+
+/* ============ 캘린더 (디자인1) ============ */
+@font-face {
+	font-family: 'Peristiwa';
+	src: url('<c:url value="/resources/font/Peristiwa.otf"/>' )
+		format('opentype');
+	font-display: swap;
+}
+
+.s-cal {
+	width: 860px;
+	border: 1px solid #c7c7c7;
+	background: #fff;
+	padding: 24px 24px 28px;
+	position: relative;
+}
+
+.s-cal__head {
+	display: grid;
+	grid-template-columns: 110px 100px 1fr;
+	align-items: center;
+	column-gap: 12px;
+	margin-bottom: 14px;
+}
+
+.s-cal__mnum {
+	font-weight: 800;
+	font-size: 96px;
+	line-height: 1;
+	color: #111;
+}
+
+.s-cal__midnav {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+}
+
+.s-cal__midnav button {
+	width: 28px;
+	height: 28px;
+	border: 1px solid #bdbdbd;
+	background: #fff;
+	border-radius: 6px;
+	font-size: 18px;
+	color: #222;
+	cursor: pointer;
+}
+
+.s-cal__midnav .dots {
+	font-size: 18px;
+	color: #999;
+}
+
+.s-cal__mname span {
+	font-family: 'Peristiwa', cursive;
+	font-size: 56px;
+	font-weight: 400;
+	line-height: .95;
+}
+
+.s-cal__mname small {
+	display: block;
+	font-size: 18px;
+	margin-top: 6px;
+	color: #444;
+}
+
+.s-cal__grid {
+	width: 100%;
+	border: 1px solid #d1d1d1;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+.s-cal__grid th, .s-cal__grid td {
+	border: 1px solid #d8d8d8;
+	vertical-align: top;
+}
+
+.s-cal__grid th {
+	height: 44px;
+	font-weight: 700;
+	color: #222;
+}
+
+.s-cal__grid td {
+	height: 120px;
+	padding: 8px 10px 6px;
+}
+
+.s-cal__num {
+	font-size: 14px;
+}
+
+.s-cal__dots {
+	display: flex;
+	gap: 6px;
+	margin-top: 6px;
+	flex-wrap: wrap;
+}
+
+.s-cal__dot {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+}
+
+/* 카테고리별 도트 색 */
+.dot-SHOW {
+	background: #d84b47;
+} /* 공연/Show → 레드 */
+.dot-SPEECH {
+	background: #2b90d9;
+} /* 강연/Speech → 블루 */
+.dot-WORKSHOP {
+	background: #3aa167;
+} /* 워크숍 → 그린 */
+.dot-MARKET {
+	background: #666;
+} /* 마켓 → 그레이 */
+
+/* 상태 */
+.is-today {
+	background: rgba(255, 235, 59, .34);
+}
+
+.s-cal__cell.is-hover {
+	background: #fff7cc;
+}
+
+/* 팝업 */
+.s-cal__pop {
+	position: absolute;
+	min-width: 360px;
+	background: #fff;
+	border: 1px solid #2b2b2b;
+	box-shadow: 0 8px 18px rgba(0, 0, 0, .12);
+	padding: 16px 18px;
+	font-size: 14px;
+	color: #222;
+	z-index: 5;
+	pointer-events: auto;
+}
+
+.s-cal__pop .row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 0;
+}
+
+.s-cal__pop .dot {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	display: inline-block;
+}
+
+.s-cal__pop .title {
+	font-weight: 600;
+}
+
+.s-cal__pop .empty {
+	color: #888;
+	padding: 6px 0;
+}
+
 </style>
 </head>
 
 <body>
-<jsp:include page="/WEB-INF/views/common/header.jsp"/>
- <main>
- <div class="container">
- <div class="section-header">
-  <h2>Reservation</h2>
- </div>
-   <div class="reservation-form">
-   <div class="event-info">
-    <h4>이벤트 정보</h4>
-        <div class="event-poster">
-          <img src="/resources/img/event1.jpg" alt="Autumn Music Festival Poster" />
-        </div>
-        
-        <div class="event-details">
-          <p class="event-title">가을 음악 페스티벌</p>
-          <p><i class="fas fa-calendar-alt"></i>• 2025-09-28</p>
-          <p><i class="fas fa-map-marker-alt"></i>• 서울 올림픽 공원</p>
-          <p><i class="fas fa-won-sign"></i>• 15,000원</p>
-        </div>
-   </div>
-   <div class="form-input">
-    <h4>예약 정보 입력</h4>
-        
-        <div class="member-info-box">
-          <p>회원 정보로 예약</p>
-          <p>로그인된 회원 정보를 사용하여 예약합니다.</p>
-        </div>
-                        <form>
-          <div class="form-group">
-            <label for="name">이름*</label>
-            <input type="text" id="name" required>
-                                  </div>
-          <div class="form-group">
-            <label for="email">이메일*</label>
-            <input type="text" id="email" required>
-                        <span id="email-message" class="error-message"></span>
-          </div>
-          <div class="form-group">
-            <label for="phone">전화번호*</label>
-            <input type="text" id="phone" required maxlength="13">
-                        <span id="phone-message" class="error-message"></span>
-          </div>
-          <div class="form-group">
-            <label for="payment">결제 방법*</label>
-            <select id="payment" required>
-              <option value="">선택</option>
-              <option value="card">신용카드</option>
-              <option value="transfer">계좌이체</option>
-            </select>
-          </div>
+	<jsp:include page="/WEB-INF/views/common/header.jsp" flush="true" />
 
-          <div class="total-price">
-            <span>총 결제 금액</span>
-            <span>15,000원</span>
-          </div>
+	<main id="main" class="container" role="main">
+		<!-- 메인 비주얼 -->
+		<section class="main-visual" aria-labelledby="mv-heading">
+			<h2 id="mv-heading" class="sr-only">메인 소개</h2>
+			<figure>
+				<img src="<c:url value='/resources/img/main-visual-2.jpg'/>"
+					alt="박물관 내부 전시관을 관람하는 모습 (운영시간 오전 10:30 ~ 오후 6:00)">
+			</figure>
+			<hr class="visual-hr" aria-hidden="true">
+			<div class="museum-status" aria-label="운영 시간">
+				<span aria-hidden="true">open 10:30 a.m.</span><br>
+				<span aria-hidden="true">close 18:00 p.m.</span>
+			</div>
+		</section>
 
-          <div class="agreement">
-            <label>
-              <input type="checkbox" required> 개인정보 수집 및 이용에 동의합니다. (필수)
-            </label>
-            <label>
-              <input type="checkbox" required> 예약 취소 및 환불 정책에 동의합니다. (필수)
-            </label>
-          </div>
+		<!-- Event -->
+		<section id="events" class="horizontal-scroll-section exhibitions"
+			aria-labelledby="events-heading">
+			<div class="section-header title">
+				<h2 id="events-heading">Event</h2>
+				<div class="nav-btns" role="group" aria-label="이벤트 슬라이드 이동">
+					<button type="button" class="events-prev"
+						aria-controls="events-carousel" aria-label="이전 슬라이드">←</button>
+					<button type="button" class="events-next"
+						aria-controls="events-carousel" aria-label="다음 슬라이드">→</button>
+				</div>
+			</div>
 
-          <div class="submit-btn">
-            <button type="submit">예약 완료하기</button>
-          </div>
-        </form>
-   </div>
-  </div>
- </div>
- </main>
- <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
- <div id="reservation-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <div class="modal-body">
-            <h4>예약이 완료되었습니다!</h4>
-            <p>예약번호: G186194572605</p>
-            <p>비회원 예약 조회 시 예약번호와 전화번호를 입력해 주세요.</p>
-            <button id="modal-confirm-btn" class="modal-btn">닫기</button>
-        </div>
-    </div>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('.form-input form');
-    const emailInput = document.getElementById('email');
-    const phoneInput = document.getElementById('phone');
-    const emailMessage = document.getElementById('email-message');
-    const phoneMessage = document.getElementById('phone-message');
+			<div id="events-carousel" class="swiper mySwiper" role="region"
+				aria-roledescription="carousel" aria-label="다가오는 이벤트"
+				aria-live="polite">
+				<div class="swiper-wrapper">
+					<c:forEach var="e" items="${events}" varStatus="st">
+						<c:set var="startStr" value="${e.startDate}" />
+						<c:set var="dateYmd"
+							value="${empty startStr ? '' : fn:substring(startStr,0,10)}" />
+						<c:choose>
+							<c:when test="${not empty e.posterUrl}">
+								<c:set var="imgSrc" value="${e.posterUrl}" />
+							</c:when>
+							<c:when test="${e.category eq 'SHOW'}">
+								<c:set var="imgSrc"
+									value='${pageContext.request.contextPath}/resources/img/events/event1.jpg' />
+							</c:when>
+							<c:when test="${e.category eq 'WORKSHOP'}">
+								<c:set var="imgSrc"
+									value='${pageContext.request.contextPath}/resources/img/events/event2.jpg' />
+							</c:when>
+							<c:when test="${e.category eq 'SPEECH'}">
+								<c:set var="imgSrc"
+									value='${pageContext.request.contextPath}/resources/img/events/event3.jpg' />
+							</c:when>
+							<c:when test="${e.category eq 'MARKET'}">
+								<c:set var="imgSrc"
+									value='${pageContext.request.contextPath}/resources/img/events/event4.jpg' />
+							</c:when>
+							<c:otherwise>
+								<c:set var="imgSrc"
+									value='${pageContext.request.contextPath}/resources/img/events/event1.jpg' />
+							</c:otherwise>
+						</c:choose>
 
-    // 이메일 유효성 검사
-    function isValidEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    }
+						<article class="event-card swiper-slide" role="group"
+							aria-roledescription="slide"
+							aria-label="${st.index + 1} / ${fn:length(events)} ${e.title}">
+							<figure>
+								<img src="${imgSrc}"
+									alt="${e.title} — ${dateYmd}<c:if test='${not empty e.location}'> · ${e.location}</c:if> 포스터">
+								<figcaption class="sr-only">${e.title}<c:if
+										test="${not empty e.description}"> — ${e.description}</c:if>
+								</figcaption>
+							</figure>
+							<div class="overlay">
+								<div class="ov-title">
+									<c:out value='${e.title}' />
+								</div>
+								<div class="ov-meta">
+									<c:out value='${dateYmd}' />
+									<c:if test="${not empty e.location}"> · <c:out
+											value='${e.location}' />
+									</c:if>
+								</div>
+								<a class="btn" href="<c:url value='/events/${e.eventId}'/>"
+									aria-label="${e.title} 상세보기">자세히보기</a>
+							</div>
+						</article>
+					</c:forEach>
+				</div>
+			</div>
+		</section>
 
-    // 전화번호 유효성 검사 (000-0000-0000 형식 검사)
-    function isValidPhone(phone) {
-        // 하이픈 포함/미포함 모두 검사
-        const phoneRegex = /^01[016789]-?\d{3,4}-?\d{4}$/; 
-        return phoneRegex.test(phone);
-    }
-    
-    // 메시지 표시 함수
-    function showMessage(element, message, isError) {
-        element.textContent = message;
-        element.style.color = isError ? 'red' : 'green';
-        element.style.visibility = message ? 'visible' : 'hidden'; 
-    }
+		<!-- Calendar & Notice -->
+		<section class="calendar-section" aria-labelledby="cal-heading">
+			<div class="section-header title">
+				<h2 id="cal-heading">Calendar</h2>
+			</div>
 
-    phoneInput.addEventListener('input', function(e) {
-        const value = e.target.value.replace(/[^0-9]/g, ''); // 숫자 외 모두 제거
-        let result = '';
+			<div class="two-col">
+				<!-- 캘린더 (860px 고정) -->
+				<div class="s-cal" id="sejongCal">
+					<div class="s-cal__head">
+						<div class="s-cal__mnum" id="mNum">09</div>
+						<div class="s-cal__midnav">
+							<button type="button" id="prevBtn" aria-label="이전 달">‹</button>
+							<span aria-hidden="true" class="dots">· ·</span>
+							<button type="button" id="nextBtn" aria-label="다음 달">›</button>
+						</div>
+						<div class="s-cal__mname">
+							<span id="mName">September</span> <small id="mYear">2025</small>
+						</div>
+					</div>
 
-        // 010-1234-5678 형식으로 자동 포맷팅
-        if (value.length < 4) {
-            result = value;
-        } else if (value.length < 8) {
-            result = value.substring(0, 3) + '-' + value.substring(3);
-        } else if (value.length < 11) {
-             // 000-000-0000 (3자리, 3자리, 4자리) 또는 000-0000-0000 (3자리, 4자리, 4자리)
-            result = value.substring(0, 3) + '-' + value.substring(3, 7) + '-' + value.substring(7);
-        } else {
-            // 11자리 (000-0000-0000)
-            result = value.substring(0, 3) + '-' + value.substring(3, 7) + '-' + value.substring(7, 11);
-        }
-        e.target.value = result;
-        
-        // 입력할 때마다 유효성 검사 실행 (실시간 피드백)
-        validateField(phoneInput, phoneMessage, isValidPhone, '전화번호 형식이 올바르지 않습니다. (예: 010-1234-5678)');
+					<table class="s-cal__grid" aria-label="월간 달력">
+						<thead>
+							<tr>
+								<th scope="col">SUN</th>
+								<th scope="col">MON</th>
+								<th scope="col">TUE</th>
+								<th scope="col">WED</th>
+								<th scope="col">THU</th>
+								<th scope="col">FRI</th>
+								<th scope="col">SAT</th>
+							</tr>
+						</thead>
+						<tbody id="calBody"></tbody>
+					</table>
+
+					<aside class="s-cal__pop" id="calPop" style="display: none;"></aside>
+				</div>
+
+				<!-- Notice -->
+				<aside aria-labelledby="notice-heading">
+					<div class="section-header">
+						<h2 id="notice-heading">Notice</h2>
+					</div>
+					<div class="notice-wrap" aria-label="공지 목록">
+						<div class="item">
+							<div class="thumb" aria-hidden="true">9/28</div>
+							<div class="meta">
+								<div class="title">가을 음악 페스티벌</div>
+								<div class="desc">올림픽공원</div>
+							</div>
+						</div>
+						<div class="item">
+							<div class="thumb" aria-hidden="true">9/25</div>
+							<div class="meta">
+								<div class="title">사내 워크숍</div>
+								<div class="desc">오전 9시 (4시간)</div>
+							</div>
+						</div>
+						<div class="item">
+							<div class="thumb" aria-hidden="true">10/2</div>
+							<div class="meta">
+								<div class="title">개발자 컨퍼런스</div>
+								<div class="desc">오후 2시 (4시간~)</div>
+							</div>
+						</div>
+					</div>
+				</aside>
+			</div>
+		</section>
+	</main>
+
+	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
+
+	<script>
+    /* 이벤트 캐러셀: 카드 310px, 간격 65px */
+    new Swiper(".mySwiper", {
+      slidesPerView: 4,
+      spaceBetween: 65,
+      allowTouchMove: false,
+      navigation: { nextEl: ".events-next", prevEl: ".events-prev" }
     });
-    
-    function validateField(inputElement, messageElement, validationFn, errorMessage) {
-        const value = inputElement.value.trim();
-        // required 속성이 있으므로 비어있는 것은 제출 시에만 경고
-        if (value === "") {
-            showMessage(messageElement, '', false); 
-            return false;
-        } else if (!validationFn(value)) {
-            showMessage(messageElement, errorMessage, true);
-            return false;
-        } else {
-            showMessage(messageElement, '', false); 
-            return true;
-        }
-    }
-    
-    // 이메일 입력 필드에서 포커스를 잃었을 때 (blur) 유효성 검사
-    emailInput.addEventListener('blur', function() {
-        validateField(emailInput, emailMessage, isValidEmail, '올바른 이메일 형식이 아닙니다. 다시 확인해 주세요.');
-    });
 
-    // 전화번호 입력 필드에서 포커스를 잃었을 때 (blur) 유효성 검사
-    phoneInput.addEventListener('blur', function() {
-        validateField(phoneInput, phoneMessage, isValidPhone, '전화번호 형식이 올바르지 않습니다. (예: 010-1234-5678)');
-    });
+    (function(){
+      /* ===== 서버 이벤트(JSP → JS) : ENUM 카테고리 사용 ===== */
+      var serverEvents = [];
+      <c:forEach var="e" items="${events}">
+        (function(){
+          var d = "<c:out value='${fn:substring(e.startDate,0,10)}'/>";
+          var t = "<c:out value='${e.title}'/>";
+          var c = "<c:out value='${e.category}'/>"; // SHOW|SPEECH|WORKSHOP|MARKET
+          serverEvents.push({ date:d, title:t, category:c });
+        })();
+      </c:forEach>
 
+      var el = {
+        mNum:  document.getElementById('mNum'),
+        mName: document.getElementById('mName'),
+        mYear: document.getElementById('mYear'),
+        body:  document.getElementById('calBody'),
+        pop:   document.getElementById('calPop'),
+        wrap:  document.getElementById('sejongCal')
+      };
 
-    // 폼 제출(submit) 시 최종 유효성 검사
-    form.addEventListener('submit', function(e) {
-        const isEmailValid = validateField(emailInput, emailMessage, isValidEmail, '이메일 형식이 올바르지 않습니다.');
-        const isPhoneValid = validateField(phoneInput, phoneMessage, isValidPhone, '전화번호 형식이 올바르지 않습니다. (예: 010-1234-5678)');
+      var MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      var DOT_CLASS = { SHOW:'dot-SHOW', SPEECH:'dot-SPEECH', WORKSHOP:'dot-WORKSHOP', MARKET:'dot-MARKET' };
 
-        // required 필드 확인 (이메일과 전화번호가 비어있으면 required 메시지를 보여줌)
-        const isEmailEmpty = emailInput.value.trim() === "";
-        const isPhoneEmpty = phoneInput.value.trim() === "";
-        
-        if (isEmailEmpty) {
-            showMessage(emailMessage, '이메일을 입력해 주세요.', true);
-        }
-         if (isPhoneEmpty) {
-            showMessage(phoneMessage, '전화번호를 입력해 주세요.', true);
-        }
+      var viewDate = new Date();
+      render(viewDate);
 
-        // 유효하지 않거나 비어있는 필드가 있으면 제출 막음
-        if (!isEmailValid || !isPhoneValid || isEmailEmpty || isPhoneEmpty) {
-            e.preventDefault(); 
-        }
-    });
-// 모달 관련 변수 추가
-    const modal = document.getElementById('reservation-modal');
-    const closeBtn = document.querySelector('.close-btn');
-    const confirmBtn = document.getElementById('modal-confirm-btn');
-    const modalName = document.getElementById('modal-name');
-    
-    // 복사 관련 변수 추가
-    const copyBtn = document.getElementById('copy-reservation-btn');
-    const reservationNumberSpan = document.getElementById('reservation-number');
+      document.getElementById('prevBtn').onclick = function(){ viewDate.setMonth(viewDate.getMonth()-1); render(viewDate,true); };
+      document.getElementById('nextBtn').onclick = function(){ viewDate.setMonth(viewDate.getMonth()+1); render(viewDate,true); };
 
-    // 모달 닫기 함수
-    function closeModal() {
-        modal.style.display = 'none';
-    }
+      var hideTimer = null;
+      document.addEventListener('click', function(e){ if(!el.pop.contains(e.target)) el.pop.style.display='none'; });
 
-    // 모달 열기 함수 (예약 성공 시 호출)
-    function showModal() {
-        modalName.textContent = nameInput.value.trim(); // 예약자 이름 표시
-        modal.style.display = 'block';
-    }
+      function render(d){
+        var y = d.getFullYear(), m = d.getMonth();
+        el.mNum.textContent  = String(m+1).padStart(2,'0');
+        el.mName.textContent = MONTH_NAMES[m];
+        el.mYear.textContent = y;
 
-    // =======================================================
-    // 예약번호 복사 기능
-    // =======================================================
-    if (copyBtn) {
-        copyBtn.addEventListener('click', function() {
-            const reservationNumber = reservationNumberSpan.textContent;
-            
-            // 클립보드에 복사하는 최신 API 사용
-            navigator.clipboard.writeText(reservationNumber).then(() => {
-                alert('예약번호 (' + reservationNumber + ')가 클립보드에 복사되었습니다.');
-                
-                // 복사 완료 후 버튼 텍스트 변경 (선택 사항)
-                copyBtn.textContent = '복사 완료!';
-                setTimeout(() => {
-                    copyBtn.textContent = '예약번호 복사';
-                }, 2000);
-            }).catch(err => {
-                // 복사 실패 시
-                console.error('클립보드 복사 실패:', err);
-                alert('복사 중 오류가 발생했습니다.');
-            });
+        var first = new Date(y,m,1);
+        var last  = new Date(y,m+1,0);
+        var startDay = first.getDay();
+        var days = last.getDate();
+
+        var monthEvents = serverEvents.filter(function(ev){
+          var dt = new Date(ev.date);
+          return dt.getFullYear()===y && dt.getMonth()===m;
         });
-    }
 
-    // 모달 닫기 이벤트 리스너
-    closeBtn.addEventListener('click', closeModal);
-    confirmBtn.addEventListener('click', closeModal);
+        var html = '', day = 1;
+        for(var r=0;r<6;r++){
+          html += '<tr>';
+          for(var c=0;c<7;c++){
+            var cellIndex = r*7 + c;
+            if(cellIndex < startDay || day > days){
+              html += '<td aria-hidden="true"></td>';
+            }else{
+              var key = y + '-' + String(m+1).padStart(2,'0') + '-' + String(day).padStart(2,'0');
+              var isToday = isSameDate(new Date(), new Date(y,m,day));
+              var dots = monthEvents
+                .filter(function(ev){ return ev.date===key; })
+                .map(function(ev){
+                  var cls = DOT_CLASS[ev.category] || 'dot-MARKET';
+                  return '<i class="s-cal__dot '+cls+'"></i>';
+                }).join('');
 
-    // 모달 외부 클릭 시 닫기
-    window.addEventListener('click', function(event) {
-        if (event.target === modal) {
-            closeModal();
+              html += '<td class="s-cal__cell '+(isToday?'is-today':'')+'" data-date="'+key+'">'
+                    +   '<div class="s-cal__num">'+day+'</div>'
+                    +   '<div class="s-cal__dots">'+dots+'</div>'
+                    + '</td>';
+              day++;
+            }
+          }
+          html += '</tr>';
         }
-    });
-});
-</script>
+        el.body.innerHTML = html;
+
+        /* 호버 → 팝업 & 하이라이트 */
+        Array.prototype.forEach.call(el.body.querySelectorAll('td.s-cal__cell'), function(td){
+          td.addEventListener('mouseenter', function(){
+            clearTimeout(hideTimer);
+            el.body.querySelectorAll('.s-cal__cell.is-hover').forEach(function(x){ x.classList.remove('is-hover'); });
+            td.classList.add('is-hover');
+
+            var dateKey = td.getAttribute('data-date');
+            var list = monthEvents.filter(function(ev){ return ev.date===dateKey; });
+
+            if(list.length===0){
+              el.pop.innerHTML = '<div class="empty">등록된 이벤트가 없습니다</div>';
+            }else{
+              var inner = '';
+              for(var i=0;i<list.length;i++){
+                var ev = list[i];
+                var dotCls = DOT_CLASS[ev.category] || 'dot-MARKET';
+                inner += '<div class="row"><span class="dot '+dotCls+'"></span><span class="title">'+escapeHtml(ev.title)+'</span></div>';
+              }
+              el.pop.innerHTML = inner;
+            }
+
+            /* 팝업 위치: 셀 아래쪽 */
+            var calRect = el.wrap.getBoundingClientRect();
+            var rect = td.getBoundingClientRect();
+            el.pop.style.left = (rect.left - calRect.left + 8) + 'px';
+            el.pop.style.top  = (rect.bottom - calRect.top + 8) + 'px';
+            el.pop.style.display = 'block';
+          });
+
+          td.addEventListener('mouseleave', function(){
+            hideTimer = setTimeout(function(){ el.pop.style.display='none'; }, 120);
+            td.classList.remove('is-hover');
+          });
+        });
+
+        el.pop.addEventListener('mouseenter', function(){ clearTimeout(hideTimer); });
+        el.pop.addEventListener('mouseleave', function(){ el.pop.style.display='none'; });
+      }
+
+      function isSameDate(a,b){ return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate(); }
+      function escapeHtml(s){ return String(s).replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; }); }
+    })();
+  </script>
 </body>
 </html>

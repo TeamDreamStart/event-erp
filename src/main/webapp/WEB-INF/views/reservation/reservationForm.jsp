@@ -1,11 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
- pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- 포트원 결제 api -->
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
 <title>reservation Form</title>
 <style>
@@ -268,93 +271,184 @@ width: 100%;
 </head>
 
 <body>
-<jsp:include page="/WEB-INF/views/common/header.jsp"/>
- <main>
- <div class="container">
- <div class="section-header">
-  <h2>Reservation</h2>
- </div>
-   <div class="reservation-form">
-   <div class="event-info">
-    <h4>이벤트 정보</h4>
-        <div class="event-poster">
-          <img src="/resources/img/events/event1.jpg" alt="Autumn Music Festival Poster" />
-        </div>
-        
-        <div class="event-details">
-          <p class="event-title">가을 음악 페스티벌</p>
-          <p><i class="fas fa-calendar-alt"></i>• 2025-09-28</p>
-          <p><i class="fas fa-map-marker-alt"></i>• 서울 올림픽 공원</p>
-          <p><i class="fas fa-won-sign"></i>• 15,000원</p>
-        </div>
-   </div>
-   <div class="form-input">
-    <h4>예약 정보 입력</h4>
-        
-        <div class="member-info-box">
-          <p>회원 정보로 예약</p>
-          <p>로그인된 회원 정보를 사용하여 예약합니다.</p>
-        </div>
-                        <form>
-          <div class="form-group">
-            <label for="name">이름*</label>
-            <input type="text" id="name" required>
-                                  </div>
-          <div class="form-group">
-            <label for="email">이메일*</label>
-            <input type="text" id="email" required>
-                        <span id="email-message" class="error-message"></span>
-          </div>
-          <div class="form-group">
-            <label for="phone">전화번호*</label>
-            <input type="text" id="phone" required maxlength="13">
-                        <span id="phone-message" class="error-message"></span>
-          </div>
-          <div class="form-group">
-            <label for="payment">결제 방법*</label>
-            <select id="payment" required>
-              <option value="">선택</option>
-              <option value="card">신용카드</option>
-              <option value="transfer">계좌이체</option>
-            </select>
-          </div>
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
+	<main>
+		<div class="container">
+			<div class="section-header">
+				<h2>Reservation</h2>
+			</div>
+			<div class="reservation-form">
+				<div class="event-info">
+					<h4>이벤트 정보</h4>
+					<div class="event-poster">
+						<img src="/resources/img/events/event11.jpg"
+							alt="Autumn Music Festival Poster" />
+					</div>
 
-          <div class="total-price">
-            <span>총 결제 금액</span>
-            <span>15,000원</span>
-          </div>
+					<div class="event-details">
+						<p class="event-title">${eventDTO.title }</p>
+						<p>
+							<i class="fas fa-calendar-alt"></i>• ${eventDTO.startDate } ~
+							${eventDTO.endDate }
+						</p>
+						<p>
+							<i class="fas fa-map-marker-alt"></i>• ${eventDTO.location }
+						</p>
+						<p>
+							<i class="fas fa-won-sign"></i>• ${eventDTO.price }${eventDTO.currency }
+						</p>
+					</div>
+				</div>
+				<div class="form-input">
+					<h4>예약 정보 입력</h4>
 
-          <div class="agreement">
-            <label>
-              <input type="checkbox" required> 개인정보 수집 및 이용에 동의합니다. (필수)
-            </label>
-            <label>
-              <input type="checkbox" required> 예약 취소 및 환불 정책에 동의합니다. (필수)
-            </label>
-          </div>
+					<div class="member-info-box">
+						<p>회원 정보로 예약</p>
+						<p>로그인된 회원 정보를 사용하여 예약합니다.</p>
+					</div>
+					<!-- eventDTO.isPaid 값으로 바로예약/결제후 예약 분기 -->
+					<form action="/events/${eventDTO.eventId }/reservations/payment"
+						method="get" id="paymentForm">
+						<div class="form-group">
+							<label>인원수*</label> <input type="number" min="1" max="10"
+								value="1" name="headCount">
+						</div>
+						<div class="form-group">
+							<label for="name">이름*</label> <input type="text" id="name"
+								value="${userDTO.name }" required readonly>
+						</div>
+						<div class="form-group">
+							<label for="email">이메일*</label> <input type="text" id="email"
+								value="${userDTO.email }" required readonly> <span
+								id="email-message" class="error-message"></span>
+						</div>
+						<div class="form-group">
+							<label for="phone">전화번호*</label> <input type="text" id="phone"
+								value="${userDTO.phone }" required maxlength="13" readonly>
+							<span id="phone-message" class="error-message"></span>
+						</div>
+						<div class="total-price">
+							<span>총 결제 금액</span> <span id="totalAmount">${eventDTO.price}원</span>
+						</div>
 
-          <div class="submit-btn">
-            <button type="submit">예약 완료하기</button>
-          </div>
-        </form>
-   </div>
-  </div>
- </div>
- </main>
- <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
- <div id="reservation-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <div class="modal-body">
-            <h4>예약이 완료되었습니다!</h4>
-            <p>예약번호: G186194572605</p>
-            <p>비회원 예약 조회 시 예약번호와 전화번호를 입력해 주세요.</p>
-            <button id="modal-confirm-btn" class="modal-btn">닫기</button>
-        </div>
-    </div>
-</div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
+						<div class="agreement">
+							<label> <input type="checkbox" required> 개인정보 수집
+								및 이용에 동의합니다. (필수)
+							</label> <label> <input type="checkbox" required> 예약 취소 및
+								환불 정책에 동의합니다. (필수)
+							</label>
+						</div>
+
+						<!-- 기존 submit 버튼 -->
+						<div class="submit-btn">
+							<button type="button" onclick="requestPay()">결제하기</button>
+						</div>
+
+						<!--  -->
+						<input type="hidden" name="userId" value="${userDTO.userId }">
+						<!-- 결제정보 전달용 -->
+						<input type="hidden" id="impUid" name="impUid" /> <input
+							type="hidden" id="method" name="method" /> <input type="hidden"
+							id="status" name="status" /> <input type="hidden" id="amount"
+							name="amount" /> <input type="hidden" id="approveNo"
+							name="approveNo" /> <input type="hidden" id="pgTid" name="pgTid" />
+						<input type="hidden" id="memo" name="memo" />
+					</form>
+					<!-- 포트원 결제 api 작동 -->
+					<script>
+					const headCountInput = document.querySelector('input[name="headCount"]');
+					const totalAmountSpan = document.getElementById('totalAmount');
+					const pricePerPerson = ${eventDTO.price}; // JSP에서 price 값 가져오기
+
+					// headCount가 바뀔 때 총 금액 계산
+					function updateTotalAmount() {
+					    let headCount = parseInt(headCountInput.value) || 1;
+					    if (headCount < 1) headCount = 1;
+					    if (headCount > 10) headCount = 10;
+					    const total = pricePerPerson * headCount;
+					    totalAmountSpan.textContent = total.toLocaleString() + "원";
+					    return total;
+					}
+
+					// 초기값 반영
+					let totalAmount = updateTotalAmount();
+
+					// 입력 이벤트
+					headCountInput.addEventListener('input', () => {
+					    totalAmount = updateTotalAmount();
+					});
+					
+IMP.init("imp06753075");
+
+function requestPay() {
+  IMP.request_pay({
+    pg: "html5_inicis",
+    pay_method: "card",
+    merchant_uid: "order-" + new Date().getTime(),
+    name: "${eventDTO.title}",
+    amount: totalAmount,
+    buyer_email: "${userDTO.email}",
+    buyer_name: "${userDTO.name}",
+    buyer_tel: "${userDTO.phone}",
+    buyer_addr: "${eventDTO.location}",
+    buyer_postcode: "00000"
+  }, function(rsp) {
+    if (rsp.success) {
+      alert("결제 성공! imp_uid=" + rsp.imp_uid);
+      console.log("결제 응답:", rsp);
+
+      // ✅ PaymentDTO 필드 매핑
+      $("#impUid").val(rsp.imp_uid);
+      $("#method").val(rsp.pay_method.toUpperCase());
+      $("#status").val("PAID");
+      $("#amount").val(rsp.paid_amount);
+      $("#approveNo").val(rsp.apply_num);
+      $("#pgTid").val(rsp.pg_tid);
+
+      // 기타 정보는 memo로 JSON 문자열 저장
+      const memoObj = {
+        buyer_name: rsp.buyer_name,
+        buyer_email: rsp.buyer_email,
+        buyer_tel: rsp.buyer_tel,
+        buyer_addr: rsp.buyer_addr,
+        buyer_postcode: rsp.buyer_postcode,
+        card_name: rsp.card_name,
+        card_number: rsp.card_number,
+        card_quota: rsp.card_quota,
+        currency: rsp.currency,
+        pg_provider: rsp.pg_provider,
+        pg_type: rsp.pg_type,
+        receipt_url: rsp.receipt_url,
+        name: rsp.name
+      };
+      $("#memo").val(JSON.stringify(memoObj));
+
+      console.log("폼 submit 직전 실행됨");
+      $("#paymentForm").submit();
+    } else {
+      alert("결제 실패: " + rsp.error_msg);
+    }
+  });
+}
+</script>
+				</div>
+			</div>
+		</div>
+	</main>
+	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
+	<div id="reservation-modal" class="modal">
+		<div class="modal-content">
+			<span class="close-btn">&times;</span>
+			<div class="modal-body">
+				<h4>예약이 완료되었습니다!</h4>
+				<p>예약번호: G186194572605</p>
+				<p>비회원 예약 조회 시 예약번호와 전화번호를 입력해 주세요.</p>
+				<button id="modal-confirm-btn" class="modal-btn">닫기</button>
+			</div>
+		</div>
+	</div>
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
     const form = document.querySelector('.form-input form');
     const emailInput = document.getElementById('email');
     const phoneInput = document.getElementById('phone');
@@ -368,10 +462,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 전화번호 유효성 검사 (000-0000-0000 형식 검사)
-    function isValidPhone(phone) {
+    function isValidPhone(콜) {
         // 하이픈 포함/미포함 모두 검사
         const phoneRegex = /^01[016789]-?\d{3,4}-?\d{4}$/; 
-        return phoneRegex.test(phone);
+        return phoneRegex.test(콜);
     }
     
     // 메시지 표시 함수

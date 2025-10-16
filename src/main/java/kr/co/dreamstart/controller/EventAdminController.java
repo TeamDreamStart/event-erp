@@ -37,6 +37,8 @@ public class EventAdminController {
 
 	@Autowired
 	private EventService eventService;
+	//카카오 api js key
+	private final String KAKAOKEY = "ee21816e3b6c14b1f71c1db0b4fbc881";
 	
 	// 화면용 포맷터
 //	private final DateTimeFormatter VIEW_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -63,6 +65,7 @@ public class EventAdminController {
 		EventDTO e = eventService.findById(eventId);
 		
 		model.addAttribute("event", e);
+		model.addAttribute("kakaoKey",KAKAOKEY);
 //		model.addAttribute("startView", e.getStartDate() == null ? "" : e.getStartDate().format(VIEW_FMT));
 //		model.addAttribute("endView", e.getEndDate() == null ? "" : e.getEndDate().format(VIEW_FMT));
 //		model.addAttribute("createdView", e.getCreatedAt() == null ? "" : e.getCreatedAt().format(VIEW_FMT));
@@ -75,8 +78,8 @@ public class EventAdminController {
 	public String form(@RequestParam(value = "id", required = false) Long id, 
 						Model model) {
 		EventDTO e = (id != null) ? eventService.findById(id) : new EventDTO();
-		
 		model.addAttribute("event", e);
+		model.addAttribute("kakaoKey",KAKAOKEY);
 //		model.addAttribute("startHtml", e.getStartDate() == null ? "" : e.getStartDate().format(HTML_FMT));
 //		model.addAttribute("endHtml", e.getEndDate() == null ? "" : e.getEndDate().format(HTML_FMT));
 //		model.addAttribute("createdView", e.getCreatedAt() == null ? "" : e.getCreatedAt().format(VIEW_FMT));
@@ -129,6 +132,8 @@ public class EventAdminController {
 								RedirectAttributes ra,
 								HttpServletRequest request) {
 		if (binding.hasErrors()) return "admin/eventForm";
+		//임시값@@@@@@@@@@
+		event.setCreatedBy(event.getCreatedBy());
 		Long newId = eventService.saveWithFiles(event, image, files, userId, request);
 		ra.addFlashAttribute("msg", (event.getEventId()==null? "이벤트 생성 완료 (ID : ":"이벤트 수정 완료 (ID : ")+newId+")");
 		return "redirect:/admin/events?page=" + page;

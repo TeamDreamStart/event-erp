@@ -120,21 +120,29 @@ public class EventServiceImpl implements EventService {
 		// 1) 이벤트 메타 저장/수정
 		Long id = save(dto, userId);
 		
-		// 2) 파일 합쳐서 fileService에 위임 
-		List<MultipartFile> all = new ArrayList<>();
-		if (image != null && !image.isEmpty()) all.add(image);
-		if (files != null) {
-			for (MultipartFile f : files) {
-				if (f != null && !f.isEmpty()) {
-					all.add(f);
-				}
-			}
+//		// 2) 파일 합쳐서 fileService에 위임 
+//		List<MultipartFile> all = new ArrayList<>();
+//		if (image != null && !image.isEmpty()) all.add(image);
+//		if (files != null) {
+//			for (MultipartFile f : files) {
+//				if (f != null && !f.isEmpty()) {
+//					all.add(f);
+//				}
+//			}
+//		}
+//		if (!all.isEmpty()) {
+//			fileService.saveFiles(request, all.toArray(new MultipartFile[0]), "event", id);
+//		}
+		// 지은) 파일 서비스에서 파일 리스트를 순회해서 DB에 저장해 주기 때문에 그냥 멀티파트파일 배열 상태로 넘기면 됩니다
+		//  
+		if (files != null && files.length > 0) {
+			// 비어있지 않은 경우
+			fileService.saveFiles(request, files, "event", dto.getEventId());
 		}
-		if (!all.isEmpty()) {
-			fileService.saveFiles(request, all.toArray(new MultipartFile[0]), "EVENT", id);
-		}
+		
+		
 		// 3) 첫번째 이미지 파일을 대표로 지정 (없으면 패스)
-		List<FileAssetDTO> saved = fileService.list("EVENT", id);
+		List<FileAssetDTO> saved = fileService.list("event", id);
 		for (FileAssetDTO fa : saved) {
 			if (fa.getMimeType() != null && fa.getMimeType().toLowerCase().startsWith("image")) {
 				String coverUrl = "/resources/uploadTemp/" + fa.getStoredPath()+ "/"
@@ -143,6 +151,7 @@ public class EventServiceImpl implements EventService {
 				break;
 			}
 		}
+		
 		
 		return id;
 	}

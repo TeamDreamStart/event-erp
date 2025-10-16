@@ -28,8 +28,6 @@ public interface EventMapper {
 	public int update(EventDTO dto);
 	public int delete(@Param("eventId") Long eventId);
 	
-	// Payment 테스트용으로 임시로 만들었음
-	public EventDTO selectByEventId(long eventId);
 	// 이벤트 종료 시각 조회
 	public LocalDateTime findEndDateByEventId(@Param("eventId") Long eventId);
 	

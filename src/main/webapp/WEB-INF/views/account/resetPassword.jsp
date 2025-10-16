@@ -129,10 +129,19 @@ input::placeholder{
                 <h2>Reset Password</h2>
             </div>
 			<div class="resetPassword-section">
-				<form action="#" method="post">
+			
+			
+			
+			
+				<form action="/reset-password" method="post">
 					<div class="resetPassword-form">
-						<label for="newPassword">새 비밀번호</label> <input type="password"
-							id="newPassword" name="newPassword" placeholder="새 비밀번호를 입력하세요."
+						<label for="newPassword">새 비밀번호</label> 
+						<input type="hidden" name="${_csrf.parameterName}"
+					value="${_csrf.token}" />
+						<!-- 이메일값 안 받아오면 이 페이지에서 나가게 자바스크립트 처리@@@@@@@@@@@@@@@@@@@@@@@@ -->
+						<input type="hidden" name="email" value="${email }">
+						<input type="password"
+							id="newPassword" name="newPass" placeholder="새 비밀번호를 입력하세요."
 							required>
 						<p class="help-text">(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10~16자)</p>
 						<p id="newPassword-error" class="error-message"></p>

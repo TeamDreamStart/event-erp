@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -67,8 +69,13 @@
 								<input type="hidden" name="visibility" value="PUBLIC">
 							</c:if>
 
-							<!-- session에서 받아와용 ${session.getAttribute("username")}-->
-							<input type="hidden" name="userId" value="1" readonly>
+							<!-- security에서 받아와용 -->
+							<div class="form-group">
+								<label>작성자</label> <input class="form-control" type="text"
+									name="userId"
+									value="<sec:authentication property='principal.userId' />"
+									readonly />
+							</div>
 
 
 							<div class="form-group">
@@ -150,40 +157,49 @@
 								<input type="hidden" name="visibility" value="PUBLIC">
 							</c:if>
 
-							<!-- session에서 받아와용 ${session.getAttribute("username")}-->
-							<label>작성자</label><input type="text" name="userId" value="1"
-								readonly>
+							<!-- security에서 받아와용 -->
+							<div class="form-group">
+								<label>작성자(수정시 기존 작성자 정보 삭제)</label> <input class="form-control"
+									type="text" name="userId"
+									value="<sec:authentication property='principal.userId' />"
+									readonly />
+							</div>
+
 
 							<div class="form-group">
 								<label>제목</label> <input type="text" name="title"
 									class="form-control" value="${postDTO.title}">
 							</div>
-							<!-- 파일 삭제 -->
-							<c:if test="${fileList != null && !fileList.isEmpty()}">
-								<div>
-									<p>삭제</p>
-									<c:forEach var="fileDTO" items="${fileList}">
-										<label> <img
-											src="${pageContext.request.contextPath}/resources/uploadTemp/${fileDTO.storedPath}/s_${fileDTO.uuid}_${fileDTO.originalName}"
-											alt="${fileDTO.originalName}"> <input type="checkbox"
-											name="deleteFileList" value="${fileDTO.fileId }">
-										</label>
-									</c:forEach>
+
+							<c:if test="${boardType eq 'notices' }">
+								<!-- 파일 삭제 -->
+								<c:if test="${fileList != null && !fileList.isEmpty()}">
+									<div>
+										<p>삭제</p>
+										<c:forEach var="fileDTO" items="${fileList}">
+											<label> <img
+												src="${pageContext.request.contextPath}/resources/uploadTemp/${fileDTO.storedPath}/s_${fileDTO.uuid}_${fileDTO.originalName}"
+												alt="${fileDTO.originalName}"> <input type="checkbox"
+												name="deleteFileList" value="${fileDTO.fileId }">
+											</label>
+										</c:forEach>
+									</div>
+								</c:if>
+								<div class="form-group">
+									<div>
+										<label class="btn btn-secondary" for="uploadFile">
+											파일선택 <input style="display: none" type="file"
+											name="uploadFile" id="uploadFile" accept="image/*" multiple>
+										</label> <span>첨부파일 최대 크기는 5MB 입니다.</span>
+									</div>
+									<!-- 파일 미리보기 -->
+									<div id="preview"
+										style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+
+									</div>
 								</div>
 							</c:if>
-							<div class="form-group">
-								<div>
-									<label class="btn btn-secondary" for="uploadFile"> 파일선택
-										<input style="display: none" type="file" name="uploadFile"
-										id="uploadFile" accept="image/*" multiple>
-									</label> <span>첨부파일 최대 크기는 5MB 입니다.</span>
-								</div>
-								<!-- 파일 미리보기 -->
-								<div id="preview"
-									style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
 
-								</div>
-							</div>
 							<div class="form-group">
 								<label>내용</label>
 								<textarea name="content" class="form-control" rows="8">${postDTO.content}</textarea>

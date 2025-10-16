@@ -40,7 +40,7 @@ h1,h2,h3 .header a, .header-nav a{
 }
 
 .logo-link{
-    font-family: 'peristiwa';
+    font-family:'Peristiwa', sans-serif;
     font-size: 64px;
     color: #222;
     font-weight: 300;
@@ -83,15 +83,21 @@ h1,h2,h3 .header a, .header-nav a{
 
 
 /*help,notice/qna 섹션 구현을 위한 추가 css*/
-.header-nav{
+   .header-nav{
     display: flex;
-    font-size: 14px;
-    letter-spacing: -0.5px;
+    gap: 40px;
+    font-size: 30px;
+    font-weight: 300;
+    padding-left: 20px;
 }
+
 .header-nav a{
-     margin-right: 40px;
-    padding-bottom: 3px;
+    padding-bottom: 10px;
     transition: color 0.2s;
+}
+
+.header-nav a:hover{
+    color: #0088ff;
 }
 
 .header-help{
@@ -187,6 +193,67 @@ main{
     font-weight: 600;
 }
 
+.nav-links-container{
+    margin-top: 40px; /* 공지 상자와의 간격 */
+    padding: 0; 
+    border-top: 2px solid #ddd; /* 상단 구분선 */
+    border-bottom: 2px solid #ddd; /* 하단 구분선 */
+    background-color: #FAF9F6; /* 배경색 */
+}
+
+/* 테이블 레이아웃을 사용하여 디자인 구현 */
+.nav-table {
+    width: 100%;
+    border-collapse: collapse; 
+    font-size: 15px;
+}
+
+.nav-table tr {
+    /* 첫 번째 행 아래에만 얇은 구분선 */
+    border-bottom: 1px solid #eee;
+}
+
+.nav-table tr:last-child {
+    border-bottom: none;
+}
+
+.link-label-cell {
+    /* 라벨 셀 스타일 */
+    width: 80px; 
+    font-weight: 500; 
+    color: #555;
+    padding: 15px 0;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #f7f7f7; /* 라벨 배경색 */
+    border-right: 1px solid #eee; /* 라벨과 제목 사이 구분선 */
+    /* .notice-section에 20px 패딩이 있으므로, 여기서도 20px 보정 */
+    padding-left: 20px; 
+    padding-right: 20px;
+}
+
+.link-title-cell {
+    /* 제목 셀 스타일 */
+    padding: 15px 20px;
+    width: auto;
+}
+
+.link-title a{
+    color: #555; 
+    transition: color 0.2s, text-decoration 0.2s;
+    /* 제목이 길어져도 한 줄로 처리 */
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+    font-weight: 400;
+}
+
+.link-title a:hover{
+    color: #2980B9;
+    text-decoration: underline;
+}
+
 /*목록 버튼*/
 .back-button-container{
     max-width: 800px;
@@ -211,6 +278,47 @@ main{
     background-color: #FAF9F6;
 }
 
+.nav-links-container{
+    max-width: 800px;
+    margin: 30px auto 0 auto;
+    border-top: 1px solid #222; /* 구분선 */
+    font-size: 14px;
+}
+
+.nav-link-item{
+    display: flex;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd; /* 각 항목 구분선 */
+    align-items: center;
+}
+
+.nav-link-item:last-child{
+    border-bottom: none; /* 마지막 항목의 하단선 제거 */
+}
+
+.link-label{
+    width: 60px; /* 라벨 너비 고정 */
+    font-weight: 600;
+    color: #222;
+    padding-right: 15px;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.link-title a{
+    color: #555;
+    transition: color 0.2s;
+    overflow: hidden;
+    text-overflow: ellipsis; /* 텍스트가 길 경우 ... 처리 */
+    white-space: nowrap; /* 줄바꿈 방지 */
+    display: block;
+    max-width: 700px; /* 제목 최대 너비 */
+}
+
+.link-title a:hover{
+    color: #000;
+    text-decoration: underline;
+}
 
 /* 4. Footer 영역 스타일 */
 .footer {
@@ -229,5 +337,4 @@ main{
 }
 .footer p:last-child {
     margin-top: 15px;
-    font-weight: bold;
 } 

@@ -243,7 +243,9 @@ br {
             </div>
             
             <div id="uid-section-content" class="tab-content active">
-                <form action="/${postDTO.username}" method="post">
+                <form action="/login" method="post">
+                <input type="hidden" name="${_csrf.parameterName}"
+					value="${_csrf.token}" />
                     <div class="find-uid-form">
                     <label for="email_uid">이메일</label><br>
                     <div class="input-group">
@@ -281,7 +283,7 @@ br {
                     </div>
                     
                     <div class="find-password-form">
-                    <label for="verificationCode_pw">비밀번호</label><br>
+                    <label for="verificationCode_pw">예약번호</label><br>
                     <div class="input-group">
                         <input type="text" id="verificationCode_pw" name="verificationCode" placeholder="비밀번호를 입력하세요." required>
                     </div>
@@ -289,7 +291,7 @@ br {
 
                     <div class="end-btn">
                         <button button onclick="history.back()" class="btn btn-cancle">취소</button>
-                        <button type="submit" class="btn btn-find-pass">로그인</button>
+                        <button type="submit" class="btn btn-find-pass">조회</button>
                     </div>
                 </form>
             </div>

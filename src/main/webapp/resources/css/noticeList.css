@@ -2,7 +2,7 @@
     font-family: 'Montserrat';
     margin: 0;
     padding: 0;
-    background-color: #F5F5F5;
+    background-color: #E5E2DB;
     color: #222;
     line-height: 1.6;
 }
@@ -23,7 +23,7 @@
 }
 
 .logo{
-    font-family: 'peristiwa';
+    font-family: 'Peristiwa', sans-serif;
     font-size: 64px;
     font-style: italic;
     font-weight: bold;
@@ -43,7 +43,7 @@
     padding-left: 15px;
 }
 
-login-button{
+.login-button{
     font-weight: bold;
 }
 
@@ -177,12 +177,36 @@ login-button{
 }
 
 /* 페이지네이션 */
+.pagination-container{
+    text-align: center;
+    margin-top: 40px;
+}
+
 .pagination {
     display: flex;
     justify-content: center;
     gap: 15px;
-    margin-top: 40px;
     align-items: center;
+	color: #888888;
+	font-size: 18px;
+	transition: 0.2s;
+}
+
+.pagination li{
+    display: inline-block;
+}
+
+.pagination li a{
+    padding: 5px 10px;
+    font-size: 18px;
+    color: #999;
+    display: block;
+    transition: color 0.2s;
+}
+
+.pagination li.active a{
+    font-weight: bold;
+    color: #222;
 }
 .nav-arrow {
     font-size: 20px;
@@ -199,17 +223,23 @@ login-button{
     border-bottom: 2px solid #333; /* 현재 페이지 강조 */
 }
 
+.pagination a:hover{
+	color: #222; /* 텍스트를 검은색으로 변경 */
+    background-color: transparent; /* 배경색 변경 없음 */
+    cursor: pointer;
+}
+
 /* 4. Footer 영역 스타일 */
 .footer {
-    background-color: #e0f2e0; /* 연한 녹색 계열 배경 */
-    color: #333;
+    background-color: #CBD4C2; /* 연한 녹색 계열 배경 */
+    color: #222;
     padding: 30px 0;
     margin-top: 80px;
     text-align: center;
 }
 .footer p {
     margin: 5px 0;
-    font-size: 14px;
+    font-size: 20px;
 }
 .footer-hr {
     display: none; /* 디자인에 hr이 없으므로 숨김 처리 */

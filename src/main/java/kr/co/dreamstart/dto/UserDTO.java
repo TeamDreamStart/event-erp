@@ -1,17 +1,16 @@
 package kr.co.dreamstart.dto;
 
-
 import lombok.Data;
 
 @Data
 public class UserDTO {
 	private long userId;
-	private String userName;
+	private String username;
 	private String password;
 	private String name;
 	private String email;
 	private String phone;
-	private int gender; //female(0)male(1)
+	private Integer gender; //female(0)male(1)
 	private String lastLoginAt;
 	private String createdAt;
 	private String updatedAt;
