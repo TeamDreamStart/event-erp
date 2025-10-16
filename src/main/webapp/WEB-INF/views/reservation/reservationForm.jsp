@@ -30,6 +30,7 @@ main {
 width: 100%;
   margin: 0 auto;
   padding: 0;
+  margin-bottom: 140px;
 }
 .section-header {
 	display: flex;
