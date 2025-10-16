@@ -9,7 +9,7 @@
   <h2>403 - 접근 권한이 없습니다.</h2>
 
   <sec:authorize access="isAuthenticated()">
-    <p><b><sec:authentication property="principal.username"/></b> 님은 이 페이지에 접근 권한이 없습니다.</p>
+    <p><b><sec:authentication property="principal.name"/></b> 님은 이 페이지에 접근 권한이 없습니다.</p>
   </sec:authorize>
 
   <sec:authorize access="isAnonymous()">

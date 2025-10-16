@@ -74,8 +74,8 @@
 						<div class="row mb-3">
 							<div class="col-md-4">
 								<label class="form-label fw-bold">아이디</label> <input type="text"
-									class="form-control" name="userName"
-									value="${userDTO.userName}" disabled>
+									class="form-control" name="username"
+									value="${userDTO.username}" disabled>
 							</div>
 							<div class="col-md-4">
 								<label class="form-label fw-bold">이메일</label> <input

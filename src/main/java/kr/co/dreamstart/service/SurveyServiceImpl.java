@@ -67,11 +67,11 @@ public class SurveyServiceImpl implements SurveyService {
 	}
 
 	@Override
-	public Map<Long, List<SurveyOptionDTO>> optionsByQuestion(Long questionId) {
+	public Map<Long, List<SurveyOptionDTO>> optionsByQuestion(Long surveyId) {
 		// TODO Auto-generated method stub
 		Map<Long, List<SurveyOptionDTO>> map = new LinkedHashMap<>();
 		
-		for (SurveyQuestionDTO q : questionList(questionId)) {
+		for (SurveyQuestionDTO q : questionList(surveyId)) {
 			map.put(q.getQuestionId(), optionList(q.getQuestionId()));
 		}
 		return map;
@@ -307,6 +307,23 @@ public class SurveyServiceImpl implements SurveyService {
 		out.put("prefillDesc", prefillDesc);
 		
 		return out;
+	}
+
+	@Override
+	public boolean isTemplate(Long surveyId) {
+		// TODO Auto-generated method stub
+		if (surveyId == null) return false;
+		
+		// 1) 고정텐플릿 1~4번 range
+		if (surveyId >= 1 && surveyId <= 4) return true;
+		
+		// 2) DB 플래그/키
+		SurveyDTO s = findSurvey(surveyId);
+		if (s == null) return false;
+		
+		if (s.getIsTemplate() != null && s.getIsTemplate() == 1) return true;
+		
+		return (s.getTemplateKey() != null && !s.getTemplateKey().isBlank());
 	}
 
 //	@Override
