@@ -35,7 +35,6 @@
 	align-items: flex-start;
 	gap: 24px;
 }
-
 .logo-link {
 	text-decoration: none;
 	color: inherit;

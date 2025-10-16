@@ -6,290 +6,266 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link
-	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap"
-	rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- 포트원 결제 api -->
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
 <title>reservation Form</title>
 <style>
-body {
-	background-color: #E5E2DB;
-	color: #222222;
-	font-family: 'Montserrat', sans-serif;
-	font-size: 16px;
-	font-weight: normal;
-	margin: 0;
-	padding: 0 120px 60px;
-	line-height: 1;
+body{
+ background-color: #E5E2DB;
+  color: #222222;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  margin: 0;
+  padding: 0 120px 60px;
+  line-height: 1;
 }
-
 main {
-	margin-top: 0;
-	padding: 0;
+  margin-top: 0;
+  padding: 0;
 }
-
 .container {
-	width: 100%;
-	margin: 0 auto;
-	padding: 0;
+width: 100%;
+  margin: 0 auto;
+  padding: 0;
 }
-
 .section-header {
-	position: relative;
-	padding-top: 40px;
-	margin-bottom: 40px;
-	text-align: left;
+ position: relative;
+ padding-top: 40px;
+ margin-bottom: 40px;
+ text-align: left;
 }
-
-.section-header h2 {
-	font-size: 20px;
-	font-weight: bold;
-	user-select: none;
-	cursor: default;
-	margin: 0;
-	padding: 0;
+.section-header h2{
+ font-size: 20px;
+ font-weight: bold;
+ user-select: none;
+ cursor: default;
+ margin: 0;
+ padding: 0;
 }
 
 .reservation-form {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 1px;
-	max-width: 1000px;
-	margin: 0 auto;
-	background-color: #FAF9F6;
-	border: 1px solid #D9D9D9;
-	color: #222222;
-	overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  max-width: 1000px;
+  margin: 0 auto;
+  background-color: #FAF9F6;
+  border: 1px solid #D9D9D9;
+  color: #222222;
+  overflow: hidden;
 }
 
 .event-info {
-	padding: 30px;
-	min-height: 600px;
-	display: flex;
-	flex-direction: column;
-	position: relative;
-	caret-color: transparent;
+  padding: 30px;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  caret-color: transparent;
 }
-
 .event-info::after {
-	content: '';
-	position: absolute;
-	top: 50%;
-	right: 0; /* 오른쪽 경계에 위치 */
-	transform: translateY(-50%); /* 정확한 수직 중앙 정렬 */
-	width: 1px;
-	height: 95%; /* 원하는 높이 95% 설정 */
-	background-color: #222222;
-	z-index: 1;
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0; /* 오른쪽 경계에 위치 */
+  transform: translateY(-50%); /* 정확한 수직 중앙 정렬 */
+  width: 1px;
+  height: 95%; /* 원하는 높이 95% 설정 */
+  background-color: #222222;
+  z-index: 1;
 }
-
 .form-input {
-	padding: 30px;
-	background-color: #FAF9F6;
-	min-height: 600px;
-	display: flex;
-	flex-direction: column;
+  padding: 30px;
+  background-color: #FAF9F6;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
 }
 
-.event-info h4, .form-input h4 {
-	font-size: 16px;
-	font-weight: bold;
-	margin-top: 0;
-	margin-bottom: 32px;
-	caret-color: transparent;
+.event-info h4,
+.form-input h4 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 32px;
+  caret-color: transparent;
 }
 
 .event-poster {
-	width: 100%;
-	text-align: left;
-	margin-bottom: 20px;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 20px;
 }
-
 .event-poster img {
-	max-width: 200px;
-	height: auto;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 200px;
+  height: auto;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .event-details {
-	margin-bottom: 20px;
+  margin-bottom: 20px;
 }
-
 .event-details p {
-	font-size: 14px;
-	line-height: 1.4;
-	margin-bottom: 8px;
-	display: flex;
-	align-items: center;
+  font-size: 14px;
+  line-height: 1.4;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
 }
-
 .event-details p i {
-	margin-right: 8px;
-	font-size: 14px;
+  margin-right: 8px;
+  font-size: 14px;
 }
-
 .event-details .event-title {
-	font-size: 14px;
-	font-weight: bold;
-	margin-top: 10px;
-	margin-bottom: 15px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 15px;
 }
 
 .form-group {
-	margin-bottom: 12px;
+  margin-bottom: 12px;
 }
-
-.form-group#payment, #name {
-	margin-bottom: 20px;
+.form-group#payment, #name{
+    margin-bottom: 20px;
 }
-
 .form-group label {
-	display: block;
-	font-size: 14px;
-	font-weight: bold;
-	margin-bottom: 4px;
-	caret-color: transparent;
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  caret-color: transparent;
 }
-
 .form-group input, .form-group select {
-	width: 100%;
-	padding: 8px 10px;
-	box-sizing: border-box;
-	font-size: 14px;
-	border-radius: 3px;
-	border: 1px solid #D9D9D9;
-	background-color: #D9D9D9;
+  width: 100%;
+  padding: 8px 10px;
+  box-sizing: border-box;
+  font-size: 14px;
+  border-radius: 3px;
+  border: 1px solid #D9D9D9;
+  background-color: #D9D9D9;
 }
 
 .member-info-box {
-	background-color: #BFD4F9;
-	border: 1px solid #8FAFED;
-	border-radius: 12px;
-	padding: 8px 20px;
-	font-size: 14px;
-	line-height: 1.0;
-	margin-bottom: 44px;
-	caret-color: transparent;
-	font-weight: bold;
+  background-color: #BFD4F9;
+  border: 1px solid #8FAFED;
+  border-radius: 12px;
+  padding: 8px 20px;
+  font-size: 14px;
+  line-height: 1.0;
+  margin-bottom: 44px;
+  caret-color: transparent;
+  font-weight: bold;
 }
-
 .member-info-box2 {
-	background-color: #FFFFC5;
-	border: 1px solid #FAFA8B;
-	border-radius: 12px;
-	padding: 8px 8px;
-	font-size: 14px;
-	line-height: 1.0;
-	margin-bottom: 44px;
-	caret-color: transparent;
+  background-color: #FFFFC5;
+  border: 1px solid #FAFA8B;
+  border-radius: 12px;
+  padding: 8px 8px;
+  font-size: 14px;
+  line-height: 1.0;
+  margin-bottom: 44px;
+  caret-color: transparent;
 }
 
 .total-price {
-	display: flex;
-	justify-content: space-between;
-	font-weight: bold;
-	margin-top: 20px;
-	padding-top: 20px;
-	border-top: 1px dashed #ccc;
-	font-size: 14px;
-	caret-color: transparent;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px dashed #ccc;
+  font-size: 14px;
+  caret-color: transparent;
 }
 
 .agreement {
-	margin-top: 30px;
-	caret-color: transparent;
+  margin-top: 30px;
+  caret-color: transparent;
 }
-
 .agreement label {
-	display: block;
-	font-size: 12px;
-	margin-bottom: 10px;
+  display: block;
+  font-size: 12px;
+  margin-bottom: 10px;
 }
 
 .submit-btn {
-	text-align: right;
-	margin-top: 20px;
+  text-align: right;
+  margin-top: 20px;
 }
-
 .submit-btn button {
-	padding: 8px 8px;
-	background-color: #BFD4F9;
-	border: 1px solid #8FAFED;
-	color: #222222;
-	font-weight: bold;
-	cursor: pointer;
-	border-radius: 3px;
+  padding: 8px 8px;
+  background-color: #BFD4F9;
+  border: 1px solid #8FAFED;
+  color: #222222;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 3px;
 }
 /* 추가된 에러 메시지 스타일 */
 .error-message {
-	display: block;
-	color: red;
-	font-size: 11px;
-	margin-top: 4px;
-	height: 15px;
-	text-align: left;
-	user-select: none;
-	cursor: default;
-	visibility: hidden; /* 초기에는 숨김 처리 */
+    display: block;
+    color: red;
+    font-size: 11px;
+    margin-top: 4px;
+    height: 15px;
+    text-align: left; 
+    user-select: none;
+    cursor: default;
+    visibility: hidden; /* 초기에는 숨김 처리 */
 }
-
 .modal {
-	display: none;
-	position: fixed;
-	z-index: 1000;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	overflow: auto;
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
 }
-
 .modal-content {
-	background-color: #FAF9F6;
-	margin: 20% auto;
-	padding: 20px;
-	width: 90%;
-	max-width: 450px; /* 이미지와 유사한 폭으로 조정 */
-	border-radius: 12px;
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-	position: relative;
-	text-align: left; /* 텍스트는 좌측 정렬 */
+    background-color: #FAF9F6; 
+    margin: 20% auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 450px; /* 이미지와 유사한 폭으로 조정 */
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    text-align: left; /* 텍스트는 좌측 정렬 */
 }
-
 .modal-body {
-	padding: 10px 0;
+    padding: 10px 0;
 }
-
 .modal-body p {
-	font-size: 16px;
-	color: #222222;
-	margin-bottom: 8px;
-	line-height: 1.4;
+    font-size: 16px;
+    color: #222222;
+    margin-bottom: 8px;
+    line-height: 1.4;
 }
-
 .modal-btn {
-	float: right;
-	padding: 5px 10px;
-	background-color: transparent;
-	border: none;
-	color: #08f;
-	font-weight: bold;
-	cursor: pointer;
-	border-radius: 4px;
-	margin-top: 10px;
-	font-size: 14px;
+    float: right;
+    padding: 5px 10px;
+    background-color: transparent;
+    border: none; 
+    color: #08f;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 10px;
+    font-size: 14px;
 }
-
 .modal-body::after {
-	content: "";
-	display: table;
-	clear: both;
+    content: "";
+    display: table;
+    clear: both;
 }
-
 .close-btn {
-	display: none;
+    display: none;
 }
 </style>
 </head>

@@ -2,20 +2,23 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sec"
-   uri="http://www.springframework.org/security/tags"%>
+uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
+
 <title>login</title>
-<link rel="stylesheet" type="text/css" href="/resources/css/findPassword.css">
+<link rel="stylesheet" type="text/css" href="/resources/css/login.css">
 <style>
     body {
         background-color: #E5E2DB;
 		color: #222222;
 		font-family: 'Montserrat', sans-serif;
 		font-size: medium;
+font-weight: normal;
 		margin: 0;
 		padding: 0 120px 60px; 
 		line-height: 1;
@@ -25,27 +28,39 @@
 		padding: 0; 
 	}
 	h2{
-		margin-bottom: 40px;
+		font-size: 20px;
+        font-weight: bold;
+        user-select: none;
+        cursor: default;
+        margin-bottom: 40px;
+        padding-top: 40px;
 	}
+    .container {
+        width: 100%;
+}
 	.find-main {
     /* find-main을 화면 가운데 정렬 */
     margin: 0 auto;
     margin-bottom: 60px;
-    width: 36%;
-    max-width: 500px;
+    
 }
-	.tab-content {
-		display: none;
-		background-color: #FAF9F6;
-		border: 1px solid #222222;
-		height: auto;
-		border-top: none;
-		border-radius: 12px;
+.tab-content {
+    display: none;
+}
+.uid-section-content, .password-section-content{
+        width: 40%;
+        max-width: 400px;
+        background-color: #FAF9F6;
+    border: 1px solid #222222;
+    border-radius: 12px;
+    margin: 0 auto;
+    margin-bottom: 60px;
+    padding: 48px 104px;
 		font-family: 'Montserrat', sans-serif;
-		font-size: 12px;
-		padding: 48px 20px;
-	}
-	
+        font-size: 14px;
+        display: block;
+        text-align: center;
+    }
 	/* active 클래스가 붙으면 보이도록 설정 */
 	.tab-content.active {
 		display: block;
@@ -55,7 +70,7 @@
 }
 	.tab-btn {
 		/* 버튼 기본 스타일 */
-        padding: 12px 80px;
+        padding: 12px 0;
     cursor: pointer;
     background-color: #CBD4C2;
     border: none;
@@ -63,7 +78,8 @@
     border-radius: 12px;
     width: 50%;
     font-family: 'Montserrat', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
+    text-align: center;
 }
 	.tab-btn.active {
         /* 활성화된 버튼 스타일 */
@@ -74,13 +90,13 @@
 		border-bottom: none;
 		margin-bottom: -1px;
 		font-family: 'Montserrat', sans-serif;
-		font-size: 12px;
+		font-size: 14px;
         
     }
 .find-uid-form, .find-password-form{
     margin: 0 auto 16px auto; 
     display: block; 
-    max-width: 380px; 
+    max-width: 400px; 
 }
 
 /* 라벨 스타일: 왼쪽 정렬 */
@@ -92,6 +108,7 @@
     margin-bottom: 0; /* 라벨 자체의 하단 마진 제거 */
     padding-bottom: 0;
     line-height: 1; /* 라벨의 높이 최소화 */
+    font-size: 14px;
 }
 
 /* input-group: input과 버튼을 나란히 배치 (줄바꿈 방지) */
@@ -99,10 +116,8 @@
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
-    gap: 10px;
     margin-top: -5px;
     justify-content: flex-start; 
-    gap: 4px ;
 }
 br{
 	margin: 0;
@@ -113,37 +128,37 @@ br{
 input::placeholder{
     color: #D9D9D9;
     font-family: 'Montserrat', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
 }
-
-input#email_uid, #verificationCode_uid, #email_pw, #verificationCode_pw{
-    padding-left: 4px;
-    margin-top: 0;
-    border-radius: 3px;
-    border: 1px solid #222222;
-    text-align: left;
-    flex-grow: 0;
-    flex-shrink: 0;
+input#verificationCode_uid, #verificationCode_pw, #email_uid, #email_pw{
+    width: 100%;
+flex-grow: 1; 
+box-sizing: border-box;
+background-color: #F2F0EF;
+border: 1px solid #222222;
+border-radius: 3px;
+padding: 10px 12px 10px 12px;
+height: 37px;
 }
-input[type=text]{
-    width: 260px;
-    height: 32px;
-    box-sizing: border-box;
+#email_uid ::placeholder{
+    padding-left:12px;
 }
 br {
     margin-top: -4px;
     padding: 0;
     line-height: 0;
 }
-.btn-register .btn-send-code, .btn-verify, .btn-find-uid, .btn-find-pass, .btn-cancle {
-    padding: 6px 2px;
-    width: 100px;
+.btn-register, .btn-send-code, .btn-verify, .btn-find-uid, .btn-find-pass, .btn-cancle {
+    padding: 8px 2px;
+    width: 80px;
+    text-decoration: none;
     border-radius: 12px;
     font-family: 'Montserrat', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     cursor: pointer;
     flex-shrink: 0;
     font-weight: bold;
+    color: #222222;
 } 
 .btn .btn-send-code, .btn-verify, .btn-find-uid, .btn-find-pass {
     border: 1px solid #8FAFED;
@@ -158,6 +173,17 @@ br {
     border: 1px solid #8FAFED;
     background-color: #BFD4F9;
     margin-right: 16px;
+    padding: 8px 2px;
+    width: 80px;
+}
+.find-link{
+    text-align: right;
+    margin: 4px auto 0 auto;
+}
+.find-link a {
+    color: #222222;
+    text-decoration: none;
+    font-size: 12px;
 }
 
 /* 하단 버튼 영역 가운데 정렬 */
@@ -176,6 +202,32 @@ br {
     text-align: left; /* 왼쪽 정렬 */
     user-select: none;
     cursor: default;
+}
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    body {
+        padding: 0 10px 30px;
+    }
+}
+@media (max-width: 480px) {
+    .tab-content {
+        padding: 30px 20px;
+    }
+    .input-group {
+        display: block;
+    }
+    input[type=text], input[type=password] {
+        width: 100%;
+        min-width: unset;
+        margin-bottom: 8px;
+    }
+    .btn-register, .btn-cancle, .btn-find-uid, .btn-find-pass {
+        width: 80px;
+    }
+    .end-btn {
+        gap: 8px;
+        margin-top: 30px;
+    }
 }
 </style>
 </head>
@@ -207,10 +259,10 @@ br {
                     <div class="input-group">
                         <input type="password" id="verificationCode_uid" name="verificationCode" placeholder="비밀번호를 입력하세요." required>
                     </div>
-                    </div>
                     <div class="find-link">
 					<a href="/find-password">아이디 · 비밀번호 찾기</a>
 				</div>
+                    </div>
 				
                 <div class="end-btn">
                     <button button onclick="history.back()" class="btn btn-cancle">취소</button>

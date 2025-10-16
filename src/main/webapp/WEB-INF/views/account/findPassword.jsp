@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="sec"
+uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link
-	href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
-	rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
 <title>findPassword</title>
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/findPassword.css">
