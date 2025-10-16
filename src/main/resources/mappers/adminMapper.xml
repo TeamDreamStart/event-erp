@@ -15,8 +15,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="created_at" property="createdAt" />
 	</resultMap>
 
+	<resultMap id="adminJoinMap" type="AdminJoinDTO">
+		<id property="reservationId" column="reservationId" />
+		<result property="eventTitle" column="eventTitle" />
+		<result property="reservationDate" column="reservationDate" />
+		<result property="reservationStatus" column="reservationStatus" />
+		<result property="headcount" column="headcount" />
+		<result property="paymentAmount" column="paymentAmount" />
+		<result property="paymentStatus" column="paymentStatus" />
+		<result property="paymentMethod" column="paymentMethod" />
+	</resultMap>
+
 	<select id="adminActionList" resultMap="adminActionLogMap">
-		select * from `admin_action_log`
+		select * from
+		`admin_action_log`
 	</select>
 
 	<insert id="recordAdminLog" parameterType="AdminActionLogDTO">
@@ -25,6 +37,54 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		(`admin_id`,`target_type`,`target_id`,`action`,`reason`,`created_at`)
 		values(#{adminId},#{targetType},#{targetId},#{action},#{reason},now())
 	</insert>
+
+	<!-- 옮겨야되는데 -->
+	<select id="selectJoinPayByUserId"
+		resultMap="adminJoinMap" parameterType="long">
+		SELECT
+		r.reservation_id AS
+		reservationId,
+		e.title AS eventTitle,
+		r.reservation_date AS
+		reservationDate,
+		r.status AS reservationStatus,
+		r.headcount AS
+		headcount,
+		p.amount AS paymentAmount,
+		p.status AS paymentStatus,
+		p.method AS paymentMethod
+		FROM reservation r
+		JOIN event e ON r.event_id
+		= e.event_id
+		LEFT JOIN payment p ON r.reservation_id = p.reservation_id
+		WHERE r.user_id = #{userId}
+	</select>
+
+	<!-- 옮겨야되는데 -->
+	<select id="selectJoinPayById" resultMap="adminJoinMap"
+		parameterType="long">
+		SELECT
+		r.reservation_id AS reservationId,
+		e.title AS
+		eventTitle,
+		r.reservation_date AS reservationDate,
+		r.status AS
+		reservationStatus,
+		r.headcount AS headcount,
+		p.amount AS paymentAmount,
+		p.status AS paymentStatus,
+		p.method AS paymentMethod
+		FROM reservation r
+		JOIN event e
+		ON r.event_id = e.event_id
+		LEFT JOIN payment p
+		ON
+		r.reservation_id = p.reservation_id
+		WHERE r.reservation_id =
+		#{reservationId}
+	</select>
+
+
 
 
 </mapper>

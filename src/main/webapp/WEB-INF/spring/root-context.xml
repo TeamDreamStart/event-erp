@@ -65,12 +65,15 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<bean id="mailSender"
 		class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="sandbox.smtp.mailtrap.io" />
+		<!-- <property name="host" value="sandbox.smtp.mailtrap.io" />
 		<property name="port" value="2525" />
 		<property name="username" value="5fb50ec1a37392" />
-		<property name="password" value="41fd5116fea25f" />
+		<property name="password" value="41fd5116fea25f" /> -->
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+		<property name="username" value="yoonje515@gmail.com" />
+		<property name="password" value="nqvp pkxd fmcb sgio" />
 		<property name="defaultEncoding" value="utf-8" />
-
 		<property name="javaMailProperties">
 			<props>
 				<prop key="mail.smtp.starttls.enable">true</prop>

@@ -31,7 +31,7 @@ public interface BoardService {
 	public Map<String, Object> postUpdate(HttpServletRequest request ,@ModelAttribute BoardPostDTO postDTO, 
 			 @RequestParam(value="uploadFile", required=false)MultipartFile[] uploadFile);
 	//Public -> Private
-	public int postDelete(long postId);
+//	public int postDelete(long postId);
 
 	// DB에서도 삭제
 	public Map<String, Object> postRealDelete(String boardType,long postId);
@@ -43,5 +43,6 @@ public interface BoardService {
 
 	public int commentDelete(long commentId);
 	
+	public List<BoardPostDTO> selectPostByUserID(long userId);
 //	public int commentDeleteByPostId(long postId);
 }

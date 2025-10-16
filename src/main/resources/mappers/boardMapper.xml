@@ -76,11 +76,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		`visibility` = #{postDTO.visibility},
 		`updated_at` =
 		now()
-		where `post_id` = #{postDTO.postId}
+		where
+		`post_id` = #{postDTO.postId}
 	</update>
 
 	<delete id="postDelete" parameterType="long">
-	 delete from `board_post` where `post_id` = #{postId}
+		delete from `board_post` where `post_id` = #{postId}
 	</delete>
 
 	<select id="select" resultMap="boardPostMap">
@@ -184,11 +185,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		delete from
 		`board_comment` where `comment_id` = #{commentId}
 	</delete>
-	
+
 	<delete id="commentDeleteByPostId" parameterType="long">
 		delete from
 		`board_comment` where `post_id` = #{postId}
 	</delete>
 
 
+	<select id="selectPostByUserID" resultMap="boardPostMap">
+		select * from board_post where user_id = #{userId}
+	</select>
 </mapper>

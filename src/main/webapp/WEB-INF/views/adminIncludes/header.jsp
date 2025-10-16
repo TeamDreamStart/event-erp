@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 <!-- Sidebar -->
 <ul
 	class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
@@ -96,12 +99,39 @@
 			class="fas fa-fw fa-chart-area"></i> <span>Charts</span></a></li>
 
 	<!-- 관리자 테이블 목록  -->
-	<li class="nav-item"><a class="nav-link" href="tables.html"> <i
+	<li class="nav-item"><a class="nav-link" href="/admin/event-manage"> <i
 			class="fas fa-fw fa-table"></i> <span>Event Manage</span></a></li>
-	<li class="nav-item"><a class="nav-link" href="tables.html"> <i
+	<li class="nav-item"><a class="nav-link" href="/admin/reservation-manage"> <i
 			class="fas fa-fw fa-table"></i> <span>Reservation Manage</span></a></li>
-	<li class="nav-item"><a class="nav-link" href="tables.html"> <i
+	<li class="nav-item"><a class="nav-link" href="/admin/payment-manage"> <i
 			class="fas fa-fw fa-table"></i> <span>Payment Manage</span></a></li>
+
+	<c:set var="ctx" value="${pageContext.request.contextPath}" />
+	<c:set var="uri" value="${pageContext.request.requestURI}" />
+	<c:set var="isSurvey" value="${fn:startsWith(uri, ctx.concat('/admin/surveys'))}" />
+	<!-- Survey Manage -->	
+	<li class="nav-item ${isSurvey ? 'active' : ''}">
+	  <a class="nav-link collapsed" href="#"
+	     data-toggle="collapse" data-target="#collapseSurvey"
+	     aria-expanded="${isSurvey ? 'true' : 'false'}" aria-controls="collapseSurvey">
+	    <i class="fas fa-fw fa-poll"></i>
+	    <span>Survey Manage</span>
+	  </a>
+	  <div id="collapseSurvey"
+	       class="collapse ${isSurvey ? 'show' : ''}"
+	       aria-labelledby="headingSurvey" data-parent="#accordionSidebar">
+	    <div class="bg-white py-2 collapse-inner rounded">
+	      <h6 class="collapse-header">Surveys</h6>
+	      <a class="collapse-item ${uri == ctx.concat('/admin/surveys') ? 'active' : ''}"
+	         href="<c:url value='/admin/surveys'/>">Survey List</a>
+	      <a class="collapse-item ${uri == ctx.concat('/admin/surveys/form') ? 'active' : ''}"
+	         href="<c:url value='/admin/surveys/form'/>">Create Survey</a>
+	      <!-- 필요하면 템플릿 고정 리스트로 바로 가기 링크도 가능
+	      <a class="collapse-item" href="<c:url value='/admin/surveys?field=isTemplate&keyword=1'/>">Templates</a>
+	      -->
+	    </div>
+	  </div>
+	</li>
 
 	<!-- Nav Item - Pages Collapse Menu -->
 	<li class="nav-item"><a class="nav-link collapsed" href="#"

@@ -21,5 +21,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	<typeAlias type="kr.co.dreamstart.dto.UserRoleDTO" alias="UserRoleDTO"/>
 	<typeAlias type="kr.co.dreamstart.dto.RoleVO" alias="RoleVO"/>
 	<typeAlias type="kr.co.dreamstart.dto.GuestDTO" alias="GuestDTO"/>
+	<typeAlias type="kr.co.dreamstart.dto.AdminJoinDTO" alias="AdminJoinDTO"/>
 </typeAliases>
 </configuration>

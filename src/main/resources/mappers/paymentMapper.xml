@@ -26,9 +26,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		limit
 		#{cri.pageStart},#{cri.perPageNum}
 	</select>
+	
+	<select id="select" resultType="paymentDTO" parameterType="long">
+		select * from payment where payment_id = #{paymentId}
+	</select>
 
-
-	<insert id="insert" parameterType="paymentDTO">
+	<insert id="insert" parameterType="paymentDTO"
+	useGeneratedKeys="true"
+		keyProperty="paymentId">
 		insert into `payment`
 		(`reservation_id`, `amount`, `method`, `status`, `approve_no`, `pg_tid`, `imp_uid`,
 		`memo`, `paid_at`, `created_at`)

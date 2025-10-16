@@ -13,4 +13,6 @@ public interface PaymentMapper {
 	public List<PaymentDTO> list(Criteria cri);
 	
 	public int insert(PaymentDTO paymentDTO);
+	
+	public PaymentDTO select(long paymentId);
 }

@@ -74,8 +74,8 @@
 						<div class="row mb-3">
 							<div class="col-md-4">
 								<label class="form-label fw-bold">아이디</label> <input type="text"
-									class="form-control" name="userName"
-									value="${userDTO.userName}" disabled>
+									class="form-control" name="username"
+									value="${userDTO.username}" disabled>
 							</div>
 							<div class="col-md-4">
 								<label class="form-label fw-bold">이메일</label> <input
@@ -131,9 +131,9 @@
 								<label class="form-label fw-bold">회원 유형</label> <select
 									id="roleSelect" class="form-select form-control" name="roleId"
 									style="${userDTO.roleName == 'ADMIN' ? 'background-color:#e6f0ff;' : ''}">
-									<option value="0" style="background-color:#e6f0ff"
+									<option value="0" style="background-color: #e6f0ff"
 										${userDTO.roleName == 'ADMIN' ? 'selected' : ''}>관리자</option>
-									<option value="1" style="background-color:white"
+									<option value="1" style="background-color: white"
 										${userDTO.roleName == 'MEMBER' ? 'selected' : ''}>일반회원</option>
 								</select>
 							</div>
@@ -173,11 +173,9 @@
 									id="isActiveSelect" class="form-select form-control"
 									name="isActive"
 									style="${userDTO.isActive == 0 ? 'background-color:#ffe6e6;' : ''}">
-									<option value="1"
-										style="background-color: white;"
+									<option value="1" style="background-color: white;"
 										${userDTO.isActive == 1 ? 'selected' : ''}>활성화</option>
-									<option value="0"
-										style="background-color: #ffe6e6;"
+									<option value="0" style="background-color: #ffe6e6;"
 										${userDTO.isActive == 0 ? 'selected' : ''}>비활성화</option>
 								</select>
 							</div>
@@ -272,11 +270,11 @@
 									<td>${r.reservationId}</td>
 									<td>${r.eventTitle}</td>
 									<td>${r.reservationDate}</td>
-									<td>${r.status}</td>
+									<td>${r.reservationStatus}</td>
 									<td>${r.headcount}</td>
-									<td>${r.payment.amount}</td>
-									<td>${r.payment.status}</td>
-									<td>${r.payment.method}</td>
+									<td>${r.paymentAmount}</td>
+									<td>${r.paymentStatus}</td>
+									<td>${r.paymentMethod}</td>
 								</tr>
 							</c:forEach>
 							<c:if test="${empty reservationList}">
@@ -303,7 +301,8 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="qna" items="${qnaList}">
+						
+							<c:forEach var="qna" items="${postList}">
 								<tr>
 									<td>${qna.title}</td>
 									<td>${qna.createdAt}</td>
@@ -311,7 +310,7 @@
 										class="btn btn-sm btn-outline-primary">이동</a></td>
 								</tr>
 							</c:forEach>
-							<c:if test="${empty qnaList}">
+							<c:if test="${empty postList}">
 								<tr>
 									<td colspan="3" class="text-center text-muted">작성한 QNA가
 										없습니다.</td>

@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 	private final UserMapper userMapper;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public Map<String, Object> userList(Criteria cri, Integer role, String searchType, String keyword, String startDate,
@@ -213,32 +216,57 @@ public class UserServiceImpl implements UserService {
 		int result = -1;
 		result = userMapper.adminUserUpdate(userDTO);
 		if (result > 0) {
-			log.info("[USERSERVICE] ADMIN - USER UPDATE SUCCESS / USERID : "+userDTO.getUserId());
+			log.info("[USERSERVICE] ADMIN - USER UPDATE SUCCESS / USERID : " + userDTO.getUserId());
 			result = userMapper.adminUserRoleUpdate(roleId, userDTO.getUserId());
 			if (result > 0) {
-				log.info("[USERSERVICE] ADMIN - USER ROLE UPDATE SUCCESS / USERID : "+userDTO.getUserId());
+				log.info("[USERSERVICE] ADMIN - USER ROLE UPDATE SUCCESS / USERID : " + userDTO.getUserId());
 				map.put("result", "success");
 			} else {
-				log.warn("[USERSERVICE] ADMIN - USER ROLE UPDATE FAIL / USERID : "+userDTO.getUserId());
+				log.warn("[USERSERVICE] ADMIN - USER ROLE UPDATE FAIL / USERID : " + userDTO.getUserId());
 				map.put("result", "fail");
 			}
 		} else {
-			log.warn("[USERSERVICE] ADMIN - USER UPDATE FAIL / USERID : "+userDTO.getUserId());
+			log.warn("[USERSERVICE] ADMIN - USER UPDATE FAIL / USERID : " + userDTO.getUserId());
 			map.put("result", "fail");
 		}
 		return map;
 	}
 
-	
 	@Override
 	@Transactional
 	public long register(UserDTO form) {
 		// TODO Auto-generated method stub
-		userMapper.join(form);
+		// 정규화/포맷칭
+		// 1) 이메일 소문자/공백제거
+		form.setEmail(normalizeEmail(form.getEmail()));
+		// 2) 전화번호 하이픈 형태로
+		form.setPhone(formatPhone(form.getPhone()));
+		// 3) 비밀번호 인코딩 / 새로 가입한 가입자의 비밀번호 -> 해시로 바꿔치기
+		form.setPassword(passwordEncoder.encode(form.getPassword()));
+		
+		int result = userMapper.join(form);
+		if (result != 1) throw new IllegalStateException("회원가입 실패");
 		userMapper.joinRole(form.getUserId());
 		return form.getUserId();
 	}
 
+	private String normalizeEmail(String email) {
+		// TODO Auto-generated method stub
+		return email == null ? null : email.trim().toLowerCase();
+	}
+
+	private String formatPhone(String raw) {
+		if (raw == null) return null;
+		String d = raw.replaceAll("\\D", "");
+		if (d.length() == 10) return d.replaceFirst("(\\d{3})(\\d{3})(\\d{4})", "$1-$2-$3");
+		if (d.length() >= 11) {
+			d = d.substring(0, 11);
+			return d.replaceFirst("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3");
+		}
+		return raw;
+	}
+	
+	
 	@Override
 	public UserDTO findByLogin(String login) {
 		// TODO Auto-generated method stub
@@ -255,6 +283,48 @@ public class UserServiceImpl implements UserService {
 	public void touchLastLogin(Long userId) {
 		// TODO Auto-generated method stub
 		userMapper.updateLastLoginAt(userId);
+	}
+
+	@Override
+	public String findUserNameByEmail(String email) {
+		return userMapper.findByEmail(email).getUsername();
+	}
+
+	@Override
+	public int resetPassword(String email, String newPass) {
+		int result = -1;
+		// 비밀번호 Encoding -> update
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		newPass = encoder.encode(newPass);
+		long userId = userMapper.findByEmail(email).getUserId();
+		result = userMapper.updatePasswordById(userId, newPass);
+		log.info("[USERSERVICE] NEW PASSWORD : " + newPass);
+		return result;
+	}
+
+	// 중복체크
+	@Override
+	public boolean existsByUserName(String username) {
+		// TODO Auto-generated method stub
+		if (username == null || username.isBlank())
+			return false;
+		// 대소문자 무시 -> db에서 비교해서 수행 (제약 걸려있음)
+		return userMapper.existsByUserName(username.trim()) > 0;
+	}
+
+	@Override
+	public boolean existsByEmail(String email) {
+		// TODO Auto-generated method stub
+		if (email == null || email.isBlank())
+			return false;
+		// 이메일은 항상 소문자만 -> 파라미터를 소문자/트림해서 조회
+		String norm = email.trim().toLowerCase();
+		return userMapper.existsByEmail(norm) > 0;
+	}
+
+	@Override
+	public UserDTO findUserByUserName(String userName) {
+		return userMapper.findByUserName(userName);
 	}
 
 }

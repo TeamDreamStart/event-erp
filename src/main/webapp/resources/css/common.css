@@ -1,0 +1,43 @@
+@charset "utf-8";
+
+/* 1) 전역: 보더박스 */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* 2) 접근성 유틸 */
+.sr-only {
+  position:absolute; width:1px; height:1px; margin:-1px; padding:0;
+  overflow:hidden; clip:rect(0 0 0 0); clip-path: inset(50%);
+  white-space:nowrap; border:0;
+}
+.sr-only.focusable:focus, .sr-only.focusable:active {
+  position:static; width:auto; height:auto; margin:0; clip:auto; clip-path:none;
+  white-space:normal; overflow:visible;
+}
+.skip-link { position:absolute; left:-9999px; top:0; }
+.skip-link:focus { left:0; z-index:1000; padding:8px 12px; background:#000; color:#fff; }
+
+/* 3) 리셋/베이스 */
+.clearfix::after { content:""; display:block; clear:both; }
+a { text-decoration:none; color:inherit; }
+img { display:block; max-width:100%; height:auto; vertical-align:top; }
+html, body { height:100%; }
+
+body{
+  margin:0;
+  font:16px/1.5 "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color:#222;
+  background:#fff;
+}
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+  outline:2px solid #1a73e8; outline-offset:2px;
+}
+
+/* HR reset (UA 기본 여백/보더 제거) */
+hr { margin:0; padding:0; border:0; height:0; background:none; overflow:visible; }
+
+/* 4) 레이아웃: 1440 고정 + 가운데 정렬 */
+.container { width:1440px; margin:0 auto; }
+
+/* 5) 타이틀 간격 공통 (섹션 헤더에 class="section-header title"로 사용) */
+:root { --space-title: 150px; }
+.section-header.title { margin-top: var(--space-title); }

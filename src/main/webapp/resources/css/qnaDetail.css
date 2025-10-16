@@ -1,29 +1,207 @@
-body{
-    background-color: #f5f5f5; /*배경색 */
-    color: #222;
-    line-height: 1.6;
-    min-height: 100vh;
+body {
+    /* 기본 폰트와 배경색 설정 */
+    font-family: 'Montserrat'; 
+    color: #222; 
+    margin: 0;
+    padding: 0;
+    background-color:#E5E2DB;
 }
 
-.header, main{
-    max-width: 1000px;
+main {
+    /* 메인 콘텐츠 중앙 정렬 및 최대 너비 설정 */
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
 }
 
-.header{
-    border-bottom: 1px  solid #222;
-    margin-bottom: 40px; /*본문과 헤더 사이에 여백 추가*/
+/*==================================
+  2. 헤더 (Header) 스타일
+==================================*/
+.header {
+    max-width: 1200px;
+    border-bottom: 1px solid #222; 
+    padding: 20px 0;
+    margin-bottom: 50px;
 }
 
-.header-top{
+.header-top {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px;
+}
+
+/* 로고 스타일 */
+.logo {
+    font-family:'Peristiwa', sans-serif;
+    font-size: 64px;
+    font-weight: 400;
+    color: #222; 
+}
+
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 유저 액션 (mypage, login) 스타일 */
+.user-actions a {
+  font-weight: bold;
+    border-left: 1px solid #222;
+    padding-left: 15px;
+}
+
+.membership {
+    background-color: #222; 
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 20px;
+    text-transform: uppercase;
+    position: relative; 
+    z-index: 10;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+}
+
+/* GNB (Visit, Event, Reservation) 스타일 */
+.header-nav {
+    display: flex;
+    justify-content: flex-start;
+    gap: 40px; 
+    font-size: 30px;
+    font-weight:  87px;
+    padding: 30px 0 10px 200px;
+}
+
+.header-nav a {
+    text-decoration: none;
+    color: #222;
+    padding-bottom: 5px;
+}
+
+.header-nav::after {
+    content: "Help";
+    position: absolute;
+    right: 20px;
+    font-size: 30px;
+    color: #222;
+}
+
+
+/*==================================
+  3. Q&A 폼 (Form) 스타일
+==================================*/
+.page-title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 50px;
+    letter-spacing: 2px;
+}
+
+.qna-from {
+    max-width: 600px;
+    margin: 0 auto;
     padding: 20px 0;
 }
 
-.logo{
-    font-size: 70px;
-    font-weight: ;
+.guide-text {
+    text-align: center;
+    font-size: 14px;
+    color: #222;
+    border: 1px solid #ccc; /* --light-border-color 대체 */
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 30px;
 }
+
+.form-group {
+    display: flex;
+    margin-bottom: 15px;
+    border: 1px solid #ccc; /* --light-border-color 대체 */
+}
+
+.form-label {
+    width: 80px;
+    background-color: #f7f7f7;
+    padding: 15px 10px;
+    text-align: center;
+    border-right: 1px solid #ccc; /* --light-border-color 대체 */
+    box-sizing: border-box;
+    font-size: 15px;
+}
+
+.form-group input,
+.form-group textarea {
+    flex-grow: 1;
+    border: none;
+    padding: 15px 20px;
+    font-size: 16px;
+    box-sizing: border-box;
+    resize: none;
+    outline: none;
+}
+
+.content-area {
+    margin-bottom: 30px;
+}
+
+.content-area textarea {
+    height: 150px;
+}
+
+/* 버튼 그룹 스타일 */
+.button-group {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.button-group button {
+    padding: 10px 25px;
+    margin: 0 5px;
+    border: 1px solid #ccc; /* --light-border-color 대체 */
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-cancel {
+    background-color: #F2F0EF;
+    color: #222;
+}
+
+.btn-submit {
+    background-color: #BFD4F9; 
+    color: #fff;
+    /*border-color: #6a9cff;*/
+}
+
+
+/*==================================
+  4. 푸터 (Footer) 스타일
+==================================*/
+.footer {
+    background-color: #CBD4C2; /* 연한 녹색 계열 배경 */
+    color: #222;
+    padding: 30px 0;
+    margin-top: 80px;
+    text-align: center;
+}
+.footer-content p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+.footer-hr {
+    display: none; /* 디자인에 hr이 없으므로 숨김 처리 */
+}
+.footer p:last-child {
+    margin-top: 15px;
+    font-weight: bold;
+} 
