@@ -10,26 +10,39 @@ pageEncoding="UTF-8"%>
 <link href="https://fonts.cdnfonts.com/css/peristiwa" rel="stylesheet">
 <title>eventList</title>
 <style>
-body {
-background-color: #E5E2DB;
-color: #222222;
-font-family: 'Montserrat', sans-serif;
-font-size: medium;
-font-weight: normal;
-margin: 0;
-padding: 0 120px 60px; 
-line-height: 1;
+body{
+ background-color: #E5E2DB;
+  color: #222222;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  margin: 0;
+  padding: 0 120px 60px;
+  line-height: 1;
 }
 main {
-margin-top: 0; 
-padding: 0; 
+  margin-top: 0;
+  padding: 0;
 }
+/* .section-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 16px;
+}
+
+.section-header h2 {
+	font-size: 30px;
+	font-weight: 700;
+	line-height: 40px;
+} */
 .main-event-container {
 display: flex; /* 자식 요소(텍스트, 포스터)를 가로로 배치 */
 align-items: center; /* 세로 중앙 정렬 */
 justify-content: space-between; /* 양쪽 끝으로 배치 */
 padding: 0px 140px 0px 140px; /* 내부 여백 */
 margin-bottom: 110px; /* 아래쪽 섹션과의 간격 */
+
 }
 
 /* 왼쪽 텍스트 영역 */
@@ -38,22 +51,22 @@ flex-basis: 60%; /* 전체 컨테이너 너비의 55% 할당 */
 color: #222222;
 }
 
-.main-event-content h1 {
-font-size: 80px;
-font-weight: 900;
+.main-event-section h1 {
+font-size: 100px;
+font-weight: 700;
 margin: 0;
 line-height: 1;
 }
 
-.main-event-content h2 {
-font-size: 50px;
-font-weight: 900;
+.main-event-section h2 {
+font-size: 40px;
+font-weight: 700;
 margin: 10px 0 20px;
 line-height: 1;
 }
 
-.main-event-content p {
-font-size: 20px;
+.main-event-section p {
+font-size: 22px;
 margin: 8px 0;
 line-height: 1.2;
 font-weight: 900;
@@ -85,17 +98,15 @@ margin: 0 auto;
 
 .section-header {
 display: flex;
-justify-content: space-between; 
-align-items: center;
-margin-bottom: 30px;
-padding-top: 40px; 
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 16px; 
 }
 
 .section-header h2{
-font-size: 20px; 
-font-weight: bold;
-margin: 0 auto 0 0;
-user-select: none;
+font-size: 30px;
+	font-weight: 700;
+	line-height: 40px;
 }
 
 .category-filter {
@@ -389,7 +400,7 @@ line-height: 1.1;
 <p>특별한 페스티벌을 즐겨보세요!!</p>
 </div>
 <div class="main-event-poster">
-<img src="/resources/img/event1.jpg" alt="가을 음악 페스티벌 포스터" />
+<img src="/resources/img/events/event1.jpg" alt="가을 음악 페스티벌 포스터" />
 </div>
 </div>
 
@@ -426,7 +437,7 @@ Category <span class="dropdown-arrow"></span>
 <!-- <c:if test="${eventDTO.visibility eq 'PUBLIC'}"> -->
 <article class="event-card swiper-slide">
 <figure class="event-card-figure">
-<img src="/resources/img/event1.jpg" alt="가을 음악 페스티벌 포스터"/>
+<img src="/resources/img/events/event1.jpg" alt="가을 음악 페스티벌 포스터"/>
 <figcaption class="hidden">포스터 이미지</figcaption>
 <a href="#" class="event-info-overlay">
 <div class="event-info-content">
@@ -440,7 +451,7 @@ Category <span class="dropdown-arrow"></span>
 </article>
 <article class="event-card swiper-slide">
 <figure class="event-card-figure">
-<img src="/resources/img/event2.jpg" alt="사내 워크숍 포스터"/>
+<img src="/resources/img/events/event2.jpg" alt="사내 워크숍 포스터"/>
 <figcaption class="hidden">포스터 이미지</figcaption>
 <a href="#" class="event-info-overlay">
 <div class="event-info-content">
@@ -454,7 +465,7 @@ Category <span class="dropdown-arrow"></span>
 </article>
 <article class="event-card swiper-slide">
 <figure class="event-card-figure">
-<img src="/resources/img/event3.jpg" alt="개발자 컨퍼런스 포스터"/>
+<img src="/resources/img/events/event3.jpg" alt="개발자 컨퍼런스 포스터"/>
 <figcaption class="hidden">포스터 이미지</figcaption>
 <a href="#" class="event-info-overlay">
 <div class="event-info-content">
@@ -468,7 +479,7 @@ Category <span class="dropdown-arrow"></span>
 </article>
 <article class="event-card swiper-slide">
 <figure class="event-card-figure">
-<img src="/resources/img/event4.jpg" alt="봄 플리마켓 포스터"/>
+<img src="/resources/img/events/event4.jpg" alt="봄 플리마켓 포스터"/>
 <figcaption class="hidden">포스터 이미지</figcaption>
 <a href="#" class="event-info-overlay">
 <div class="event-info-content">
@@ -482,7 +493,7 @@ Category <span class="dropdown-arrow"></span>
 </article>
 <article class="event-card swiper-slide">
 <figure class="event-card-figure">
-<img src="/resources/img/event1.jpg" alt="추가 이벤트 포스터"/>
+<img src="/resources/img/events/event5.jpg" alt="추가 이벤트 포스터"/>
 <figcaption class="hidden">포스터 이미지</figcaption>
 <a href="#" class="event-info-overlay">
 <div class="event-info-content">
@@ -496,7 +507,7 @@ Category <span class="dropdown-arrow"></span>
 </article>
 <article class="event-card swiper-slide">
 <figure class="event-card-figure">
-<img src="/resources/img/event2.jpg" alt="추가 이벤트 포스터"/>
+<img src="/resources/img/events/event6.jpg" alt="추가 이벤트 포스터"/>
 <figcaption class="hidden">포스터 이미지</figcaption>
 <a href="#" class="event-info-overlay">
 <div class="event-info-content">

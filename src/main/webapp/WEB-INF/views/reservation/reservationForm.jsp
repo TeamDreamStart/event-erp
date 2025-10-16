@@ -32,18 +32,16 @@ width: 100%;
   padding: 0;
 }
 .section-header {
- position: relative;
- padding-top: 40px;
- margin-bottom: 40px;
- text-align: left;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 16px;
 }
-.section-header h2{
- font-size: 20px;
- font-weight: bold;
- user-select: none;
- cursor: default;
- margin: 0;
- padding: 0;
+
+.section-header h2 {
+	font-size: 30px;
+	font-weight: 700;
+	line-height: 40px;
 }
 
 .reservation-form {
@@ -375,7 +373,7 @@ width: 100%;
 
 					// 입력 이벤트
 					headCountInput.addEventListener('input', () => {
-					    totalAmount = updateTotalAmount();
+					  totalAmount = updateTotalAmount();
 					});
 					
 IMP.init("imp06753075");
