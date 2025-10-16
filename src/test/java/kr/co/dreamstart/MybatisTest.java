@@ -393,7 +393,7 @@ public class MybatisTest {
 	
 	@Test
 	public void sasdTest() {
-		List<AdminJoinDTO> dto = adminMapper.selectReservationPaymentByUserId(278);
+		List<AdminJoinDTO> dto = adminMapper.selectJoinPayByUserId(278);
 		System.out.println(dto);
 	}
 	// 회원 가입 관련 테스트
