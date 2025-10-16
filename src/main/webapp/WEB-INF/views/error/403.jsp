@@ -34,5 +34,8 @@
       <sec:authorize access="isAnonymous()"> | <a href="/login" id="btn-back">로그인</a></sec:authorize>
 		</article>
   </p>
+  </div>
+  </main>
+  <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 </body>
 </html>
