@@ -43,6 +43,6 @@ public interface BoardService {
 
 	public int commentDelete(long commentId);
 	
-	public List<BoardPostDTO> selectPostByUserID(long userId);
+	public List<BoardPostDTO> listWithCommentCountByUserId(long userId);
 //	public int commentDeleteByPostId(long postId);
 }

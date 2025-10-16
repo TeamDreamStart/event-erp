@@ -72,14 +72,14 @@ th {
 			alert(`${resultType}이(가) 실패하였습니다.`);
 		}
 	</script>
-	<h1> 마이페이지</h1>
+	<h1>마이페이지</h1>
 	<button type="button"
 		onclick="location.href='/my-info/${userDTO.userId}/update'">내
 		정보 수정</button>
 
 
 	<!-- 설문조사 -->
-	<h2>${userDTO.name }  님의 설문조사 내역</h2>
+	<h2>${userDTO.name }님의 설문조사 내역</h2>
 	<table>
 		<thead>
 			<tr>
@@ -109,7 +109,7 @@ th {
 	</table>
 
 	<!-- 예약 및 결제 -->
-	<h2>${userDTO.name } 님의  예약 및 결제 정보</h2>
+	<h2>${userDTO.name }님의 예약 및 결제 정보</h2>
 	<table>
 		<thead>
 			<tr>
@@ -125,37 +125,40 @@ th {
 					<td>${r.reservationId}</td>
 					<td>${r.eventTitle}</td>
 					<td>${r.reservationDate}</td>
-					<td><button type="button" onclick="location.href='/reservations/${r.reservationId}'">자세히보기</button></td>
+					<td><button type="button"
+							onclick="location.href='/reservations/${r.reservationId}'">자세히보기</button></td>
 				</tr>
 			</c:forEach>
-				
+
 			<c:if test="${empty reservationList}">
 				<tr>
 					<td colspan="3" class="center">예약 내역이 없습니다.</td>
 				</tr>
 			</c:if>
 		</tbody>
-		
+
 	</table>
 
 	<!-- QNA -->
-	<h2>${userDTO.name } 님의 QNA 작성 내역</h2>
+	<h2>${userDTO.name }님의 QNA 작성 내역</h2>
 	<table>
 		<thead>
 			<tr>
 				<th>제목</th>
 				<th>작성일</th>
-				<th>답변보기</th>
+				<th>답변여부</th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach var="qna" items="${postList}" >
+			<c:forEach var="qna" items="${postList}">
 				<tr>
 					<td>${qna.title}</td>
 					<td>${qna.createdAt}</td>
-					<c:if test="${qna.commentCount > 0 }">
-					<td><a href="/admin/qna/${qna.postId}">답변보기</a></td>
-					</c:if>
+					<td><c:if test="${qna.commentCount > 0 }">
+							<a style="color: red" href="/qna/${qna.postId}">답변완료</a>
+						</c:if> <c:if test="${qna.commentCount == 0 }">
+					답변대기
+					</c:if></td>
 				</tr>
 			</c:forEach>
 

@@ -244,7 +244,7 @@ public class AdminController {
 		model.addAttribute("userDTO", userDTO);
 		List<AdminJoinDTO> list = adminService.selectJoinPayByUserId(userId); //예약 및 결제정보
 		model.addAttribute("reservationList", list);
-		List<BoardPostDTO> postList = boardService.selectPostByUserID(userId);
+		List<BoardPostDTO> postList = boardService.listWithCommentCountByUserId(userId);
 		model.addAttribute("postList", postList);
 		return "/admin/customerDetailForm";
 	}

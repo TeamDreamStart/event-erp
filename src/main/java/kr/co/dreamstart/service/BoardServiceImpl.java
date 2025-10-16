@@ -171,8 +171,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardPostDTO> selectPostByUserID(long userId) {
-		return mapper.selectPostByUserID(userId);
-	}
+	public List<BoardPostDTO> listWithCommentCountByUserId(long userId) {
+		return mapper.listWithCommentCountByUserId(userId);
+	} 
 
 }

@@ -73,6 +73,6 @@ public interface BoardMapper {
 	
 	public int commentDeleteByPostId(long postId);
 	
-	public List<BoardPostDTO> selectPostByUserID(long userId);
+	public List<BoardPostDTO> listWithCommentCountByUserId(long userId);
 
 }

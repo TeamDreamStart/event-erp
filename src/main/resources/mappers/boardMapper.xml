@@ -192,7 +192,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 
 
-	<select id="selectPostByUserID" resultMap="boardPostMap">
-		select * from board_post where user_id = #{userId}
-	</select>
+<!-- 특정 회원 qna List -->
+	<select id="listWithCommentCountByUserId" resultMap="boardPostMap">
+    SELECT 
+        p.post_id,
+        p.user_id,
+        p.title,
+        p.content,
+        p.created_at,
+        p.updated_at,
+        COUNT(c.comment_id) AS commentCount
+    FROM board_post p
+    LEFT JOIN board_comment c 
+        ON p.post_id = c.post_id
+    WHERE p.user_id = #{userId} and p.category = 'QNA'
+    GROUP BY 
+        p.post_id,
+        p.user_id,
+        p.title,
+        p.content,
+        p.created_at,
+        p.updated_at
+    ORDER BY p.created_at DESC
+</select>
 </mapper>
