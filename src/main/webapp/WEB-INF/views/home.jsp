@@ -1,369 +1,283 @@
-홈 jsp 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+  pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="ko">
-<%@ taglib prefix="sec"
-    uri="http://www.springframework.org/security/tags"%>
-<!DOCTYPE html>
-<html>
 <head>
 <meta charset="UTF-8">
-<script src="/js/main.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
-
-<script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
-<title>home</title>
-<link rel="stylesheet" type="text/css" href="/resources/css/home.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
+<title>reservation Form</title>
 <style>
-    body {
-        background-color: #E5E2DB;
-        color: #222222;
-        font-family: 'Montserrat', sans-serif;
-        font-size: medium;
-        margin: 0;
-        padding: 0 120px 60px; 
-        line-height: 1;
-    }
-    main {
-        margin-top: 0; 
-        padding: 0; 
-    }
-    .hidden {
-        display: none;
-    }
-    .main-visual figure {
-        margin: 0;
-        width: 100%;
-        line-height: 0;
-    }
-    .visual-image {
-        width: 100%;
-        height: auto;
-        display: block;
-        margin: 0;
-    }
-    .museum-status {
-        text-align: right;
-        margin-top: 20px;
-        font-size: 20px;
-        right: 0;
-        margin-bottom: 80;
-        user-select: none;
-        cursor: default;
-    }
+ body{
+  background-color: #E5E2DB;
+    color: #222222;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0;
+    padding: 0 120px 60px;
+    line-height: 1;
+}
+main {
+    margin-top: 0;
+    padding: 0;
+}
+.container {
+width: 100%;
+    margin: 0 auto;
+    padding: 0;
+}
+.section-header {
+  position: relative;
+  padding-top: 40px;
+  margin-bottom: 40px;
+  text-align: left;
+}
+.section-header h2{
+  font-size: 20px;
+  font-weight: bold;
+  user-select: none;
+  cursor: default;
+  margin: 0;
+  padding: 0;
+}
 
-    .museum-status p {
-        margin: 5px 0;
-    }
-
-    .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-    }
-    .section-header h2{
-        font-size: 20px;
-        font-weight: bold;
-        user-select: none;
-        cursor: default;
-        margin: 0;
-        margin-bottom: 40px 
-        ;
-    }
-    .swiper-navigation-custom {
-        display: flex;
-        align-items: center;
-    }
-    .hr2{
-        border: none;
-        border-top: 1px solid #222222;
-        margin-bottom: 0;
-        margin-top: 50px;
-        width: 100%; 
-        box-sizing: border-box;
-    }
-
-    .horizontal-scroll-section.exhibitions {
-        margin-bottom: 60px;
-    }
-
-    .event-card {
-        text-align: center;
-    }
-
-    .event-card figure {
-        margin: 0;
-        width: 100%;
-        height: auto; 
-        user-select: none;
-        cursor: default;
-    }
-
-    .event-card figure img {
-        width: 100%;
-        height: auto; 
-        display: block;
-        border: none;
-    }
-
-    .event-card .title {
-        margin-top: 15px;
-        font-size: 16px;
-        font-weight: bold;
-    }
-.swiper-button-next, .swiper-button-prev {
-        position: static !important; /* 기본 absolute 위치 해제 */
-        transform: none !important; /* 기본 y축 이동 해제 */
-        margin: 0px; /* 버튼 간격 조절 */
-        width: 25px !important; /* 버튼 크기 조절 */
-        height: 25px !important;
-        color: #222222 !important;
-        top: auto; /* 불필요한 top 속성 제거 */
-    }
-
-    /* 버튼 아이콘 크기 조절 */
-    .swiper-button-next:after, .swiper-button-prev:after {
-        font-size: 12px !important;
-    }
-    .calendar-section {
+.reservation-form {
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 50px;
-    margin-bottom: 50px;
-}
-
-.calendar-section .section-header {
-    justify-content: flex-start;
-    margin-bottom: 20px;
-}
-
-#calendar {
-    width: 100%;
-    max-width: 600px;
-    margin-top: 20px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 20px;
-}
-
-.fc .fc-toolbar-title {
-    font-size: 1.8em;
-    font-weight: 600;
-}
-
-.fc .fc-button-group > .fc-button {
-    background-color: transparent;
-    border: none;
-    color: #fff; /* #000 -> #222222 */
-    font-size: 1.5em;
-    padding: 0 10px;
-    box-shadow: none;
-}
-.fc .fc-button-group > .fc-button:hover {
-    background-color: transparent;
-    color: #555;
-}
-
-.fc-daygrid-week-number,
-.fc-col-header-cell {
-    background-color: #f9f9f9;
-}
-
-.fc-daygrid-day-number {
-    padding: 8px;
-    font-size: 1em;
-    font-weight: 500;
-}
-
-.fc-daygrid-day-top {
-    justify-content: center;
-}
-
-.fc-event {
-    background-color: #a8a39d;
-    border-color: #a8a39d;
-    font-size: 0.9em;
-    margin-top: 2px;
-    padding: 2px 5px;
-    border-radius: 3px;
-    white-space: nowrap;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: #FAF9F6;
+		border: 1px solid #D9D9D9;
+		color: #222222;
     overflow: hidden;
-    text-overflow: ellipsis;
 }
 
-.fc-daygrid-event-harness {
-    margin-bottom: 5px;
+.event-info {
+    padding: 30px;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+		position: relative;
+		caret-color: transparent;
+}
+.event-info::after {
+    content: '';
+    position: absolute;
+		top: 50%;
+    right: 0; /* 오른쪽 경계에 위치 */
+    transform: translateY(-50%); /* 정확한 수직 중앙 정렬 */
+    width: 1px;
+    height: 95%; /* 원하는 높이 80% 설정 */
+    background-color: #222222;
+    z-index: 1;
+}
+.form-input {
+    padding: 30px;
+    background-color: #FAF9F6;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
 }
 
-.calendar-add {
-    display: block;
-    text-align: right;
-    margin-top: 10px;
-    color: #555;
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.notice-label {
-    font-size: 2em;
-    font-weight: 600;
-    margin-bottom: 20px;
-    grid-column: 2 / 3;
-    align-self: flex-start;
-}
-
-.notice-item {
-    border: 1px solid #ccc;
-    padding: 15px;
-    margin-bottom: 15px;
-    background-color: #fff;
-}
-
-.notice-item .title {
+.event-info h4,
+.form-input h4 {
+    font-size: 16px;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-top: 0;
+    margin-bottom: 32px;
+    caret-color: transparent;
 }
 
+.event-poster {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 20px;
+}
+.event-poster img {
+    max-width: 200px;
+    height: auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.event-details {
+    margin-bottom: 20px;
+}
+.event-details p {
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+.event-details p i {
+    margin-right: 8px;
+    font-size: 14px;
+}
+.event-details .event-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    caret-color: transparent;
+}
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    font-size: 14px;
+		border-radius: 3px;
+		border: 1px solid #D9D9D9;
+    background-color: #D9D9D9;
+}
+
+.member-info-box {
+    background-color: #BFD4F9;
+		border: 1px solid #8FAFED;
+		border-radius: 12px;
+    padding: 8px 8px;
+    font-size: 14px;
+    line-height: 1.0;
+    margin-bottom: 44px;
+    caret-color: transparent;
+}
+.member-info-box2 {
+    background-color: #FFFFC5;
+		border: 1px solid #FAFA8B;
+		border-radius: 12px;
+    padding: 8px 8px;
+    font-size: 14px;
+    line-height: 1.0;
+    margin-bottom: 44px;
+    caret-color: transparent;
+}
+
+.total-price {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dashed #ccc;
+    font-size: 14px;
+    caret-color: transparent;
+}
+
+.agreement {
+    margin-top: 30px;
+    caret-color: transparent;
+}
+.agreement label {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.submit-btn {
+    text-align: right;
+    margin-top: 20px;
+}
+.submit-btn button {
+    padding: 8px 8px;
+    background-color: #BFD4F9;
+    border: 1px solid #8FAFED;
+    color: #222222;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 3px;
+}
 </style>
 </head>
+
 <body>
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
-    <main>
-        <section class="main-visual">
-            <figure>
-                <img src="<c:url value='/resources/img/grand.jpg'/>" alt="메인 베너입니다." class="visual-image"/>
-                <figcaption class="hidden">할아버지 할머니가 미술관 구경하는 배너</figcaption>
-            </figure><hr class="hr2">
-            <div class="museum-status">
-                <p>open 10:30 a.m.</p>
-                <p>close 18:00 p.m.</p>
-            </div>
-        </section>
-
-    <section class="horizontal-scroll-section exhibitions">
-        <div class="section-header">
-            <h2>Event</h2>
-            <div class="swiper-navigation-custom">
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-            </div>
-        </div>
-
-<div #swiperRef="" class="swiper mySwiper">
-    <div class="swiper-wrapper">
-    <article class="event-card swiper-slide">
-                <div class="placeholder">
+  <main>
+  <div class="container">
+   <div class="section-header">
+    <h2>Reservation</h2>
+   </div>
+      <div class="reservation-form">
+       <div class="event-info">
+        <h4>이벤트 정보</h4>
+                <div class="event-poster">
+                    <img src="/resources/img/event1.jpg" alt="Autumn Music Festival Poster" />
                 </div>
-                <figure class="event-1">
-                    <img src="<c:url value='/resources/img/events/event1.jpg'/>" alt="전시 1을 넣습니다."/>
-                    <figcaption class="hidden">포스터 이미지</figcaption>
-                    <div class="event-info-overlay">
-            <div class="event-info-content">
-                <h3 class="event-title">${postDTO.title}</h3>
-                <p class="event-start-date">${postDTO.start_date}</p>
-                <p class="event-location">${postDTO.location}</p>
                 
-                <a href="/event/detail/${eventId}" class="detail-btn">자세히 보기</a>
-            </div>
-        </div>
-                </figure>
-                </article>
-                <article class="event-card swiper-slide">
-                <div class="placeholder"></div>
-                <figure class="event-2">
-                    <img src="<c:url value='/resources/img/events/event2.jpg'/>" alt="전시 2를 넣습니다."/>
-                </figure>
-                </article>
-                <article class="event-card swiper-slide">
-                <div class="placeholder"></div>
-                <figure class="event-3">
-                    <img src="<c:url value='/resources/img/events/event3.jpg'/>" alt="전시 3을 넣습니다."/>
-                </figure>
-                </article>
-                <article class="event-card swiper-slide">
-                <div class="placeholder"></div>
-                <figure class="event-4">
-                    <img src="<c:url value='/resources/img/events/event4.jpg'/>" alt="전시 4를 넣습니다."/>
-                </figure>
-                </article>
-                <article class="event-card swiper-slide">
-                <div class="placeholder"></div>
-                <figure class="event-5">
-                    <img src="<c:url value='/resources/img/events/event4.jpg'/>" alt="전시 4를 넣습니다."/>
-                </figure>
-                </article>
+                <div class="event-details">
+                    <p class="event-title">가을 음악 페스티벌</p>
+                    <p><i class="fas fa-calendar-alt"></i>• 2025-09-28</p>
+                    <p><i class="fas fa-map-marker-alt"></i>• 서울 올림픽 공원</p>
+                    <p><i class="fas fa-won-sign"></i>• 15,000원</p>
                 </div>
-</div>
+       </div>
+       <div class="form-input">
+        <h4>예약 정보 입력</h4>
+                
+                <div class="member-info-box">
+                    <p>회원 정보로 예약</p>
+                    <p>로그인된 회원 정보를 사용하여 예약합니다.</p>
+                </div>
+                <!--비회원일 경우-->
+                <!-- <div class="member-info-box2">
+                    <p>비회원 예약</p>
+                    <p>회원가입 후 예약하시면 더 편리하게 이용하실 수 있습니다.</p>
+                </div> -->
+                <form>
+                    <div class="form-group">
+                        <label for="name">이름*</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">이메일*</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">전화번호*</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="payment">결제 방법*</label>
+                        <select id="payment" required>
+                            <option value="">선택</option>
+                            <option value="card">신용카드</option>
+                            <option value="transfer">계좌이체</option>
+                        </select>
+                    </div>
 
-    <section class="calendar-section">
-        <div class="section-header">
-            <h2>Calendar</h2>
-            <div id="calendar"></div>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
-            <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-            const rawEvents = [
-                                    {title: '회의A', start: '2025-09-17', order: 1, allDay: true },
-                    {title: '회의B', start: '2025-09-17', order: 2, allDay: true },
-                    {title: '회의C', start: '2025-09-18', order: 3, allDay: true },
-                    {title: '점심약속', start: '2025-09-22', order: 1, allDay: true }
-                                ];
-                            var calendarEl = document.getElementById('calendar');
-                            var calendar = new FullCalendar.Calendar(calendarEl, {
-                
-                                locale: 'ko',
-                                initialView: 'dayGridMonth',
-                                eventOrder: 'order',
-                                eventOrderStrict: true,
-                                fixedWeekCount: false, 
-                                headerToolbar: {
-                                        left: 'prev', 
-                                        center: 'title',
-                                        right: 'next',
-                                },
-                                height: 'auto',
-                                dayCellContent: function(arg) {
-                                        return {
-                                        html: arg.date.getDate().toString()
-                                        };
-                                },
-                events: rawEvents,
-                                dateClick : function(info) {
-                    alert("선택하신 날짜에 일정이 없습니다.");
-                },
-                eventClick : function(info) {
-                    alert("선택하신 날짜에 이벤트가 있습니다.");
-                }
-                            });
-                            calendar.render();
-                        });
-            
-            </script>
-                <span class="calendar-add">더보기</span>
-                
-                <span class="notice-label">Notic</span>
-            </div>
-        </section>
-    </main>
-<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
-<script>
-    var swiper = new Swiper(".mySwiper", {
-    slidesPerView: 4,
-    centeredSlides: false,
-    spaceBetween: 30,
-    pagination: {
-        el: ".swiper-pagination",
-        type: "fraction",
-    },
-    navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-    },
-    });
-</script>
+                    <div class="total-price">
+                        <span>총 결제 금액</span>
+                        <span>15,000원</span>
+                    </div>
+
+                    <div class="agreement">
+                        <label>
+                            <input type="checkbox" required> 개인정보 수집 및 이용에 동의합니다. (필수)
+                        </label>
+                        <label>
+                            <input type="checkbox" required> 예약 취소 및 환불 정책에 동의합니다. (필수)
+                        </label>
+                    </div>
+
+                    <div class="submit-btn">
+                        <button type="submit">예약 완료하기</button>
+                    </div>
+                </form>
+       </div>
+    </div>
+  </div>
+  </main>
+  <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 </body>
 </html>
