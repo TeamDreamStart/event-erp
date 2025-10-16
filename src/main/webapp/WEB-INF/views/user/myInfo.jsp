@@ -10,8 +10,9 @@
 
 /* 임시 */
 body {
-	font-family: Arial, sans-serif;
-	margin: 30px;
+	 background-color: #E5E2DB;
+	 font-family: Arial, sans-serif;
+	 margin: 30px;
 }
 
 h2 {
@@ -54,6 +55,143 @@ th {
 	text-align: center;
 	color: #777;
 }
+
+.dashboard-container {
+    /* 최대 너비 (max-w-4xl) 및 중앙 정렬 (mx-auto) */
+    max-width: 56rem; /* 896px */
+    margin-left: auto;
+    margin-right: auto;
+    /* 섹션 간 수직 간격 (space-y-8) */
+    display: flex;
+    flex-direction: column;
+    gap: 2rem; /* 32px */
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 0.75rem; /* rounded-xl */
+    /* 기본 패딩 (p-6) */
+    padding: 1.5rem; /* 24px */
+    /* 그림자 (shadow-soft) */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
+}
+
+/* 태블릿 이상에서의 큰 패딩 (sm:p-8) */
+	@media (min-width: 640px) {
+    .card {
+        padding: 2rem; /* 32px */
+    }
+}
+
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* 하단 구분선 (border-b) */
+    border-bottom: 1px solid #F3F4F6; /* border-gray-100 */
+    /* 구분선 아래 패딩 (pb-3) */
+    padding-bottom: 0.75rem; /* 12px */
+    /* 제목 아래 마진 (mb-6) */
+    margin-bottom: 1.5rem; /* 24px */
+}
+
+.card-header h2 {
+    font-size: 1.25rem; /* text-xl */
+    font-weight: 700; /* font-bold */
+    color: #333333; /* text-dark */
+    margin: 0;
+}
+
+.card-header button {
+    font-size: 0.875rem; /* text-sm */
+    color: #6B7280; /* text-gray-500 */
+    cursor: pointer;
+    transition: color 0.15s ease-in-out;
+    padding: 0.5rem 0.75rem; /* 버튼 패딩 추가 */
+    border: 1px solid #D1D5DB;
+    background-color: #F9FAFB;
+    border-radius: 0.375rem;
+}
+
+.card-header button:hover {
+    color: #3B82F6; /* primary-blue */
+    border-color: #3B82F6;
+}
+
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem; /* mt-4 역할 */
+    border-radius: 0.5rem; /* 전체 테이블에 둥근 모서리 적용 */
+    overflow: hidden; /* 둥근 모서리를 위해 필수 */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* 테이블에 가벼운 그림자 */
+}
+
+.data-table thead tr {
+    background-color: #F9FAFB; /* th 배경색, f9f9f9 대신 밝은 회색 */
+    color: #333333;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.data-table th, .data-table td {
+    padding: 1rem 1.25rem; /* 충분한 패딩 */
+    text-align: left;
+    border-bottom: 1px solid #E5E7EB; /* border-gray-200 */
+    font-size: 0.875rem; /* text-sm */
+    line-height: 1.5;
+}
+
+.data-table td {
+    color: #4B5563; /* text-gray-600 */
+}
+
+/* 마지막 행 하단선 제거 */
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* 테이블 내부 버튼 스타일 */
+.data-table button, .data-table a {
+    display: inline-block;
+    background-color: #3B82F6; /* primary-blue */
+    color: white;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem; /* rounded-md */
+    font-size: 0.875rem;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.data-table button:hover, .data-table a:hover {
+    background-color: #2563EB;
+}
+
+.data-table .center {
+    text-align: center;
+    color: #9CA3AF; /* text-gray-400 */
+}
+
+
+.info-label {
+    display: inline-block;
+    width: 6rem; /* 96px, 기존 120px보다 약간 작게 조정 */
+    font-weight: 600;
+    color: #6B7280;
+    margin-right: 0.5rem;
+}
+
+
+.info-row {
+    margin: 0.6rem 0; /* 6px 0 역할 */
+    font-size: 0.875rem;
+    color: #333333;
+}
+
 </style>
 </head>
 <body id="page-top">
