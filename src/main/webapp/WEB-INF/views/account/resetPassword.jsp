@@ -75,7 +75,6 @@ input::placeholder{
     border-radius: 3px;
     padding: 10px 12px;
     font-size: 14px;
-    outline: none;
     transition: border-color 0.2s;
     caret-color: transparent;
 }

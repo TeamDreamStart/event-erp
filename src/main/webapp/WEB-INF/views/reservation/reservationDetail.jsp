@@ -60,7 +60,10 @@
 </style>
 </head>
 <body>
-내 예약내역인거임
+	<header>
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
+	</header>
+
 <!-- 	private Long reservationId;
     private String eventTitle;
     private Timestamp reservationDate;
@@ -102,7 +105,7 @@
 
      <div class="info-row">
         <div class="info-label">결제금액</div>
-        <div class="info-value">${reservationDTO.paymentAmount}</div>
+        <div class="info-value"> <fmt:formatNumber value="${reservationDTO.paymentAmount}" pattern="###,###,###"/>원</div>
     </div>
     <div class="info-row">
         <div class="info-label">결제상태</div>
@@ -114,11 +117,14 @@
     </div>
 
     <div class="button-row">
-        <a href="/admin/reservations" class="back-button">목록으로 돌아가기</a>
+        <button onclick="history.back()">이전으로</button>
     </div>
 </div>
 
 
+	<footer>
+	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
+	</footer>
 
 </body>
 </html>

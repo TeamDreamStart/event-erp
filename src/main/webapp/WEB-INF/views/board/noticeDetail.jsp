@@ -194,4 +194,4 @@
 		<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 </footer>
 </body>
-</html>
+</html> 

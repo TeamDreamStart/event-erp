@@ -117,6 +117,7 @@ public class ReservationController {
 	@GetMapping("/reservations/{reservationId}")
 	public String reservationDetail(@PathVariable("reservationId")long reservationId,Model model) {
 		AdminJoinDTO rDTO = aService.selectJoinPayById(reservationId);
+		System.out.println(rDTO);
 		model.addAttribute("reservationDTO", rDTO);
 		return "/reservation/reservationDetail";
 	}

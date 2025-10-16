@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -295,7 +297,7 @@ width: 100%;
 							<i class="fas fa-map-marker-alt"></i>• ${eventDTO.location }
 						</p>
 						<p>
-							<i class="fas fa-won-sign"></i>• ${eventDTO.price }${eventDTO.currency }
+							<i class="fas fa-won-sign"></i>• <fmt:formatNumber value="${eventDTO.price }" pattern="###,###,###"/>원
 						</p>
 					</div>
 				</div>
@@ -328,7 +330,7 @@ width: 100%;
 							<span id="phone-message" class="error-message"></span>
 						</div>
 						<div class="total-price">
-							<span>총 결제 금액</span> <span id="totalAmount">${eventDTO.price}원</span>
+							<span>총 결제 금액</span> <span id="totalAmount"><fmt:formatNumber value="${eventDTO.price }" pattern="###,###,###"/>원</span>
 						</div>
 
 						<div class="agreement">

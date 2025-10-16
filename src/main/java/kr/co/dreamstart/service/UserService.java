@@ -17,7 +17,6 @@ public interface UserService {
 									@Param("startDate") String startDate, 
 									@Param("endDate") String endDate);
 	
-	public UserDTO userDetail(long userId);
 	public Map<String,Object> adminUserUpdate(UserDTO userDTO, int roleId);
 	
 	//naver
@@ -44,6 +43,12 @@ public interface UserService {
 	// 이메일 중복 체크
 	boolean existsByEmail(String email);
 	
-	//for reservation - 아이디로 찾기
+	//username
 	public UserDTO findUserByUserName(String userName);
+	//email
+	public UserDTO findByEmail(String email);
+	//userId
+	public UserDTO findByUserId(long userId);
+	
+	
 }
