@@ -51,6 +51,7 @@ flex-grow: 1;
 overflow-y: auto;
 max-height: 600px; 
 caret-color: transparent;
+margin-bottom: 140px;
 }
 .cancle-scroll{
  width: 100%;
@@ -88,9 +89,9 @@ color: #222222;
 }
 .reservation-info h4,
 .cancle-reason h4 {
+	margin-top: 4px;
 font-size: 14px;
 font-weight: bold;
-margin-top: 0;
 margin-bottom: 15px;
 }
 .reservation-info p {

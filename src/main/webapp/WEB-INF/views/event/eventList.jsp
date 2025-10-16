@@ -108,25 +108,29 @@ font-size: 30px;
 	font-weight: 700;
 	line-height: 40px;
 }
+.section-right{
+	right: 20px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	white-space: nowrap;
+}
 
 .category-filter {
-font-size: 16px;
+font-size: 20px;
 display: flex;
 align-items: center;
 position: relative;
 cursor: pointer;
-padding-right: 20px;
 caret-color: transparent;
-margin-right: 20px;
+margin-bottom: 4px;
+width: 100%;
 }
 
 .dropdown-arrow {
-position: absolute;
-right: 0;
-top: 50%;
-transform: translateY(-50%) rotate(45deg);
-width: 3px;
-height: 3px;
+display: inline-block;
+transform: translateX(-50%) rotate(45deg);
+width:8px;
+height: 4px;
 border-right: 2px solid #222222;
 border-bottom: 2px solid #222222;
 pointer-events: none;
@@ -140,19 +144,21 @@ transform: translateY(-50%) rotate(-135deg);
 .category-dropdown-menu {
 position: absolute;
 top: 100%;
-right: 0;
+right: 50px;
 list-style: none;
-padding: 5px 0 0 0;
+padding: 21px 0 0 0;
+font-size: 14px;
 margin: 0;
 background-color: #ffffff; 
 border: 1px solid #ccc; 
 box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-min-width: 120px;
+min-width: 166px;
 z-index: 1000;
 opacity: 0;
 visibility: hidden;
 transform: translateY(10px);
 transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+text-align: center;
 }
 
 .category-filter.active .category-dropdown-menu {
@@ -162,7 +168,7 @@ transform: translateY(0);
 }
 
 .category-dropdown-menu li {
-padding: 0 21px;
+padding-bottom: 25px;
 margin-top: 10px;
 cursor: pointer;
 color: #222222;
@@ -290,7 +296,7 @@ margin-top: 20px;
 }
 
 .detail-btn {
-display: inline-block;
+display: block;
 margin-top: 8px;
 padding: 10px 4px;
 background-color: #FAF9F6;
@@ -300,6 +306,9 @@ font-size: 14px;
 border-radius: 3px;
 transition: background-color 0.2s;
 caret-color: transparent;
+width: 60px;
+height: 16px;
+text-align: center;
 }
 
 .detail-btn:hover {
@@ -406,20 +415,22 @@ line-height: 1.1;
 
 <div class="section-header">
 <h2>Present Events</h2>
+<div class="setion-right">
 
-<div class="category-filter">
-Category <span class="dropdown-arrow"></span>
-<ul class="category-dropdown-menu">
-<li data-value="all" class="selected">Show</li>
-<li data-value="workshop">Workshop</li>
-<li data-value="speech">Speech</li>
-<li data-value="market">Market</li>
-</ul>
-</div>
-
-<div class="swiper-nav-controls">
-<div class="swiper-button-prev"></div>
-<div class="swiper-button-next"></div>
+	<div class="category-filter">
+		Category <span class="dropdown-arrow"></span>
+		<ul class="category-dropdown-menu">
+			<li data-value="all" class="selected">Show</li>
+			<li data-value="workshop">Workshop</li>
+			<li data-value="speech">Speech</li>
+			<li data-value="market">Market</li>
+		</ul>
+	</div>
+	
+	<div class="swiper-nav-controls">
+		<div class="swiper-button-prev"></div>
+		<div class="swiper-button-next"></div>
+	</div>
 </div>
 
 </div>
