@@ -322,4 +322,9 @@ public class UserServiceImpl implements UserService {
 		return userMapper.existsByEmail(norm) > 0;
 	}
 
+	@Override
+	public UserDTO findUserByUserName(String userName) {
+		return userMapper.findByUserName(userName);
+	}
+
 }

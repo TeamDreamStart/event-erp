@@ -43,4 +43,7 @@ public interface UserService {
 	boolean existsByUserName(String username);
 	// 이메일 중복 체크
 	boolean existsByEmail(String email);
+	
+	//for reservation - 아이디로 찾기
+	public UserDTO findUserByUserName(String userName);
 }

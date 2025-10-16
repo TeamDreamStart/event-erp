@@ -1,11 +1,13 @@
 package kr.co.dreamstart.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,12 +20,15 @@ import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.EventDTO;
 import kr.co.dreamstart.dto.PageVO;
 import kr.co.dreamstart.dto.PaymentDTO;
+import kr.co.dreamstart.dto.ReservationDTO;
 import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.mapper.BoardMapper;
 import kr.co.dreamstart.mapper.FileAssetMapper;
+import kr.co.dreamstart.mapper.ReservationMapper;
 import kr.co.dreamstart.mapper.UserMapper;
 import kr.co.dreamstart.service.EmailSenderService;
 import kr.co.dreamstart.service.PaymentService;
+import kr.co.dreamstart.service.ReservationService;
 import kr.co.dreamstart.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import kr.co.dreamstart.mapper.EventMapper;
@@ -31,7 +36,6 @@ import kr.co.dreamstart.mapper.SurveyMapper;
 
 @Slf4j
 @Controller
-//@RequestMapping("/test")
 public class TestController {
 
 	@Autowired
@@ -51,13 +55,15 @@ public class TestController {
 
 	@Autowired
 	private PaymentService paymentService;
-	
+
 	@Autowired
 	private EmailSenderService emailService;
-	
+
 	@Autowired
 	private UserService userService;
-
+	
+	@Autowired
+	private ReservationService rService;
 
 	@GetMapping("/list-test")
 	public String userList(@RequestParam(required = false) Integer userId, Criteria cri, Model model) {
@@ -92,77 +98,52 @@ public class TestController {
 		model.addAttribute("latitude", "37.2689226891878");
 		model.addAttribute("longitude", "126.99991127117");
 		model.addAttribute("title", "가을페스티벌");
-		
+
 		return "test/mapTest";
 	}
 
-//	@GetMapping("/pay-test")
-//	public String pay(Model model) {
-//		EventDTO event = new EventDTO();
-//		event.setEventId(1L);
-//		event.setTitle("Spring Festival 2025");
-//		event.setDescription("봄맞이 특별 공연");
-//		event.setLocation("서울 강남구 코엑스");
-//		event.setStartDate("2025-10-05");
-//		event.setEndDate("2025-10-05");
-//		event.setCapacity(200);
-//		event.setStatus("OPEN");
-//		event.setVisibility("PUBLIC");
-//		event.setPosterUrl("C:/teamDS/upload/test.png");
-//		event.setCreatedBy(100L);
-//		event.setCreatedAt("2025-09-19");
-//		event.setUpdatedAt("2025-09-19");
-//
-//		model.addAttribute("event", event);
-//
-//		// 가격은 임의로 만원
-//		model.addAttribute("price", 100);
-//
-//		return "test/payTest";
-//	}
+	@GetMapping("/pay-test")
+	public String pay(Model model) {
+		EventDTO event = eventMapper.findById((long) 6);
 
-	@RequestMapping(value="/payment/complete", method=RequestMethod.POST)
-	public String paymentComplete(PaymentDTO payment, RedirectAttributes rttr) {
-	    System.out.println("Controller 호출됨");
-	    payment.setReservationId(1);
-	    System.out.println(payment);
+		model.addAttribute("event", event);
 
-	    int result = paymentService.savePayment(payment);
-	    rttr.addFlashAttribute("result", result > 0 ? "success" : "fail");
+		// 가격은 임의로 만원
+		model.addAttribute("price", 100);
 
-	    return "redirect:/pay-test"; // 결과 JSP
+		return "test/payTest";
 	}
 
+	//get으로 주고받으니까 되네 어이없어
+	@Transactional
+	@GetMapping("/payment/complete-pay")
+	public String paymentComplete(PaymentDTO paymentDTO, RedirectAttributes rttr,@RequestParam("userId")long userId,@RequestParam("eventId")long eventId,@RequestParam("headCount")int headCount) {
+		ReservationDTO rDTO = new ReservationDTO();
+		rDTO.setUserId(userId);
+		rDTO.setEventId(eventId);
+		rDTO.setHeadCount(headCount);
+		Map<String,Object> map = rService.reservationWithPay(rDTO, paymentDTO);
+		//event 남은 정원 -1 해야함
+		rttr.addFlashAttribute("result", map.get("result"));
+		rttr.addFlashAttribute("resultType", map.get("resultType"));
 
-	
-	
-	
+		return "redirect:/pay-test"; // 결과 JSP
+	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	@PostMapping("https://kauth.kakao.com/oauth/token")
 	public String kakaoTokenTest() {
 
 		return "test/map-test";
 	}
+
 	@GetMapping("/error")
 	public String errorTest() {
 		return "/common/error";
 	}
+
 	@GetMapping("/access-denied")
 	public String accessTest() {
 		return "/common/accessDenied";
 	}
-
 
 }

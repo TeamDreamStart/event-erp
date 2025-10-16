@@ -28,7 +28,9 @@ import kr.co.dreamstart.dto.BoardCommentDTO;
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.FileAssetDTO;
+import kr.co.dreamstart.dto.ReservationDTO;
 import kr.co.dreamstart.dto.UserDTO;
+import kr.co.dreamstart.mapper.ReservationMapper;
 import kr.co.dreamstart.service.AdminService;
 import kr.co.dreamstart.service.BoardService;
 import kr.co.dreamstart.service.FileService;
@@ -50,6 +52,9 @@ public class AdminController {
 	
 	@Autowired
 	private AdminService adminService;
+	
+	@Autowired
+	private ReservationMapper reservationMapper;
 
 	// main
 	@GetMapping("")
@@ -236,7 +241,7 @@ public class AdminController {
 	@GetMapping("/customers/{userId}")
 	public String userDetail(@PathVariable("userId") long userId, Model model) {
 		UserDTO userDTO = userService.userDetail(userId);
-		List<AdminJoinDTO> list = adminService.selectReservationPaymentByUserId(userId); //예약 및 결제정보
+		List<AdminJoinDTO> list = adminService.selectJoinPayByUserId(userId); //예약 및 결제정보
 		model.addAttribute("reservationList", list);
 		model.addAttribute("userDTO", userDTO);
 		List<BoardPostDTO> postList = boardService.selectPostByUserID(userId);
@@ -255,8 +260,9 @@ public class AdminController {
 	
 	//reservation list
 	@GetMapping("/reservation-manage")
-	public String reservationList() {
-		
+	public String reservationList(Model model,Criteria cri) {
+		List<ReservationDTO> reservationList = reservationMapper.list(cri);
+		model.addAttribute("reservationList", reservationList);
 		return "/admin/reservationManage";
 	}
 	
@@ -264,8 +270,10 @@ public class AdminController {
 	//reservation Detail
 	@GetMapping("/reservation-manage/{reservationId}")
 	public String reservationForm(@PathVariable("reservationId")long reservationId,Model model) {
-		
-		return "/admin/reservationManage";
+		ReservationDTO dto = reservationMapper.select(reservationId);
+		System.out.println(dto);
+		model.addAttribute("reservationDTO", dto);
+		return "/admin/reservationDetailForm";
 	}
 	//reservation Detail
 	@PostMapping("/reservation-manage/{reservationId}")
