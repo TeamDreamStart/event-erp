@@ -3,12 +3,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<link href="https://www.dafont.com/peristiwa.font" rel="stylesheet">
-<link href="https://fonts.google.com/specimen/Montserrat"
-	rel="stylesheet">
-<link rel="stylesheet" href="/webapp/resources/css/noticeList.css">
+	<head>
+		<meta charset="UTF-8">
+		<link href="https://fonts.cdnfonts.com/css/peristiwa" rel="stylesheet">
+		<link href="https://fonts.google.com/specimen/Montserrat" rel="stylesheet"> 
+		<link rel="stylesheet" href="/webapp/resources/css/noticeList.css">
 
 <style>
 body {
@@ -64,13 +63,13 @@ button {
 	margin-bottom: 20px;
 }
 
-.logo-link {
-	font-family: 'peristiwa';
-	font-size: 64px;
-	font-style: italic;
-	color: #222;
-	display: inline-block;
-	margin-left: 20px;
+.logo-link{
+    font-family: 'Peristiwa', sans-serif;
+    font-size: 64px;
+    font-style: italic;
+    color: #222;
+    display: inline-block;
+    margin-left: 20px;
 }
 
 .header-right {
@@ -212,211 +211,157 @@ button {
 
 /* 검색창 */
 .search-bar {
-	display: flex;
-	justify-content: center;
-	margin-bottom: 50px;
-	border: none; /*테두리 제거*/
-	max-width: 450px;
-	margin: 50px auto;
-	gap: 10px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+    border:none;  /*테두리 제거*/
+    max-width: 888px;
+    margin: 50px auto;
+    gap: 43px;
 }
 
+/*검색 입력창*/
 .search-input {
-	width: 300px;
-	padding: 15px 20px;
-	background-color: #CBD4C2;
-	border: 1px solid #222;
-	border-radius: 15px;
-	flex-grow: 1;
-	box-shadow: none;
-	outline: none;
-	font-size: 18px;
-	color: #222;
-	opacity: 1;
+    width: 733px;
+    height: 60px;
+    box-sizing: border-box;
+    padding: 0px 20px;
+    background-color:#CBD4C2;
+    border: 1px solid #222;
+    border-radius: 15px;
+    flex-grow: 0;
+    box-shadow: none;
+    outline: none;
+    font-size: 18px;
+    color:#222 ;
+    opacity: 1;
 }
 
+   .search-input::placeholder{
+        color: #888888;
+        opacity: 1;
+    }
+
+/*검색 버튼*/
 .search-btn {
-	padding: 10px 20px;
-	background-color: #CBD4C2;
-	border: 1px solid #222;
-	border-radius: 15px;
-	font-size: 18px;
-	outline: none;
+    width: 112px;
+    height: 60px;
+    box-sizing: border-box;
+    padding: 0px;
+    background-color: #CBD4C2;
+    border: 1px solid #222;
+    border-radius: 15px;
+    font-size: 18px;
+    outline: none;
+    font-weight: bold;
+
+      /* 텍스트 정렬 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /*버튼 텍스트 색상*/
+    color: #222;
 }
 
-/* 게시판 테이블 */
+.qna-header{
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 0 0px 10px 0; /* 아래쪽 패딩으로 테이블과 간격 조정 */
+    margin: 0 auto;
+    max-width: 888px;
+    border-bottom: none;
+    background-color: transparent;
+}
+.qna-header > div:nth-child(1) { width: 50%; text-align: left; padding-left: 20px; } 
+.qna-header > div:nth-child(2) { width: 15%; text-align: center; } 
+.qna-header > div:nth-child(3) { width: 15%; text-align: center; } 
+.qna-header > div:nth-child(4) { width: 10%; text-align: center; } 
+
+/* ⭐️ Q&A 리스트 박스 컨테이너 (888x584 크기 및 스크롤) */
+.qna-list-container{
+    max-width: 888px;
+    height: 584px; 
+    margin: 10px auto 0 auto; /* 헤더 텍스트와 분리를 위한 상단 마진 */
+    border: 1px solid #AFAFAF; 
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    background-color: white; /* 리스트 배경색을 흰색으로 설정 */
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 허용 */
+}
+
+/* ⭐️ 공지사항 테이블 (notice-table CSS를 Q&A 리스트에 맞게 재정의) */
 .notice-table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-bottom: 40px auto;
-	text-align: center;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0; /* 컨테이너 내부에 맞춥니다. */
+    text-align: center;
 }
-
-.notice-table thead th {
-	font-weight: bold;
-	padding: 15px 0;
-	border-top: 2px solid #222; /* 상단 굵은 선 */
-	border-bottom: 1px solid #222; /* 하단 얇은 선 */
-	font-size: 14px;
-}
-
+/* 테이블 헤더는 HTML에서 제거되었으므로 thead 관련 CSS는 무시됩니다. */
 .notice-table tbody td {
-	padding: 12px 0;
-	border-bottom: 1px solid #AFAFAF;
-	color: #222;
-	font-size: 15px;
-	vertical-align: top;
+    padding: 12px 0;
+    border-bottom: 1px solid #AFAFAF;
+    color: #222;
+    font-size: 15px;
+    vertical-align: middle;
+}
+.notice-table tbody tr:last-child td {
+    border-bottom: none; /* 마지막 줄 아래 선 제거 */
 }
 
-.notice-table th:nth-child(1) {
-	width: auto;
-} /* 제목 (나머지 공간 전부) */
-.notice-table th:nth-child(2), .notice-table td:nth-child(2) {
-	width: 15%;
-} /* 작성자 */
-.notice-table th:nth-child(3), .notice-table td:nth-child(3) {
-	width: 12%;
-} /* 등록일자 */
-.notice-table th:nth-child(4), .notice-table td:nth-child(4) {
-	width: 10%;
-	font-weight: bold;
-} /* 상태 */
-.notice-table tbody td:nth-child(1) {
-	text-align: left; /*제목은 왼쪽 정렬*/
-	padding-left: 20px;
-}
+/* 테이블 컬럼 너비 지정 (헤더 너비와 일치) */
+.notice-table td:nth-child(1) { width: 50%; text-align: left; padding-left: 20px; } /* 제목 */
+.notice-table td:nth-child(2) { width: 15%; } /* 작성자 */
+.notice-table td:nth-child(3) { width: 15%; } /* 등록일자 */
+.notice-table td:nth-child(4) { width: 10%; font-weight: bold; } /* 상태 */
 
-.notice-table td a {
-	display: flex;
-	align-items: center;
-	font-weight: bold;
-	color: #222;
-	padding: 5px 0;
+/* 질문 제목 링크 스타일 */
+.notice-table td a{
+    display: block; /* 전체 셀 클릭 가능하게 */
+    font-weight: 500;
+    color: #222;
+    padding: 0;
+    text-align: left;
 }
-
-.notice-table td a::before {
-	content: Q;
-	margin-right: 10px;
-	font-size: 22px;
-	color: #FAF9F6;
+.notice-table td a::before{
+    content: 'Q';
+    margin-right: 10px;
+    font-size: 18px; /* 크기 조정 */
+    color: #888888;
+    font-weight: bold;
 }
-
-.notice-table td p {
-	margin: 5px 0 0 35px;
-	padding: 0;
-	color: #595959;
-	font-size: 14px;
-	white-space: normal;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	display: -webkit-box;
-	-webkit-line-clamp: 2;
-	-webkit-box-orient: vertical;
-	line-height: 1.5;
-	max-height: 3em; /* 1.5 * 2 = 3em */
-}
-
-.notice-table tbody td:first-child {
-	text-align: center;
-	width: auto;
-}
-
-.notice-table tbody tr:hover {
-	background-color: #FFFFFF;
-	cursor: pointer;
-}
+/* 불필요한 P 태그 관련 CSS 제거 */
 
 /* 답변대기 상태 강조 */
-.notice-table td:nth-child(4):contains( '답변대기 ') {
-	color: #888888;
+.status-waiting {
+    color: #888888; 
+    font-weight: bold;
 }
-
 /* 답변완료 상태 강조 */
-.notice-table td:nth-child(4):contains( '답변완료 ') {
-	color: #0088ff; /* 파란색 계열 */
+.status-complete { 
+    color: #0088ff;
+    font-weight: bold;
 }
 
 /* 페이지네이션 */
-.pagination-container {
-	text-align: center;
-	margin-top: 40px;
-}
-
 .pagination {
-	display: flex;
-	justify-content: center;
-	gap: 15px;
-	align-items: center;
-	color: #888888;
-	font-size: 18px;
-	transition: 0.2s;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    align-items: center;
+    margin-top: 40px;
 }
-
-.pagination li {
-	display: inline-block;
-}
-
-.pagination li a {
-	padding: 5px 10px;
-	font-size: 18px;
-	color: #999;
-	display: block;
-	transition: color 0.2s;
-}
-
-.pagination li.active a {
-	font-weight: bold;
-	color: #222;
-}
-
-.nav-arrow {
-	font-size: 20px;
-	color: #999;
-}
-
-.page-number {
-	padding: 5px 10px;
-	font-size: 16px;
-	border: 1px solid transparent;
-	transition: all 0.2s;
-}
-
-.page-number.active {
-	font-weight: bold;
-	border-bottom: 2px solid #333; /* 현재 페이지 강조 */
-}
-
-.pagination a:hover {
-	color: #222; /* 텍스트를 검은색으로 변경 */
-	background-color: transparent; /* 배경색 변경 없음 */
-	cursor: pointer;
-}
+.pagination a{padding: 5px 10px; font-size: 18px; color: #888888; transition: color 0.2s;}
+.pagination a.active{font-weight: bold;}
+.pagination a:hover{color: #222; cursor: pointer;}
 
 /* 4. Footer 영역 스타일 */
-.footer {
-	background-color: #CBD4C2; /* 연한 녹색 계열 배경 */
-	color: #222;
-	padding: 30px 0;
-	margin-top: 80px;
-	text-align: center;
-}
-
-.footer-content p {
-	margin: 5px 0;
-	font-size: 14px;
-}
-
-.footer-hr {
-	display: none; /* 디자인에 hr이 없으므로 숨김 처리 */
-}
-
-.footer p:last-child {
-	margin-top: 15px;
-	font-weight: bold;
-}
+.footer {background-color: #CBD4C2; color: #222; padding: 30px 0; margin-top: 80px; text-align: center;}
+.footer p {margin: 5px 0; font-size: 14px;}
+.footer-hr {display: none;}
+.footer p:last-child {margin-top: 15px; font-weight: bold;} 
 </style>
-
-<title>qnalist</title>
 </head>
 <body>
 	<header>

@@ -21,11 +21,11 @@ body {
 	line-height: 1.6;
 }
 
-.main-container {
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 20px;
-	background-color: white;
+.main-content{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #E5E2DB;
 }
 
 a {
@@ -65,13 +65,13 @@ button {
 	margin-bottom: 20px;
 }
 
-.logo-link {
-	font-family: 'peristiwa';
-	font-size: 64px;
-	font-style: italic;
-	color: #222;
-	display: inline-block;
-	margin-left: 20px;
+.logo-link{
+    font-family:'Peristiwa', sans-serif;
+    font-size: 64px;
+    font-style: italic;
+    color: #222;
+    display: inline-block;
+    margin-left: 20px;
 }
 
 .header-right {
@@ -315,10 +315,13 @@ button {
 }
 
 .pagination {
-	display: flex;
-	justify-content: center;
-	gap: 15px;
-	align-items: center;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    align-items: center;
+	color: #888888;
+	font-size: 18px;
+	transition: 0.2s;
 }
 
 .pagination li {
@@ -353,6 +356,12 @@ button {
 .page-number.active {
 	font-weight: bold;
 	border-bottom: 2px solid #333; /* 현재 페이지 강조 */
+}
+
+.pagination a:hover{
+	color: #222; /* 텍스트를 검은색으로 변경 */
+    background-color: transparent; /* 배경색 변경 없음 */
+    cursor: pointer;
 }
 
 /* 4. Footer 영역 스타일 */

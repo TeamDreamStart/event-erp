@@ -7,172 +7,234 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link href="https://www.dafont.com/peristiwa.font" rel="stylesheet">
-<link href="https://fonts.google.com/specimen/Montserrat"
-	rel="stylesheet">
-<link rel="stylesheet" href="/webapp/resources/css/noticeList.css">
+    <link href="https://fonts.cdnfonts.com/css/peristiwa" rel="stylesheet">
+    <link rel="stylesheet" href="qnaDetail.css">
 
 <style>
-/* 기존 qnaform CSS 그대로 복사 */
 body {
-	background-color: #F5F5F5;
-	font-family: 'Montserrat';
-	margin: 0;
-	padding: 0;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	color: #222;
-	line-height: 1.6;
+    /* 기본 폰트와 배경색 설정 */
+    font-family: 'Montserrat'; 
+    color: #222; 
+    margin: 0;
+    padding: 0;
+    background-color:#E5E2DB;
 }
 
-.qna-form-container {
-	width: 900px;
-	background-color: #F5F5F5;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0, 05);
-	padding: 30px 50px;
-	margin-top: 0px;
+main {
+    /* 메인 콘텐츠 중앙 정렬 및 최대 너비 설정 */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
-h1 {
-	text-align: center;
-	font-size: 2em;
-	font-weight: 500;
-	margin-bottom: 40px;
-	padding-top: 20px;
-	color: #222;
-}
-
-/*헤더 스타일*/
+/*==================================
+  2. 헤더 (Header) 스타일
+==================================*/
 .header {
-	width: 100%;
-	max-width: 900px;
-	background-color: #F5F5F5;
-	border-bottom: 1px solid #222;
-	padding: 10px 0;
-	box-sizing: border-box;
+    max-width: 1200px;
+    border-bottom: 1px solid #222; 
+    padding: 20px 0;
+    margin-bottom: 50px;
+    position: relative;
 }
 
 .header-top {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 0 50px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
 }
 
+/* 로고 스타일 */
 .logo {
-	font-family: 'peristiwa';
-	font-size: 64px;
-	font-style: italic;
-	color: #222;
-	display: inline-block;
-	margin-left: 20px;
+    font-family:'Peristiwa', sans-serif;
+    font-size: 64px;
+    color: #222; 
+    margin-left: 20px;
 }
 
-.header-nav {
-	display: flex;
-	gap: 40px;
-	font-size: 30px;
-	font-weight: 300;
-	padding-left: 20px;
+.logo-link {
+    text-decoration: none;
+    color: inherit;
 }
 
-.header-nav a {
-	color: #222;
-	text-decoration: none;
-	padding-bottom: 10px;
-	transition: color 0.2s;
-}
-
-.header-nav a:hover {
-	color: #0088ff;
-}
-
-.user-actions {
-	display: flex;
-	align-items: center;
-	gap: 15px;
+/* 유저 액션 (mypage, login) 스타일 */
+.user-actions a {
+   font-weight: bold;
+    border-left: 1px solid #222;
+    padding-left: 15px;
 }
 
 .membership {
-	background: none;
-	border: none;
-	cursor: pointer;
-	font-size: 0.95em;
-	color: #222;
-	position: relative;
-	padding-right: 20px;
+    background-color: #222; 
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 20px;
+    text-transform: uppercase;
+    position: relative; 
+    z-index: 10;
 }
 
-.user-actions a {
-	text-decoration: none;
-	color: #222;
-	font-size: 0.95em;
-	padding: 8px 15px;
+.user-actions {
+    display: flex;
+    align-items: center;
 }
 
-.user-actions a:last-child {
-	background-color: #222;
-	color: #E5E2DB;
-	border-radius: 3px;
+/* GNB (Visit, Event, Reservation) 스타일 */
+ .header-nav{
+    display: flex;
+    gap: 40px;
+    font-size: 30px;
+    font-weight: 300;
+    padding-left: 20px;
+    margin-bottom: 20px;
 }
 
-/* 상세보기 스타일 */
-.detail-group {
-	margin-bottom: 25px;
-	padding: 20px;
-	background-color: #FAF9F6;
-	border: 1px solid #222;
-	border-radius: 4px;
+.header-nav a{
+   color: #222;
+    padding-bottom: 10px;
+    transition: color 0.2s;
+    text-decoration: none;
 }
 
-.detail-group label {
-	display: block;
-	font-weight: bold;
-	color: #222;
-	margin-bottom: 10px;
-	font-size: 0.95em;
+.header-nav a:hover{
+    color: #0088ff;
 }
 
-.detail-group .detail-content {
-	background-color: #fff;
-	padding: 10px 15px;
-	border-radius: 4px;
-	border: 1px solid #ccc;
-	min-height: 40px;
+.header-help{
+    position: absolute;
+    top: 5px;
+    right: -10px;
+    font-size: 30px;
+    font-weight: 300;
 }
 
-/* 내용 영역 */
-.detail-group .detail-content.textarea {
-	min-height: 200px;
-	white-space: pre-wrap;
+
+/*==================================
+  3. Q&A 폼 (Form) 스타일
+==================================*/
+.page-title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 50px;
+    letter-spacing: 2px;
 }
 
-/* 푸터 스타일 */
+.qna-from {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+.guide-text {
+    text-align: center;
+    font-size: 14px;
+    color: #222;
+    border: 1px solid #ccc; /* --light-border-color 대체 */
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    display: flex;
+    margin-bottom: 15px;
+    border: 1px solid #ccc; /* --light-border-color 대체 */
+}
+
+.form-label {
+    width: 80px;
+    background-color: #f7f7f7;
+    padding: 15px 10px;
+    text-align: center;
+    border-right: 1px solid #ccc; /* --light-border-color 대체 */
+    box-sizing: border-box;
+    font-size: 15px;
+}
+
+.form-group input,
+.form-group textarea {
+    flex-grow: 1;
+    border: none;
+    padding: 15px 20px;
+    font-size: 16px;
+    box-sizing: border-box;
+    resize: none;
+    outline: none;
+}
+
+.content-area {
+    margin-bottom: 30px;
+}
+
+.content-area textarea {
+    height: 150px;
+}
+
+/* 버튼 그룹 스타일 */
+.button-group {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.button-group button {
+    padding: 10px 25px;
+    margin: 0 5px;
+    border: 1px solid #ccc; /* --light-border-color 대체 */
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-cancel {
+    background-color: #F2F0EF;
+    color: #222;
+}
+
+.btn-submit {
+    background-color: #BFD4F9; 
+    color: #fff;
+    /*border-color: #6a9cff;*/
+}
+
+
+/*==================================
+  4. 푸터 (Footer) 스타일
+==================================*/
 .footer {
-	background-color: #CBD4C2;
-	color: #222;
-	padding: 30px 0;
-	margin-top: 80px;
-	text-align: center;
+    background-color: #CBD4C2; /* 연한 녹색 계열 배경 */
+    color: #222;
+    padding: 30px 20px;
+    margin-top: 80px;
+    margin-bottom: 30px;
 }
 
-.footer-content p {
-	margin: 5px 0;
-	font-size: 14px;
+.footer p {
+    margin: 5px 0;
+    font-size: 14px;
+    text-align: left;
 }
-
 .footer-hr {
-	display: none;
+    display: block;
+    width: 100%;
+    border: none;
+    border-top: 1px solid #222;
+    margin: 15px 0;
 }
 
 .footer p:last-child {
-	margin-top: 15px;
-	font-weight: bold;
-}
+    margin-top: 15px;
+} 
+
 </style>
 
-<title>qnaDetail</title>
+<title>qnadetail</title>
 </head>
 <body>
 	<header class="header">
