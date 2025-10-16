@@ -53,6 +53,7 @@ width: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
+	
 }
 </style>
 </head>
@@ -70,17 +71,20 @@ width: 100%;
 		</article>
 		<article class="cancle-reason" aria-required="true">
     <h4>예약정보</h4>
-		<input type="radio" class="mind" id="mind">
-		<label for="mind">단순변심</label>
-		<input type="radio" class="disaster" id="disaster">
-		<label for="disaster">천재지변</label>
-		<input type="radio" class="moved" id="moved">
-		<label for="moved">이벤트일정 변동</label>
-		<input type="radio" class="cancle" id="cancle">
-		<label for="cancle">공연취소</label>
-		<input type="radio" class="disease" id="disease">
-		<label for="disease">건강상의 이유</label>
-		<p>취소금액: 15000원</p>
+		<textarea style="overflow: scroll;" class="cancle-scroll">
+			<input type="radio" class="mind" name="cancleReason" value="단순변심">
+			<label for="mind">단순변심</label>
+			<input type="radio" class="disaster" name="cancleReason" value="천재지변">
+			<label for="disaster">천재지변</label>
+			<input type="radio" class="moved" name="cancleReason" value="이벤트일정 변동">
+			<label for="moved">이벤트일정 변동</label>
+			<input type="radio" class="cancle" name="cancleReason" value="공연취소">
+			<label for="cancle">공연취소</label>
+			<input type="radio" class="disease" name="cancleReason" value="건강상의 이유">
+			<label for="disease">건강상의 이유</label>
+			<p>취소금액: 15000원</p>
+		</textarea>
+
 		<button onclick="history.back()" id="btn-back">취소</button>
 		<button type="submit" class="reservation-cancle">예약취소</button>
 		</article>
