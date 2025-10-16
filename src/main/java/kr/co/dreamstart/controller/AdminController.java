@@ -261,7 +261,7 @@ public class AdminController {
 	//reservation list
 	@GetMapping("/reservation-manage")
 	public String reservationList(Model model,Criteria cri) {
-		List<ReservationDTO> reservationList = reservationMapper.reservationList(cri);
+		List<ReservationDTO> reservationList = reservationMapper.list(cri);
 		model.addAttribute("reservationList", reservationList);
 		return "/admin/reservationManage";
 	}

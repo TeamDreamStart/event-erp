@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 
-	<select id="reservationList" resultMap="reservationMap">
+	<select id="list" resultMap="reservationMap">
 		select * from
 		`reservation`
 		order by `reservation_date`
@@ -33,22 +33,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		reservation_id = #{reservationId}
 	</select>
 
-	<insert id="insert" parameterType="ReservationDTO"
-	useGeneratedKeys="true"
-		keyProperty="reservationId">
+	<insert id="insert" parameterType="ReservationDTO">
 		INSERT INTO `reservation`
-		(`user_id`,
+		(`reservation_id`,`user_id`,
 		`event_id`,
 		`reservation_date`,
 		`status`,
 		`headcount`
 		)
 		VALUES
-		(#{userId},
+		(#{reservationId},#{userId},
 		#{eventId},
 		NOW(),                  <!-- 예약 시간 자동 저장 -->
 		'CONFIRMED',              <!-- PENDING / CONFIRMED / CANCELLED -->
 		#{headCount})
 	</insert>
+	
 
 </mapper>

@@ -12,4 +12,5 @@ public interface ReservationService {
 	public Map<String,Object> reservationWithPay(ReservationDTO rDTO,PaymentDTO pDTO);
 	
 	public int reservation(ReservationDTO rDTO);
+	public long makeId(long eventId);
 }

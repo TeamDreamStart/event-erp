@@ -299,7 +299,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 로그인 영역 -->
 	<!-- 로그인 단건 조회 -->
-	<select id="findByUsername" parameterType="string"
+	<select id="findByUserName" parameterType="string"
 		resultMap="userMap">
 		select
 		`user_id`, `username`, `password`, `name`, `email`,
