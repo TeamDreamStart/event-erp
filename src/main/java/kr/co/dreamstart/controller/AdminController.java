@@ -214,7 +214,7 @@ public class AdminController {
 	}
 
 	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-	// userList
+	// user List
 	@GetMapping("/customers")
 	public String userManage(Criteria cri, @RequestParam(required = false) Integer role,
 			@RequestParam(required = false) String searchType, @RequestParam(required = false) String keyword,
@@ -240,16 +240,16 @@ public class AdminController {
 	//회원 설문조사내역, 예약및 결제정보, Qna 작성내역 조회결과 추가 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	@GetMapping("/customers/{userId}")
 	public String userDetail(@PathVariable("userId") long userId, Model model) {
-		UserDTO userDTO = userService.userDetail(userId);
+		UserDTO userDTO = userService.findByUserId(userId);
+		model.addAttribute("userDTO", userDTO);
 		List<AdminJoinDTO> list = adminService.selectJoinPayByUserId(userId); //예약 및 결제정보
 		model.addAttribute("reservationList", list);
-		model.addAttribute("userDTO", userDTO);
 		List<BoardPostDTO> postList = boardService.selectPostByUserID(userId);
 		model.addAttribute("postList", postList);
 		return "/admin/customerDetailForm";
 	}
 
-	// update
+	// user update
 	@PostMapping("/customers/{userId}")
 	public String userForm(@PathVariable("userId") long userId, UserDTO userDTO,@RequestParam int roleId, RedirectAttributes rttr) {
 		Map<String,Object> map = userService.adminUserUpdate(userDTO,roleId);

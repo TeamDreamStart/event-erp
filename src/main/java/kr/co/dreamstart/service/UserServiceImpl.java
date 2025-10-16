@@ -67,9 +67,7 @@ public class UserServiceImpl implements UserService {
 		return map;
 	}
 
-	public UserDTO userDetail(long userId) {
-		return userMapper.findByUserId(userId);
-	}
+
 
 	// NAVER API 1. access token으로 네이버 API 호출
 	public Map<String, String> getNaverUser(String accessToken) {
@@ -326,5 +324,16 @@ public class UserServiceImpl implements UserService {
 	public UserDTO findUserByUserName(String userName) {
 		return userMapper.findByUserName(userName);
 	}
+
+	@Override
+	public UserDTO findByEmail(String email) {
+		return userMapper.findByEmail(email);
+	}
+
+	@Override
+	public UserDTO findByUserId(long userId) {
+		return userMapper.findByUserId(userId);
+	}
+
 
 }

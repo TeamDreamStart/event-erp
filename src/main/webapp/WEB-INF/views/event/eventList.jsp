@@ -389,7 +389,7 @@ line-height: 1.1;
 <p>특별한 페스티벌을 즐겨보세요!!</p>
 </div>
 <div class="main-event-poster">
-<img src="/resources/img/event1.jpg" alt="가을 음악 페스티벌 포스터" />
+<img src="/resources/img/events/event1.jpg" alt="가을 음악 페스티벌 포스터" />
 </div>
 </div>
 
@@ -426,7 +426,7 @@ Category <span class="dropdown-arrow"></span>
 <!-- <c:if test="${eventDTO.visibility eq 'PUBLIC'}"> -->
 <article class="event-card swiper-slide">
 <figure class="event-card-figure">
-<img src="/resources/img/event1.jpg" alt="가을 음악 페스티벌 포스터"/>
+<img src="/resources/img/events/event1.jpg" alt="가을 음악 페스티벌 포스터"/>
 <figcaption class="hidden">포스터 이미지</figcaption>
 <a href="#" class="event-info-overlay">
 <div class="event-info-content">
@@ -440,7 +440,7 @@ Category <span class="dropdown-arrow"></span>
 </article>
 <article class="event-card swiper-slide">
 <figure class="event-card-figure">
-<img src="/resources/img/event2.jpg" alt="사내 워크숍 포스터"/>
+<img src="/resources/img/events/event2.jpg" alt="사내 워크숍 포스터"/>
 <figcaption class="hidden">포스터 이미지</figcaption>
 <a href="#" class="event-info-overlay">
 <div class="event-info-content">
@@ -454,7 +454,7 @@ Category <span class="dropdown-arrow"></span>
 </article>
 <article class="event-card swiper-slide">
 <figure class="event-card-figure">
-<img src="/resources/img/event3.jpg" alt="개발자 컨퍼런스 포스터"/>
+<img src="/resources/img/events/event3.jpg" alt="개발자 컨퍼런스 포스터"/>
 <figcaption class="hidden">포스터 이미지</figcaption>
 <a href="#" class="event-info-overlay">
 <div class="event-info-content">
@@ -468,7 +468,7 @@ Category <span class="dropdown-arrow"></span>
 </article>
 <article class="event-card swiper-slide">
 <figure class="event-card-figure">
-<img src="/resources/img/event4.jpg" alt="봄 플리마켓 포스터"/>
+<img src="/resources/img/events/event4.jpg" alt="봄 플리마켓 포스터"/>
 <figcaption class="hidden">포스터 이미지</figcaption>
 <a href="#" class="event-info-overlay">
 <div class="event-info-content">
@@ -482,7 +482,7 @@ Category <span class="dropdown-arrow"></span>
 </article>
 <article class="event-card swiper-slide">
 <figure class="event-card-figure">
-<img src="/resources/img/event1.jpg" alt="추가 이벤트 포스터"/>
+<img src="/resources/img/events/event1.jpg" alt="추가 이벤트 포스터"/>
 <figcaption class="hidden">포스터 이미지</figcaption>
 <a href="#" class="event-info-overlay">
 <div class="event-info-content">
@@ -496,7 +496,7 @@ Category <span class="dropdown-arrow"></span>
 </article>
 <article class="event-card swiper-slide">
 <figure class="event-card-figure">
-<img src="/resources/img/event2.jpg" alt="추가 이벤트 포스터"/>
+<img src="/resources/img/events/event2.jpg" alt="추가 이벤트 포스터"/>
 <figcaption class="hidden">포스터 이미지</figcaption>
 <a href="#" class="event-info-overlay">
 <div class="event-info-content">

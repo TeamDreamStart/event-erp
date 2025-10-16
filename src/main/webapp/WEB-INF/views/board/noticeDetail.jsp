@@ -386,11 +386,8 @@ margin: 10px auto;
 		</section>
 	</main>
 
-	<footer class="footer">
-		<p>수원시 팔달구 덕영대로 895번길 11</p>
-		<p>대표전화. 031-420-4204</p>
-		<hr class="footer-hr">
-		<p>@jfdfhfksehfkjsnckaul</p>
+	<footer>
+
 	</footer>
 </body>
 </html>
