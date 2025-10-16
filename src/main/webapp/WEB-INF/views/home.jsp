@@ -1,254 +1,369 @@
+홈 jsp 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="ko">
+<%@ taglib prefix="sec"
+    uri="http://www.springframework.org/security/tags"%>
+<!DOCTYPE html>
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
+<script src="/js/main.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
 
-<title>eventDetail</title>
-<link rel="stylesheet" type="text/css" href="/resources/css/login.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+<title>home</title>
+<link rel="stylesheet" type="text/css" href="/resources/css/home.css">
 <style>
- body {
-
-background-color: #E5E2DB;
-color: #222222;
-font-family: 'Montserrat', sans-serif;
-font-size: 16px;
-font-weight: normal;
-margin: 0;
-padding: 0 120px 60px;
-line-height: 1.6;
-}
-main {
-margin-top: 0;
-padding: 0;
-}
-.section-header {
- position: relative;
- padding-top: 40px;
- margin-bottom: 40px;
- text-align: left;
-}
-h2{
-  font-size: 20px;
-  font-weight: bold;
-  user-select: none;
-  cursor: default;
-  margin-bottom: 40px;
-  padding-top: 40px;
- }
- .container {
-  width: 100%;
-}
- .main-event-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* 설명과 포스터 반반씩 공간 차지 */
-  gap: 60px;
-  align-items: center; /* 세로 공간 중앙 정렬 */
-  width: 80%;
-  max-width: 800px; /* main 중앙에 오도록 너비를 제한 */
-  margin: 0 auto 80px auto; /* 가운데 정렬 및 하단 마진 */
-  text-align: left;
-  background-color: #FAF9F6;
-  padding: 60px 38px 80px 38px;
- }
-
- .event-detail-info {
-  grid-column: 1 / 2;
- }
-
- .event-detail-info h3 {
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: 0;
-  margin-bottom: 20px;
- }
-
- .event-detail-info p {
-  font-size: 14px; /* 텍스트 줄바꿈을 위해 크기 약간 줄임 */
-  margin-bottom: 10px;
-  line-height: 1.6; /* 가독성을 위해 줄 간격 조정 */
- }
-
- .event-detail-info .detail-during-date,
- .event-detail-info .detail-location,
- .event-detail-info .detail-capacity,
- .event-detail-info .detail-status {
-  margin-top: 8px;
-  font-weight: bold;
- }
- .event-detail-info p:not(.detail-during-date, .detail-location, .detail-capacity, .detail-status) {
-  font-weight: normal;
-  margin-top: 0;
- }
-
- .reserve-btn {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 15px;
-  background-color: #CBD4C2;
-  color: #222222;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: bold;
-  border: 1px solid #222222;
-  margin-top: 24px;
-  cursor: pointer;
- }
- .reserve-btn::after {
-  content: '→';
-  margin-left: 8px;
-  font-size: 16px;
- }
-
- .main-event-poster {
-  grid-column: 2 / 3;
-  grid-row: 1 / 2;
-  text-align: right;
-  width: 100%;
-  align-self: center; /* 포스터가 세로 중앙에 오도록 */
- }
-
- .main-event-poster img {
-  max-width: 100%;
-    max-height: 450px; /* 포스터의 최대 높이를 제한하여 정비례로 약간 축소 */
-  height: auto;
-  display: block;
-  box-sizing: border-box;
- }
-
- .add-more-detail {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-top: 40px;
-  padding: 0;
-  width: 100%;
- }
- .add-more-detail article {
-  flex: 1 1 200px;
-  min-width: 200px;
-  padding: 20px;
-  color: #222222;
-  background-color: #D9D9D9;
-  border-radius: 12px;
- }
-  /* main-event-section의 중앙 정렬에 맞춰 add-more-detail 너비 조정 */
-  .content-container > .add-more-detail {
-    max-width: 876px; /* main-event-section의 너비에 맞춤 (800px + 좌우 padding) */
-    margin: 0 auto;
-  }
-
-
- @media (max-width: 1024px) {
-  body {
-   padding: 0 40px 40px;
-  }
-    .content-container > .add-more-detail {
-      max-width: unset;
+    body {
+        background-color: #E5E2DB;
+        color: #222222;
+        font-family: 'Montserrat', sans-serif;
+        font-size: medium;
+        margin: 0;
+        padding: 0 120px 60px; 
+        line-height: 1;
     }
-  .main-event-section {
-   grid-template-columns: 1fr 1fr;
-   gap: 30px;
-      max-width: 900px;
-      padding: 40px 20px;
-  }
-    .main-event-poster img {
-        max-height: 400px; /* 반응형 높이 조정 */
+    main {
+        margin-top: 0; 
+        padding: 0; 
     }
- }
+    .hidden {
+        display: none;
+    }
+    .main-visual figure {
+        margin: 0;
+        width: 100%;
+        line-height: 0;
+    }
+    .visual-image {
+        width: 100%;
+        height: auto;
+        display: block;
+        margin: 0;
+    }
+    .museum-status {
+        text-align: right;
+        margin-top: 20px;
+        font-size: 20px;
+        right: 0;
+        margin-bottom: 80;
+        user-select: none;
+        cursor: default;
+    }
 
- @media (max-width: 768px) {
-  .main-event-section {
-   grid-template-columns: 1fr;
-   gap: 20px;
-   max-width: 100%;
-   padding: 30px 15px;
-  }
-  .event-detail-info {
-   grid-column: 1 / -1;
-  }
-  .main-event-poster {
-   grid-column: 1 / -1;
-   grid-row: auto;
-   order: -1;
-   text-align: center;
-  }
-  .main-event-poster img {
-   max-width: 300px;
-   width: 100%;
-   max-height: unset; /* 모바일에서는 높이 제한 해제 */
-  }
-  
-  .reserve-btn {
-   font-size: 16px;
-  }
-  
-  .add-more-detail article {
-   flex-basis: 100%;
-  }
- }
+    .museum-status p {
+        margin: 5px 0;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+    .section-header h2{
+        font-size: 20px;
+        font-weight: bold;
+        user-select: none;
+        cursor: default;
+        margin: 0;
+        margin-bottom: 40px 
+        ;
+    }
+    .swiper-navigation-custom {
+        display: flex;
+        align-items: center;
+    }
+    .hr2{
+        border: none;
+        border-top: 1px solid #222222;
+        margin-bottom: 0;
+        margin-top: 50px;
+        width: 100%; 
+        box-sizing: border-box;
+    }
+
+    .horizontal-scroll-section.exhibitions {
+        margin-bottom: 60px;
+    }
+
+    .event-card {
+        text-align: center;
+    }
+
+    .event-card figure {
+        margin: 0;
+        width: 100%;
+        height: auto; 
+        user-select: none;
+        cursor: default;
+    }
+
+    .event-card figure img {
+        width: 100%;
+        height: auto; 
+        display: block;
+        border: none;
+    }
+
+    .event-card .title {
+        margin-top: 15px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+.swiper-button-next, .swiper-button-prev {
+        position: static !important; /* 기본 absolute 위치 해제 */
+        transform: none !important; /* 기본 y축 이동 해제 */
+        margin: 0px; /* 버튼 간격 조절 */
+        width: 25px !important; /* 버튼 크기 조절 */
+        height: 25px !important;
+        color: #222222 !important;
+        top: auto; /* 불필요한 top 속성 제거 */
+    }
+
+    /* 버튼 아이콘 크기 조절 */
+    .swiper-button-next:after, .swiper-button-prev:after {
+        font-size: 12px !important;
+    }
+    .calendar-section {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 50px;
+    margin-bottom: 50px;
+}
+
+.calendar-section .section-header {
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+#calendar {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+.fc .fc-toolbar-title {
+    font-size: 1.8em;
+    font-weight: 600;
+}
+
+.fc .fc-button-group > .fc-button {
+    background-color: transparent;
+    border: none;
+    color: #fff; /* #000 -> #222222 */
+    font-size: 1.5em;
+    padding: 0 10px;
+    box-shadow: none;
+}
+.fc .fc-button-group > .fc-button:hover {
+    background-color: transparent;
+    color: #555;
+}
+
+.fc-daygrid-week-number,
+.fc-col-header-cell {
+    background-color: #f9f9f9;
+}
+
+.fc-daygrid-day-number {
+    padding: 8px;
+    font-size: 1em;
+    font-weight: 500;
+}
+
+.fc-daygrid-day-top {
+    justify-content: center;
+}
+
+.fc-event {
+    background-color: #a8a39d;
+    border-color: #a8a39d;
+    font-size: 0.9em;
+    margin-top: 2px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fc-daygrid-event-harness {
+    margin-bottom: 5px;
+}
+
+.calendar-add {
+    display: block;
+    text-align: right;
+    margin-top: 10px;
+    color: #555;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.notice-label {
+    font-size: 2em;
+    font-weight: 600;
+    margin-bottom: 20px;
+    grid-column: 2 / 3;
+    align-self: flex-start;
+}
+
+.notice-item {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #fff;
+}
+
+.notice-item .title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
 </style>
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
-<main>
-<div class="content-container">
-<div class="section-header">
-<h2>Present Event</h2> </div>
+    <main>
+        <section class="main-visual">
+            <figure>
+                <img src="<c:url value='/resources/img/grand.jpg'/>" alt="메인 베너입니다." class="visual-image"/>
+                <figcaption class="hidden">할아버지 할머니가 미술관 구경하는 배너</figcaption>
+            </figure><hr class="hr2">
+            <div class="museum-status">
+                <p>open 10:30 a.m.</p>
+                <p>close 18:00 p.m.</p>
+            </div>
+        </section>
 
-<div class="main-event-section">
-<div class="event-detail-info">
+    <section class="horizontal-scroll-section exhibitions">
+        <div class="section-header">
+            <h2>Event</h2>
+            <div class="swiper-navigation-custom">
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div>
 
-<h3>가을 음악 페스티벌</h3>
-<br>
-<p>지역 아티스트들과 함께하는 가을 음악 페스티벌이 서울 올림픽 공원에서 열립니다. 다양한 장르의 음악 공연이 준비되어 있어 관객들에게 특별한 경험을 선사합니다. 야외 무대에서 펼쳐지는 생생한 사운드와 가을밤의 분위기가 어우러져 색다른 감동을 느낄 수 있습니다. 가족, 친구, 연인과 함께 즐기며 일상의 피로를 풀고 활력을 얻을 수 있는 자리입니다. 음악과 함께하는 가을 축제를 통해 새로운 추억을 만들어 보세요.</p>
-
-<p class="detail-during-date">공연기간: 2025년 9월 28일~2025년 10월 2일</p>
-<p class="detail-location">개최 장소: 서울 올림픽 공원</p>
-<p class="detail-capacity">수용 인원: 500</p>
-<p class="detail-status">관람가능 여부: OPEN</p>
-<a href="/reservations/form" class="reserve-btn">바로 예약하기</a>
+<div #swiperRef="" class="swiper mySwiper">
+    <div class="swiper-wrapper">
+    <article class="event-card swiper-slide">
+                <div class="placeholder">
+                </div>
+                <figure class="event-1">
+                    <img src="<c:url value='/resources/img/events/event1.jpg'/>" alt="전시 1을 넣습니다."/>
+                    <figcaption class="hidden">포스터 이미지</figcaption>
+                    <div class="event-info-overlay">
+            <div class="event-info-content">
+                <h3 class="event-title">${postDTO.title}</h3>
+                <p class="event-start-date">${postDTO.start_date}</p>
+                <p class="event-location">${postDTO.location}</p>
+                
+                <a href="/event/detail/${eventId}" class="detail-btn">자세히 보기</a>
+            </div>
+        </div>
+                </figure>
+                </article>
+                <article class="event-card swiper-slide">
+                <div class="placeholder"></div>
+                <figure class="event-2">
+                    <img src="<c:url value='/resources/img/events/event2.jpg'/>" alt="전시 2를 넣습니다."/>
+                </figure>
+                </article>
+                <article class="event-card swiper-slide">
+                <div class="placeholder"></div>
+                <figure class="event-3">
+                    <img src="<c:url value='/resources/img/events/event3.jpg'/>" alt="전시 3을 넣습니다."/>
+                </figure>
+                </article>
+                <article class="event-card swiper-slide">
+                <div class="placeholder"></div>
+                <figure class="event-4">
+                    <img src="<c:url value='/resources/img/events/event4.jpg'/>" alt="전시 4를 넣습니다."/>
+                </figure>
+                </article>
+                <article class="event-card swiper-slide">
+                <div class="placeholder"></div>
+                <figure class="event-5">
+                    <img src="<c:url value='/resources/img/events/event4.jpg'/>" alt="전시 4를 넣습니다."/>
+                </figure>
+                </article>
+                </div>
 </div>
 
-<div class="main-event-poster">
-<img src="/resources/img/event1.jpg" alt="가을 음악 페스티벌 포스터" />
-</div>
-</div>
-
-<div class="add-more-detail">
-<article class="detail-1">
-<figure class="add-detail-1">
-<img src="#" alt="행사와 관련된 역사">
-<figcaption class="explain">어쩌구저쩌구</figcaption>
-</figure>
-</article>
-<article class="detail-2">
-<figure class="add-detail-2">
-<img src="#" alt="이 행사를 개최하게 된 목적">
-<figcaption class="explain">어쩌구저쩌구</figcaption>
-</figure>
-</article>
-<article class="detail-3">
-<figure class="add-detail-3">
-<img src="#" alt="자리를 빛내줄 게스트 관련">
-<figcaption class="explain">어쩌구저쩌구</figcaption>
-</figure>
-</article>
-<article class="detail-4">
-<figure class="add-detail-4">
-<img src="#" alt="후원명단 및 감사인물">
-<figcaption class="explain">어쩌구저쩌구</figcaption>
-</figure>
-</article>
-</div>
-
-</div>
-</main>
-<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
+    <section class="calendar-section">
+        <div class="section-header">
+            <h2>Calendar</h2>
+            <div id="calendar"></div>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
+            <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+            const rawEvents = [
+                                    {title: '회의A', start: '2025-09-17', order: 1, allDay: true },
+                    {title: '회의B', start: '2025-09-17', order: 2, allDay: true },
+                    {title: '회의C', start: '2025-09-18', order: 3, allDay: true },
+                    {title: '점심약속', start: '2025-09-22', order: 1, allDay: true }
+                                ];
+                            var calendarEl = document.getElementById('calendar');
+                            var calendar = new FullCalendar.Calendar(calendarEl, {
+                
+                                locale: 'ko',
+                                initialView: 'dayGridMonth',
+                                eventOrder: 'order',
+                                eventOrderStrict: true,
+                                fixedWeekCount: false, 
+                                headerToolbar: {
+                                        left: 'prev', 
+                                        center: 'title',
+                                        right: 'next',
+                                },
+                                height: 'auto',
+                                dayCellContent: function(arg) {
+                                        return {
+                                        html: arg.date.getDate().toString()
+                                        };
+                                },
+                events: rawEvents,
+                                dateClick : function(info) {
+                    alert("선택하신 날짜에 일정이 없습니다.");
+                },
+                eventClick : function(info) {
+                    alert("선택하신 날짜에 이벤트가 있습니다.");
+                }
+                            });
+                            calendar.render();
+                        });
+            
+            </script>
+                <span class="calendar-add">더보기</span>
+                
+                <span class="notice-label">Notic</span>
+            </div>
+        </section>
+    </main>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
+<script>
+    var swiper = new Swiper(".mySwiper", {
+    slidesPerView: 4,
+    centeredSlides: false,
+    spaceBetween: 30,
+    pagination: {
+        el: ".swiper-pagination",
+        type: "fraction",
+    },
+    navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+    },
+    });
+</script>
 </body>
 </html>
