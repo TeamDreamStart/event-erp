@@ -144,16 +144,6 @@ main {
     cursor: pointer;
     display: inline-block;
 }
-
-/* --- Q&A 영역 (이미지에는 있지만 구현 제외) --- */
-/*
-.qna-box {
-    position: absolute;
-    top: 0;
-    right: 0;
-    ...
-}
-*/
 </style>
 </head>
 <body>
