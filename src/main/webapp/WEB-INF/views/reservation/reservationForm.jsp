@@ -278,7 +278,7 @@ width: 100%;
    <div class="event-info">
     <h4>이벤트 정보</h4>
         <div class="event-poster">
-          <img src="/resources/img/event1.jpg" alt="Autumn Music Festival Poster" />
+          <img src="/resources/img/events/event1.jpg" alt="Autumn Music Festival Poster" />
         </div>
         
         <div class="event-details">
