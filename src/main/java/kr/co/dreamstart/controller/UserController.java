@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,13 +30,18 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import kr.co.dreamstart.dto.AdminJoinDTO;
+import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.mapper.UserMapper;
+import kr.co.dreamstart.service.AdminService;
+import kr.co.dreamstart.service.BoardService;
 import kr.co.dreamstart.service.EmailSenderService;
 import kr.co.dreamstart.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -43,59 +49,58 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 public class UserController {
-	@Autowired
-	private UserMapper userMapper; // DB연동
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private EmailSenderService emailService;
-
+	
+	@Autowired
+	private BoardService boardService;
+	
+	@Autowired
+	private AdminService adminService;
 
 //	회원가입
-	@GetMapping("/join")		// 바인딩할 빈 객체 생성
-	public String joinForm(@ModelAttribute("user") UserDTO user, 
-						Model model,
-						HttpServletResponse resp,
-						HttpSession session) {
+	@GetMapping("/join") // 바인딩할 빈 객체 생성
+	public String joinForm(@ModelAttribute("user") UserDTO user, Model model, HttpServletResponse resp,
+			HttpSession session) {
 
 		// 뒤로가기 복원 방지 : 캐시 금지
 		resp.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
 		resp.addHeader("Pragma", "no-cache");
 		resp.setDateHeader("Expires", 0);
-		
+
 		// 플래시 모델이 없을때만 새객체 채워주기
 		if (!model.containsAttribute("user")) {
 			model.addAttribute("user", new UserDTO());
 		}
-		
+
 		log.info("GET /joinForm 호출"); // 로그 기록 (확인용)
 		return "account/join"; // JSP 경로 반환
 	}
-	
+
 	@PostMapping("/join")
-	public String joinSubmit(@Valid @ModelAttribute("user") UserDTO form, 
-							BindingResult binding,
-							RedirectAttributes ra,
-							HttpSession session) {
+	public String joinSubmit(@Valid @ModelAttribute("user") UserDTO form, BindingResult binding, RedirectAttributes ra,
+			HttpSession session) {
 
 		// 성별 값 한번더 채크(0/1)
 		if (form.getGender() == null || (form.getGender() != 0 && form.getGender() != 1)) {
 			binding.rejectValue("gender", "gender.invalid", "성별을 올바르게 선택해 주세요.");
 			return "account/join";
 		}
-		
+
 		// 바인딩/검증 에러 -> 플래시에 싵고 PRG
 		if (binding.hasErrors()) {
 			ra.addFlashAttribute("user", form);
 			ra.addFlashAttribute("org.springframework.validation.BindingResult.user", binding);
 			return "redirect:/join";
 		}
-		
+
 		// 이메일 정규화 (공백제거 + 소문자)
 		String email = form.getEmail() == null ? null : form.getEmail().trim().toLowerCase();
 
@@ -107,7 +112,7 @@ public class UserController {
 			ra.addAttribute("error", "이메일 인증을 먼저 완료해 주세요.");
 			return "redirect:/join";
 		}
-		
+
 		// 실제 가입 처리는 서비스에서 (포맷/인코딩 포함)
 		userService.register(form);
 
@@ -164,7 +169,7 @@ public class UserController {
 			@RequestParam(required = false) String email) {
 		if (email != null && !email.isEmpty()) {
 			// 이메일로 회원 존재여부 확인
-			UserDTO userDTO = userMapper.findByEmail(email);
+			UserDTO userDTO = userService.findByEmail(email);
 			if (userDTO != null && userDTO.getSnsId() == null) { // sns 회원 비밀번호 변경 방지
 				String code = emailService.sendEmail(email);
 				// codeCheck용
@@ -211,6 +216,44 @@ public class UserController {
 		userService.resetPassword(email, newPass);
 		// 변경성공 alert
 		return "redirect:/login";
+	}
+
+	// 로그인한 사용자의 ID와 URL 경로의 userId가 같을 때만 접근 허용
+	@PreAuthorize("#userId == principal.userId")
+	@GetMapping("/my-info/{userId}")
+	public String myInfo(@PathVariable("userId") long userId, Model model) {
+		UserDTO userDTO = userService.findByUserId(userId);
+		model.addAttribute("userDTO", userDTO);
+		List<AdminJoinDTO> list = adminService.selectJoinPayByUserId(userId); // 예약 및 결제정보
+		model.addAttribute("reservationList", list);
+		List<BoardPostDTO> postList = boardService.selectPostByUserID(userId);
+		model.addAttribute("postList", postList);
+		return "/user/myInfo";
+	}
+
+	// 로그인한 사용자의 ID와 URL 경로의 userId가 같을 때만 접근 허용
+	@PreAuthorize("#userId == authentication.principal.userId")
+	@GetMapping("/my-info/{userId}/update")
+	public String myInfoForm(@PathVariable("userId") long userId, Model model) {
+		UserDTO userDTO = userService.findByUserId(userId);
+		model.addAttribute("userDTO", userDTO);
+		return "/user/myInfoForm";
+	}
+	
+	@PostMapping("/my-info/{userId}/update")
+	public String myInfoUpdate(@PathVariable("userId") long userId,UserDTO userDTO,RedirectAttributes rttr) {
+		// 회원 정보 수정
+		
+		return "";
+	}
+	
+
+	// 로그인한 사용자의 ID와 URL 경로의 userId가 같을 때만 접근 허용
+	@PreAuthorize("#userId == principal.userId")
+	@GetMapping("/my-info/{userId}/survey")
+	public String myInfoSurvey() {
+
+		return "/user/surveyForm";
 	}
 
 }

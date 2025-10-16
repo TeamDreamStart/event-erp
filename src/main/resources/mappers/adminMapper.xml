@@ -57,7 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		JOIN event e ON r.event_id
 		= e.event_id
 		LEFT JOIN payment p ON r.reservation_id = p.reservation_id
-		WHERE r.user_id = #{userId}
+		WHERE r.user_id = #{userId} order by r.reservation_date desc
 	</select>
 
 	<!-- 옮겨야되는데 -->

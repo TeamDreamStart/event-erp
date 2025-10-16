@@ -111,7 +111,8 @@
 					<sec:authorize access="isAuthenticated()">
 						<span><strong><sec:authentication
 									property="principal.name" /></strong> 님 환영합니다 👋</span>
-						<a href="<c:url value='/myinfo'/>" class="mypage-link">mypage</a>
+						<a href="/my-info/<sec:authentication
+									property="principal.userId" />" class="mypage-link">mypage</a>
 						<form method="post" action="<c:url value='/logout'/>"
 							style="display: inline; margin: 0;">
 							<sec:csrfInput />
@@ -119,7 +120,7 @@
 						</form>
 					</sec:authorize>
 					<sec:authorize access="isAnonymous()">
-						<a href="<c:url value='/myinfo'/>" class="mypage-link"
+						<a href="<c:url value='/login'/>" class="mypage-link"
 							style="display: none;">mypage</a>
 						<a
 							href="<c:url value='/login'><c:param name='mode' value='member'/></c:url>"
