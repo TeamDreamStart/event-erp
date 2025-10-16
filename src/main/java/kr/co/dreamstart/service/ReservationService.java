@@ -13,4 +13,5 @@ public interface ReservationService {
 	
 	public int reservation(ReservationDTO rDTO);
 	public long makeId(long eventId);
+	public ReservationDTO selectById(long reservationId);
 }

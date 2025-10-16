@@ -10,5 +10,6 @@ import kr.co.dreamstart.dto.AdminJoinDTO;
 @Service
 public interface AdminService {
 	public void recordAdminLog(AdminActionLogDTO adminActionLogDTO);
-	public List<AdminJoinDTO> selectReservationPaymentByUserId(long userId);
+	public List<AdminJoinDTO> selectJoinPayByUserId(long userId);
+	public AdminJoinDTO selectJoinPayById(long reservationId);
 }

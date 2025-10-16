@@ -65,5 +65,10 @@ public class ReservationServiceImpl implements ReservationService {
 	    return Long.parseLong(reservationIdStr);
 	}
 
+	@Override
+	public ReservationDTO selectById(long reservationId) {
+		return rMapper.select(reservationId);
+	}
+
 
 }

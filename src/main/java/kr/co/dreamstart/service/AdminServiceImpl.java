@@ -28,9 +28,17 @@ public class AdminServiceImpl implements AdminService {
 		}
 	}
 
+	// reservation으로 옯겨야함
 	@Override
-	public List<AdminJoinDTO> selectReservationPaymentByUserId(long userId) {
-		return adminMapper.selectReservationPaymentByUserId(userId);
+	public List<AdminJoinDTO> selectJoinPayByUserId(long userId) {
+		return adminMapper.selectJoinPayByUserId(userId);
 	}
+
+	@Override
+	public AdminJoinDTO selectJoinPayById(long reservationId) {
+		return adminMapper.selectJoinPayById(reservationId);
+	}
+	
+	
 
 }

@@ -13,8 +13,10 @@ public interface AdminMapper {
 	public List<AdminActionLogDTO> adminActionList();
 	public int recordAdminLog(AdminActionLogDTO logDTO);
 	
-	
 	//userDetail
-	public List<AdminJoinDTO> selectReservationPaymentByUserId(long userId);
+	//reservation으로 옮겨야...되는데...@@@@@@@@@@@@@@@@@@
+	public List<AdminJoinDTO> selectJoinPayByUserId(long userId);
+	public AdminJoinDTO selectJoinPayById(long reservationId);
+	
 	
 }

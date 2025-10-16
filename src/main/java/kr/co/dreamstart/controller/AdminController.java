@@ -241,7 +241,7 @@ public class AdminController {
 	@GetMapping("/customers/{userId}")
 	public String userDetail(@PathVariable("userId") long userId, Model model) {
 		UserDTO userDTO = userService.userDetail(userId);
-		List<AdminJoinDTO> list = adminService.selectReservationPaymentByUserId(userId); //예약 및 결제정보
+		List<AdminJoinDTO> list = adminService.selectJoinPayByUserId(userId); //예약 및 결제정보
 		model.addAttribute("reservationList", list);
 		model.addAttribute("userDTO", userDTO);
 		List<BoardPostDTO> postList = boardService.selectPostByUserID(userId);

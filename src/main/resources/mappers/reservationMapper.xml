@@ -22,7 +22,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="list" resultMap="reservationMap">
 		select * from
 		`reservation`
-		order by `reservation_date`
+		order by
+		`reservation_date`
 		limit
 		#{cri.pageStart},#{cri.perPageNum}
 	</select>
@@ -48,6 +49,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		'CONFIRMED',              <!-- PENDING / CONFIRMED / CANCELLED -->
 		#{headCount})
 	</insert>
-	
+
+
+
+
 
 </mapper>

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import kr.co.dreamstart.dto.AdminJoinDTO;
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.ReservationDTO;
 
@@ -15,5 +16,6 @@ public interface ReservationMapper {
 	public List<ReservationDTO> list(@Param("cri")Criteria cri);
 	public ReservationDTO select(long reservationId);
 	public int insert(ReservationDTO reservationDTO);
+	public AdminJoinDTO selectJoinPayById(long reservationId);
 	
 }
