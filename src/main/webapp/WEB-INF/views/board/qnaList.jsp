@@ -1,419 +1,370 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8" %>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <link href="https://fonts.cdnfonts.com/css/peristiwa" rel="stylesheet">
-            <link href="https://fonts.google.com/specimen/Montserrat" rel="stylesheet">
-            <link rel="stylesheet" href="/webapp/resources/css/qnaList.css">
-            <style>
-                /* 1. 공통 및 기본 스타일 */
-                body {
-                    font-family: 'Montserrat';
-                    margin: 0;
-                    padding: 0;
-                    background-color: #E5E2DB;
-                    color: #222;
-                    line-height: 1.6;
-                }
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link href="https://fonts.cdnfonts.com/css/peristiwa" rel="stylesheet">
+        <link href="https://fonts.google.com/specimen/Montserrat" rel="stylesheet"> 
+        <link rel="stylesheet" href="/webapp/resources/css/noticeList.css">
 
-                .main-container {
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    padding: 20px;
-                    background-color: white;
-                }
+<style>
 
-                a {
-                    text-decoration: none;
-                    color: inherit;
-                }
+/* 1. 공통 및 기본 스타일 */
+body {
+    font-family: 'Montserrat', sans-serif; /* 폰트 fallback 추가 */
+    margin: 0;
+    padding: 0;
+    background-color: #E5E2DB;
+    color: #222;
+    line-height: 1.6;
+}
 
-                ul {
-                    list-style: none;
-                    padding: 0;
-                    margin: 0;
-                }
+.container { /* .main-container 대신 HTML의 .container 사용 */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
 
-                button {
-                    cursor: pointer;
-                    background: none;
-                    border: none;
-                    padding: 0;
-                    font-family: inherit;
-                    color: inherit;
-                }
+a {
+    text-decoration: none;
+    color: inherit;
+}
 
-                /* 3. Main Content (qna) 스타일 */
-                .main-content {
-                    padding-top: 80px;
-                }
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
 
-                .page-title {
-                    text-align: center;
-                    font-size: 30px;
-                    font-weight: bold;
-                    margin: 65px 0 40px 0;
-                    position: relative;
-                    padding-bottom: 10px;
-                }
+button {
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    color: inherit;
+}
 
-                /* 검색창 */
-                .search-bar {
-                    display: flex;
-                    justify-content: center;
-                    margin-bottom: 50px;
-                    border: none;
-                    /*테두리 제거*/
-                    max-width: 888px;
-                    margin: 50px auto;
-                    gap: 43px;
-                }
+/* 3. Main Content (qna) 스타일 */
+/* .main-content는 HTML에 없으므로 스타일 제거 */
 
-                /*검색 입력창*/
-                .search-input {
-                    width: 733px;
-                    height: 60px;
-                    box-sizing: border-box;
-                    padding: 0px 20px;
-                    background-color: #CBD4C2;
-                    border: 1px solid #222;
-                    border-radius: 15px;
-                    flex-grow: 0;
-                    box-shadow: none;
-                    outline: none;
-                    font-size: 18px;
-                    color: #222;
-                    opacity: 1;
-                }
+.page-title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin: 80px 0 40px 0;
+    position: relative;
+    padding-bottom: 10px;
+}
 
-                .search-input::placeholder {
-                    color: #888888;
-                    opacity: 1;
-                }
+/* 검색창 */
+.search-bar {
+    display: flex;
+    justify-content: center;
+    border: none; /*테두리 제거*/
+    max-width: 888px;
+    margin: 50px auto;
+    gap: 43px;
+}
 
-                /*검색 버튼*/
-                .search-btn {
-                    width: 112px;
-                    height: 60px;
-                    box-sizing: border-box;
-                    padding: 0px;
-                    background-color: #CBD4C2;
-                    border: 1px solid #222;
-                    border-radius: 15px;
-                    font-size: 18px;
-                    outline: none;
-                    font-weight: bold;
+/*검색 입력창*/
+.search-bar input[type="text"] { /* 클래스가 없어 태그 선택자로 변경 */
+    width: 733px;
+    height: 60px;
+    box-sizing: border-box;
+    padding: 0px 20px;
+    background-color: #CBD4C2;
+    border: 1px solid #222;
+    border-radius: 15px;
+    flex-grow: 0;
+    box-shadow: none;
+    outline: none;
+    font-size: 18px;
+    color: #222;
+    opacity: 1;
+}
 
-                    /* 텍스트 정렬 */
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
+.search-bar input[type="text"]::placeholder {
+    color: #888888;
+    opacity: 1;
+}
 
-                    /*버튼 텍스트 색상*/
-                    color: #222;
-                }
+/*검색 버튼*/
+.search-bar button { /* 클래스가 없어 태그 선택자로 변경 */
+    width: 112px;
+    height: 60px;
+    box-sizing: border-box;
+    padding: 0px;
+    background-color: #CBD4C2;
+    border: 1px solid #222;
+    border-radius: 15px;
+    font-size: 18px;
+    outline: none;
+    font-weight: bold;
 
-                .qna-header {
-                    display: flex;
-                    justify-content: space-between;
-                    font-weight: bold;
-                    font-size: 14px;
-                    padding: 0 0px 10px 0;
-                    /* 아래쪽 패딩으로 테이블과 간격 조정 */
-                    margin: 0 auto;
-                    max-width: 888px;
-                    border-bottom: none;
-                    background-color: transparent;
-                }
+    /* 텍스트 정렬 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-                .qna-header>div:nth-child(1) {
-                    width: 50%;
-                    text-align: left;
-                    padding-left: 20px;
-                }
+    /*버튼 텍스트 색상*/
+    color: #222;
+}
 
-                .qna-header>div:nth-child(2) {
-                    width: 15%;
-                    text-align: center;
-                }
+/* ======================================================= */
+/* ⭐️ 테이블 구조를 대체하는 Q&A 목록 스타일 */
+/* ======================================================= */
 
-                .qna-header>div:nth-child(3) {
-                    width: 15%;
-                    text-align: center;
-                }
+/* Q&A 헤더 (테이블 <thead> 대체) */
+.qna-header-wrapper {
+    max-width: 888px;
+    margin: 0 auto;
+    font-weight: bold;
+    font-size: 14px;
+    padding-bottom: 10px;
+}
 
-                .qna-header>div:nth-child(4) {
-                    width: 10%;
-                    text-align: center;
-                }
+.qna-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 0px 10px 0;
+    border-bottom: 1px solid #AFAFAF; /* 헤더 구분선 */
+}
 
-                /* ⭐️ Q&A 리스트 박스 컨테이너 (888x584 크기 및 스크롤) */
-                .qna-list-container {
-                    max-width: 888px;
-                    height: 584px;
-                    margin: 10px auto 0 auto;
-                    /* 헤더 텍스트와 분리를 위한 상단 마진 */
-                    border: 1px solid #AFAFAF;
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-                    background-color: white;
-                    /* 리스트 배경색을 흰색으로 설정 */
-                    overflow-y: auto;
-                    /* 내용이 넘칠 경우 스크롤 허용 */
-                }
+/* 헤더 컬럼 너비 지정 */
+.qna-header > div:nth-child(1) { width: 50%; text-align: left; padding-left: 20px; } /* 제목 */
+.qna-header > div:nth-child(2) { width: 15%; text-align: center; } /* 작성자 */
+.qna-header > div:nth-child(3) { width: 15%; text-align: center; } /* 등록일자 */
+.qna-header > div:nth-child(4) { width: 10%; text-align: center; } /* 상태 */
 
-                .qna-detail {
-                    padding: 10px 20px;
-                    border-bottom: 1px solid #AFAFAF;
-                }
+/* ⭐️ Q&A 리스트 박스 컨테이너 (888x584 크기 및 스크롤) */
+.qna-list-container {
+    max-width: 888px;
+    height: 584px;
+    margin: 0 auto; 
+    border: 1px solid #AFAFAF;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    background-color: white; /* 리스트 배경색을 흰색으로 설정 */
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 허용 */
+}
 
-                .qna-summary {
-                    font-weight: 500;
-                    font-size: 16px;
-                    cursor: pointer;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                }
+/* ⭐️ 각 Q&A 항목 (details 태그) */
+.qna-item {
+    border-bottom: 1px solid #E5E5E5;
+    padding: 0;
+    margin: 0;
+}
 
-                .qna-title {
-                    color: #222;
-                    font-size: 14px;
-                }
+.qna-item:last-child {
+    border-bottom: none;
+}
 
-                .qna-meta {
-                    font-size: 14px;
-                    color: #222;
-                }
+/* Summary (게시글 제목, 정보) 스타일 */
+.qna-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    font-size: 15px;
+    cursor: pointer; /* 클릭 가능함을 명시 */
+    list-style: none; /* 기본 화살표 숨기기 */
+}
 
-                .qna-answer {
-                    margin-top: 10px;
-                    padding: 10px 0 0 0;
-                    border-top: 1px dashed #ccc;
-                    font-size: 14px;
-                    color: #595959;
-                }
+/* summary 태그의 기본 화살표를 제거하고 커스텀 스타일 적용 (선택 사항) */
+.qna-summary::-webkit-details-marker {
+    display: none;
+}
+.qna-summary::before {
+    content: ''; /* 기본 화살표 대체 */
+    display: none; 
+}
 
-                details[open] .qna-summary {
-                    margin-bottom: 10px;
-                }
 
-                /* ⭐️ Q&A 리스트 테이블 */
-                .qna-table {
-                    /* 🌟 notice-table -> qna-table 변경 */
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin: 0;
-                    text-align: center;
-                }
+/* summary 호버 시 배경색 변경 (사용자가 클릭할 것임을 인지하도록) */
+.qna-summary:hover {
+    background-color: #F8F8F8;
+}
 
-                .qna-table thead th {
-                    /* 🌟 .notice-table -> .qna-table 변경 */
-                    border-bottom: 1px solid #222;
-                }
+/* Summary 컬럼 너비 지정 */
+.qna-col {
+    padding: 0 5px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
-                .qna-table tbody td {
-                    /* 🌟 .notice-table -> .qna-table 변경 */
-                    padding: 12px 0;
-                    border-bottom: 1px solid #AFAFAF;
-                    color: #222;
-                    font-size: 15px;
-                    vertical-align: middle;
-                }
+.qna-col.title-col {
+    width: 50%;
+    text-align: left;
+    font-weight: 500;
+    padding-left: 20px;
+}
+.qna-summary > .qna-col:nth-child(2) { width: 15%; } /* 작성자 */
+.qna-summary > .qna-col:nth-child(3) { width: 15%; } /* 등록일자 */
+.qna-summary > .qna-col:nth-child(4) { width: 10%; font-weight: bold; } /* 상태 */
 
-                .qna-table tbody tr:last-child td {
-                    /* 🌟 .notice-table -> .qna-table 변경 */
-                    border-bottom: none;
-                    /* 마지막 줄 아래 선 제거 */
-                }
 
-                /* 테이블 컬럼 너비 지정 */
-                .qna-table td:nth-child(1) {
-                    /* 🌟 .notice-table -> .qna-table 변경 */
-                    width: 50%;
-                    text-align: left;
-                    padding-left: 20px;
-                }
+/* 'Q' 아이콘 스타일 */
+.q-icon {
+    content: 'Q';
+    margin-right: 10px;
+    font-size: 18px; /* 크기 조정 */
+    color: #888888;
+    font-weight: bold;
+}
 
-                /* 제목 */
 
-                .qna-table td:nth-child(2) {
-                    /* 🌟 .notice-table -> .qna-table 변경 */
-                    width: 15%;
-                }
+/* Details (펼쳐졌을 때의 본문 내용) 스타일 */
+.qna-content {
+    padding: 20px;
+    padding-left: 40px; /* 제목과의 정렬을 위해 왼쪽 패딩 조정 */
+    margin-top: -1px; /* summary와 겹치는 선 보정 */
+    border-top: 1px dashed #DDD;
+    background-color: #FDFDFD;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.8;
+}
 
-                /* 작성자 */
+.qna-content strong {
+    color: #222;
+}
 
-                .qna-table td:nth-child(3) {
-                    /* 🌟 .notice-table -> .qna-table 변경 */
-                    width: 15%;
-                }
+.view-detail-link {
+    display: inline-block;
+    margin-top: 10px;
+    color: #0088ff;
+    font-weight: bold;
+}
 
-                /* 등록일자 */
 
-                .qna-table td:nth-child(4) {
-                    /* 🌟 .notice-table -> .qna-table 변경 */
-                    width: 10%;
-                    font-weight: bold;
-                }
+/* 답변대기 상태 강조 */
+.status-waiting {
+    color: #888888;
+}
 
-                /* 상태 */
+/* 답변완료 상태 강조 */
+.status-complete {
+    color: #0088ff;
+}
 
-                /* 질문 제목 링크 스타일 */
-                .qna-table td a {
-                    /* 🌟 .notice-table -> .qna-table 변경 */
-                    display: block;
-                    /* 전체 셀 클릭 가능하게 */
-                    font-weight: 500;
-                    color: #222;
-                    padding: 0;
-                    text-align: left;
-                }
+/* 페이지네이션 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    align-items: center;
+    margin-top: 40px;
+}
 
-                .qna-table td a::before {
-                    /* 🌟 .notice-table -> .qna-table 변경 */
-                    content: 'Q';
-                    margin-right: 10px;
-                    font-size: 22px;
-                    /* 크기 조정 */
-                    color: #888888;
-                }
+.pagination a {
+    padding: 5px 10px;
+    font-size: 18px;
+    color: #888888;
+    transition: color 0.2s;
+}
 
-                /* 답변대기 상태 강조 */
-                .status-waiting {
-                    color: #888888;
-                    font-size: 14px;
-                }
+.pagination a.active {
+    font-weight: bold;
+}
 
-                /* 답변완료 상태 강조 */
-                .status-complete {
-                    color: #0088ff;
-                    font-size: 14px;
-                }
+.pagination a:hover {
+    color: #222;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+    <header>
+        <jsp:include page="/WEB-INF/views/common/header.jsp"/>
+    </header>
+    <!--메인 컨테이너-->
+    <div class="container">
+        <div class="page-title">Q&A</div>
+        <!--검색창-->
+        <div class="search-bar">
+            <input type="text" placeholder="제목/작성자/등록일자 검색">
+            <button class="search-btn">검색</button>
+        </div>
+    </div>
+    
+    <!-- Q&A 헤더 (테이블 헤더 대체) -->
+    <!-- .notice-table을 대체하기 위한 목록 헤더 -->
+    <div class="qna-header-wrapper">
+        <div class="qna-header">
+            <div>제목</div>
+            <div>작성자</div>
+            <div>등록일자</div>
+            <div>상태</div>
+        </div>
+    </div>
 
-                /* 페이지네이션 */
-                .pagination {
-                    display: flex;
-                    justify-content: center;
-                    gap: 16px;
-                    align-items: center;
-                    margin-top: 40px;
-                }
 
-                .pagination a {
-                    padding: 5px 10px;
-                    font-size: 18px;
-                    color: #888888;
-                    transition: color 0.2s;
-                }
+    <!-- ⭐️ Q&A 리스트 박스 컨테이너 (스크롤 및 리스트 목록) -->
+    <div class="qna-list-container">
+        <c:choose>
+            <c:when test="${empty postList}">
+                <div class="empty-list-message">게시글이 없습니다.</div>
+            </c:when>
+            <c:otherwise>
+                <c:forEach var="postDTO" items="${postList}">
+                    <c:if test="${postDTO.visibility eq 'PUBLIC' and postDTO.category eq 'QNA'}">
+                        <!-- ⭐️ 각 게시글: details로 감싸 접기/펴기 기능 구현 -->
+                        <details class="qna-item">
+                            
+                            <!-- Summary: 항상 보이는 제목/정보 줄 -->
+                            <summary class="qna-summary">
+                                <div class="qna-col title-col">
+                                    <span class="q-icon">Q</span>
+                                    ${postDTO.title}
+                                </div>
+                                <div class="qna-col">${postDTO.userId}</div>
+                                <div class="qna-col">${postDTO.createdAt}</div>
+                                <div class="qna-col status-col">
+                                    <c:choose>
+                                        <c:when test="${postDTO.commentCount > 0}">
+                                            <span class="status-complete">답변완료</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="status-waiting">답변대기</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </summary>
+                            
+                            <!-- Details: 펼쳐졌을 때 보이는 내용 (실제 Post 내용) -->
+                            <div class="qna-content">
+                                <p>
+                                    <!-- 실제 DB에서 가져온 content 내용 출력 (가정) -->
+                                    <strong>문의 내용 요약:</strong> ${postDTO.title}에 대한 상세 문의 내용입니다. <br>
+                                    <c:if test="${postDTO.commentCount > 0}">
+                                        <br>
+                                        <strong>[답변]</strong> 답변 내용이 여기에 표시됩니다.
+                                    </c:if>
+                                    <br>
+                                    <a href="/qna/${postDTO.postId}" class="view-detail-link">전체 페이지에서 상세 내용 보기</a>
+                                </p>
+                            </div>
+                            
+                        </details>
+                    </c:if>
+                </c:forEach>
+            </c:otherwise>
+        </c:choose>
+    </div>
+    
+    <!-- 이전에 있던 table 태그는 제거되었습니다. -->
 
-                .pagination a.active {
-                    font-weight: bold;
-                }
-
-                .pagination a:hover {
-                    color: #222;
-                    cursor: pointer;
-                }
-            </style>
-        </head>
-
-        <body>
-                <header>
-                       
-                <jsp:include page="/WEB-INF/views/common/header.jsp" />
-                   
-            </header>
-                    <div class="container">
-                        <div class="page-title">Q&A</div>
-                                <div class="search-bar">
-                                <input type="text" class="search-bar" placeholder="제목/작성자/등록일자 검색">
-                                <button class="search-btn">검색</button>
-                            </div>
-                    </div>
-                    <div class="qna-box">
-                    <table class="qna-table">         <thead>
-                                    <tr>
-                                            <th>제목</th>
-                                            <th>작성자</th>
-                                            <th>등록일자</th>
-                                            <th>상태</th>
-                                        </tr>
-                                </thead>
-                            <tbody>
-                                    <c:choose>
-                                            <c:when test="${empty postList}">
-                                                    <tr>
-                                                            <td class="text-center" colspan="6">게시글이 없습니다.</td>
-                                                        </tr>
-                                                </c:when>
-                                            <c:otherwise>
-                                                    <c:forEach var="postDTO" items="${postList}">
-                                                            <c:if                            
-                                        test="${postDTO.visibility eq 'PUBLIC' and postDTO.category eq 'QNA'}">
-                                                                    <tr>
-                                                                            <td colspan="4" style="padding: 0;">
-                                                                                    <details class="qna-detail">
-                                                                                            <summary
-                                                        class="qna-summary">
-                                                                                                    <span
-                                                            class="qna-title">Q. ${postDTO.title}</span>
-                                                                                                    <span
-                                                            class="qna-meta">${postDTO.userId} | ${postDTO.createdAt} |
-                                                                                                            <c:choose>
-                                                                                                                   
-                                                                <c:when test="${postDTO.commentCount > 0}">
-                                                                                                                       
-                                                                        <span style="color:#0088FF">답변완료</span>
-                                                                                                                       
-                                                                </c:when>
-                                                                                                                   
-                                                                <c:otherwise>
-                                                                                                                       
-                                                                        <span class="status-waiting">답변대기</span>
-                                                                                                                       
-                                                                </c:otherwise>
-                                                                                                               
-                                                            </c:choose>
-                                                                                                        </span>
-                                                                                                </summary>
-                                                                                            <div class="qna-answer">
-                                                                                                    <c:choose>
-                                                                                                            <c:when
-                                                                test="${postDTO.commentCount > 0}">
-                                                                                                                       
-                                                                                                                <p>관리자
-                                                                    답변 내용이 여기에 들어갑니다.</p>
-                                                                                                               
-                                                            </c:when>
-                                                                                                           
-                                                            <c:otherwise>
-                                                                                                                    <p>
-                                                                    아직 답변이 등록되지 않았습니다.</p>
-                                                                                                               
-                                                            </c:otherwise>
-                                                                                                        </c:choose>
-                                                                                                </div>
-                                                                                        </details>
-                                                                                </td>
-                                                                        </tr>
-                                                                </c:if>
-                                                        </c:forEach>
-                                                </c:otherwise>
-                                        </c:choose>
-                                </tbody>
-                        </table>
-                    </div>
-                    <div class="pagination">
-                        <a href="#">&lt;</a> <a href="#">1</a> <a href="#">2</a> <a href="#">3</a>
-                        <a href="#">&gt;</a>
-                    </div>
-                <footer>
-                           
-                <jsp:include page="/WEB-INF/views/common/footer.jsp" />
-                   
-            </footer>
-        </body>
-
-        </html>
+    <!--페이지네이션-->
+    <div class="pagination">
+        <a href="#">&lt;</a> <a href="#">1</a> <a href="#">2</a> <a href="#">3</a>
+        <a href="#">&gt;</a>
+    </div>
+    <footer>
+            <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
+    </footer>
+</body>
+</html>
