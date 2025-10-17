@@ -202,6 +202,7 @@ main {
 						<c:forEach var="rDTO" items="${reservationList }">
 							<div class="tmp" onclick="location.href='/reservations/${rDTO.reservationId}'">
 								<span class="tmp-span">${rDTO.eventTitle}</span>
+								<span class="tmp-span">${rDTO.reservationId}</span>
 								<span  class="tmp-span">${rDTO.reservationDate}</span>
 								<%-- <span>${rDTO.location}</span> --%>
 								<span  class="tmp-span">건물이름</span>
@@ -220,6 +221,11 @@ main {
 						<a href="/events" class="event-button">이벤트 둘러보기</a>
 					</div>
 				</c:if>
+			</div>
+			
+			<div>
+				이벤트 설문조사
+				설문 작성 가능한 이벤트
 			</div>
 		</div>
 	</main>

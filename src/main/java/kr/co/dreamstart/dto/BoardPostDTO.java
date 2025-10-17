@@ -22,4 +22,9 @@ public class BoardPostDTO {
     //댓글 개수
     private int commentCount;
     
+    //사용자 화면에서 리스트에 댓글 표시
+    private String commentContent;
+    private String commentCreatedAt;
+    
+    
 }

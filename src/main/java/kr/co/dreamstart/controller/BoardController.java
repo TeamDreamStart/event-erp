@@ -1,5 +1,6 @@
 package kr.co.dreamstart.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,34 +54,30 @@ public class BoardController {
 
 	// Q&A 목록
 	@GetMapping("/qna")
-	public String qnaList(@RequestParam(required = false) String keyword, Criteria cri, Model model) {
-		Map<String, Object> map = boardService.postList(cri, "QNA", "PUBLIC", "title", keyword);
-		model.addAttribute("totalCount", map.get("totalCount"));
-		model.addAttribute("postList", map.get("postList")); // 해당 게시물 commentCount 포함
+	public String qnaList(@RequestParam(required = false) String searchType,@RequestParam(required = false) String keyword, Criteria cri, Model model) {
+		Map<String, Object> map = boardService.listWithComment(cri, "QNA",searchType, keyword);
+		model.addAttribute("postList", map.get("postList"));
 		model.addAttribute("pageVO", map.get("pageVO"));
 		model.addAttribute("cri", map.get("cri"));
-		System.out.println( map.get("postList"));
 		// 검색 조건 별도 전달
 		model.addAttribute("keyword", keyword);
 		return "/board/qnaList";
 	}
 
 	// Q&A 상세보기
-	@GetMapping("/qna/{postId}")
-	public String qnaDetail(@PathVariable("postId") long postId, Model model) {
-		//인증된 사용자 정보랑 qna 작성자랑 같아야됨
-		Map<String, Object> map = boardService.postDetail("QNA", postId);
-		model.addAttribute("postDTO", map.get("postDTO"));
-		model.addAttribute("prevDTO", map.get("prevDTO"));
-		model.addAttribute("nextDTO", map.get("nextDTO"));
-		model.addAttribute("commentList", map.get("commentList"));
-		return "/board/qnaDetail";
-	}
+//	@GetMapping("/qna/{postId}")
+//	public String qnaDetail(@PathVariable("postId") long postId, Model model) {
+//		//인증된 사용자 정보랑 qna 작성자랑 같아야됨
+//		Map<String, Object> map = boardService.postDetail("QNA", postId);
+//		model.addAttribute("postDTO", map.get("postDTO"));
+//		model.addAttribute("prevDTO", map.get("prevDTO"));
+//		model.addAttribute("nextDTO", map.get("nextDTO"));
+//		return "/board/qnaDetail";
+//	}
 
 	// Q&A 등록
 	@GetMapping("/qna/form")
 	public String qnaGet() {
-		
 		return "/board/qnaForm";
 	}
 	
