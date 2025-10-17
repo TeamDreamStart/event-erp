@@ -8,6 +8,7 @@
 <meta charset="UTF-8">
 <title>home</title>
 
+<!-- 공토 css reset/common -->
 <link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
 <link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 <link

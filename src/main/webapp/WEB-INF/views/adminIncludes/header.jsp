@@ -99,8 +99,33 @@
 			class="fas fa-fw fa-chart-area"></i> <span>Charts</span></a></li>
 
 	<!-- 관리자 테이블 목록  -->
-	<li class="nav-item"><a class="nav-link" href="/admin/event-manage"> <i
-			class="fas fa-fw fa-table"></i> <span>Event Manage</span></a></li>
+	<%-- ===== Event Manage ===== --%>
+	<c:set var="ctx" value="${pageContext.request.contextPath}" />
+	<c:set var="uri" value="${pageContext.request.requestURI}" />
+	<c:set var="isEvent" value="${fn:startsWith(uri, ctx.concat('/admin/events'))}" />
+	
+	<li class="nav-item ${isEvent ? 'active' : ''}">
+	  <a class="nav-link collapsed" href="#"
+	     data-toggle="collapse" data-target="#collapseEvent"
+	     aria-expanded="${isEvent ? 'true' : 'false'}" aria-controls="collapseEvent">
+	    <i class="fas fa-fw fa-calendar-alt"></i>
+	    <span>Event Manage</span>
+	  </a>
+	  <div id="collapseEvent"
+	       class="collapse ${isEvent ? 'show' : ''}"
+	       aria-labelledby="headingEvent" data-parent="#accordionSidebar">
+	    <div class="bg-white py-2 collapse-inner rounded">
+	      <h6 class="collapse-header">Events</h6>
+	
+	      <a class="collapse-item ${uri == ctx.concat('/admin/events') ? 'active' : ''}"
+	         href="<c:url value='/admin/events'/>">Event List</a>
+	
+	      <a class="collapse-item ${uri == ctx.concat('/admin/events/form') ? 'active' : ''}"
+	         href="<c:url value='/admin/events/form'/>">Create Event</a>
+	    </div>
+	  </div>
+	</li>
+
 	<li class="nav-item"><a class="nav-link" href="/admin/reservation-manage"> <i
 			class="fas fa-fw fa-table"></i> <span>Reservation Manage</span></a></li>
 	<li class="nav-item"><a class="nav-link" href="/admin/payment-manage"> <i

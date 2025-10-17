@@ -46,7 +46,8 @@ public class CustomUserDetailService implements UserDetailsService {
 		// UserDetails 생성 후 반환
 		return new CustomUserDetails(
 				u.getUserId(),
-				u.getUsername(),
+				u.getName(),	// name(표시용)
+				u.getEmail(),	// =username
 				u.getPassword(),
 				enabled,
 				authorities

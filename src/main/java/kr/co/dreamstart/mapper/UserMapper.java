@@ -69,6 +69,9 @@ public interface UserMapper {
 	// 아이디로 사용자 단건
 	public UserDTO findByUserName(String userName);
 	
+	// 이름으로 찾기
+	public String findNameById(Long usrId);
+	
 	// 중복체크
 	public int existsByUserName(@Param("username") String username);
 	public int existsByEmail(@Param("email") String email);
