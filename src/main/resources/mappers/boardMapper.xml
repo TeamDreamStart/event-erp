@@ -81,7 +81,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 
 	<delete id="postDelete" parameterType="long">
-		delete from `board_post` where `post_id` = #{postId}
+		delete from `board_post`
+		where `post_id` = #{postId}
 	</delete>
 
 	<select id="select" resultMap="boardPostMap">
@@ -192,7 +193,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 
 
+<<<<<<< Updated upstream
 	<select id="selectPostByUserID" resultMap="boardPostMap">
 		select * from board_post where user_id = #{userId}
 	</select>
+=======
+	<!-- 특정 회원 qna List -->
+<select id="listWithCommentCountByUserId" resultMap="boardPostMap" parameterType="long">
+	SELECT
+		p.post_id,
+		p.user_id,
+		p.title,
+		p.content,
+		p.created_at,
+		p.updated_at,
+		IFNULL(COUNT(c.comment_id), 0) AS commentCount
+	FROM board_post p
+	LEFT JOIN board_comment c
+		ON p.post_id = c.post_id
+	WHERE p.user_id = #{userId}
+	  AND p.category = 'QNA'
+	GROUP BY
+		p.post_id,
+		p.user_id,
+		p.title,
+		p.content,
+		p.created_at,
+		p.updated_at
+	ORDER BY p.created_at DESC
+</select>
+
+>>>>>>> Stashed changes
 </mapper>

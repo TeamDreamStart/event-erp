@@ -139,7 +139,11 @@ th {
 	</table>
 
 	<!-- QNA -->
+<<<<<<< Updated upstream
 	<h2>${userDTO.name } 님의 QNA 작성 내역</h2>
+=======
+	<h2>${userDTO.name }님의 QNA 작성 내역 </h2>
+>>>>>>> Stashed changes
 	<table>
 		<thead>
 			<tr>
@@ -149,6 +153,7 @@ th {
 			</tr>
 		</thead>
 		<tbody>
+<<<<<<< Updated upstream
 			<c:forEach var="qna" items="${postList}" >
 				<tr>
 					<td>${qna.title}</td>
@@ -156,6 +161,21 @@ th {
 					<c:if test="${qna.commentCount > 0 }">
 					<td><a href="/admin/qna/${qna.postId}">답변보기</a></td>
 					</c:if>
+=======
+			<c:forEach var="qnaDTO" items="${postList}">
+			<tr>
+			<td>${qnaDTO.commentCount}</td>
+			</tr>
+				<tr>
+					<td>${qnaDTO.title}</td>
+					<td>${qnaDTO.createdAt}</td>
+					<td><c:if test="${qnaDTO.commentCount > 0 }">
+							<a style="color: red" href="/qna/${qna.postId}">답변완료</a>
+						</c:if> <c:if test="${qnaDTO.commentCount == 0 }">
+					답변대기
+					</c:if></td>
+					
+>>>>>>> Stashed changes
 				</tr>
 			</c:forEach>
 
