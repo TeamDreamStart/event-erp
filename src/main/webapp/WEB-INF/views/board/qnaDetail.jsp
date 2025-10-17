@@ -8,7 +8,7 @@
 <head>
 <meta charset="UTF-8">
     <link href="https://fonts.cdnfonts.com/css/peristiwa" rel="stylesheet">
-    <link rel="stylesheet" href="qnaDetail.css">
+    <link rel="stylesheet" href="/resources/css/qnaDetail.css">
 
 <style>
 /*==================================
@@ -33,7 +33,7 @@ main {
 /*==================================
   2. Q&A 폼 (Form) 스타일
 ==================================*/
-.page-title {
+.qna-from-container h1 {
     text-align: center;
     font-size: 30px;
     font-weight: bold;
@@ -41,7 +41,7 @@ main {
     letter-spacing: 2px;
 }
 
-.qna-from {
+.qna-from-container {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px 0;
@@ -57,13 +57,13 @@ main {
     margin-bottom: 30px;
 }
 
-.form-group {
+.detail-group {
     display: flex;
     margin-bottom: 15px;
     border: 1px solid #ccc; /* --light-border-color 대체 */
 }
 
-.form-label {
+.detail-group label {
     width: 80px;
     background-color: #f7f7f7;
     padding: 15px 10px;
@@ -73,8 +73,8 @@ main {
     font-size: 15px;
 }
 
-.form-group input,
-.form-group textarea {
+.detail-group .detail-content,
+.detail-group .detail-content.textarea {
     flex-grow: 1;
     border: none;
     padding: 15px 20px;
@@ -84,11 +84,7 @@ main {
     outline: none;
 }
 
-.content-area {
-    margin-bottom: 30px;
-}
-
-.content-area textarea {
+.detail-content.textarea {
     height: 150px;
 }
 
@@ -173,7 +169,7 @@ main {
 		</div>
 
 	</div>
-	<button onclick="location.href='/qna'" type="button">목록</button>
+	<button onclick="location.href='/qna'" type="button" class="btn-list">목록</button>
 
 	<footer>
         <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
