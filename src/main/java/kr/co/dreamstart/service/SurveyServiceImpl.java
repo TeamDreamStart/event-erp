@@ -74,7 +74,7 @@ public class SurveyServiceImpl implements SurveyService {
 		Map<Long, List<SurveyOptionDTO>> map = new LinkedHashMap<>();
 		
 		for (SurveyQuestionDTO q : questionList(surveyId)) {
-			map.put(q.getQuestionId(), optionList(q.getQuestionId()));
+			map.put(q.getQuestionId(), surveyMapper.optionList(q.getQuestionId()));
 		}
 		return map;
 	}
@@ -340,6 +340,7 @@ public class SurveyServiceImpl implements SurveyService {
 		return surveyMapper.adminSurveyReservations();
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public boolean saveResponse(Long userId, Long eventId, Map<Long, Long> answers) {
 		// TODO Auto-generated method stub
@@ -357,13 +358,21 @@ public class SurveyServiceImpl implements SurveyService {
 			return false;
 		}
 		
+		// SurveyResponseDTO 객체로 insert 수행
+		SurveyResponseDTO dto = new SurveyResponseDTO();
+		dto.setSurveyId(surveyId);
+		dto.setUserId(userId);
 		// 3) 응답 헤더 insert
-		surveyMapper.insertResponse(surveyId, userId);
+		surveyMapper.insertResponse(dto);
 		
-		// 4) 최근 응답 id 조회
-		Long responseId = surveyMapper.findLastResponseId(surveyId, userId);
+		Long responseId = dto.getResponseId();	// 자동 생성된 pk바로 가져옴
+		if (responseId == null) {
+			throw new IllegalStateException("responseId 생성 실패 : Mybatis useGeneratedKeys 설정 확인");
+		}
 		
-		// 5) 문항별 응답 저장
+		log.info("신규 응답 등록 완료 : responseId={}", responseId);
+				
+		// 4) 문항별 응답 저장
 		for (Map.Entry<Long, Long> entry : answers.entrySet()) {
 			surveyMapper.insertAnswer(responseId, entry.getKey(), entry.getValue(), null);
 		}

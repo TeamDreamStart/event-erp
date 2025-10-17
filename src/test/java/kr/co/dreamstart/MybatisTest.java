@@ -438,11 +438,12 @@ public class MybatisTest {
 	
 	@Test
 	public void saveResponseTest() {
-		Long userId = 101L;
-		Long eventId = 7L;
+		Long userId = 268L;	// 신규유저 (응답기록없음)
+		Long eventId = 9L;	// survey_id = 22 연결된 이벤트
 		Map<Long, Long> answers = new LinkedHashMap<>();
-		answers.put(11L, 51L);	// 질문ID=11, 보기ID=51
-		answers.put(12L, 56L);
+		answers.put(10126L, 1131L);	 // 만족     // 질문ID=11, 보기ID=51 
+		answers.put(10127L, 1135L);	 // 만족
+		answers.put(10128L, 1139L);  // 보통
 		
 		boolean result = surveyService.saveResponse(userId, eventId, answers);
 		assertTrue(result);

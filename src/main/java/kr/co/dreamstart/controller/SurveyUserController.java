@@ -48,7 +48,7 @@ public class SurveyUserController {
 							@PathVariable Long eventId,
 							RedirectAttributes ra) {
 		// 설문 응답 저장
-		surveyService.
+		surveyService.saveResponse(userId, eventId, null);
 		log.info("[SURVEY SUBMIT] userId={}, eventId={}", userId, eventId);
 		return "redirect:/my-info/" + userId + "/events/" + eventId + "/survey/complate";
 	}

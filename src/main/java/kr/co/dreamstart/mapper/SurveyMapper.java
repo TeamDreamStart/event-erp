@@ -81,7 +81,7 @@ public interface SurveyMapper {
 	public List<Map<String, Object>> responseDetailFlat(@Param("responseId") Long responseId);
 	// 사용자 응답 제출시
 	// 응답헤더저장
-	public int insertResponse(@Param("surveyId") Long surveyId, @Param("userId") Long userId);
+	public int insertResponse(SurveyResponseDTO response);
 	// 응답상세저장
 	public int insertAnswer(@Param("responseId") Long responseId, @Param("questionId") Long questionId,
 			@Param("optionId") Long optionId, @Param("answerText") String answerText);

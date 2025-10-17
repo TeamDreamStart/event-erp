@@ -147,8 +147,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 <!-- 유저아이디로 응답 갯수 카운트 -->
-<select id="responseCountByUser" resultType="int">
-	select count(*)
+<select id="responseCountByUser" resultType="int" parameterType="map">
+	select count(DISTINCT user_id)
 	from `event_erp`.`survey_response`
 	where `survey_id` = #{surveyId}
 		and `user_id` = #{userId}
@@ -195,7 +195,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<!-- 방금 insert된 응답 id -->
-	<select id="findLastRespomseId" resultType="long">
+	<select id="findLastResponseId" parameterType="map" resultType="long">
 		select `response_id`
 		from `event_erp`.`survey_response`
 		where `survey_id` = #{surveyId}
@@ -325,8 +325,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    <!-- 클론시 복제용 문항/보기 -->
    <!-- 사용자 응답 제출시 -->
    <!-- 응답 헤더 저장 -->
-   <insert id="insertResponse" useGeneratedKeys="true"
-      keyProperty="responseId" keyColumn="response_id">
+   <insert id="insertResponse" 
+   		parameterType="SurveyResponseDTO" 
+   		useGeneratedKeys="true"
+   		keyProperty="responseId"
+   		keyColumn="response_id">
       insert into
       `event_erp`.`survey_response`
       (`survey_id`, `user_id`, `responded_at`)
