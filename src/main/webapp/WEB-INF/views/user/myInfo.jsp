@@ -176,7 +176,7 @@ main {
     <div class="my-reservation-box">
         <h3>나의 예약</h3>
         
-		<c:if test="${empty reservationList}"></c:if>
+		<c:if test="${empty reservationList}">
         <div class="no-reservation-content">
             <p>예약 내역이 없습니다.</p>
             <p>새로운 이벤트를 예약해 보세요!</p>

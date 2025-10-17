@@ -233,19 +233,34 @@ public class UserController {
 
 	// 로그인한 사용자의 ID와 URL 경로의 userId가 같을 때만 접근 허용
 	@PreAuthorize("#userId == authentication.principal.userId")
-	@GetMapping("/my-info/{userId}/update")
+	@GetMapping("/my-info/{userId}/edit")
 	public String myInfoForm(@PathVariable("userId") long userId, Model model) {
 		UserDTO userDTO = userService.findByUserId(userId);
 		model.addAttribute("userDTO", userDTO);
 		return "/user/myInfoForm";
 	}
 	
-	@PostMapping("/my-info/{userId}/update")
+	// 기본정보 수정 -> 마이페이지
+	@PostMapping("/my-info/{userId}/edit")
 	public String myInfoUpdate(@PathVariable("userId") long userId,UserDTO userDTO,RedirectAttributes rttr) {
 		// 회원 정보 수정
 		
-		return "";
+		
+		rttr.addFlashAttribute("msg", "회원정보가 성공적으로 수정되었습니다.");
+		return "redirect:/my-info/"+userId;
 	}
+	// 비밀정보 변경 -> 로그아웃 후 새로운 비밀번호로 다시 로그인하게
+	@PostMapping("/my-info/{userId}/edit/pass")
+	public String passwordUpdate(@PathVariable("userId") long userId,UserDTO userDTO,RedirectAttributes rttr) {
+		// 회원 정보 수정
+		
+		
+		rttr.addFlashAttribute("msg", "비밀번호가 변경되었습니다. 다시 로그인해 주세요.");
+		return "redirect:/login";
+	}
+	
+	
+	//회원탈퇴
 	
 
 	// 로그인한 사용자의 ID와 URL 경로의 userId가 같을 때만 접근 허용
