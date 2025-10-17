@@ -34,6 +34,7 @@ import kr.co.dreamstart.mapper.ReservationMapper;
 import kr.co.dreamstart.service.AdminService;
 import kr.co.dreamstart.service.BoardService;
 import kr.co.dreamstart.service.FileService;
+import kr.co.dreamstart.service.ReservationService;
 import kr.co.dreamstart.service.UserService;
 
 @PreAuthorize("hasRole('ADMIN')") // 권한 메서드 글로벌 설정
@@ -55,6 +56,9 @@ public class AdminController {
 	
 	@Autowired
 	private ReservationMapper reservationMapper;
+	
+	@Autowired
+	private ReservationService reservationService;
 
 	// main
 	@GetMapping("")
@@ -270,12 +274,12 @@ public class AdminController {
 	//reservation Detail
 	@GetMapping("/reservation-manage/{reservationId}")
 	public String reservationForm(@PathVariable("reservationId")long reservationId,Model model) {
-		ReservationDTO dto = reservationMapper.select(reservationId);
+		ReservationDTO dto = reservationService.selectById(reservationId);
 		System.out.println(dto);
 		model.addAttribute("reservationDTO", dto);
 		return "/admin/reservationDetailForm";
 	}
-	//reservation Detail
+	//reservation Update
 	@PostMapping("/reservation-manage/{reservationId}")
 	public String reservationFormPOST(@PathVariable("reservationId")long reservationId,RedirectAttributes rttr) {
 		

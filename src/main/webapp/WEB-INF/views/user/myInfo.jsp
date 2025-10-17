@@ -140,7 +140,8 @@ th {
 	</table>
 
 	<!-- QNA -->
-	<h2>${userDTO.name }님의 QNA 작성 내역</h2>
+
+	<h2>${userDTO.name }님의 QNA 작성 내역 </h2>
 	<table>
 		<thead>
 			<tr>
@@ -159,9 +160,8 @@ th {
 						</c:if> <c:if test="${qna.commentCount == 0 }">
 					답변대기
 					</c:if></td>
-				</tr>
-			</c:forEach>
-
+				<tr>
+			<c:forEach var="qnaDTO" items="${postList}">
 			<c:if test="${empty postList}">
 				<tr>
 					<td colspan="3" class="center">작성한 QNA가 없습니다.</td>

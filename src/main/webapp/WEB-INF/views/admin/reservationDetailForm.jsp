@@ -41,7 +41,7 @@
                 <h6 class="m-0 font-weight-bold text-primary">RESERVATION DETAIL</h6>
             </div>
             <div class="card-body">
-                <form action="/admin/reservations/${reservationDTO.reservationId}" method="post">
+                <form action="/admin/reservation-manage/${reservationDTO.reservationId}" method="post">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
                     <div class="row mb-3">
@@ -90,7 +90,7 @@
                     </div> --%>
 
                     <div class="text-center">
-                        <a href="/admin/reservations" class="btn btn-secondary">목록</a>
+                        <a href="/admin/reservation-manage" class="btn btn-secondary">목록</a>
                     </div>
                 </form>
             </div>
