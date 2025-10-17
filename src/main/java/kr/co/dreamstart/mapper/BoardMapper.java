@@ -72,5 +72,7 @@ public interface BoardMapper {
 	public int commentDelete(long commentId);
 	
 	public int commentDeleteByPostId(long postId);
+	
+	public List<BoardPostDTO> listWithCommentCountByUserId(long userId);
 
 }

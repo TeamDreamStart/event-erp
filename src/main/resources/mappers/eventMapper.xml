@@ -59,7 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			e.`created_by`, e.`created_by_name`,
 			e.`updated_by`, e.`updated_by_name`,
 			e.`created_at`, e.`updated_at`, 
-			e.`is_paid`, e.`price`, e.`currency`, e.`category`
+			e.`is_paid`, e.`price`, e.`currency`, e.`category`,e.`latitude`,e.`longitude`
 		from `event_erp`.`event` e
 		where e.`event_id` = #{eventId}
 		limit 1
@@ -86,13 +86,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			(`title`, `description`, `location`, `start_date`, `end_date`, 
 			`capacity`, `status`, `visibility`, `poster_url`, 
 			`created_by`, `updated_by`, `is_paid`, 
-			`price`, `currency`, `category`)
+			`price`, `currency`, `category`,`latitude`,`longitude`)
 		values
 			(
 			#{title}, #{description}, #{location}, #{startDate}, #{endDate},
 			#{capacity}, #{status}, #{visibility}, #{posterUrl},
 			#{createdBy}, #{updatedBy}, #{paid}, 
-			#{price}, #{currency}, #{category})
+			#{price}, #{currency}, #{category},#{latitude},#{longitude})
 	</insert>
 	
 	<!-- 수정 (name 컬럼은 db 트리거가 채움) -->

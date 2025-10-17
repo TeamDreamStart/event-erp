@@ -1,174 +1,183 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet"/>
+<link
+	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap"
+	rel="stylesheet" />
 <title>findPassword</title>
-<link rel="stylesheet" type="text/css" href="/resources/css/findPassword.css">
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/findPassword.css">
+<style type="text/css">
+/* 기본 스타일 */
+.tab-radio-group {
+	display: flex;
+	justify-content: space-between;
+}
+
+.tab-btn {
+	padding: 10px 20px;
+	cursor: pointer;
+	border: 1px solid #ccc;
+	background-color: #CBD4C2;
+	border-radius: 10px 10px 0 0;
+	transition: background-color 0.3s;
+	user-select: none;
+	background-color: #CBD4C2;
+}
+
+.tab-btn:hover {
+	background-color: #e0e0e0;
+}
+
+/* 라디오 숨기기 */
+input[type="radio"] {
+	display: none;
+}
+
+/* 체크된 라벨 강조 */
+input[type="radio"]:checked+label {
+	background-color: #FAF9F6;
+	font-weight: bold;
+	border-bottom: none;
+}
+
+/* 클릭 막기 */
+.tab-radio-group.readonly label {
+	pointer-events: none;
+}
+
+.box {
+	background-color: #FAF9F6;
+	border-radius: 0 0 20px 20px;
+	width: 620px;
+	height: 300px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	gap: 15px;
+	border: 1px solid #ccc;
+	border-top: none;
+}
+
+.container {
+	display: flex;
+	justify-content: center;
+	margin-top: 50px;
+}
+</style>
 </head>
 <body>
-      <jsp:include page="/WEB-INF/views/common/header.jsp"/>
-    <main>
-    <div class="container">
-        <h2>Find</h2>
-        <div class="find-main">
-            <div class="tab-header">
-                <button type="button" class="tab-btn active" data-tab="uid-section-content">아이디 찾기</button>
-                <button type="button" class="tab-btn" data-tab="password-section-content">비밀번호 찾기</button>
-            </div>
-            
-            <div id="uid-section-content" class="tab-content active">
-                <form action="/login" method="post">
-                    <div class="find-uid-form">
-                    <label for="email_uid">이메일로 찾기</label><br>
-                    <div class="input-group">
-                        <input type="text" name="userEmail" id="email_uid" placeholder="이메일을 입력하세요." required>
-                        <button type="button" class="btn-send-code">인증번호 전송</button>
-                    </div>
-                    <span id="email-uid-message" class="error-message"></span>
-                    </div>
-                    
-                    <div class="find-uid-form">
-                    <label for="verificationCode_uid">인증번호</label><br>
-                    <div class="input-group">
-                        <input type="text" id="verificationCode_uid" name="verificationCode" placeholder="인증번호를 입력하세요." required>
-                        <button type="button" class="btn-verify">확인</button>
-                    </div>
-                    </div>
-                                        <div class="end-btn">
-                        <button onclick="history.back()" class="btn-cancle">취소</button>
-                        <button type="submit" class="btn-find-uid">로그인</button>
-                    </div>
-                </form>
-            </div>
-            
-            <div id="password-section-content" class="tab-content">
-                <form action="/reset-password" method="post">
-                    <div class="find-password-form">
-                    <label for="email_pw">이메일로 찾기</label><br>
-                    <div class="input-group">
-                        <input type="text" name="userEmail" id="email_pw" placeholder="이메일을 입력하세요." required>
-                        <button type="button" class="btn-send-code">인증번호 전송</button>
-                    </div>
-                    <span id="email-pw-message" class="error-message"></span>
-                    </div>
-                    
-                    <div class="find-password-form">
-                    <label for="verificationCode_pw">인증번호</label><br>
-                    <div class="input-group">
-                        <input type="text" id="verificationCode_pw" name="verificationCode" placeholder="인증번호를 입력하세요." required>
-                        <button type="button" class="btn-verify">확인</button>
-                    </div>
-                    </div>
-                                        <div class="end-btn">
-                        <button onclick="history.back()" class="btn-cancle">취소</button>
-                        <button type="submit" class="btn-find-pass">비밀번호 찾기</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> <hr>
-    </main>
-    <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
-    tabButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const targetId = this.dataset.tab;
+	<script>
+		const result = '${empty result ? "" : result}';
+		const msg = '${empty msg ? "" : msg}';
+		if (result === 'success') {
+			alert(`${msg}`);
+		} else if (result === 'fail') {
+			alert(`${msg}`);
+			window.location.href = "/find-password";
+		}
+		const findUserName = '${empty findUserName ? "" : findUserName}'
+		if (findUserName !== "") {
+			alert("고객님의 아이디는 " + findUserName + "입니다.");
+			window.location.href = "/login";
+		}
+		function checkCode(e) {
+			const codeCheck = document.querySelector('input[name="codeCheck"]').value
+					.trim();
+			const code = document.querySelector('input[name="code"]').value
+					.trim();
 
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            tabContents.forEach(content => content.classList.remove('active'));
+			if (code === "") {
+				alert("인증번호를 입력해주세요.");
+				e.preventDefault();
+				return false;
+			}
 
-            const targetContent = document.getElementById(targetId);
-            if (targetContent) {
-                targetContent.classList.add('active');
-            }
-        });
-    });
+			if (code !== codeCheck) {
+				alert("인증번호가 일치하지 않습니다.");
+				e.preventDefault();
+				return false;
+			}
 
-    // 메시지를 표시하거나 숨기는 함수 (참고하신 로직 기반)
-    function showMessage(elementId, message, isError) {
-        const messageElement = document.getElementById(elementId);
-        if (messageElement) {
-            messageElement.textContent = message;
-            messageElement.style.color = isError ? 'red' : 'green';
-        }
-    }
+			return true;
+		}
+	</script>
+	<header>
+		<jsp:include page="/WEB-INF/views/common/header.jsp" />
+	</header>
+	<main>
+		<div class="container">
 
-    // 모든 이메일 메시지 숨기는 함수
-    function hideAllEmailMessages() {
-        showMessage('email-uid-message', '', false);
-        showMessage('email-pw-message', '', false);
-    }
-    
-    function isValidEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    }
+			<!-- 이메일 입력 단계 -->
+			<c:if test="${empty email }">
+				<form action="/find-password" method="get">
+					<div class="tab-radio-group">
+						<input type="radio" id="tab-findId" name="findType" value="findId"
+							checked hidden> <label for="tab-findId" class="tab-btn">아이디
+							찾기</label> <input type="radio" id="tab-findPass" name="findType"
+							value="findPass" hidden> <label for="tab-findPass"
+							class="tab-btn">비밀번호 찾기</label>
+					</div>
 
-    const sendCodeUidBtn = document.querySelector('#uid-section-content .btn-send-code');
-    const sendCodePwBtn = document.querySelector('#password-section-content .btn-send-code');
+					<div class="box">
+						<label for="email">이메일</label> <input type="text" name="email"
+							placeholder="이메일을 입력해 주세요." required>
+						<div>
+							<button style="height: 45px;" type="submit">인증번호 전송</button>
+							<button type="button" onclick="location.href='/login'">취소</button>
+						</div>
+					</div>
+				</form>
+			</c:if>
 
-    if (sendCodeUidBtn) {
-        sendCodeUidBtn.addEventListener('click', function() {
-            const messageId = 'email-uid-message';
-            const emailInput = document.getElementById('email_uid');
-            const email = emailInput.value.trim();
-            
-            // 기존 메시지 숨김
-            showMessage(messageId, '', false); 
+			<!-- 인증번호 입력 단계 -->
+			<c:if test="${not empty email}">
+				<form action="/find-password" method="post"
+					onsubmit="return checkCode(event)">
+					<div class="tab-radio-group readonly">
+						<c:if test="${findType eq 'findId' }">
+							<input type="radio" id="tab-findId" name="findType"
+								value="findId" checked hidden>
+							<label for="tab-findId" class="tab-btn">아이디 찾기</label>
+							<input type="radio" id="tab-findPass" name="findType"
+								value="findPass" hidden>
+							<label for="tab-findPass" class="tab-btn">비밀번호 찾기</label>
+						</c:if>
+						<c:if test="${findType eq 'findPass' }">
+							<input type="radio" id="tab-findId" name="findType"
+								value="findId" hidden>
+							<label for="tab-findId" class="tab-btn">아이디 찾기</label>
+							<input type="radio" id="tab-findPass" name="findType"
+								value="findPass" checked hidden>
+							<label for="tab-findPass" class="tab-btn">비밀번호 찾기</label>
+						</c:if>
+					</div>
 
-            if (email === "") {
-                showMessage(messageId, '이메일을 입력해 주세요.', true);
-                emailInput.focus();
-                return;
-            }
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" /> <input type="hidden" name="email"
+						value="${email }">
 
-            if (!isValidEmail(email)) {
-                showMessage(messageId, '올바른 이메일 형식이 아닙니다. 다시 확인해 주세요.', true);
-                emailInput.focus();
-                return;
-            }
+					<div class="box">
+						<label for="code">인증번호</label> <input type="hidden"
+							name="codeCheck" value="${code }"> <input type="text"
+							name="code" placeholder="인증번호를 입력해 주세요." required>
+						<div>
+							<button type="submit">확인</button>
+							<button type="button" onclick="location.href='/login'">취소</button>
+						</div>
+					</div>
+				</form>
+			</c:if>
 
-            // 유효성 검사 통과 시
-            showMessage(messageId, '인증번호를 전송합니다.', false); // 성공 메시지는 초록색으로 표시 가능
-            // 서버 전송 로직...
-        });
-    }
-
-    if (sendCodePwBtn) {
-        sendCodePwBtn.addEventListener('click', function() {
-            const messageId = 'email-pw-message';
-            const emailInput = document.getElementById('email_pw');
-            const email = emailInput.value.trim();
-            
-            // 기존 메시지 숨김
-            showMessage(messageId, '', false);
-
-            if (email === "") {
-                showMessage(messageId, '이메일을 입력해 주세요.', true);
-                emailInput.focus();
-                return;
-            }
-            
-            if (!isValidEmail(email)) {
-                showMessage(messageId, '올바른 이메일 형식이 아닙니다. 다시 확인해 주세요.', true);
-                emailInput.focus();
-                return;
-            }
-
-            // 유효성 검사 통과 시
-            showMessage(messageId, '인증번호를 전송합니다.', false); // 성공 메시지는 초록색으로 표시 가능
-            // 서버 전송 로직...
-        });
-    }
-});
-</script>
+		</div>
+	</main>
+	<jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
 </body>
 </html>

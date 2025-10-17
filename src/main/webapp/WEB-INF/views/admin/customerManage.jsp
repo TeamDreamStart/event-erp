@@ -92,7 +92,7 @@
 							<select  style="width:100px"  name="searchType" id="searchType" class="custom-select custom-select-sm form-control form-control-sm">
 								<option value="ALL">전체</option>
 								<option value="userId">회원번호</option>
-								<option value="userName">아이디</option>
+								<option value="username">아이디</option>
 								<option value="email">이메일</option>
 								<option value="phone">전화번호</option>
 								<option value="createdAt">가입일자</option>
@@ -153,11 +153,11 @@
 								<c:forEach var="userDTO" items="${userList }">
 									<tr>
 										<td>${userDTO.userId}</td>
-										<c:if test="${not empty userDTO.userName}">
-											<td>${userDTO.userName}</td>
+										<c:if test="${not empty userDTO.username}">
+											<td>${userDTO.username}</td>
 										</c:if>
 										<c:if
-											test="${empty userDTO.userName || not empty userDTO.snsId}">
+											test="${empty userDTO.username || not empty userDTO.snsId}">
 											<td><img style="height: 40px"
 												src="/resources/img/naver/btnG_축약형.png" alt="네이버로그인이미지"></td>
 										</c:if>

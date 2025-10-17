@@ -24,7 +24,7 @@ public interface SurveyService {
 	public SurveyDTO findSurvey(Long surveyId);
 	public List<SurveyQuestionDTO> questionList(Long surveyId);
 	public List<SurveyOptionDTO> optionList(Long surveyId);
-	public Map<Long, List<SurveyOptionDTO>> optionsByQuestion (Long questionId);
+	public Map<Long, List<SurveyOptionDTO>> optionsByQuestion (Long surveyId);
 	
 	// 상세조회 (이벤트 제목 포함)
 	public String findEventTitleBySurveyId(Long surveyId);
@@ -60,6 +60,8 @@ public interface SurveyService {
 	// 폼 진입용프리필/사전선택 계산
 	public Map<String, Object> cloneFormPrefill(Long templateId, Long eventId, Long surveyId);
 	
+	// 고정템플릿인지 확인하기 위해
+	public boolean isTemplate(Long surveyId);
 	
 	// Likert(클른문항) 보정이 필요할때만 노출
 //	public int ensureLikert5ForSurvey(Long surveyId);

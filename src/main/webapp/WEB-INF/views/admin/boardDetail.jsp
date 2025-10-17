@@ -12,7 +12,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>Notice Detail</title>
+<title>Board Detail</title>
 
 <!-- Custom fonts for this template-->
 <link href="/resources/vendor/fontawesome-free/css/all.min.css"
@@ -25,17 +25,16 @@
 <link href="/resources/css/sb-admin-2.min.css" rel="stylesheet">
 </head>
 <body id="page-top">
-<script>
-    const result = '${empty result ? "" : result}';
-    const resultType = '${empty resultType ? "" : resultType}';
+	<script>
+		const result = '${empty result ? "" : result}';
+		const resultType = '${empty resultType ? "" : resultType}';
 
-    if (result === 'success') {
-        alert(`성공적으로 ${resultType}되었습니다.`);
-    } else if (result === 'fail') {
-        alert(`${resultType}이(가) 실패하였습니다.`);
-    }
-</script>
-<p>result:${result }resultType:${resultType }</p>
+		if (result === 'success') {
+			alert(`성공적으로 ${resultType}되었습니다.`);
+		} else if (result === 'fail') {
+			alert(`${resultType}이(가) 실패하였습니다.`);
+		}
+	</script>
 	<!-- Page Wrapper -->
 	<div id="wrapper">
 		<!-- header -->
@@ -46,7 +45,7 @@
 		<div class="container-fluid">
 
 			<!-- Page Heading -->
-			<h1 class="h3 mb-2 text-gray-800">Notice Detail</h1>
+			<h1 class="h3 mb-2 text-gray-800">${boardType } Detail</h1>
 
 			<!-- DataTales Example -->
 			<div class="card shadow mb-4">
@@ -81,13 +80,20 @@
 							</tr>
 							<tr>
 								<th rowspan="2">내용</th>
-								<td colspan="3"><c:forEach var="fileDTO"
-										items="${fileList}">
-										<img
-											src="${pageContext.request.contextPath}/resources/uploadTemp/${fileDTO.storedPath}/${fileDTO.uuid}_${fileDTO.originalName}"
-											alt="${fileDTO.originalName}">
+								<c:if test="${boardType eq 'notices' }">
+								<td colspan="3"><c:if test="${not empty fileList }">
+										<c:forEach var="fileDTO" items="${fileList}">
+											<img style="width:100%"
+												src="${pageContext.request.contextPath}/resources/uploadTemp/${fileDTO.storedPath}/${fileDTO.uuid}_${fileDTO.originalName}"
+												alt="${fileDTO.originalName}">
 
-									</c:forEach></td>
+										</c:forEach>
+									</c:if>
+									<c:if test="${empty fileList }">
+										<span>첨부된 사진이 없습니다.</span>
+									</c:if>
+									</td>
+									</c:if>
 							</tr>
 							<tr>
 								<td colspan="3">${postDTO.content}</td>
@@ -123,7 +129,7 @@
 								href="${pageContext.request.contextPath}/admin/${boardType}/${postDTO.postId}/delete"
 								class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
 						</div>
-						
+
 
 
 

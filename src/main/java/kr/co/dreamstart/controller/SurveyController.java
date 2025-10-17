@@ -142,6 +142,7 @@ public class SurveyController {
 	public String cloneForm(@RequestParam(required = false) Long eventId,
 							@RequestParam(required = false) Long templateId,
 							@RequestParam(required = false) Long surveyId,
+							@RequestParam(required = false, name = "templated") Integer templated,
 							Model model) {
 		// 공통목록
 		model.addAttribute("templates", surveyService.fixedTemplates());
@@ -151,6 +152,11 @@ public class SurveyController {
 		Map<String, Object> prefill = surveyService.cloneFormPrefill(templateId, eventId, surveyId);
 		model.addAllAttributes(prefill);
 		
+		// 템플릿 정확히 정의해주기
+		boolean isTemplateFlag = 
+				(templateId != null)		// 템플릿 라디오 진입
+			|| (surveyId != null && surveyService.isTemplate(surveyId));
+		model.addAttribute("isTemplate", isTemplateFlag);
 		return "/admin/surveyCloneForm";
 		
 	}

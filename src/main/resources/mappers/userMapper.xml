@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 회원 정보 -->
 	<resultMap type="UserDTO" id="userMap">
 		<id column="user_id" property="userId" />
-		<result column="username" property="userName" />
+		<result column="username" property="username" />
 		<result column="password" property="password" />
 		<result column="name" property="name" />
 		<result column="email" property="email" />
@@ -288,8 +288,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="join" parameterType="UserDTO"
 		useGeneratedKeys="true" keyProperty="userId">
 		insert into `user`
-		(`username`,`password`,`name`,`email`,`created_at`,`is_active`)
-		values(#{userName},#{password},#{name},#{email},now(),1)
+		(`username`,`password`,`name`,`email`, `gender`, `phone`, `created_at`,`is_active`)
+		values(#{username},#{password},#{name},#{email}, #{gender}, #{phone}, now(),1)
 	</insert>
 	<!-- 회원가입시 일반회원 권한 부여 -->
 	<insert id="joinRole" parameterType="long">
@@ -299,7 +299,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 로그인 영역 -->
 	<!-- 로그인 단건 조회 -->
-	<select id="findByUsername" parameterType="string"
+	<select id="findByUserName" parameterType="string"
 		resultMap="userMap">
 		select
 		`user_id`, `username`, `password`, `name`, `email`,
@@ -357,4 +357,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		`updated_at` = NOW()
 		where `user_id` = #{userId}
 	</update>
+	
+	<!-- 아이디/이메일 중복 체크 -> db 제약과 비교 / 아이디 : 대소문자 무시 -->
+	<select id="existsByUserName" parameterType="string" resultType="int">
+		select count(1) 
+		from `user` 
+		where `username` COLLATE utf8mb4_0900_ai_ci 
+			= #{username} COLLATE utf8mb4_0900_ai_ci
+	</select>
+	<select id="existsByEmail" parameterType="string" resultType="int">
+		select count(1) 
+		from `user` 
+		where `email` = LOWER (#{email})
+	</select>
 </mapper>

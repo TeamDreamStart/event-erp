@@ -25,6 +25,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.co.dreamstart.dto.AdminJoinDTO;
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.EventDTO;
@@ -35,6 +36,7 @@ import kr.co.dreamstart.dto.SurveyQuestionDTO;
 import kr.co.dreamstart.dto.SurveyResponseDTO;
 import kr.co.dreamstart.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
+import kr.co.dreamstart.mapper.AdminMapper;
 import kr.co.dreamstart.mapper.BoardMapper;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
@@ -61,6 +63,9 @@ public class MybatisTest {
 	@Autowired
 	private EventService eventService;
 
+	@Autowired
+	private AdminMapper adminMapper;
+	
 	@Test
 	public void testFactory() {
 		assertNotNull("sqlFactory is Null", sqlFactory); // ����
@@ -152,11 +157,15 @@ public class MybatisTest {
 		// @Autowiredprivate MailSender mailSender;
 		// JavaMailSenderImpl을 직접 만들어서 사용 (Spring Bean 없이)
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		mailSender.setHost("sandbox.smtp.mailtrap.io"); // Mailtrap에서 받은 값
-		mailSender.setPort(2525); // 또는 587, 465 등
-		mailSender.setUsername("5fb50ec1a37392"); // Mailtrap에서 복사한 username
-		mailSender.setPassword("41fd5116fea25f"); // Mailtrap에서 복사한 password
+//		mailSender.setHost("sandbox.smtp.mailtrap.io"); // Mailtrap에서 받은 값
+//		mailSender.setPort(2525); // 또는 587, 465 등
+//		mailSender.setUsername("5fb50ec1a37392"); // Mailtrap에서 복사한 username
+//		mailSender.setPassword("41fd5116fea25f"); // Mailtrap에서 복사한 password
 
+		mailSender.setHost("smtp.gmail.com");
+		mailSender.setPort(587);
+		mailSender.setUsername("yoonje515@gmail.com");
+		mailSender.setPassword("nqvp pkxd fmcb sgio");
 		Properties props = mailSender.getJavaMailProperties();
 		props.put("mail.transport.protocol", "smtp");
 		props.put("mail.smtp.auth", "true");
@@ -168,8 +177,8 @@ public class MybatisTest {
 		try {
 			MimeMessage msg = mailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(msg, false, "UTF-8");
-			helper.setFrom("from@example.com"); // 임의 주소(받는사람이 Mailtrap에서 확인)
-			helper.setTo("to@example.com"); // 임의 주소 (메일 트랩에서 수신)
+			helper.setFrom("teamDS@dreamstart.com"); // 임의 주소(받는사람이 Mailtrap에서 확인)
+			helper.setTo("yje_515@naver.com"); // 임의 주소 (메일 트랩에서 수신)
 			helper.setSubject("[테스트] Mailtrap + Email Api 테스트- 임시 비밀번호 발송");
 			helper.setText("임시 비밀번호는 [" + tmpPass + "]입니다.", false);
 
@@ -194,7 +203,7 @@ public class MybatisTest {
 		try (SqlSession session = sqlFactory.openSession()) {
 			UserMapper mapper = session.getMapper(UserMapper.class);
 			UserDTO user = new UserDTO();
-			user.setUserName("insertTest8");
+			user.setUsername("insertTest8");
 			user.setPassword("1234");
 			user.setName("테스트8");
 			user.setEmail("insert8@test.com");
@@ -239,7 +248,7 @@ public class MybatisTest {
 		for(UserDTO u : targets) {
 			String hash = passwordEncoder.encode(raw);
 			userMapper.updatePasswordById(u.getUserId(), hash);
-			log.info("[RESET] userId={} username={} -> DONE", u.getUserId(), u.getUserName());
+			log.info("[RESET] userId={} username={} -> DONE", u.getUserId(), u.getUsername());
 		}
 		log.info("[RESET] completed.");
 	}
@@ -249,7 +258,7 @@ public class MybatisTest {
 	public void loginQueryByUsername() {
 		UserDTO dto = userMapper.findByLogin("admin");
 		assertNotNull(dto);
-		log.info("user={} email={}", dto.getUserName(), dto.getEmail());
+		log.info("user={} email={}", dto.getUsername(), dto.getEmail());
 	}
 
 	@Test
@@ -380,6 +389,45 @@ public class MybatisTest {
 		assertEquals(newId, loaded.getEventId());
 		assertEquals("서비스-생성-라운드트립", loaded.getTitle());
 		assertEquals("OPEN", loaded.getStatus());
+	}
+	
+	@Test
+	public void sasdTest() {
+		List<AdminJoinDTO> dto = adminMapper.selectJoinPayByUserId(278);
+		System.out.println(dto);
+	}
+	// 회원 가입 관련 테스트
+	@Test
+	public void existsByUserNameTest() {
+		// 이미 존재하는 계정일 경우
+		String existing = "admin";
+		int cnt = userMapper.existsByUserName(existing);
+		assertTrue("should exist, but count was" + cnt, cnt > 0);
+		log.info("[EXISTS-USERNAME] {} -> count={}", existing,cnt);
+	}
+	@Test
+	public void existsByUserName_notExistsTest() {
+		// 존재하지 않는 계정일 경우
+		String notExisting = "없지롱";
+		int cnt = userMapper.existsByUserName(notExisting);
+		assertEquals("non-existing username should be 0", 0, cnt);
+		log.info("[NOT EXISTS-USERNAME] {} -> {}", notExisting, cnt);
+	}
+	@Test
+	public void existsByEmailTest() {
+		// 이미 존재하는 이메일일 경우
+		String existing = "smoke@example.com";
+		int cnt = userMapper.existsByEmail(existing);
+		assertTrue("email should exist, but count was" + cnt, cnt > 0);
+		log.info("[EXISTS-EMAIL] {} -> {}", existing, cnt);
+	}
+	@Test
+	public void existsByEmail_notExistsTest() {
+		// 존재하는 이메일일 경우
+		String notExisting = "start1233456@naver.com";
+		int cnt = userMapper.existsByEmail(notExisting);
+		assertEquals("non-existing email should be 0", 0, cnt);
+		log.info("[NOT EXISTS-EMAIL] {} -> {}", notExisting, cnt);
 	}
 	
 }

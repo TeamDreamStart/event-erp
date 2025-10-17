@@ -23,14 +23,18 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.dreamstart.dto.AdminActionLogDTO;
+import kr.co.dreamstart.dto.AdminJoinDTO;
 import kr.co.dreamstart.dto.BoardCommentDTO;
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.FileAssetDTO;
+import kr.co.dreamstart.dto.ReservationDTO;
 import kr.co.dreamstart.dto.UserDTO;
+import kr.co.dreamstart.mapper.ReservationMapper;
 import kr.co.dreamstart.service.AdminService;
 import kr.co.dreamstart.service.BoardService;
 import kr.co.dreamstart.service.FileService;
+import kr.co.dreamstart.service.ReservationService;
 import kr.co.dreamstart.service.UserService;
 
 @PreAuthorize("hasRole('ADMIN')") // 권한 메서드 글로벌 설정
@@ -49,6 +53,12 @@ public class AdminController {
 	
 	@Autowired
 	private AdminService adminService;
+	
+	@Autowired
+	private ReservationMapper reservationMapper;
+	
+	@Autowired
+	private ReservationService reservationService;
 
 	// main
 	@GetMapping("")
@@ -94,24 +104,24 @@ public class AdminController {
 		return "/admin/boardDetail";
 	}
 
-	// 첨부파일 다운로드
-	@GetMapping("/files/download/{fileId}")
-	public void downloadFile(@PathVariable Long fileId, HttpServletResponse response, HttpServletRequest request)
-			throws IOException {
-		FileAssetDTO fileDTO = fileService.getFile(fileId);
-		String uploadFolder = request.getServletContext().getRealPath("/resources/uploadTemp");
-		File file = new File(uploadFolder + "/" + fileDTO.getStoredPath() + "/" + fileDTO.getUuid() + "_"
-				+ fileDTO.getOriginalName());
-		if (!file.exists()) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
-			return;
-		}
-		response.setContentType(fileDTO.getMimeType());
-		response.setHeader("Content-Disposition",
-				"attachment; filename=\"" + URLEncoder.encode(fileDTO.getOriginalName(), "UTF-8") + "\"");
-		Files.copy(file.toPath(), response.getOutputStream());
-		response.getOutputStream().flush();
-	}
+	// 첨부파일 다운로드@@@@@@@@@@ 사용안함 안해
+//	@GetMapping("/files/download/{fileId}")
+//	public void downloadFile(@PathVariable Long fileId, HttpServletResponse response, HttpServletRequest request)
+//			throws IOException {
+//		FileAssetDTO fileDTO = fileService.getFile(fileId);
+//		String uploadFolder = request.getServletContext().getRealPath("/resources/uploadTemp");
+//		File file = new File(uploadFolder + "/" + fileDTO.getStoredPath() + "/" + fileDTO.getUuid() + "_"
+//				+ fileDTO.getOriginalName());
+//		if (!file.exists()) {
+//			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+//			return;
+//		}
+//		response.setContentType(fileDTO.getMimeType());
+//		response.setHeader("Content-Disposition",
+//				"attachment; filename=\"" + URLEncoder.encode(fileDTO.getOriginalName(), "UTF-8") + "\"");
+//		Files.copy(file.toPath(), response.getOutputStream());
+//		response.getOutputStream().flush();
+//	}
 
 	// insert
 	@GetMapping("/{boardType}/form")
@@ -208,7 +218,7 @@ public class AdminController {
 	}
 
 	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-	// userList
+	// user List
 	@GetMapping("/customers")
 	public String userManage(Criteria cri, @RequestParam(required = false) Integer role,
 			@RequestParam(required = false) String searchType, @RequestParam(required = false) String keyword,
@@ -230,15 +240,20 @@ public class AdminController {
 		return "/admin/customerManage";
 	}
 
+	// user Detail
 	//회원 설문조사내역, 예약및 결제정보, Qna 작성내역 조회결과 추가 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	@GetMapping("/customers/{userId}")
 	public String userDetail(@PathVariable("userId") long userId, Model model) {
-		UserDTO userDTO = userService.userDetail(userId);
+		UserDTO userDTO = userService.findByUserId(userId);
 		model.addAttribute("userDTO", userDTO);
+		List<AdminJoinDTO> list = adminService.selectJoinPayByUserId(userId); //예약 및 결제정보
+		model.addAttribute("reservationList", list);
+		List<BoardPostDTO> postList = boardService.listWithCommentCountByUserId(userId);
+		model.addAttribute("postList", postList);
 		return "/admin/customerDetailForm";
 	}
 
-	// update
+	// user update
 	@PostMapping("/customers/{userId}")
 	public String userForm(@PathVariable("userId") long userId, UserDTO userDTO,@RequestParam int roleId, RedirectAttributes rttr) {
 		Map<String,Object> map = userService.adminUserUpdate(userDTO,roleId);
@@ -246,5 +261,31 @@ public class AdminController {
 		rttr.addFlashAttribute("resultType", "회원정보 수정");
 		return "redirect:/admin/customers/" + userId;
 	}
+	
+	//reservation list
+	@GetMapping("/reservation-manage")
+	public String reservationList(Model model,Criteria cri) {
+		List<ReservationDTO> reservationList = reservationMapper.list(cri);
+		model.addAttribute("reservationList", reservationList);
+		return "/admin/reservationManage";
+	}
+	
+	
+	//reservation Detail
+	@GetMapping("/reservation-manage/{reservationId}")
+	public String reservationForm(@PathVariable("reservationId")long reservationId,Model model) {
+		ReservationDTO dto = reservationService.selectById(reservationId);
+		System.out.println(dto);
+		model.addAttribute("reservationDTO", dto);
+		return "/admin/reservationDetailForm";
+	}
+	//reservation Update
+	@PostMapping("/reservation-manage/{reservationId}")
+	public String reservationFormPOST(@PathVariable("reservationId")long reservationId,RedirectAttributes rttr) {
+		
+		return "redirect:/admin/reservation-manage/"+reservationId;
+	}
+	
+	
 
 }

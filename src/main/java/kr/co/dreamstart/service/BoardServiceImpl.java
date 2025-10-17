@@ -125,12 +125,12 @@ public class BoardServiceImpl implements BoardService {
 		return map;
 	}
 
-	@Override
-	public int postDelete(long boardId) {
-		int result = -1;
-
-		return result;
-	}
+	// PUBLIC -> PRIVATE 은 그냥 UPDATE에서 구현
+//	@Override
+//	public int postDelete(long boardId) {
+//		int result = -1;
+//		return result;
+//	}
 
 	@Override
 	public Map<String, Object> postRealDelete(String boardType, long postId) {
@@ -169,5 +169,10 @@ public class BoardServiceImpl implements BoardService {
 	public int commentDelete(long commentId) {
 		return mapper.commentDelete(commentId);
 	}
+
+	@Override
+	public List<BoardPostDTO> listWithCommentCountByUserId(long userId) {
+		return mapper.listWithCommentCountByUserId(userId);
+	} 
 
 }
