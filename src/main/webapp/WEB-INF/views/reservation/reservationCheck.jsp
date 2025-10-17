@@ -32,11 +32,11 @@ main {
 }
 
 .section-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 40px; /* 제목과 내용 사이 간격 */
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom:20px;
 }
-
 .section-header h2 {
     font-size: 30px;
     font-weight: 700;

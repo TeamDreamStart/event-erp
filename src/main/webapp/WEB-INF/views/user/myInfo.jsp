@@ -34,7 +34,7 @@ main {
 .section-header {
     display: flex;
     align-items: center;
-    margin-bottom: 40px; /* 제목과 내용 사이 간격 */
+    margin-bottom: 20px; /* 제목과 내용 사이 간격 */
 }
 
 .page-title {
