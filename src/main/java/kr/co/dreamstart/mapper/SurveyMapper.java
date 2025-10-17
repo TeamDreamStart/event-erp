@@ -91,13 +91,18 @@ public interface SurveyMapper {
 	// 폼 진입용프리필/사전선택 계산
 	public Map<String, Object> cloneFormPrefill(Long templateId, Long eventId, Long surveyId);
 
-
+	// 고객 : 오픈설문만 / 관리자 : 모든 설문
+	public List<Map<String, Object>> openSurveyReservations(@Param("userId") Long userId);
+	public List<Map<String, Object>> adminSurveyReservations();
 	
-	// 응닶상세 원본 (조인x)
-//	public List<SurveyAnswerDTO> answerListByresponse(@Param("responseId") Long responseId);	
-	// 오프셋용 (JSON)
-//	public int cloneSurveyWithOffsets(Long templateId, Long eventId, Long userId, int openDelayHours,
-//			int closeAfterDays);
+	// 설문제출용 (중복방지 + id조회)
+	public Long findSurveyIdByEvent(@Param("eventId") Long eventId);
+	public Long findLastResponseId(@Param("surveyId") Long surveyId,
+								@Param("userId") Long userId);
+	
+	// 유저아이디로 응답 조회 (복수 응답 방지)
+	public int responseCountByUser(@Param("surveyId") Long surveyId,
+								@Param("userId") Long userId);
 	
 //	테스트용
 //	설문조회

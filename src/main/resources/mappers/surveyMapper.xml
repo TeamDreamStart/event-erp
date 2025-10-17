@@ -146,6 +146,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where r.`survey_id` = #{surveyId}
 	</select>
 
+<!-- 유저아이디로 응답 갯수 카운트 -->
+<select id="responseCountByUser" resultType="int">
+	select count(*)
+	from `event_erp`.`survey_response`
+	where `survey_id` = #{surveyId}
+		and `user_id` = #{userId}
+</select>
+
 	<!-- 상세 1건 -->
 	<select id="findSurvey" resultMap="surveyMap">
 		select
@@ -176,6 +184,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from `event_erp`.`survey` s
 		left join `event_erp`.`event` e on e.`event_id` = s.`event_id`
 		where s.`survey_id` = #{surveyId}
+	</select>
+	
+	<!-- 이벤트 기준으로 설문 ID 조회 -->
+	<select id="findSurveyIdByEvent" parameterType="long" resultType="long">
+		select `survey_id`
+		from `event_erp`.`survey`
+		where `event_id` = #{eventId}
+		limit 1
+	</select>
+	
+	<!-- 방금 insert된 응답 id -->
+	<select id="findLastRespomseId" resultType="long">
+		select `response_id`
+		from `event_erp`.`survey_response`
+		where `survey_id` = #{surveyId}
+			and `user_id` = #{userId}
+		order by `responded_at` desc
+		limit 1
 	</select>
 
    <!-- 문항리스트 -->
@@ -610,5 +636,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			end as pct_applicants
 		from base b cross join appl a
 		order by b.`question_id`, b.`option_id`
+	</select>
+	
+	<!-- 오픈설문 + 예약자정보 (사용자용 뷰) -->
+	<select id="openSurveyReservations" resultType="map">
+		select *
+		from `event_erp`.`vw_event_survey_reservation`
+		where `user_id` = #{userId}
+		order by open_at desc
+	</select>
+	
+	<!-- 관리자용 : 모든설문 + 예약자정보 -->
+	<select id="adminSurveyReservations" resultType="map">
+		select *
+		from `event_erp`.`vw_event_survey_reservation_admin`
+		order by`event_id` desc, survey_id desc
 	</select>
 </mapper>

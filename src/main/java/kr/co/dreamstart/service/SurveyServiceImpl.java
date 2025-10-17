@@ -16,6 +16,7 @@ import kr.co.dreamstart.dto.SurveyDTO;
 import kr.co.dreamstart.dto.SurveyOptionDTO;
 import kr.co.dreamstart.dto.SurveyQuestionDTO;
 import kr.co.dreamstart.dto.SurveyResponseDTO;
+import kr.co.dreamstart.service.SurveyService;
 import kr.co.dreamstart.mapper.EventMapper;
 import kr.co.dreamstart.mapper.SurveyMapper;
 import lombok.RequiredArgsConstructor;
@@ -59,11 +60,12 @@ public class SurveyServiceImpl implements SurveyService {
 		// TODO Auto-generated method stub
 		return surveyMapper.questionList(surveyId);
 	}
+	
 
 	@Override
-	public List<SurveyOptionDTO> optionList(Long surveyId) {
+	public List<SurveyOptionDTO> optionsList(Long questionId) {
 		// TODO Auto-generated method stub
-		return surveyMapper.optionList(surveyId);
+		return surveyMapper.optionList(questionId);
 	}
 
 	@Override
@@ -326,9 +328,53 @@ public class SurveyServiceImpl implements SurveyService {
 		return (s.getTemplateKey() != null && !s.getTemplateKey().isBlank());
 	}
 
-//	@Override
-//	public int ensureLikert5ForSurvey(Long surveyId) {
-//		// TODO Auto-generated method stub
-//		return 0;
-//	}
+	@Override
+	public List<Map<String, Object>> openSurveyReservations(Long userId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.openSurveyReservations(userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> adminSurveyReservations() {
+		// TODO Auto-generated method stub
+		return surveyMapper.adminSurveyReservations();
+	}
+
+	@Override
+	public boolean saveResponse(Long userId, Long eventId, Map<Long, Long> answers) {
+		// TODO Auto-generated method stub
+		// 1) 이벤트에 연결된 설문 ID 찾기
+		Long surveyId = surveyMapper.findSurveyIdByEvent(eventId);
+		if (surveyId == null) {
+			log.warn("설문이 존재하지 않습니다. eventId={}", eventId);
+			return false;
+		}
+		
+		// 2) 중복 응답 여부 확인
+		int existing = surveyMapper.responseCountByUser(surveyId, userId);
+		if (existing > 0) {
+			log.info("이미 응답한 유저입니다: userId={}, surveyId={}", userId, surveyId);
+			return false;
+		}
+		
+		// 3) 응답 헤더 insert
+		surveyMapper.insertResponse(surveyId, userId);
+		
+		// 4) 최근 응답 id 조회
+		Long responseId = surveyMapper.findLastResponseId(surveyId, userId);
+		
+		// 5) 문항별 응답 저장
+		for (Map.Entry<Long, Long> entry : answers.entrySet()) {
+			surveyMapper.insertAnswer(responseId, entry.getKey(), entry.getValue(), null);
+		}
+		
+		log.info("설문 응답 저장 완료 : userId={}, eventId={}, responseId={}", userId, eventId, responseId);
+		return true;
+	}
+
+	@Override
+	public Map<String, Object> findSurveyIdByEvent(Long eventId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
