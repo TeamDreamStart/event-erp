@@ -62,7 +62,7 @@ main {
 	border: 1px solid #D9D9D9;
 	padding: 32px 23px;
 	border-radius: 12px;
-	margin-bottom: 26px;
+	margin-bottom: 40px;
 }
 
 .form-section-title {
@@ -72,7 +72,7 @@ main {
 }
 
 .form-group {
-	margin-bottom: 20px;
+	margin-bottom: 29px;
 }
 
 .form-group:last-of-type {
@@ -83,7 +83,7 @@ main {
 	display: block;
 	font-size: 14px;
 	font-weight: 700;
-	margin-bottom: 8px;
+	margin-bottom: 9px;
 }
 
 .form-input-box {
@@ -112,7 +112,12 @@ main {
 	font-size: 12px;
 	margin-top: 5px;
 }
-
+#phone-group.form-group{
+	margin-bottom: 0px;
+}
+.form-group :last-child{
+	margin-bottom: 0px;
+}
 .help-text {
 	color: #888;
 }
@@ -135,7 +140,7 @@ main {
 	display: flex;
 	justify-content: flex-end;
 	gap: 14px;
-	margin-top: 40px;
+	margin-top: 34px;
 }
 
 .action-btn {
@@ -182,10 +187,15 @@ main {
 					<input type="hidden" id="userId" name="userId"
 						value="${userDTO.userId}">
 
+						<div class="form-group">
+    <label class="form-label" for="username">아이디 (변경 불가)</label> 
+    <input type="text" id="username" name="username" class="form-input-box email-input" value="${userDTO.username}" onblur="checkUserIdFormat(this)" readonly><!--유저확인 함수는 기제안했음-->
+</div>
+
 					<div class="form-group">
 						<label class="form-label" for="email">이메일 (변경 불가)</label> <input
 							type="text" id="email" name="email"
-							class="form-input-box email-input" value="${userDTO.email}"
+							class="form-input-box email-input" style="caret-color: transparent;" value="${userDTO.email}"
 							onblur="checkEmailFormat(this)">
 					</div>
 
@@ -198,26 +208,29 @@ main {
 					<div class="form-group" id="phone-group">
 						<label class="form-label" for="phone">전화번호*</label> <input
 							type="text" id="phone" name="phone" value="${userDTO.phone}"
-							class="form-input-box" placeholder="예) 010-1234-5678" required
+							class="form-input-box" style="caret-color: transparent;" placeholder="예) 010-1234-5678" required
 							pattern="\d{3}-\d{4}-\d{4}" oninput="autoFormatPhone(this)"
 							onblur="checkPhoneValidity(this)"> <span
 							class="help-text">'-'를 포함하여 000-0000-0000 형식으로 입력해 주세요.</span> <span
 							class="error-message" id="phone-error">전화번호 형식이 올바르지 않습니다.
 							(예: 000-0000-0000)</span>
 					</div>
+					<div class="button-area">
+						<button type="submit" class="action-btn save-btn">저장</button>
+					</div>
 				</form>
 			</div>
 
-			<div class="info-box" style="margin-bottom: 140px;">
-				<form action=" " method="post">
+			<div class="info-box">
+				<form action="#" method="post">
 					<div class="form-section-title">비밀번호 변경</div>
 
-					<div class="form-group">
+					<!-- <div class="form-group">
 						<label class="form-label" for="currentPassword">현재 비밀번호</label> <input
 							type="password" id="currentPassword" name="currentPassword"
 							class="form-input-box" placeholder="현재 비밀번호를 입력하세요"> <input
 							type="hidden" name="existingPassword" value="${userDTO.password}">
-					</div>
+					</div> -->
 
 					<div class="form-group">
 						<label class="form-label" for="newPassword">새 비밀번호</label> <input
@@ -238,6 +251,10 @@ main {
 					</div>
 				</form>
 			</div>
+			<div class="button-area"  style="margin-bottom: 140px; margin-top: 0;">
+						<button type="button" class="action-btn cancel-btn"
+							onclick="history.back()">취소</button>
+					</div>
 		</div>
 	</main>
 
