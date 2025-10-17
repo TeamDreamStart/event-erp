@@ -2,176 +2,190 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>회원 상세보기</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
+<title>MyPage</title>
 <style>
-
-/* 임시 */
 body {
-	font-family: Arial, sans-serif;
-	margin: 30px;
+    background-color: #E5E2DB;
+    color: #222222;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    margin: 0;
+    padding: 0 120px 60px;
+    line-height: 1;
 }
 
-h2 {
-	margin-top: 40px;
-	border-bottom: 1px solid #ddd;
-	padding-bottom: 5px;
+main {
+    margin-top: 0;
+    padding: 0;
 }
 
-.section {
-	margin-top: 20px;
+.container {
+    max-width: 896px; /* 이미지에 따라 적절한 너비 설정 */
+    margin: 0 auto;
+    padding: 0;
 }
 
-.label {
-	display: inline-block;
-	width: 120px;
-	font-weight: bold;
+.section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px; /* 제목과 내용 사이 간격 */
 }
 
-.row {
-	margin: 6px 0;
+.page-title {
+    display: flex;
+    align-items: center;
 }
 
-table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-top: 10px;
+.page-title h2 {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 40px;
 }
 
-th, td {
-	border: 1px solid #ccc;
-	padding: 8px;
-	text-align: left;
+/* --- 회원 정보 섹션 --- */
+.member-info-box {
+    background-color: #FFFFFF;
+    padding: 32px 51px;
+    border: 1px solid #D9D9D9;
+    border-radius: 12px;
+    margin-bottom: 30px; 
+    position: relative;
+    font-size: 14px;
+		max-height: 163;
 }
 
-th {
-	background-color: #f9f9f9;
+.info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom:40px;
 }
 
-.center {
-	text-align: center;
-	color: #777;
+.info-header p {
+    font-weight: bold;
+    margin: 0;
+}
+
+.modify-btn {
+    background-color: #D9D9D9;
+    color: #222222;
+    padding: 5px 22px;
+    border-radius: 12px;
+    font-size: 14px;
+    cursor: pointer;
+		border: none;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr; /* 항목명 | 이메일 | 전화번호 */
+    gap: 12px 0;
+    font-size: 14px;
+}
+
+.info-label {
+    font-weight: 700;
+    color: #222222;
+}
+
+/* --- 나의 예약 섹션 (예약 없음 상태) --- */
+.my-reservation-box {
+    background-color: #FFFFFF;
+    padding: 32px 51px;
+    border: 1px solid #D9D9D9;
+    border-radius: 12px;
+    min-height: 218px; 
+		max-width: 896px ;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* '나의 예약' 제목 위치 */
+    margin-bottom: 140px;
+}
+
+.my-reservation-box h3 {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0 0 28px 0;
+    width: 100%;
+}
+
+.no-reservation-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex-grow: 1; /* 중앙 정렬을 위해 남은 공간 차지 */
+    text-align: center;
+}
+
+.no-reservation-content p {
+    font-size: 14px;
+    margin: 0 0 11px 0;
+    color: #222222;
+}
+
+.event-button {
+    text-decoration: none;
+    background-color: #BFD4F9;
+    color: #222222;
+    padding: 10px;
+		margin-top: 17px;
+    border: 1px solid #8FAFED;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-block;
 }
 </style>
 </head>
-<body id="page-top">
+<body>
+<jsp:include page="/WEB-INF/views/common/header.jsp"/>
+<main>
+<div class="container">
+    <div class="section-header">
+        <div class="page-title">
+            <h2>MyPage</h2>
+        </div>
+    </div>
 
-	<header>
-		<jsp:include page="/WEB-INF/views/common/header.jsp" flush="true" />
-	</header>
-
-	<script>
-		const result = '${empty result ? "" : result}';
-		const resultType = '${empty resultType ? "" : resultType}';
-
-		if (result === 'success') {
-			alert(`성공적으로 ${resultType}되었습니다.`);
-		} else if (result === 'fail') {
-			alert(`${resultType}이(가) 실패하였습니다.`);
-		}
-	</script>
-	<h1>마이페이지</h1>
-	<button type="button"
-		onclick="location.href='/my-info/${userDTO.userId}/update'">내
-		정보 수정</button>
-
-
-	<!-- 설문조사 -->
-	<h2>${userDTO.name }님의 설문조사 내역</h2>
-	<table>
-		<thead>
-			<tr>
-				<th>설문 제목</th>
-				<th>응답 여부</th>
-				<th>응답일</th>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach var="survey" items="${surveyList}">
-				<tr>
-					<td>${survey.title}</td>
-					<td><c:choose>
-							<c:when test="${survey.responded}">응답완료</c:when>
-							<c:otherwise>미응답</c:otherwise>
-						</c:choose></td>
-					<td>${survey.respondedAt}</td>
-				</tr>
-			</c:forEach>
-
-			<c:if test="${empty surveyList}">
-				<tr>
-					<td colspan="3" class="center">설문이 없습니다.</td>
-				</tr>
-			</c:if>
-		</tbody>
-	</table>
-
-	<!-- 예약 및 결제 -->
-	<h2>${userDTO.name }님의 예약 및 결제 정보</h2>
-	<table>
-		<thead>
-			<tr>
-				<th>예약번호</th>
-				<th>이벤트명</th>
-				<th>예약일</th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach var="r" items="${reservationList}">
-				<tr>
-					<td>${r.reservationId}</td>
-					<td>${r.eventTitle}</td>
-					<td>${r.reservationDate}</td>
-					<td><button type="button"
-							onclick="location.href='/reservations/${r.reservationId}'">자세히보기</button></td>
-				</tr>
-			</c:forEach>
-
-			<c:if test="${empty reservationList}">
-				<tr>
-					<td colspan="3" class="center">예약 내역이 없습니다.</td>
-				</tr>
-			</c:if>
-		</tbody>
-
-	</table>
-
-	<!-- QNA -->
-
-	<h2>${userDTO.name }님의 QNA 작성 내역 </h2>
-	<table>
-		<thead>
-			<tr>
-				<th>제목</th>
-				<th>작성일</th>
-				<th>답변여부</th>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach var="qna" items="${postList}">
-				<tr>
-					<td>${qna.title}</td>
-					<td>${qna.createdAt}</td>
-					<td><c:if test="${qna.commentCount > 0 }">
-							<a style="color: red" href="/qna/${qna.postId}">답변완료</a>
-						</c:if> <c:if test="${qna.commentCount == 0 }">
-					답변대기
-					</c:if></td>
-				<tr>
-			<c:forEach var="qnaDTO" items="${postList}">
-			<c:if test="${empty postList}">
-				<tr>
-					<td colspan="3" class="center">작성한 QNA가 없습니다.</td>
-				</tr>
-			</c:if>
-		</tbody>
-	</table>
-	<footer>
-		<jsp:include page="/WEB-INF/views/common/footer.jsp" flush="true" />
-	</footer>
-
+    <div class="member-info-box">
+        <div class="info-header">
+            <p>나의 정보</p>
+            <button class="modify-btn" onclick="location.href='/my-info/${userDTO.userId}/edit'">수정</button>
+        </div>
+        
+        <div class="info-grid">
+            <span class="info-label">이름</span>
+            <span class="info-label">이메일</span>
+            <span class="info-label">전화번호</span>
+            
+            <span>${userDTO.name}</span>
+            <span>${userDTO.email}</span>
+            <span>${userDTO.phone}</span>
+        </div>
+    </div>
+    
+    <div class="my-reservation-box">
+        <h3>나의 예약</h3>
+        
+		<c:if test="${empty reservationList}"></c:if>
+        <div class="no-reservation-content">
+            <p>예약 내역이 없습니다.</p>
+            <p>새로운 이벤트를 예약해 보세요!</p>
+            <a href="/events" class="event-button">이벤트 둘러보기</a>
+        </div>
+		</c:if>
+    </div>
+</div>
+</main>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 </body>
 </html>
