@@ -16,7 +16,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="created_at" property="createdAt" />
 		<result column="updated_at" property="updatedAt" />
 		<result column="published_at" property="publishedAt" />
-		<result column="comment_count" property="commentCount" />
+		<!-- 댓글 -->
+		<result column="commentCount" property="commentCount" />
+		<result column="commentContent" property="commentContent" />
+		<result column="commentCreatedAt" property="commentCreatedAt" />
+
 	</resultMap>
 
 	<resultMap type="BoardCommentDTO" id="boardCommentMap">
@@ -42,7 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select p.*,(SELECT COUNT(*)
 		FROM
 		board_comment c WHERE c.post_id =
-		p.post_id) AS comment_count
+		p.post_id) AS commentCount
 		from
 		`board_post` p
 		where 1=1
@@ -195,8 +199,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 	<!-- 특정 회원 qna List -->
-<select id="listWithCommentCountByUserId" resultMap="boardPostMap" parameterType="long">
-	SELECT
+	<select id="listWithCommentCountByUserId"
+		resultMap="boardPostMap" parameterType="long">
+		SELECT
 		p.post_id,
 		p.user_id,
 		p.title,
@@ -204,19 +209,56 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		p.created_at,
 		p.updated_at,
 		IFNULL(COUNT(c.comment_id), 0) AS commentCount
-	FROM board_post p
-	LEFT JOIN board_comment c
+		FROM board_post p
+		LEFT
+		JOIN board_comment c
 		ON p.post_id = c.post_id
-	WHERE p.user_id = #{userId}
-	  AND p.category = 'QNA'
-	GROUP BY
+		WHERE p.user_id =
+		#{userId}
+		AND p.category = 'QNA'
+		GROUP BY
 		p.post_id,
 		p.user_id,
 		p.title,
 		p.content,
 		p.created_at,
 		p.updated_at
-	ORDER BY p.created_at DESC
-</select>
+		ORDER BY p.created_at DESC
+	</select>
+
+	<!-- 사용자 화면 QNA 리스트에서 게시글(질문)과 답변(댓글)을 같이 표시할 수 있ek -->
+	<select id="listWithComment" resultMap="boardPostMap">
+		SELECT
+		p.post_id,
+		p.category,
+		p.title,
+		p.content,
+		p.user_id,
+		p.is_pinned,
+		p.visibility,
+		p.created_at,
+		COUNT(c.comment_id) AS commentCount,
+		MAX(c.content) AS commentContent,
+		MAX(c.created_at) AS commentCreatedAt
+		FROM board_post p
+		LEFT JOIN board_comment c
+		ON p.post_id = c.post_id
+		WHERE p.category = #{category} and visibility = 'PUBLIC'
+		<if test="searchType == 'title'">
+			AND p.title = #{keyword}
+		</if>
+		GROUP BY
+		p.post_id,
+		p.category,
+		p.title,
+		p.content,
+		p.user_id,
+		p.is_pinned,
+		p.visibility,
+		p.created_at
+		ORDER BY p.created_at DESC
+		limit
+		#{cri.pageStart},#{cri.perPageNum}
+	</select>
 
 </mapper>

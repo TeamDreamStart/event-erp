@@ -218,20 +218,24 @@ public class UserController {
 		return "redirect:/login";
 	}
 
-	// 로그인한 사용자의 ID와 URL 경로의 userId가 같을 때만 접근 허용
+	// userInfo Detail
+	// 로그인한 사용자의 ID와 URL 경로의 userId가 같을 때만 접근 허용해야함
 	@PreAuthorize("#userId == principal.userId")
 	@GetMapping("/my-info/{userId}")
 	public String myInfo(@PathVariable("userId") long userId, Model model) {
 		UserDTO userDTO = userService.findByUserId(userId);
 		model.addAttribute("userDTO", userDTO);
-		List<AdminJoinDTO> list = adminService.selectJoinPayByUserId(userId); // 예약 및 결제정보
-		model.addAttribute("reservationList", list);
+		List<AdminJoinDTO> reservationList = adminService.selectJoinPayByUserId(userId); // 예약 및 결제정보
+		for(AdminJoinDTO dto : reservationList) {
+			System.out.println(dto);
+		}
+		model.addAttribute("reservationList", reservationList);
 		List<BoardPostDTO> postList = boardService.listWithCommentCountByUserId(userId);
 		model.addAttribute("postList", postList);
 		return "/user/myInfo";
 	}
 
-	// 로그인한 사용자의 ID와 URL 경로의 userId가 같을 때만 접근 허용
+	// 로그인한 사용자의 ID와 URL 경로의 userId가 같을 때만 접근 허용해야함 안먹음;;
 	@PreAuthorize("#userId == authentication.principal.userId")
 	@GetMapping("/my-info/{userId}/edit")
 	public String myInfoForm(@PathVariable("userId") long userId, Model model) {
@@ -260,7 +264,12 @@ public class UserController {
 	}
 	
 	
-	//회원탈퇴
+	//회원탈퇴 -> 회원정보 만료?/삭제 후 로그아웃, 메인화면으로
+	@PostMapping("")
+	public String quitUser() {
+		
+		return "redirect:/";
+	}
 	
 
 	// 로그인한 사용자의 ID와 URL 경로의 userId가 같을 때만 접근 허용

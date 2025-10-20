@@ -182,7 +182,7 @@ main {
 
 			<div class="info-box">
 				<form onsubmit="return validateForm(event)"
-					action="/my-info/${userDTO.userId}/update" method="post">
+					action="/my-info/${userDTO.userId}/edit" method="post">
 					<div class="form-section-title">기본 정보</div>
 					<input type="hidden" id="userId" name="userId"
 						value="${userDTO.userId}">
@@ -221,8 +221,8 @@ main {
 				</form>
 			</div>
 
-			<div class="info-box">
-				<form action="#" method="post">
+			<div class="info-box" style="margin-bottom: 140px;">
+				<form action="/my-info/${userDTO.userId }/edit/pass" method="post">
 					<div class="form-section-title">비밀번호 변경</div>
 
 					<!-- <div class="form-group">
@@ -245,9 +245,8 @@ main {
 					</div>
 
 					<div class="button-area">
-						<button type="button" class="action-btn cancel-btn"
-							onclick="history.back()">취소</button>
-						<button type="submit" class="action-btn save-btn">저장</button>
+
+						<button type="submit" class="action-btn save-btn">변경</button>
 					</div>
 				</form>
 			</div>

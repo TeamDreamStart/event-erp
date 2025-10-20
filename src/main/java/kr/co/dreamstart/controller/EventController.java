@@ -37,6 +37,10 @@ public class EventController {
 	public String detail(@PathVariable Long id, Model model) {
 		log.info("GET event/{} 호출", id);
 		model.addAttribute("event", eventService.findById(id));
+		
+		//해당 이벤트 fileList 전달해야함
+		
+		
 		return "event/eventDetail";
 	}
 	

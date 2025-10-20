@@ -75,4 +75,7 @@ public interface BoardMapper {
 	
 	public List<BoardPostDTO> listWithCommentCountByUserId(long userId);
 
+	
+	// QNA 게시글(*),댓글,댓글수 가져오는 쿼리
+	public List<BoardPostDTO> listWithComment(@Param("cri")Criteria cri,@Param("category")String category,@Param("searchType")String searchType,@Param("keyword")String keyword);
 }

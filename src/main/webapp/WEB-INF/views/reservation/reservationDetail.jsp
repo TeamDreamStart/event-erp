@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -155,25 +156,26 @@ flex-direction: column;
     <h3>예약 정보</h3>
     <div class="info-row">
         <span class="info-label">예약번호</span>
-        <span class="info-value">CJ123456789</span>
+        <span class="info-value">${reservationDTO.reservationId}</span>
     </div>
     <div class="info-row">
         <span class="info-label">이벤트명</span>
-        <span class="info-value">가을 음악 페스티벌</span>
+        <span class="info-value">${reservationDTO.eventTitle}</span>
     </div>
     <div class="info-row">
         <span class="info-label">예약자</span>
-        <span class="info-value">qwertyuiop</span>
+        <span class="info-value">DTO수정필요
+					<%-- ${reservationDTO.userName} --%></span>
     </div>
     <div class="info-row">
-        <span class="info-label">연락처</span>
-        <span class="info-value">010-1234-5678</span>
+        <span class="info-label">인원</span>
+        <span class="info-value">${reservationDTO.headcount}</span>
     </div>
     <div class="info-row">
-        <span class="info-label">이메일</span>
-        <span class="info-value">qwertyuiop@naver.com</span>
+        <span class="info-label">예약상태</span>
+        <span class="info-value">${reservationDTO.reservationStatus}</span>
     </div>
-    <div class="info-row">
+    <!-- <div class="info-row">
         <span class="info-label">이벤트 일시</span>
         <span class="info-value">2025-09-28</span>
     </div>
@@ -186,28 +188,31 @@ flex-direction: column;
         <span class="info-value">
             <span class="status-button status-reservation-complete">예약완료</span>
         </span>
-    </div>
+    </div> -->
 </div>
 
 <div class="info-box">
     <h3>결제 정보</h3>
     <div class="info-row">
         <span class="info-label">결제 방법</span>
-        <span class="info-value">카드결제</span>
+        <span class="info-value">${reservationDTO.paymentMethod}</span>
     </div>
     <div class="info-row">
         <span class="info-label">결제 상태</span>
         <span class="info-value">
-            <span class="status-button status-payment-complete">결제완료</span>
+            <span class="status-button status-payment-complete">${reservationDTO.paymentStatus}</span>
         </span>
     </div>
     <div class="info-row">
         <span class="info-label">결제 금액</span>
-        <span class="info-value">15,000원</span>
+        <span class="info-value"><fmt:formatNumber value="${reservationDTO.paymentAmount}"
+						pattern="###,###,###" />
+					원</span>
     </div>
     <div class="info-row">
         <span class="info-label">결제 일시</span>
-        <span class="info-value">2025-09-20</span>
+        <span class="info-value"><fmt:formatDate value="${reservationDTO.reservationDate}"
+						pattern="yyyy-MM-dd HH:mm:ss" /></span>
     </div>
 
     <div class="action-buttons">
