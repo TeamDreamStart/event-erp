@@ -60,6 +60,7 @@ public class BoardController {
 		model.addAttribute("pageVO", map.get("pageVO"));
 		model.addAttribute("cri", map.get("cri"));
 		// 검색 조건 별도 전달
+		model.addAttribute("searchType", searchType);
 		model.addAttribute("keyword", keyword);
 		return "/board/qnaList";
 	}
