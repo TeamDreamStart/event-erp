@@ -80,7 +80,7 @@
 									<th>QR 코드</th>
 									<th>취소 사유</th>
 									<th>취소 일시</th>
-									<th>상세</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -112,7 +112,7 @@
 										<td>${r.cancelReason}</td>
 										<td>${r.cancelledAt}</td>
 										<td>
-											<a class="btn btn-primary" href="/admin/reservation-manage/${r.reservationId}">상세</a>
+											<a class="btn btn-primary" href="/admin/reservation-manage/${r.reservationId}">관리</a>
 										</td>
 									</tr>
 								</c:forEach>

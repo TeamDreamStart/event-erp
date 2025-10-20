@@ -114,8 +114,7 @@ qna-header div:nth-child(3) {
 .qna-list-container {
 	max-width: 888px;
 	margin: 0 auto;
-	border: 1px solid #AFAFAF;
-	background-color: #fff;
+	background-color: #FAF9F6;
 }
 
 .qna-item {

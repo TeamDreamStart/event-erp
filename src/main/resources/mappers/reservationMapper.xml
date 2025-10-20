@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{cri.pageStart},#{cri.perPageNum}
 	</select>
 
-	<select id="select" resultType="reservationDTO">
+	<select id="select" resultMap="reservationMap">
 		select * from reservation
 		where
 		reservation_id = #{reservationId}
@@ -50,8 +50,197 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{headCount})
 	</insert>
 
+	<resultMap id="reservationJoinMap"
+		type="ReservationJoinDTO">
+		<id column="reservationId" property="reservationId" />
+
+		<!-- EVENT -->
+		<result column="eventId" property="eventId" />
+		<result column="eventTitle" property="eventTitle" />
+
+		<!-- USER -->
+		<result column="userId" property="userId" />
+		<result column="userName" property="userName" />
+
+		<!-- RESERVATION -->
+		<result column="reservationDate" property="reservationDate" />
+		<result column="reservationStatus" property="reservationStatus" />
+		<result column="headCount" property="headCount" />
+		<result column="userType" property="userType" />
+		<result column="qrCode" property="qrCode" />
+		<result column="cancelReason" property="cancelReason" />
+		<result column="reservationCancelledAt"
+			property="reservationCancelledAt" />
+
+		<!-- PAYMENT -->
+		<result column="paymentId" property="paymentId" />
+		<result column="paymentAmount" property="paymentAmount" />
+		<result column="paymentStatus" property="paymentStatus" />
+		<result column="paymentMethod" property="paymentMethod" />
+		<result column="refundAmount" property="refundAmount" />
+		<result column="approveNo" property="approveNo" />
+		<result column="pgTid" property="pgTid" />
+		<result column="memo" property="memo" />
+		<result column="paidAt" property="paidAt" />
+		<result column="paymentCancelledAt"
+			property="paymentCancelledAt" />
+		<result column="paymentCreatedAt" property="paymentCreatedAt" />
+		<result column="impUid" property="impUid" />
+
+	</resultMap>
+
+	<select id="selectJoinPayByUserId"
+		resultMap="reservationJoinMap" parameterType="long">
+		SELECT
+		r.reservation_id AS
+		reservationId,
+		e.title AS eventTitle,
+		r.reservation_date AS
+		reservationDate,
+		r.status AS reservationStatus,
+		r.headcount AS
+		headCount,
+		p.amount AS paymentAmount,
+		p.status AS paymentStatus,
+		p.method AS paymentMethod
+		FROM reservation r
+		JOIN event e ON r.event_id
+		= e.event_id
+		LEFT JOIN payment p ON r.reservation_id = p.reservation_id
+		WHERE r.user_id = #{userId} order by r.reservation_date desc
+	</select>
 
 
+	<select id="selectJoinPayById" resultMap="reservationJoinMap"
+		parameterType="long">
+		SELECT
+		r.reservation_id AS reservationId,
+		e.title AS
+		eventTitle,
+		r.reservation_date AS reservationDate,
+		r.status AS
+		reservationStatus,
+		r.headcount AS headCount,
+		p.amount AS paymentAmount,
+		p.status AS paymentStatus,
+		p.method AS paymentMethod
+		FROM reservation r
+		JOIN event e
+		ON r.event_id = e.event_id
+		LEFT JOIN payment p
+		ON
+		r.reservation_id = p.reservation_id
+		WHERE r.reservation_id =
+		#{reservationId}
+	</select>
+	
+	<update id="cancel">
+		update reservation set status='CANCELLED',
+		cancel_reason = #{cancelReason}, cancelled_at = now() where
+		reservation_id = #{reservationId};
+	</update>
 
+	<select id="adminJoinList" resultMap="reservationJoinMap">
+		SELECT
+		e.event_id AS
+		eventId,
+		e.title AS eventTitle,
+
+		u.user_id AS userId,
+		u.name AS userName,
+
+		r.reservation_id AS reservationId,
+		r.reservation_date AS
+		reservationDate,
+		r.status AS reservationStatus,
+		r.headcount AS
+		headCount,
+		r.user_type AS userType,
+		r.qr_code AS qrCode,
+		r.cancel_reason
+		AS cancelReason,
+		r.cancelled_at AS reservationCancelledAt,
+
+		p.payment_id
+		AS paymentId,
+		p.amount AS paymentAmount,
+		p.status AS paymentStatus,
+		p.method AS paymentMethod,
+		p.refund_amount AS refundAmount,
+		p.approve_no AS approveNo,
+		p.pg_tid AS pgTid,
+		p.memo AS memo,
+		p.paid_at
+		AS paidAt,
+		p.cancelled_at AS paymentCancelledAt,
+		p.created_at AS
+		paymentCreatedAt,
+		p.imp_uid AS impUid
+
+		FROM reservation r
+		JOIN user u
+		ON
+		r.user_id = u.user_id
+		JOIN event e
+		ON r.event_id = e.event_id
+		LEFT JOIN
+		payment p
+		ON p.reservation_id = r.reservation_id
+
+		ORDER BY
+		r.reservation_date DESC
+		limit
+		#{cri.pageStart},#{cri.perPageNum}
+	</select>
+
+	<select id="adminJoinSelect" resultType="ReservationJoinDTO"
+		parameterType="long">
+		SELECT
+		e.event_id AS eventId,
+		e.title AS eventTitle,
+
+		u.user_id AS userId,
+		u.name AS userName,
+
+		r.reservation_id AS
+		reservationId,
+		r.reservation_date AS reservationDate,
+		r.status AS
+		reservationStatus,
+		r.headcount AS headCount,
+		r.user_type AS userType,
+		r.qr_code AS qrCode,
+		r.cancel_reason AS cancelReason,
+		r.cancelled_at AS
+		reservationCancelledAt,
+
+		p.payment_id AS paymentId,
+		p.amount AS
+		paymentAmount,
+		p.status AS paymentStatus,
+		p.method AS paymentMethod,
+		p.refund_amount AS refundAmount,
+		p.approve_no AS approveNo,
+		p.pg_tid AS
+		pgTid,
+		p.memo AS memo,
+		p.paid_at AS paidAt,
+		p.cancelled_at AS
+		paymentCancelledAt,
+		p.created_at AS paymentCreatedAt,
+		p.imp_uid AS
+		impUid
+
+		FROM reservation r
+		JOIN user u
+		ON r.user_id = u.user_id
+		JOIN event
+		e
+		ON r.event_id = e.event_id
+		LEFT JOIN payment p
+		ON p.reservation_id =
+		r.reservation_id
+		WHERE r.reservation_id = #{reservationId};
+	</select>
 
 </mapper>

@@ -36,13 +36,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import kr.co.dreamstart.dto.AdminJoinDTO;
+import kr.co.dreamstart.dto.ReservationJoinDTO;
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.mapper.UserMapper;
 import kr.co.dreamstart.service.AdminService;
 import kr.co.dreamstart.service.BoardService;
 import kr.co.dreamstart.service.EmailSenderService;
+import kr.co.dreamstart.service.ReservationService;
 import kr.co.dreamstart.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -64,6 +65,9 @@ public class UserController {
 	
 	@Autowired
 	private AdminService adminService;
+	
+	@Autowired
+	private ReservationService rService;
 
 //	회원가입
 	@GetMapping("/join") // 바인딩할 빈 객체 생성
@@ -225,8 +229,8 @@ public class UserController {
 	public String myInfo(@PathVariable("userId") long userId, Model model) {
 		UserDTO userDTO = userService.findByUserId(userId);
 		model.addAttribute("userDTO", userDTO);
-		List<AdminJoinDTO> reservationList = adminService.selectJoinPayByUserId(userId); // 예약 및 결제정보
-		for(AdminJoinDTO dto : reservationList) {
+		List<ReservationJoinDTO> reservationList = rService.selectJoinPayByUserId(userId); // 예약 및 결제정보
+		for(ReservationJoinDTO dto : reservationList) {
 			System.out.println(dto);
 		}
 		model.addAttribute("reservationList", reservationList);
