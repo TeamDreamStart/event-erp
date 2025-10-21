@@ -278,8 +278,8 @@
 
 .info-label {
 	display: inline-block;
-	width: 6rem; /* 96px, 기존 120px보다 약간 작게 조정 */
-	font-weight: 600;
+	width: 10rem; /* 96px, 기존 120px보다 약간 작게 조정 */
+	font-weight: 700;
 	color: #6B7280;
 	margin-right: 0.5rem;
 }
@@ -310,14 +310,15 @@
     border-radius: 12px; 
     padding: 32px 31px; 
     width: 455px;
+		min-height: 355px;
 }
 
 /* 제목 스타일 */
 .modal-title {
     font-size: 14px; 
-    font-weight: bold;
+    font-weight: 700;
     color: #222222;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 /* 주의사항 박스 (빨간색 경고 박스) */
@@ -326,45 +327,46 @@
     border: 1px solid #FDBCB4; /* 경계선 */
     padding: 8px;
     border-radius: 3px;
-    margin-bottom: 18px;
+    margin-bottom: 15px;
+		width: 85%;
 }
 
 .warning-header {
     color: #C42006; 
-    font-weight: bold;
+    font-weight: 900;
     margin-bottom: 18px;
     font-size: 14px;
 }
 
 .warning-icon {
     margin-right: 5px;
-    font-size: 1.1em;
+    font-size: 14px;
 }
 
-.warning-list {
-    list-style-type: none; 
+.warning-list { 
     padding-left: 0;
     margin-top: 10px;
     margin-bottom: 0;
-}
-
-.warning-list li {
+		font-weight: 700;
+	}
+	
+	.warning-list li {
     color: #C42006; /* 진한 빨간색 리스트 텍스트 */
     font-size: 14px;
-    line-height: 1.2;
+    line-height: 1.6;
 }
 
 /* 비밀번호 입력 안내 텍스트 */
 .input-instruction {
     font-size: 14px;
-    color: #D9D9D9;
+    color: #222222;
     margin-bottom: 15px;
 }
 
 /* 레이블 텍스트 */
 .label-text {
     display: block;
-    font-weight: bold;
+    font-weight: 700;
     font-size: 14px;
     color: #222222;
     margin-bottom: 8px;
@@ -372,19 +374,23 @@
 
 /* 비밀번호 입력 필드 */
 .password-input {
-    width: 100%;
+    width: 85%;
     padding: 9px;
     border: 1px solid #AFAFAF;
     border-radius: 4px;
     box-sizing: border-box;
     outline: none;
+		background-color: #F2F0EF;
 }
 .password-input:focus {
-    border-color: #007FFF; /* 포커스 시 테두리 색상 */
-    box-shadow: 0 0 0 1px #8c8c8c;
+	border: 1px solid #007FFF;
+	outline: none;
 }
 
-
+.modal-hr{
+	border: 1px solid #222222;
+	margin-top: 12px;
+}
 /* 버튼 영역 */
 .modal-actions {
     display: flex;
@@ -395,19 +401,20 @@
 
 /* 공통 버튼 스타일 */
 .btn {
-    padding: 10px 14px;
     border: none;
     border-radius: 12px;
     cursor: pointer;
     font-size: 14px;
     font-weight: 700;
     transition: background-color 0.2s;
+		width: 52px;
+		height: 34px;
 }
 
 /* 탈퇴 버튼 (빨간색) */
 .btn-withdraw {
     background-color: #ED2100; /* 진한 빨간색 */
-    color: white;
+    color: #222222;
 }
 .btn-withdraw:hover {
     background-color: #cc2900;
@@ -495,9 +502,9 @@
                 <span class="warning-icon">⚠️</span> 주의사항
             </p>
             <ul class="warning-list">
-                <li>회원님의 모든 정보가 삭제됩니다.</li>
-                <li>예약 내역이 모두 삭제됩니다.</li>
-                <li>삭제된 정보는 복구할 수 없습니다.</li>
+                <li>•		회원님의 모든 정보가 삭제됩니다.</li>
+                <li>•		예약 내역이 모두 삭제됩니다.</li>
+                <li>•		삭제된 정보는 복구할 수 없습니다.</li>
             </ul>
         </div>
 
@@ -509,7 +516,7 @@
             <label for="password" class="label-text">비밀번호</label>
             <input type="password" id="password" name="password" 
                   placeholder="비밀번호를 입력하세요." class="password-input" required>
-            
+            <hr class="modal-hr">
             <div class="modal-actions">
                 <button type="submit" class="btn btn-withdraw">탈퇴</button>
                 <button type="button" class="btn btn-cancel" onclick="closeModal()">취소</button>
@@ -522,6 +529,10 @@
     function closeModal() {
         document.getElementById('withdrawalModal').style.display = 'none';
     }
+
+		window.onload = function() {
+        document.getElementById('withdrawalModal').style.display = 'flex';
+    };
 </script>
 </body>
 </html>
