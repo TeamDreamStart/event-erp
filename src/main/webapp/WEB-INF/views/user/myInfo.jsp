@@ -290,7 +290,138 @@
 	font-size: 0.875rem;
 	color: #333333;
 }
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.85); /* 짙은 배경 */
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    display: none;
+}
 
+/* 모달 컨텐츠 박스 (하얀색 박스) */
+.modal-content {
+    background-color: #FAF9F6;
+    border-radius: 12px; 
+    padding: 32px 31px; 
+    width: 455px;
+}
+
+/* 제목 스타일 */
+.modal-title {
+    font-size: 14px; 
+    font-weight: bold;
+    color: #222222;
+    margin-bottom: 20px;
+}
+
+/* 주의사항 박스 (빨간색 경고 박스) */
+.warning-box {
+    background-color: #FFE1DD; /* 연한 빨간색 배경 */
+    border: 1px solid #FDBCB4; /* 경계선 */
+    padding: 8px;
+    border-radius: 3px;
+    margin-bottom: 18px;
+}
+
+.warning-header {
+    color: #C42006; 
+    font-weight: bold;
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+.warning-icon {
+    margin-right: 5px;
+    font-size: 1.1em;
+}
+
+.warning-list {
+    list-style-type: none; 
+    padding-left: 0;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.warning-list li {
+    color: #C42006; /* 진한 빨간색 리스트 텍스트 */
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+/* 비밀번호 입력 안내 텍스트 */
+.input-instruction {
+    font-size: 14px;
+    color: #D9D9D9;
+    margin-bottom: 15px;
+}
+
+/* 레이블 텍스트 */
+.label-text {
+    display: block;
+    font-weight: bold;
+    font-size: 14px;
+    color: #222222;
+    margin-bottom: 8px;
+}
+
+/* 비밀번호 입력 필드 */
+.password-input {
+    width: 100%;
+    padding: 9px;
+    border: 1px solid #AFAFAF;
+    border-radius: 4px;
+    box-sizing: border-box;
+    outline: none;
+}
+.password-input:focus {
+    border-color: #007FFF; /* 포커스 시 테두리 색상 */
+    box-shadow: 0 0 0 1px #8c8c8c;
+}
+
+
+/* 버튼 영역 */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    gap: 14px; /* 버튼 사이 간격 */
+    margin-top: 12px;
+}
+
+/* 공통 버튼 스타일 */
+.btn {
+    padding: 10px 14px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    transition: background-color 0.2s;
+}
+
+/* 탈퇴 버튼 (빨간색) */
+.btn-withdraw {
+    background-color: #ED2100; /* 진한 빨간색 */
+    color: white;
+}
+.btn-withdraw:hover {
+    background-color: #cc2900;
+}
+
+/* 취소 버튼 (옅은 회색) */
+.btn-cancel {
+    background-color: #F2F0EF; /* 옅은 회색 */
+    color: #222222;
+    border: 1px solid #AFAFAF;
+}
+.btn-cancel:hover {
+    background-color: #e0e0e0;
+}
 </style>
 </head>
 <body>
@@ -302,18 +433,20 @@
 					<h2>MyPage</h2>
 				</div>
 			</div>
-			
-			<div class="member-info-box">
-				<div class="info-header">
-					<p>나의 정보</p>
-					<button class="modify-btn"
-					onclick="location.href='/my-info/${userDTO.userId}/edit'">수정</button>
-				</div>
+			<div class="info-box">
 
-				<div class="info-grid">
-					<span class="info-label">이름</span> <span class="info-label">이메일</span>
-					<span class="info-label">전화번호</span> <span>${userDTO.name}</span> <span>${userDTO.email}</span>
-					<span>${userDTO.phone}</span>
+				<div class="member-info-box">
+					<div class="info-header">
+						<p>나의 정보</p>
+						<button class="modify-btn"
+						onclick="location.href='/my-info/${userDTO.userId}/edit'">수정</button>
+					</div>
+					
+					<div class="info-grid">
+						<span class="info-label">이름</span> <span class="info-label">이메일</span>
+						<span class="info-label">전화번호</span> <span>${userDTO.name}</span> <span>${userDTO.email}</span>
+						<span>${userDTO.phone}</span>
+					</div>
 				</div>
 			</div>
 
@@ -353,5 +486,42 @@
 		</div>
 	</main>
 	<jsp:include page="../common/footer.jsp" />
+	<div id="withdrawalModal" class="modal-backdrop">
+    <div class="modal-content">
+        <h2 class="modal-title">회원탈퇴</h2>
+
+        <div class="warning-box">
+            <p class="warning-header">
+                <span class="warning-icon">⚠️</span> 주의사항
+            </p>
+            <ul class="warning-list">
+                <li>회원님의 모든 정보가 삭제됩니다.</li>
+                <li>예약 내역이 모두 삭제됩니다.</li>
+                <li>삭제된 정보는 복구할 수 없습니다.</li>
+            </ul>
+        </div>
+
+        <p class="input-instruction">
+            탈퇴를 진행하시려면 비밀번호를 입력해 주세요.
+        </p>
+
+        <form id="withdrawalForm" action="#" method="POST">
+            <label for="password" class="label-text">비밀번호</label>
+            <input type="password" id="password" name="password" 
+                  placeholder="비밀번호를 입력하세요." class="password-input" required>
+            
+            <div class="modal-actions">
+                <button type="submit" class="btn btn-withdraw">탈퇴</button>
+                <button type="button" class="btn btn-cancel" onclick="closeModal()">취소</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+	// 모달을 닫는 JavaScript 함수 (취소 버튼용)
+    function closeModal() {
+        document.getElementById('withdrawalModal').style.display = 'none';
+    }
+</script>
 </body>
 </html>

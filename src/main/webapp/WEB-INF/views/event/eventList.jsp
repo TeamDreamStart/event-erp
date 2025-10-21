@@ -8,34 +8,22 @@ pageEncoding="UTF-8"%>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
 <link href="https://fonts.cdnfonts.com/css/peristiwa" rel="stylesheet">
+
+<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 <title>eventList</title>
 <style>
-body{
- background-color: #E5E2DB;
-  color: #222222;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
-  font-weight: normal;
-  margin: 0;
-  padding: 0 120px 60px;
-  line-height: 1;
+		body {
+	background: #E5E2DB;
 }
-main {
-  margin-top: 0;
-  padding: 0;
-}
-/* .section-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 16px;
-}
-
-.section-header h2 {
-	font-size: 30px;
-	font-weight: 700;
-	line-height: 40px;
-} */
+	
+	.section-header {
+		display: flex;
+		align-items: center;
+		margin-bottom: 20px; /* 제목과 내용 사이 간격 */
+	}
+	
+	
 .main-event-container {
 display: flex; /* 자식 요소(텍스트, 포스터)를 가로로 배치 */
 align-items: center; /* 세로 중앙 정렬 */
@@ -91,18 +79,10 @@ display: none;
 .event-section{
 margin-bottom: 100px;
 }
-.content-container {
+.container {
 max-width: 100%;
 margin: 0 auto;
 }
-
-.section-header {
-display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 20px; 
-}
-
 .section-header h2{
 font-size: 30px;
 	font-weight: 700;
@@ -396,7 +376,7 @@ line-height: 1.1;
 <body>
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <main>
-<div class="content-container">
+<div class="container">
 <section class="event-section present-event horizontal-scroll-section events-swiper">
 
 <div class="main-event-container">

@@ -12,34 +12,20 @@
 <!-- 포트원 결제 api -->
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
+
+<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 <title>reservation Form</title>
 <style>
-body{
- background-color: #E5E2DB;
-  color: #222222;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
-  font-weight: normal;
-  margin: 0;
-  padding: 0 120px 60px;
-  line-height: 1;
+		body {
+	background: #E5E2DB;
 }
-main {
-  margin-top: 0;
-  padding: 0;
-}
-.container {
-width: 100%;
-  margin: 0 auto;
-  padding: 0;
-  margin-bottom: 140px;
-}
-.section-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 20px;
-}
+	
+	.section-header {
+		display: flex;
+		align-items: center;
+		margin-bottom: 20px; /* 제목과 내용 사이 간격 */
+	}
 
 .section-header h2 {
 	font-size: 30px;
@@ -57,6 +43,7 @@ width: 100%;
   border: 1px solid #D9D9D9;
   color: #222222;
   overflow: hidden;
+  margin-bottom: 140px;
 }
 
 .event-info {
@@ -130,7 +117,7 @@ width: 100%;
 .form-group {
   margin-bottom: 12px;
 }
-.form-group#payment, #name{
+.form-group #name{
     margin-bottom: 20px;
 }
 .form-group label {
@@ -191,6 +178,7 @@ width: 100%;
   display: block;
   font-size: 12px;
   margin-bottom: 10px;
+  font-weight: bold;
 }
 
 .submit-btn {
@@ -311,8 +299,8 @@ width: 100%;
 					<form action="/events/${eventDTO.eventId }/reservations/payment"
 						method="get" id="paymentForm">
 						<div class="form-group">
-							<label>인원수*</label> <input type="number" min="1" max="10"
-								value="1" name="headCount">
+							<label for="people">인원수*</label> <input type="number" id="people" min="1" max="10"
+								value="1" name="headCount" style=" margin-bottom: 20px;" required readonly>
 						</div>
 						<div class="form-group">
 							<label for="name">이름*</label> <input type="text" id="name"

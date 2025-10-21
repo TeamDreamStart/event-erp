@@ -7,33 +7,20 @@ pageEncoding="UTF-8"%>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
+
+<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 <title>reservation cancle</title>
 <style>
-body{
- background-color: #E5E2DB;
-  color: #222222;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
-  font-weight: normal;
-  margin: 0;
-  padding: 0 120px 60px;
-  line-height: 1;
+		body {
+	background: #E5E2DB;
 }
-main {
-  margin-top: 0;
-  padding: 0;
-}
-.container {
-width: 100%;
-  margin: 0 auto;
-  padding: 0;
-}
-.section-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 20px;
-}
+	
+	.section-header {
+		display: flex;
+		align-items: center;
+		margin-bottom: 20px; /* 제목과 내용 사이 간격 */
+	}
 
 .section-header h2 {
 	font-size: 30px;
