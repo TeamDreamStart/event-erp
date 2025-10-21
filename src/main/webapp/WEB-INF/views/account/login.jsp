@@ -6,46 +6,30 @@ uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
+<meta charset="UTF-8"><link
+	href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
+	rel="stylesheet">
+<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 
 <title>login</title>
-<link rel="stylesheet" type="text/css" href="/resources/css/login.css">
+<!-- <link rel="stylesheet" type="text/css" href="/resources/css/login.css"> -->
 <style>
-    body {
-        background-color: #E5E2DB;
-		color: #222222;
-		font-family: 'Montserrat', sans-serif;
-		font-size: medium;
-font-weight: normal;
-		margin: 0;
-		padding: 0 120px 60px; 
-		line-height: 1;
-	}
-	main {
-		margin-top: 0; 
-		padding: 0; 
-	}
-	h2{
-		font-size: 20px;
-        font-weight: bold;
-        user-select: none;
-        cursor: default;
-        margin-bottom: 40px;
-        padding-top: 40px;
-	}
-    .container {
-        width: 100%;
+	body {
+	background: #E5E2DB;
 }
-	.find-main {
-    /* find-main을 화면 가운데 정렬 */
-    margin: 0 auto;
-    margin-bottom: 60px;
-    
+h2 {
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
 }
 .tab-content {
     display: none;
+}
+.section-header {
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
 }
 .uid-section-content, .password-section-content{
         width: 40%;
@@ -179,6 +163,7 @@ br {
 .find-link{
     text-align: right;
     margin: 4px auto 0 auto;
+    text-decoration: none;
 }
 .find-link a {
     color: #222222;
@@ -235,8 +220,10 @@ br {
     <jsp:include page="/WEB-INF/views/common/header.jsp"/>
     <main>
     <div class="container">
-        <h2>Login</h2>
-        <div class="find-main">
+        <div class="section-header">
+            <h2>Login</h2>
+        </div>
+        <div class="container">
             <div class="tab-header">
                 <button type="button" class="tab-btn active" data-tab="uid-section-content">회원으로 로그인하기</button>
                 <button type="button" class="tab-btn" data-tab="password-section-content">비회원으로 예약조회</button>

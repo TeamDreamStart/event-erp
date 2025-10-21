@@ -9,38 +9,20 @@ pageEncoding="UTF-8"%>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
 <title>Reservation Check</title>
 <style>
-body {
-    background-color: #E5E2DB;
-    color: #222222;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 16px;
-    font-weight: normal;
-    margin: 0;
-    padding: 0 120px 60px;
-    line-height: 1;
+    body {
+	background: #E5E2DB;
 }
+	
+	.section-header {
+		display: flex;
+		align-items: center;
+		margin-bottom: 20px; /* 제목과 내용 사이 간격 */
+	}
 
-main {
-    margin-top: 0;
-    padding: 0;
-}
-
-.container {
-    max-width: 896px;
-    margin: 0 auto;
-    padding: 0;
-}
-
-.section-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom:20px;
-}
 .section-header h2 {
-    font-size: 30px;
-    font-weight: 700;
-    line-height: 40px;
+	font-size: 30px;
+	font-weight: 700;
+	line-height: 40px;
 }
 
 .reservation-title a {

@@ -7,39 +7,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link
-	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap"
-	rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
+
+<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 <title>마이페이지 - 예약 상세</title>
 <style>
-body {
-	background-color: #E5E2DB;
-	color: #222222;
-	font-family: 'Montserrat', sans-serif;
-	font-size: 14px;
-	font-weight: normal;
-	margin: 0;
-	line-height: normal;
-	padding: 0 120px 60px;
+		body {
+	background: #E5E2DB;
 }
-
-main {
-	margin-top: 0px;
-	padding: 0px;
-}
-
-.container {
-	width: 100%;
-	margin: 0 auto;
-	padding: 0;
-}
-
-.section-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 20px;
-}
+	
+	.section-header {
+		display: flex;
+		align-items: center;
+		margin-bottom: 20px; /* 제목과 내용 사이 간격 */
+	}
 
 .section-header h2 {
 	font-size: 30px;

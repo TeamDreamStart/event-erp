@@ -26,7 +26,7 @@ body{
   margin:0;
   font:16px/1.5 "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   color:#222;
-  background:#fff;
+  background:#E5E2DB;
 }
 a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
   outline:2px solid #1a73e8; outline-offset:2px;

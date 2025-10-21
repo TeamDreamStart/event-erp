@@ -7,32 +7,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link
-	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap"
-	rel="stylesheet" />
+	href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
+	rel="stylesheet">
+<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 <title>MyPage - 회원 정보 수정</title>
 <style>
-body {
-	background-color: #E5E2DB;
-	color: #222222;
-	font-family: 'Montserrat', sans-serif;
-	font-size: 16px;
-	font-weight: normal;
-	margin: 0;
-	padding: 0 120px 60px;
-	line-height: 1;
+	body {
+	background: #E5E2DB;
 }
-
-main {
-	margin-top: 0;
-	padding: 0;
-}
-
-.container {
-	max-width: 896px;
-	margin: 0 auto;
-	padding: 0;
-}
-
 .section-header {
 	display: flex;
 	align-items: center;
@@ -62,13 +45,17 @@ main {
 	border: 1px solid #D9D9D9;
 	padding: 32px 23px;
 	border-radius: 12px;
-	margin-bottom: 40px;
+	max-width: 896px;
+	margin: 0 auto 40px auto;
+}
+.info-box:last-child{
+	margin-bottom: 0;
 }
 
 .form-section-title {
 	font-size: 16px;
 	font-weight: bold;
-	margin-bottom: 30px;
+	margin-bottom: 40px;
 }
 
 .form-group {
@@ -112,12 +99,7 @@ main {
 	font-size: 12px;
 	margin-top: 5px;
 }
-
-#phone-group.form-group {
-	margin-bottom: 0px;
-}
-
-.form-group :last-child {
+.form-group :last-child{
 	margin-bottom: 0px;
 }
 
@@ -143,7 +125,12 @@ main {
 	display: flex;
 	justify-content: flex-end;
 	gap: 14px;
-	margin-top: 34px;
+	max-width: 896px;
+}
+.end-btn{
+	margin: 34px auto 140 auto;
+	max-width: 896px;
+	width: 100%;
 }
 
 .action-btn {
@@ -163,12 +150,42 @@ main {
 	background-color: #F2F0EF;
 	color: #222222;
 	border: 1px solid #AFAFAF;
+	right: 0;
 }
 
 .save-btn {
 	background-color: #BFD4F9;
 	color: #222222;
 	border: 1px solid #8FAFED;
+}
+    option {
+        font-size: 16px;
+    }
+
+		select.box{
+
+		}
+.birth-select {
+    max-width: 100%;
+    min-width: 135px;
+    padding: 8px;
+    border-radius: 3px;
+    font-size: 14px;
+    box-sizing: border-box;
+    border-radius: 3px;
+    border: 1px solid #AFAFAF;
+    background-color: #F2F0EF;
+    font-family: 'Montserrat', 'Pretendard', sans-serif;
+}
+    /* 2. 생년월일 섹션의 정렬 (가장 중요한 부분!) */
+.form-group.birth-date-group {
+    /* 레이블이 위에 있고, select 박스들이 아래에 한 줄로 오게 하려면 별도 flex 설정을 안 해도 됩니다. */
+}
+/* 3. 년/월/일 select 박스들을 한 줄에 정렬하고 간격 유지 */
+.birth-select-wrapper {
+    display: flex; /* 자식 요소(select)를 가로로 배열 */
+    gap: 6px;      /* select 박스들 사이에 8px 간격 (이미지 기반 추정치) */
+    width: 100%;   /* 부모 요소의 너비를 꽉 채우도록 */
 }
 </style>
 </head>
@@ -225,23 +242,37 @@ main {
 							class="error-message" id="phone-error">전화번호 형식이 올바르지 않습니다.
 							(예: 000-0000-0000)</span>
 					</div>
-					<!-- 임시 -->
-					<div class="form-group">
-						<label class="form-label" for="name">성별*</label>
-						<input type="radio" name="gender" value="0" <c:if test="${userDTO.gender == 0 }">checked</c:if>>여자
-						<input type="radio" name="gender" value="1" <c:if test="${userDTO.gender == 1 }">checked</c:if>>남자
+
+					<div class="form-group" id="gender-section">
+						<label class="form-label" for="gender">성별*</label>
+						<input type="radio" id="male" name="gender" class="gender1">
+						<label for="male">남</label>
+						<input type="radio" id="female" name="gender" class="gender1">
+						<label for="female">여</label>
 					</div>
-					<div class="form-group">
-						<label class="form-label" for="name">생일</label>
-						<input type="date" name="birthDate" value="${userDTO.birthDate }">
-					</div>
+					<!-- 생년월일 -->
+            <div class="form-group">
+              <label class="form-label" for="birth_year">생년월일*</label>
+              <div class="birth-select-wrapper">
+                <select class="birth-select" id="birth_year" name="birth_year">
+                  <option value="" disabled selected>출생 연도</option>
+                </select>
+                <select class="birth-select" id="birth_month" name="birth_month">
+                  <option value="" disabled selected>월</option>
+                </select>
+                <select class="birth-select" id="birth_day" name="birth_day">
+                  <option value="" disabled selected>일</option>
+                </select>
+              </div>
+            </div>
+
 					<div class="button-area">
 						<button type="submit" class="action-btn save-btn">저장</button>
 					</div>
 				</form>
 			</div>
 
-			<div class="info-box" style="margin-bottom: 140px;">
+			<div class="info-box">
 				<form action="/my-info/${userDTO.userId }/edit/pass" method="post">
 					<input type="hidden" name="${_csrf.parameterName}"
 						value="${_csrf.token}" /> 
@@ -261,13 +292,13 @@ main {
 					<div class="form-group">
 						<label class="form-label" for="newPassword">새 비밀번호</label> <input
 							type="password" id="newPassword" name="newPassword"
-							class="form-input-box" placeholder="새 비밀번호를 입력하세요">
+							class="form-input-box" placeholder="새 비밀번호를 입력하세요" required>
 					</div>
 
 					<div class="form-group">
 						<label class="form-label" for="confirmPassword">새 비밀번호 확인</label>
 						<input type="password" id="confirmPassword" name="confirmPassword"
-							class="form-input-box" placeholder="새 비밀번호를 다시 입력하세요">
+							class="form-input-box" placeholder="새 비밀번호를 다시 입력하세요" required>
 					</div>
 
 					<div class="button-area">
@@ -276,14 +307,45 @@ main {
 					</div>
 				</form>
 			</div>
-			<div class="button-area" style="margin-bottom: 140px; margin-top: 0;">
-				<button type="button" class="action-btn cancel-btn"
-					onclick="history.back()">취소</button>
-			</div>
+			<div class="button-area end-btn" >
+						<button type="button" class="action-btn cancel-btn"
+							onclick="history.back()">취소</button>
+					</div>
 		</div>
 	</main>
 
 	<script>
+		/* ============================
+ * 생년월일 옵션
+ * ============================ */
+const birthYearEl  = $('#birth_year');
+const birthMonthEl = $('#birth_month');
+const birthDayEl   = $('#birth_day');
+
+function generateDateOptions() {
+  if (!birthYearEl || !birthMonthEl || !birthDayEl) return;
+  const currentYear = new Date().getFullYear();
+  for (let y=currentYear; y>=1940; y--) {
+    const o=document.createElement('option'); o.value=y; o.textContent=y+'년';
+    birthYearEl.appendChild(o);
+  }
+  for (let m=1; m<=12; m++) {
+    const o=document.createElement('option'); o.value=String(m).padStart(2,'0'); o.textContent=o.value+'월';
+    birthMonthEl.appendChild(o);
+  }
+  setDayOptions();
+}
+function setDayOptions() {
+  birthDayEl.innerHTML = '<option value="" disabled selected>일</option>';
+  const y=birthYearEl.value, m=birthMonthEl.value;
+  if (!y || !m) return;
+  const maxDay = new Date(y, m, 0).getDate();
+  for (let d=1; d<=maxDay; d++) {
+    const o=document.createElement('option'); o.value=String(d).padStart(2,'0'); o.textContent=o.value+'일';
+    birthDayEl.appendChild(o);
+  }
+}
+
 		function checkEmailFormat(input) {
 			const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
@@ -341,6 +403,7 @@ main {
 		document.addEventListener('DOMContentLoaded', function() {
 			const phoneInput = document.getElementById('phone');
 		});
+		
 	</script>
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 </body>
