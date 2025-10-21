@@ -28,12 +28,14 @@ import kr.co.dreamstart.dto.BoardCommentDTO;
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.FileAssetDTO;
+import kr.co.dreamstart.dto.PaymentDTO;
 import kr.co.dreamstart.dto.ReservationDTO;
 import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.mapper.ReservationMapper;
 import kr.co.dreamstart.service.AdminService;
 import kr.co.dreamstart.service.BoardService;
 import kr.co.dreamstart.service.FileService;
+import kr.co.dreamstart.service.PaymentService;
 import kr.co.dreamstart.service.ReservationService;
 import kr.co.dreamstart.service.UserService;
 
@@ -60,6 +62,8 @@ public class AdminController {
 	@Autowired
 	private ReservationService reservationService;
 
+	@Autowired
+	private PaymentService paymentService;
 	// main
 	@GetMapping("")
 	public String adminMain() {
@@ -262,10 +266,13 @@ public class AdminController {
 		return "redirect:/admin/customers/" + userId;
 	}
 	
+	
+	//@@@@@@@@@@@@페이징 처리 해야함
 	//reservation list
 	@GetMapping("/reservation-manage")
 	public String reservationList(Model model,Criteria cri) {
 		List<ReservationDTO> reservationList = reservationMapper.list(cri);
+		
 		model.addAttribute("reservationList", reservationList);
 		return "/admin/reservationManage";
 	}
@@ -274,9 +281,12 @@ public class AdminController {
 	//reservation Detail
 	@GetMapping("/reservation-manage/{reservationId}")
 	public String reservationForm(@PathVariable("reservationId")long reservationId,Model model) { //이상하다! @@
-		ReservationJoinDTO dto = reservationService.adminJoinSelect(reservationId);
-		System.out.println(dto);
-		model.addAttribute("reservationDTO", dto);
+		ReservationJoinDTO reservationDTO = reservationService.adminJoinSelect(reservationId);
+		model.addAttribute("reservationDTO", reservationDTO);
+		PaymentDTO pDTO = paymentService.selectByReservationId(reservationId);
+		model.addAttribute("paymentDTO", pDTO);
+		System.out.println(reservationDTO);
+		System.out.println(pDTO);
 		return "/admin/reservationDetailForm";
 	}
 	//reservation Update

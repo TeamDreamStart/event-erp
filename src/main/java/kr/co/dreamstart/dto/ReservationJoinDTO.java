@@ -12,6 +12,7 @@ public class ReservationJoinDTO {
 	//event
 	private long eventId;
 	private String eventTitle;
+	private String location;
 	//user
 	private long userId;
 	private String userName;

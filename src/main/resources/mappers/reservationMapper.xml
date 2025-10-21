@@ -67,6 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="reservationStatus" property="reservationStatus" />
 		<result column="headCount" property="headCount" />
 		<result column="userType" property="userType" />
+		<result column="location" property="location"/>
 		<result column="qrCode" property="qrCode" />
 		<result column="cancelReason" property="cancelReason" />
 		<result column="reservationCancelledAt"
@@ -100,6 +101,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		r.status AS reservationStatus,
 		r.headcount AS
 		headCount,
+		e.location AS location,
 		p.amount AS paymentAmount,
 		p.status AS paymentStatus,
 		p.method AS paymentMethod
@@ -121,6 +123,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		r.status AS
 		reservationStatus,
 		r.headcount AS headCount,
+		e.location AS location,
 		p.amount AS paymentAmount,
 		p.status AS paymentStatus,
 		p.method AS paymentMethod
@@ -155,6 +158,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		r.status AS reservationStatus,
 		r.headcount AS
 		headCount,
+		e.location AS location,
 		r.user_type AS userType,
 		r.qr_code AS qrCode,
 		r.cancel_reason
@@ -208,6 +212,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		r.status AS
 		reservationStatus,
 		r.headcount AS headCount,
+		e.location AS location,
 		r.user_type AS userType,
 		r.qr_code AS qrCode,
 		r.cancel_reason AS cancelReason,

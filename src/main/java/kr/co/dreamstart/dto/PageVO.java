@@ -29,7 +29,7 @@ public class PageVO {
 
 		// 시작 페이지
 		startPage = (endPage - displayPageNum) + 1;
-
+		if (startPage < 1) startPage = 1;
 		// 실제 마지막 페이지 (전체 데이터 건수 기반)
 		int realEnd = (int) Math.ceil((double) total / cri.getPerPageNum());
 

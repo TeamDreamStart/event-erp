@@ -110,7 +110,7 @@
 											</c:if>
 										</td>
 										<td>${r.cancelReason}</td>
-										<td>${r.cancelledAt}</td>
+										<td><fmt:formatDate value="${r.cancelledAt}" pattern="yyyy-MM-dd HH:mm"/></td>
 										<td>
 											<a class="btn btn-primary" href="/admin/reservation-manage/${r.reservationId}">관리</a>
 										</td>
@@ -128,9 +128,13 @@
 								</c:if>
 
 								<c:forEach begin="${pageVO.startPage}" end="${pageVO.endPage}" var="idx">
-									<li class="page-item ${pageVO.cri.page == idx ? 'active' : ''}">
-										<a class="page-link" href="/reservation-manage?page=${idx}&perPageNum=${cri.perPageNum}">${idx}</a>
+								<!-- 페이징 처리 전 임시값 -->
+									<li class="page-item active">
+										<a class="page-link" href="/reservation-manage?page=${idx}&perPageNum=${cri.perPageNum}">1</a>
 									</li>
+<%-- 									<li class="page-item ${pageVO.cri.page == idx ? 'active' : ''}">
+										<a class="page-link" href="/reservation-manage?page=${idx}&perPageNum=${cri.perPageNum}">${idx}</a>
+									</li> --%>
 								</c:forEach>
 
 								<c:if test="${pageVO.next}">

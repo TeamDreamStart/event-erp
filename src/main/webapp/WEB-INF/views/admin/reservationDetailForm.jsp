@@ -59,7 +59,7 @@
             <!-- 예약 기본정보 -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">RESERVATION DETAIL</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">RESERVATION - PAYMENT DETAIL</h6>
                 </div>
                 <div class="card-body">
 
@@ -79,6 +79,28 @@
                             <input class="form-control" type="text" value="${reservationDTO.reservationStatus}" disabled>
                         </div>
                     </div>
+                    <!-- 결제정보 -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="custom-label">결제번호</label>
+                            <input class="form-control" type="text" value="${paymentDTO.paymentId}" disabled>
+                        </div>
+                        <%-- <div class="col-md-4">
+                            <label class="custom-label">결제일</label>
+                            <span class="form-control">
+                                <fmt:formatDate value="${paymentDTO.createdAt}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                            </span>
+                        </div> --%>
+                        <div class="col-md-4">
+                            <label class="custom-label">취소일</label>
+                            <input class="form-control" type="text" value="${paymentDTO.cancelledAt}" disabled>
+                        </div> 
+                        <div class="col-md-4">
+                            <label class="custom-label">취소사유</label>
+                            <input class="form-control" type="text" value="${reservationDTO.cancelReason}" disabled>
+                        </div>
+                    </div>
+                    <!--  -->
 
                     <div class="row mb-3">
                         <div class="col-md-4">

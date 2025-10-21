@@ -190,6 +190,7 @@
 							</ul>
 						</div>
 						<!-- paging end -->
+						
 						<div style="display: flex; justify-content: flex-end;">
 							<a type="button" href="/admin/${boardType }/form"
 								class="btn btn-success">새로 작성</a>
