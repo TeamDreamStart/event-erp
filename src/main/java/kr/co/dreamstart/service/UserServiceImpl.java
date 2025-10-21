@@ -67,8 +67,6 @@ public class UserServiceImpl implements UserService {
 		return map;
 	}
 
-
-
 	// NAVER API 1. access token으로 네이버 API 호출
 	public Map<String, String> getNaverUser(String accessToken) {
 		String header = "Bearer " + accessToken;
@@ -241,9 +239,10 @@ public class UserServiceImpl implements UserService {
 		form.setPhone(formatPhone(form.getPhone()));
 		// 3) 비밀번호 인코딩 / 새로 가입한 가입자의 비밀번호 -> 해시로 바꿔치기
 		form.setPassword(passwordEncoder.encode(form.getPassword()));
-		
+
 		int result = userMapper.join(form);
-		if (result != 1) throw new IllegalStateException("회원가입 실패");
+		if (result != 1)
+			throw new IllegalStateException("회원가입 실패");
 		userMapper.joinRole(form.getUserId());
 		return form.getUserId();
 	}
@@ -254,32 +253,30 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private String formatPhone(String raw) {
-		if (raw == null) return null;
+		if (raw == null)
+			return null;
 		String d = raw.replaceAll("\\D", "");
-		if (d.length() == 10) return d.replaceFirst("(\\d{3})(\\d{3})(\\d{4})", "$1-$2-$3");
+		if (d.length() == 10)
+			return d.replaceFirst("(\\d{3})(\\d{3})(\\d{4})", "$1-$2-$3");
 		if (d.length() >= 11) {
 			d = d.substring(0, 11);
 			return d.replaceFirst("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3");
 		}
 		return raw;
 	}
-	
-	
+
 	@Override
 	public UserDTO findByLogin(String login) {
-		// TODO Auto-generated method stub
 		return userMapper.findByLogin(login);
 	}
 
 	@Override
 	public List<String> findRoleNames(Long userId) {
-		// TODO Auto-generated method stub
 		return userMapper.findRoleNameByUserId(userId);
 	}
 
 	@Override
 	public void touchLastLogin(Long userId) {
-		// TODO Auto-generated method stub
 		userMapper.updateLastLoginAt(userId);
 	}
 
@@ -335,5 +332,19 @@ public class UserServiceImpl implements UserService {
 		return userMapper.findByUserId(userId);
 	}
 
+	@Override
+	public Map<String, Object> userUpdate(UserDTO userDTO) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		// 기본정보 업데이트
+		int result = -1;
+		result = userMapper.adminUserUpdate(userDTO);
+		if(result>0) {
+			map.put("result","success");			
+		}else {
+			map.put("result","fail");			
+		}
+		map.put("resultType","회원정보 수정");
+		return map;
+	}
 
 }

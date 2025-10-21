@@ -239,7 +239,8 @@ public class UserController {
 		return "/user/myInfo";
 	}
 
-	// 로그인한 사용자의 ID와 URL 경로의 userId가 같을 때만 접근 허용해야함 안먹음;;
+	// 회원정보 수정
+	// 로그인한 사용자의 ID와 URL 경로의 userId가 같을 때만 접근 허용해야함 안먹음;; 프론트에서 막아야되낭@@@@@@@@@@@@@@@@@@@@@@
 	@PreAuthorize("#userId == authentication.principal.userId")
 	@GetMapping("/my-info/{userId}/edit")
 	public String myInfoForm(@PathVariable("userId") long userId, Model model) {
@@ -248,16 +249,23 @@ public class UserController {
 		return "/user/myInfoForm";
 	}
 	
+	// 회원정보 수정
 	// 기본정보 수정 -> 마이페이지
-	@PostMapping("/my-info/{userId}/edit")
-	public String myInfoUpdate(@PathVariable("userId") long userId,UserDTO userDTO,RedirectAttributes rttr) {
+	@PostMapping("/my-info/{userId}/edit/{editType}")
+	public String myInfoUpdate(@PathVariable("userId") long userId,@PathVariable("editType") String editType,UserDTO userDTO,RedirectAttributes rttr) {
 		// 회원 정보 수정
-		
-		
+		if(editType.equals("info")) {
+			
+		}
+		// 비밀번호 변경
+		if(editType.equals("pass")) {
+			
+		}
 		rttr.addFlashAttribute("msg", "회원정보가 성공적으로 수정되었습니다.");
 		return "redirect:/my-info/"+userId;
 	}
-	// 비밀정보 변경 -> 로그아웃 후 새로운 비밀번호로 다시 로그인하게
+	// 회원정보 수정
+	// 비밀정보 변경 -> 로그아웃 후 새로운 비밀번호로 다시 로그인하게@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	@PostMapping("/my-info/{userId}/edit/pass")
 	public String passwordUpdate(@PathVariable("userId") long userId,UserDTO userDTO,RedirectAttributes rttr) {
 		// 회원 정보 수정
@@ -268,20 +276,20 @@ public class UserController {
 	}
 	
 	
-	//회원탈퇴 -> 회원정보 만료?/삭제 후 로그아웃, 메인화면으로
-	@PostMapping("")
-	public String quitUser() {
-		
-		return "redirect:/";
-	}
-	
+//	//회원탈퇴 -> 회원정보 만료?/삭제 후 로그아웃, 메인화면으로
+//	@PostMapping("")
+//	public String quitUser() {
+//		
+//		return "redirect:/";
+//	}
+//	
 
-	// 로그인한 사용자의 ID와 URL 경로의 userId가 같을 때만 접근 허용
-	@PreAuthorize("#userId == principal.userId")
-	@GetMapping("/my-info/{userId}/survey")
-	public String myInfoSurvey() {
-
-		return "/user/surveyForm";
-	}
+//	// 로그인한 사용자의 ID와 URL 경로의 userId가 같을 때만 접근 허용
+//	@PreAuthorize("#userId == principal.userId")
+//	@GetMapping("/my-info/{userId}/survey")
+//	public String myInfoSurvey() {
+//
+//		return "/user/surveyForm";
+//	}
 
 }

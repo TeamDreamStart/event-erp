@@ -112,12 +112,15 @@ main {
 	font-size: 12px;
 	margin-top: 5px;
 }
-#phone-group.form-group{
+
+#phone-group.form-group {
 	margin-bottom: 0px;
 }
-.form-group :last-child{
+
+.form-group :last-child {
 	margin-bottom: 0px;
 }
+
 .help-text {
 	color: #888;
 }
@@ -182,20 +185,26 @@ main {
 
 			<div class="info-box">
 				<form onsubmit="return validateForm(event)"
-					action="/my-info/${userDTO.userId}/edit" method="post">
+					action="/my-info/${userDTO.userId}/edit/info" method="post">
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
 					<div class="form-section-title">기본 정보</div>
 					<input type="hidden" id="userId" name="userId"
 						value="${userDTO.userId}">
 
-						<div class="form-group">
-    <label class="form-label" for="username">아이디 (변경 불가)</label> 
-    <input type="text" id="username" name="username" class="form-input-box email-input" value="${userDTO.username}" onblur="checkUserIdFormat(this)" readonly><!--유저확인 함수는 기제안했음-->
-</div>
+					<div class="form-group">
+						<label class="form-label" for="username">아이디 (변경 불가)</label> <input
+							type="text" id="username" name="username"
+							class="form-input-box email-input" value="${userDTO.username}"
+							onblur="checkUserIdFormat(this)" readonly>
+						<!--유저확인 함수는 기제안했음-->
+					</div>
 
 					<div class="form-group">
 						<label class="form-label" for="email">이메일 (변경 불가)</label> <input
 							type="text" id="email" name="email"
-							class="form-input-box email-input" style="caret-color: transparent;" value="${userDTO.email}"
+							class="form-input-box email-input"
+							style="caret-color: transparent;" value="${userDTO.email}"
 							onblur="checkEmailFormat(this)">
 					</div>
 
@@ -208,12 +217,23 @@ main {
 					<div class="form-group" id="phone-group">
 						<label class="form-label" for="phone">전화번호*</label> <input
 							type="text" id="phone" name="phone" value="${userDTO.phone}"
-							class="form-input-box" style="caret-color: transparent;" placeholder="예) 010-1234-5678" required
+							class="form-input-box" style="caret-color: transparent;"
+							placeholder="예) 010-1234-5678" required
 							pattern="\d{3}-\d{4}-\d{4}" oninput="autoFormatPhone(this)"
 							onblur="checkPhoneValidity(this)"> <span
 							class="help-text">'-'를 포함하여 000-0000-0000 형식으로 입력해 주세요.</span> <span
 							class="error-message" id="phone-error">전화번호 형식이 올바르지 않습니다.
 							(예: 000-0000-0000)</span>
+					</div>
+					<!-- 임시 -->
+					<div class="form-group">
+						<label class="form-label" for="name">성별*</label>
+						<input type="radio" name="gender" value="0" <c:if test="${userDTO.gender == 0 }">checked</c:if>>여자
+						<input type="radio" name="gender" value="1" <c:if test="${userDTO.gender == 1 }">checked</c:if>>남자
+					</div>
+					<div class="form-group">
+						<label class="form-label" for="name">생일</label>
+						<input type="date" name="birthDate" value="${userDTO.birthDate }">
 					</div>
 					<div class="button-area">
 						<button type="submit" class="action-btn save-btn">저장</button>
@@ -223,6 +243,12 @@ main {
 
 			<div class="info-box" style="margin-bottom: 140px;">
 				<form action="/my-info/${userDTO.userId }/edit/pass" method="post">
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" /> 
+						<!-- user 정보값 -->
+						<input type="hidden" id="userId"
+						name="userId" value="${userDTO.userId}"> <input
+						type="hidden" name="email" value="${userDTO.email }">
 					<div class="form-section-title">비밀번호 변경</div>
 
 					<!-- <div class="form-group">
@@ -250,10 +276,10 @@ main {
 					</div>
 				</form>
 			</div>
-			<div class="button-area"  style="margin-bottom: 140px; margin-top: 0;">
-						<button type="button" class="action-btn cancel-btn"
-							onclick="history.back()">취소</button>
-					</div>
+			<div class="button-area" style="margin-bottom: 140px; margin-top: 0;">
+				<button type="button" class="action-btn cancel-btn"
+					onclick="history.back()">취소</button>
+			</div>
 		</div>
 	</main>
 
@@ -320,4 +346,3 @@ main {
 </body>
 </html>
 
-  
