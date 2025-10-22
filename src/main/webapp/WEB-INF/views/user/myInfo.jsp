@@ -8,15 +8,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link
-	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap"
-	rel="stylesheet" />
+   href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap"
+   rel="stylesheet" />
 
 <link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
 <link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 <title>MyPage</title>
 <style>
 body {
-	background: #E5E2DB;
+   background: #E5E2DB;
 }
 .btn-area{
    width: 896px;
@@ -25,33 +25,33 @@ body {
    justify-content: flex-end;
 }
 .section-header {
-	display: flex;
-	align-items: center;
-	margin-bottom: 20px; /* 제목과 내용 사이 간격 */
+   display: flex;
+   align-items: center;
+   margin-bottom: 20px; /* 제목과 내용 사이 간격 */
 }
 
 .page-title {
-	display: flex;
-	align-items: center;
+   display: flex;
+   align-items: center;
 }
 
 .page-title h2 {
-	font-size: 30px;
-	font-weight: 700;
-	line-height: 40px;
+   font-size: 30px;
+   font-weight: 700;
+   line-height: 40px;
 }
 
 /* --- 회원 정보 섹션 --- */
 .member-info-box {
-	width: 896px; /* 이미지에 따라 적절한 너비 설정 */
-	background-color: #FFFFFF;
-	padding: 32px 51px;
-	border: 1px solid #D9D9D9;
-	border-radius: 12px;
-	position: relative;
-	font-size: 14px;
-	max-height: 163;
-	margin: 0 auto 40 auto;
+   width: 896px; /* 이미지에 따라 적절한 너비 설정 */
+   background-color: #FFFFFF;
+   padding: 32px 51px;
+   border: 1px solid #D9D9D9;
+   border-radius: 12px;
+   position: relative;
+   font-size: 14px;
+   max-height: 163;
+   margin: 0 auto 40 auto;
 }
 
 .info-header {
@@ -91,17 +91,17 @@ body {
 
 /* --- 나의 예약 섹션 (예약 없음 상태) --- */
 .my-reservation-box {
-	background-color: #FFFFFF;
-	padding: 32px 51px;
-	border: 1px solid #D9D9D9;
-	border-radius: 12px;
-	min-height: 218px;
-	width: 896px;
-	display: flex;
-	align-items: center;
-	margin: 40px 0px 140px 0px;
-	flex-wrap: wrap;
-	justify-content: center;
+   background-color: #FFFFFF;
+   padding: 32px 51px;
+   border: 1px solid #D9D9D9;
+   border-radius: 12px;
+   min-height: 218px;
+   width: 896px;
+   display: flex;
+   align-items: center;
+   margin: 40px 0px 0px 0px;
+   flex-wrap: wrap;
+   justify-content: center;
 }
 
 .my-reservation-box h3 {
@@ -293,7 +293,7 @@ body {
 
 /* 마지막 행 하단선 제거 */
 .data-table tbody tr:last-child td {
-	border-bottom: none;
+   border-bottom: none;
 }
 
 /* 테이블 내부 버튼 스타일 */
@@ -334,135 +334,135 @@ body {
 }
 
 .modal-backdrop {
-	background-color: rgba(0, 0, 0, 0.85); /* 짙은 배경 */
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	z-index: 1000;
-	display: none;
+   background-color: rgba(0, 0, 0, 0.85); /* 짙은 배경 */
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   z-index: 1000;
+   display: none;
 }
 
 /* 모달 컨텐츠 박스 (하얀색 박스) */
 .modal-content {
-	background-color: #FAF9F6;
-	border-radius: 12px;
-	padding: 32px 31px;
-	width: 455px;
-	min-height: 355px;
+   background-color: #FAF9F6;
+   border-radius: 12px;
+   padding: 32px 31px;
+   width: 455px;
+   min-height: 355px;
 }
 
 /* 제목 스타일 */
 .modal-title {
-	font-size: 14px;
-	font-weight: 700;
-	color: #222222;
-	margin-bottom: 10px;
+   font-size: 14px;
+   font-weight: 700;
+   color: #222222;
+   margin-bottom: 10px;
 }
 
 /* 주의사항 박스 (빨간색 경고 박스) */
 .warning-box {
-	background-color: #FFE1DD; /* 연한 빨간색 배경 */
-	border: 1px solid #FDBCB4; /* 경계선 */
-	padding: 8px;
-	border-radius: 3px;
-	margin-bottom: 15px;
-	width: 85%;
+   background-color: #FFE1DD; /* 연한 빨간색 배경 */
+   border: 1px solid #FDBCB4; /* 경계선 */
+   padding: 8px;
+   border-radius: 3px;
+   margin-bottom: 15px;
+   width: 85%;
 }
 
 .warning-header {
-	color: #C42006;
-	font-weight: 900;
-	margin-bottom: 18px;
-	font-size: 14px;
+   color: #C42006;
+   font-weight: 900;
+   margin-bottom: 18px;
+   font-size: 14px;
 }
 
 .warning-icon {
-	margin-right: 5px;
-	font-size: 14px;
+   margin-right: 5px;
+   font-size: 14px;
 }
 
 .warning-list {
-	padding-left: 0;
-	margin-top: 10px;
-	margin-bottom: 0;
-	font-weight: 700;
+   padding-left: 0;
+   margin-top: 10px;
+   margin-bottom: 0;
+   font-weight: 700;
 }
 
 .warning-list li {
-	color: #C42006; /* 진한 빨간색 리스트 텍스트 */
-	font-size: 14px;
-	line-height: 1.6;
+   color: #C42006; /* 진한 빨간색 리스트 텍스트 */
+   font-size: 14px;
+   line-height: 1.6;
 }
 
 /* 비밀번호 입력 안내 텍스트 */
 .input-instruction {
-	font-size: 14px;
-	color: #222222;
-	margin-bottom: 15px;
+   font-size: 14px;
+   color: #222222;
+   margin-bottom: 15px;
 }
 
 /* 레이블 텍스트 */
 .label-text {
-	display: block;
-	font-weight: 700;
-	font-size: 14px;
-	color: #222222;
-	margin-bottom: 8px;
+   display: block;
+   font-weight: 700;
+   font-size: 14px;
+   color: #222222;
+   margin-bottom: 8px;
 }
 
 /* 비밀번호 입력 필드 */
 .password-input {
-	width: 85%;
-	padding: 9px;
-	border: 1px solid #AFAFAF;
-	border-radius: 4px;
-	box-sizing: border-box;
-	outline: none;
-	background-color: #F2F0EF;
+   width: 85%;
+   padding: 9px;
+   border: 1px solid #AFAFAF;
+   border-radius: 4px;
+   box-sizing: border-box;
+   outline: none;
+   background-color: #F2F0EF;
 }
 
 .password-input:focus {
-	border: 1px solid #007FFF;
-	outline: none;
+   border: 1px solid #007FFF;
+   outline: none;
 }
 
 .modal-hr {
-	border: 1px solid #222222;
-	margin-top: 12px;
+   border: 1px solid #222222;
+   margin-top: 12px;
 }
 /* 버튼 영역 */
 .modal-actions {
-	display: flex;
-	justify-content: flex-end; /* 오른쪽 정렬 */
-	gap: 14px; /* 버튼 사이 간격 */
-	margin-top: 12px;
+   display: flex;
+   justify-content: flex-end; /* 오른쪽 정렬 */
+   gap: 14px; /* 버튼 사이 간격 */
+   margin-top: 12px;
 }
 
 /* 공통 버튼 스타일 */
 .btn {
-	border: none;
-	border-radius: 12px;
-	cursor: pointer;
-	font-size: 14px;
-	font-weight: 700;
-	transition: background-color 0.2s;
-	width: 52px;
-	height: 34px;
+   border: none;
+   border-radius: 12px;
+   cursor: pointer;
+   font-size: 14px;
+   font-weight: 700;
+   transition: background-color 0.2s;
+   width: 52px;
+   height: 34px;
 }
 
 /* 탈퇴 버튼 (빨간색) */
 .btn-withdraw {
-	background-color: #ED2100; /* 진한 빨간색 */
-	color: #222222;
+   background-color: #ED2100; /* 진한 빨간색 */
+   color: #222222;
 }
 
 .btn-withdraw:hover {
-	background-color: #cc2900;
+   background-color: #cc2900;
 }
 
 /* 취소 버튼 (옅은 회색) */
@@ -722,7 +722,7 @@ body {
                   <div class="survey-text"> <div class="event-title">가을 음악 페스티벌 2025</div>
 										<div class="event-date">이벤트 일시: 2025-09-28</div>
 									</div>
-										<button class="survey-btn">설문 작성</button>
+										<a class="survey-btn" href="#">설문 작성</a>
 									</div>
             </div>
       </div>

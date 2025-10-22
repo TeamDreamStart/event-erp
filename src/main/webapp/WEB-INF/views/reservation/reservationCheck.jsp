@@ -7,9 +7,11 @@ pageEncoding="UTF-8"%>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 <title>Reservation Check</title>
 <style>
-    body {
+ 	body {
 	background: #E5E2DB;
 }
 	
@@ -24,7 +26,16 @@ pageEncoding="UTF-8"%>
 	font-weight: 700;
 	line-height: 40px;
 }
-
+.main-check{
+    max-width: 896px;
+	margin: 0 auto;
+	color: #222222;
+	padding: 0;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	flex-grow: 1;
+	caret-color: transparent;
+	margin-bottom: 140px;
+}
 .reservation-title a {
     text-decoration: none;
     color: #222222;
@@ -116,7 +127,6 @@ pageEncoding="UTF-8"%>
 		border: 1px solid #D9D9D9;
     padding: 30px;
     border-radius: 12px;
-		margin-bottom: 140px;
 }
 
 .query-form label {
@@ -170,7 +180,7 @@ pageEncoding="UTF-8"%>
     <div class="section-header">
             <h2>Reservation Check</h2>
     </div>
-
+<div class="main-check">
     <div class="reservation-status-box">
         <div class="status-cards">
             <div class="card confirmed">
@@ -204,6 +214,7 @@ pageEncoding="UTF-8"%>
             
             <button type="submit">예약 조회하기</button>
         </form>
+    </div>
     </div>
 </div>
 </main>
