@@ -694,61 +694,46 @@ body {
 
 				<h3>나의 예약</h3>
 				<c:if test="${not empty reservationList}">
-					<div class="my-reservation-box">
-						<div class="tmpWrap">
+					<div class="tmpWrap">
 
-							<c:forEach var="rDTO" items="${reservationList}">
-								<div class="tmp"
-									onclick="location.href='/reservations/${rDTO.reservationId}'">
+						<c:forEach var="rDTO" items="${reservationList}">
+							<div class="tmp"
+								onclick="location.href='/reservations/${rDTO.reservationId}'">
 
-									<span class="tmp-span-title">${rDTO.eventTitle}</span>
-									<div class="tmp-middle">
-										<div class="tmp-details">
-											<span class="tmp-span">예약번호 : ${rDTO.reservationId}</span> <span
-												class="tmp-span"> <fmt:formatDate
-													pattern="yyyy-MM-dd" value="${rDTO.reservationDate}" />
-											</span>
-											<%-- <span>${rDTO.location}</span> --%>
-											<span class="tmp-span">건물이름</span>
-										</div>
+								<span class="tmp-span-title">${rDTO.eventTitle}</span>
+								<div class="tmp-middle">
+									<div class="tmp-details">
+										<span class="tmp-span">예약번호 : ${rDTO.reservationId}</span> <span
+											class="tmp-span"> <fmt:formatDate pattern="yyyy-MM-dd"
+												value="${rDTO.reservationDate}" />
+										</span>
+										<%-- <span>${rDTO.location}</span> --%>
+										<span class="tmp-span">건물이름</span>
+									</div>
 
-										<div class="reservation-bottom">
-											<div>
-												<c:if test="${rDTO.reservationStatus eq 'CONFIRMED'}">
-													<span class="tmp-span-radius"
-														style="margin-left: 7px; font-weight: 500;">예약확정</span>
-												</c:if>
-												<c:if test="${rDTO.reservationStatus eq 'CANCELLED'}">
-													<span class="tmp-span-radius"
-														style="background-color: red; border: 1px solid red;">취소됨</span>
-												</c:if>
-											</div>
-
-											<c:if
-												test="${rDTO.paymentAmount>0 || not empty rDTO.paymentAmount}">
-												<span> <fmt:formatNumber type="number"
-														maxFractionDigits="3" value="${rDTO.paymentAmount}" />원
-												</span>
+									<div class="reservation-bottom">
+										<div>
+											<c:if test="${rDTO.reservationStatus eq 'CONFIRMED'}">
+												<span class="tmp-span-radius"
+													style="margin-left: 7px; font-weight: 500;">예약확정</span>
+											</c:if>
+											<c:if test="${rDTO.reservationStatus eq 'CANCELLED'}">
+												<span class="tmp-span-radius"
+													style="background-color: red; border: 1px solid red;">취소됨</span>
 											</c:if>
 										</div>
+
+										<c:if
+											test="${rDTO.paymentAmount>0 || not empty rDTO.paymentAmount}">
+											<span> <fmt:formatNumber type="number"
+													maxFractionDigits="3" value="${rDTO.paymentAmount}" />원
+											</span>
+										</c:if>
 									</div>
 								</div>
-							</c:forEach>
-
-							<c:if test="${rDTO.reservationStatus eq 'CONFIRMED'}">
-								<span class="tmp-span-radius">예약확정</span>
-							</c:if>
-							<c:if test="${rDTO.reservationStatus eq 'CANCELLED'}">
-								<span class="tmp-span-radius"
-									style="background-color: red; border: 1px solid red;">취소됨</span>
-							</c:if>
-							<c:if
-								test="${rDTO.paymentAmount>0 || not empty rDTO.paymentAmount}">
-								<span><fmt:formatNumber type="number"
-										maxFractionDigits="3" value="${rDTO.paymentAmount}" />원</span>
-							</c:if>
-						</div>
+							</div>
 						</c:forEach>
+
 					</div>
 
 				</c:if>
