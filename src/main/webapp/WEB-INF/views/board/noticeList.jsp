@@ -213,7 +213,7 @@ button {
 		<div class="search-bar">
 			<form action="/notices" method="get">
 				<input type="text" placeholder="제목을 검색하세요." name="keyword" class="search-input" value="${keyword }">
-				<button type="submit" class="search-btn">검색</button>
+				<button type="submit" class="search-btn">검색🔍️</button>
 			</form>
 		</div>
 

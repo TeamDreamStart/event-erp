@@ -8,26 +8,15 @@
 <head>
 <meta charset="UTF-8">
 <link href="https://www.dafont.com/peristiwa.font" rel="stylesheet">
-<link href="https://fonts.google.com/specimen/Montserrat"
-	rel="stylesheet">
-<link rel="stylesheet" href="/webapp/resources/css/noticeList.css">
-
-
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
+	<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 <style>
 
 /*기본 스타일 및 레이아웃 설정*/
 body {
-	background-color: #F5F5F5;
-	font-family: 'Montserrat';
-	margin: 0;
-	padding: 0;
-	display: flex;
-	flex-direction: column;
-	align-items: center; /*전체 페이지 내용을 중앙에 배치*/
-	color: #222;
-	line-height: 1.6;
+ background: #E5E2DB;
 }
-
 .qna-form-container {
 	width: 900px;
 	background-color: #F5F5F5;

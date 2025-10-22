@@ -145,5 +145,9 @@ public class TestController {
 	public String accessTest() {
 		return "/common/accessDenied";
 	}
+	@GetMapping("/test-survey")
+	public String survayTest() {
+		return "/user/surveyForm";
+	}
 
 }
