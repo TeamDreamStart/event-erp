@@ -153,10 +153,11 @@ body {
     /* 기존 스타일 유지 */
  width: 202px;
  height: 195px;
- border: 2px solid #D9D9D9;
+ border: 1px solid #D9D9D9;
  border-radius: 3px;
  cursor: pointer;
   padding: 16px 13px;
+  font-size: 14px;
 }
 .tmp:hover {
    background-color: #D9D9D9;
