@@ -26,6 +26,7 @@ uri="http://www.springframework.org/security/tags"%>
     .error-main {
         /* 전체 콘텐츠를 중앙 정렬 */
         text-align: center; 
+        margin-bottom: 140px;
     }
     .error-text h1{
         font-weight: bold;

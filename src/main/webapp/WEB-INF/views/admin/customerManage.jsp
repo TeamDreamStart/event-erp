@@ -182,7 +182,7 @@
 											<td>일반회원</td>
 										</c:if>
 										<td><a class="btn btn-primary"
-											href="/admin/customers/${userDTO.userId }">수정/상세</a></td>
+											href="/admin/customers/${userDTO.userId }">관리</a></td>
 									</tr>
 								</c:forEach>
 							</tbody>

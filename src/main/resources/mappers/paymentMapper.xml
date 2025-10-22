@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.dreamstart.mapper.PaymentMapper">
 	<resultMap type="PaymentDTO" id="paymentMap">
-		<id column="user_id" property="paymentId" />
+		<id column="payment_id" property="paymentId" />
 		<result column="reservation_id" property="reservationId" />
 		<result column="amount" property="amount" />
 		<result column="method" property="method" />
@@ -41,7 +41,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		(#{reservationId}, #{amount}, #{method}, #{status}, #{approveNo}, #{pgTid}, #{impUid},
 		#{memo}, now(), now())
 	</insert>
-
+	
+	<update id="cancel" parameterType="long">
+		update payment set status = 'CANCELLED', refund_amount = amount , amount = 0, cancelled_at = now() where reservation_id = #{reservationId};
+	</update>
+	
+	<select id="selectByReservationId" resultMap="paymentMap">
+		select * from payment where reservation_id = #{reservationId}
+	</select>
 
 
 </mapper>

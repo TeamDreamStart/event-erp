@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import kr.co.dreamstart.dto.AdminJoinDTO;
+import kr.co.dreamstart.dto.ReservationJoinDTO;
 import kr.co.dreamstart.dto.EventDTO;
 import kr.co.dreamstart.dto.PaymentDTO;
 import kr.co.dreamstart.dto.ReservationDTO;
@@ -116,7 +116,8 @@ public class ReservationController {
 	//reservation detail
 	@GetMapping("/reservations/{reservationId}")
 	public String reservationDetail(@PathVariable("reservationId")long reservationId,Model model) {
-		AdminJoinDTO rDTO = aService.selectJoinPayById(reservationId);
+		ReservationJoinDTO rDTO = rService.selectJoinPayById(reservationId);
+		System.out.println(rDTO);
 		model.addAttribute("reservationDTO", rDTO);
 		return "/reservation/reservationDetail";
 	}
@@ -124,12 +125,17 @@ public class ReservationController {
 	// detail -> 예약 취소 폼
 	@GetMapping("/reservations/{reservationId}/cancel")
 	public String reservationCencelForm(@PathVariable("reservationId")long reservationId,Model model) {
-		
+		ReservationJoinDTO rDTO = rService.selectJoinPayById(reservationId);
+		model.addAttribute("reservationDTO", rDTO);
 		return "/reservation/reservationCancel";
 	}
+	
+	// 포트원 Api 환불(카드취소) 구현 해야함@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	@PostMapping("/reservations/{reservationId}/cancel")
-	public String reservationCencel(@PathVariable("reservationId")long reservationId,RedirectAttributes rttr) {
-		
+	public String reservationCencel(@PathVariable("reservationId")long reservationId,RedirectAttributes rttr,@RequestParam("cancelReason")String cancelReason) {
+		Map<String,Object> map = rService.reservationCancel(reservationId, cancelReason);
+		rttr.addFlashAttribute("resultType",map.get("resultType"));
+		rttr.addFlashAttribute("result",map.get("result"));
 		return "redirect:/reservations/"+reservationId;
 	}
 

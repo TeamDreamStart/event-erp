@@ -27,7 +27,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import kr.co.dreamstart.dto.AdminJoinDTO;
+import kr.co.dreamstart.dto.ReservationJoinDTO;
 import kr.co.dreamstart.dto.BoardPostDTO;
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.EventDTO;
@@ -43,6 +43,7 @@ import kr.co.dreamstart.mapper.BoardMapper;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 import kr.co.dreamstart.mapper.EventMapper;
+import kr.co.dreamstart.mapper.ReservationMapper;
 import kr.co.dreamstart.mapper.SurveyMapper;
 import kr.co.dreamstart.mapper.UserMapper;
 import kr.co.dreamstart.service.EventService;
@@ -71,6 +72,7 @@ public class MybatisTest {
 	
 	@Autowired
 	private SurveyService surveyService;
+	private ReservationMapper reservationMapper;
 	
 	@Test
 	public void testFactory() {
@@ -399,7 +401,7 @@ public class MybatisTest {
 	
 	@Test
 	public void sasdTest() {
-		List<AdminJoinDTO> dto = adminMapper.selectJoinPayByUserId(278);
+		List<ReservationJoinDTO> dto = reservationMapper.selectJoinPayByUserId(278);
 		System.out.println(dto);
 	}
 	// 회원 가입 관련 테스트

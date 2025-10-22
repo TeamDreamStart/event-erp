@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -221,38 +222,35 @@ button {
 	padding-bottom: 10px;
 }
 
-/* 검색창 */
 .search-bar {
 	display: flex;
 	justify-content: center;
-	margin-bottom: 50px;
-	border: none; /*테두리 제거*/
-	max-width: 450px;
+	max-width: 888px;
 	margin: 50px auto;
-	gap: 10px;
+	gap: 20px;
 }
 
-.search-input {
-	width: 300px;
-	padding: 15px 20px;
-	background-color: #CBD4C2;
-	border: 1px solid #222;
-	border-radius: 15px;
-	flex-grow: 1;
-	box-shadow: none;
-	outline: none;
-	font-size: 18px;
-	color: #222;
-	opacity: 1;
-}
-
-.search-btn {
-	padding: 10px 20px;
+.search-bar input[type="text"] {
+	width: 708px;
+	height: 60px;
 	background-color: #CBD4C2;
 	border: 1px solid #222;
 	border-radius: 15px;
 	font-size: 18px;
 	outline: none;
+	margin-right: 43px;
+	padding-left: 14px;
+}
+
+.search-bar button {
+	width: 112px;
+	height: 60px;
+	background-color: #CBD4C2;
+	border: 1px solid #222;
+	border-radius: 15px;
+	font-size: 18px;
+	font-weight: bold;
+	cursor: pointer;
 }
 
 /* 게시판 테이블 */
@@ -433,7 +431,7 @@ button {
 									<td>${postDTO.postId}</td>
 									<td><a href="/notices/${postDTO.postId}">${postDTO.title}</a></td>
 									<td>${postDTO.viewCount}</td>
-									<td>${postDTO.createdAt}</td>
+									<td><fmt:formatDate value="${postDTO.createdAt}" pattern="yyyy-MM-dd"/></td>
 								</tr>
 							</c:if>
 						</c:forEach>

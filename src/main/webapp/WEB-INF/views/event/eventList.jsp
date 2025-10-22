@@ -10,28 +10,29 @@ pageEncoding="UTF-8"%>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
 <link href="https://fonts.cdnfonts.com/css/peristiwa" rel="stylesheet">
+
+<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 <title>eventList</title>
 <style>
-body {
-background-color: #E5E2DB;
-color: #222222;
-font-family: 'Montserrat', sans-serif;
-font-size: medium;
-font-weight: normal;
-margin: 0;
-padding: 0 120px 60px; 
-line-height: 1;
+		body {
+	background: #E5E2DB;
 }
-main {
-margin-top: 0; 
-padding: 0; 
-}
+	
+	.section-header {
+		display: flex;
+		align-items: center;
+		margin-bottom: 20px; /* 제목과 내용 사이 간격 */
+	}
+	
+	
 .main-event-container {
 display: flex; /* 자식 요소(텍스트, 포스터)를 가로로 배치 */
 align-items: center; /* 세로 중앙 정렬 */
 justify-content: space-between; /* 양쪽 끝으로 배치 */
 padding: 0px 140px 0px 140px; /* 내부 여백 */
 margin-bottom: 110px; /* 아래쪽 섹션과의 간격 */
+
 }
 
 /* 왼쪽 텍스트 영역 */
@@ -40,22 +41,22 @@ flex-basis: 60%; /* 전체 컨테이너 너비의 55% 할당 */
 color: #222222;
 }
 
-.main-event-content h1 {
-font-size: 80px;
-font-weight: 900;
+.main-event-section h1 {
+font-size: 100px;
+font-weight: 700;
 margin: 0;
 line-height: 1;
 }
 
-.main-event-content h2 {
-font-size: 50px;
-font-weight: 900;
+.main-event-section h2 {
+font-size: 40px;
+font-weight: 700;
 margin: 10px 0 20px;
 line-height: 1;
 }
 
-.main-event-content p {
-font-size: 20px;
+.main-event-section p {
+font-size: 22px;
 margin: 8px 0;
 line-height: 1.2;
 font-weight: 900;
@@ -80,44 +81,38 @@ display: none;
 .event-section{
 margin-bottom: 100px;
 }
-.content-container {
+.container {
 max-width: 100%;
 margin: 0 auto;
 }
-
-.section-header {
-display: flex;
-justify-content: space-between; 
-align-items: center;
-margin-bottom: 30px;
-padding-top: 40px; 
-}
-
 .section-header h2{
-font-size: 20px; 
-font-weight: bold;
-margin: 0 auto 0 0;
-user-select: none;
+font-size: 30px;
+	font-weight: 700;
+	line-height: 40px;
+}
+.section-right{
+	right: 20px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	white-space: nowrap;
 }
 
 .category-filter {
-font-size: 16px;
+font-size: 20px;
 display: flex;
 align-items: center;
 position: relative;
 cursor: pointer;
-padding-right: 20px;
 caret-color: transparent;
-margin-right: 20px;
+margin-bottom: 4px;
+width: 100%;
 }
 
 .dropdown-arrow {
-position: absolute;
-right: 0;
-top: 50%;
-transform: translateY(-50%) rotate(45deg);
-width: 3px;
-height: 3px;
+display: inline-block;
+transform: translateX(-50%) rotate(45deg);
+width:8px;
+height: 4px;
 border-right: 2px solid #222222;
 border-bottom: 2px solid #222222;
 pointer-events: none;
@@ -131,19 +126,21 @@ transform: translateY(-50%) rotate(-135deg);
 .category-dropdown-menu {
 position: absolute;
 top: 100%;
-right: 0;
+right: 50px;
 list-style: none;
-padding: 5px 0 0 0;
+padding: 21px 0 0 0;
+font-size: 14px;
 margin: 0;
 background-color: #ffffff; 
 border: 1px solid #ccc; 
 box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-min-width: 120px;
+min-width: 166px;
 z-index: 1000;
 opacity: 0;
 visibility: hidden;
 transform: translateY(10px);
 transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+text-align: center;
 }
 
 .category-filter.active .category-dropdown-menu {
@@ -153,7 +150,7 @@ transform: translateY(0);
 }
 
 .category-dropdown-menu li {
-padding: 0 21px;
+padding-bottom: 25px;
 margin-top: 10px;
 cursor: pointer;
 color: #222222;
@@ -281,7 +278,7 @@ margin-top: 20px;
 }
 
 .detail-btn {
-display: inline-block;
+display: block;
 margin-top: 8px;
 padding: 10px 4px;
 background-color: #FAF9F6;
@@ -291,6 +288,9 @@ font-size: 14px;
 border-radius: 3px;
 transition: background-color 0.2s;
 caret-color: transparent;
+width: 60px;
+height: 16px;
+text-align: center;
 }
 
 .detail-btn:hover {
@@ -378,7 +378,7 @@ line-height: 1.1;
 <body>
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <main>
-<div class="content-container">
+<div class="container">
 <section class="event-section present-event horizontal-scroll-section events-swiper">
 
 <div class="main-event-container">
@@ -391,26 +391,28 @@ line-height: 1.1;
 <p>특별한 페스티벌을 즐겨보세요!!</p>
 </div>
 <div class="main-event-poster">
-<img src="/resources/img/event1.jpg" alt="가을 음악 페스티벌 포스터" />
+<img src="/resources/img/events/event1.jpg" alt="가을 음악 페스티벌 포스터" />
 </div>
 </div>
 
 <div class="section-header">
 <h2>Present Events</h2>
+<div class="setion-right">
 
-<div class="category-filter">
-Category <span class="dropdown-arrow"></span>
-<ul class="category-dropdown-menu">
-<li data-value="all" class="selected">Show</li>
-<li data-value="workshop">Workshop</li>
-<li data-value="speech">Speech</li>
-<li data-value="market">Market</li>
-</ul>
-</div>
-
-<div class="swiper-nav-controls">
-<div class="swiper-button-prev"></div>
-<div class="swiper-button-next"></div>
+	<div class="category-filter">
+		Category <span class="dropdown-arrow"></span>
+		<ul class="category-dropdown-menu">
+			<li data-value="all" class="selected">Show</li>
+			<li data-value="workshop">Workshop</li>
+			<li data-value="speech">Speech</li>
+			<li data-value="market">Market</li>
+		</ul>
+	</div>
+	
+	<div class="swiper-nav-controls">
+		<div class="swiper-button-prev"></div>
+		<div class="swiper-button-next"></div>
+	</div>
 </div>
 
 </div>
@@ -428,7 +430,7 @@ Category <span class="dropdown-arrow"></span>
 <!-- <c:if test="${eventDTO.visibility eq 'PUBLIC'}"> -->
 <article class="event-card swiper-slide">
 <figure class="event-card-figure">
-<img src="/resources/img/event1.jpg" alt="가을 음악 페스티벌 포스터"/>
+<img src="/resources/img/events/event1.jpg" alt="가을 음악 페스티벌 포스터"/>
 <figcaption class="hidden">포스터 이미지</figcaption>
 <a href="#" class="event-info-overlay">
 <div class="event-info-content">
@@ -442,7 +444,7 @@ Category <span class="dropdown-arrow"></span>
 </article>
 <article class="event-card swiper-slide">
 <figure class="event-card-figure">
-<img src="/resources/img/event2.jpg" alt="사내 워크숍 포스터"/>
+<img src="/resources/img/events/event2.jpg" alt="사내 워크숍 포스터"/>
 <figcaption class="hidden">포스터 이미지</figcaption>
 <a href="#" class="event-info-overlay">
 <div class="event-info-content">
@@ -456,7 +458,7 @@ Category <span class="dropdown-arrow"></span>
 </article>
 <article class="event-card swiper-slide">
 <figure class="event-card-figure">
-<img src="/resources/img/event3.jpg" alt="개발자 컨퍼런스 포스터"/>
+<img src="/resources/img/events/event3.jpg" alt="개발자 컨퍼런스 포스터"/>
 <figcaption class="hidden">포스터 이미지</figcaption>
 <a href="#" class="event-info-overlay">
 <div class="event-info-content">
@@ -470,7 +472,7 @@ Category <span class="dropdown-arrow"></span>
 </article>
 <article class="event-card swiper-slide">
 <figure class="event-card-figure">
-<img src="/resources/img/event4.jpg" alt="봄 플리마켓 포스터"/>
+<img src="/resources/img/events/event4.jpg" alt="봄 플리마켓 포스터"/>
 <figcaption class="hidden">포스터 이미지</figcaption>
 <a href="#" class="event-info-overlay">
 <div class="event-info-content">
@@ -484,7 +486,7 @@ Category <span class="dropdown-arrow"></span>
 </article>
 <article class="event-card swiper-slide">
 <figure class="event-card-figure">
-<img src="/resources/img/event1.jpg" alt="추가 이벤트 포스터"/>
+<img src="/resources/img/events/event5.jpg" alt="추가 이벤트 포스터"/>
 <figcaption class="hidden">포스터 이미지</figcaption>
 <a href="#" class="event-info-overlay">
 <div class="event-info-content">
@@ -498,7 +500,7 @@ Category <span class="dropdown-arrow"></span>
 </article>
 <article class="event-card swiper-slide">
 <figure class="event-card-figure">
-<img src="/resources/img/event2.jpg" alt="추가 이벤트 포스터"/>
+<img src="/resources/img/events/event6.jpg" alt="추가 이벤트 포스터"/>
 <figcaption class="hidden">포스터 이미지</figcaption>
 <a href="#" class="event-info-overlay">
 <div class="event-info-content">

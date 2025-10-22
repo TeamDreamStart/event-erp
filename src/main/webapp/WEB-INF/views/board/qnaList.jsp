@@ -1,17 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<link href="https://fonts.cdnfonts.com/css/peristiwa" rel="stylesheet">
-		<link href="https://fonts.google.com/specimen/Montserrat" rel="stylesheet"> 
-		<link rel="stylesheet" href="/webapp/resources/css/noticeList.css">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.cdnfonts.com/css/peristiwa" rel="stylesheet">
+<link href="https://fonts.google.com/specimen/Montserrat"
+	rel="stylesheet">
+<link rel="stylesheet" href="/webapp/resources/css/noticeList.css">
 
 <style>
+/* ==== 기본 스타일 ==== */
 body {
-	font-family: 'Montserrat';
+	font-family: 'Montserrat', sans-serif;
 	margin: 0;
 	padding: 0;
 	background-color: #E5E2DB;
@@ -19,11 +22,10 @@ body {
 	line-height: 1.6;
 }
 
-.main-container {
+.container {
 	max-width: 1200px;
 	margin: 0 auto;
 	padding: 20px;
-	background-color: white;
 }
 
 a {
@@ -31,175 +33,7 @@ a {
 	color: inherit;
 }
 
-ul {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
-
-button {
-	cursor: pointer;
-	background: none;
-	border: none;
-	padding: 0;
-	font-family: inherit;
-	color: inherit;
-}
-
-.header {
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 20px;
-	position: relative;
-	border-bottom: 1px solid #222;
-	background-color: white;
-}
-
-.header-top {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-start;
-	position: relative; /*자식 요소의 absoulute 기준점*/
-	margin-bottom: 20px;
-}
-
-.logo-link{
-    font-family: 'Peristiwa', sans-serif;
-    font-size: 64px;
-    font-style: italic;
-    color: #222;
-    display: inline-block;
-    margin-left: 20px;
-}
-
-.header-right {
-	display: flex;
-	gap: 0px;
-	/*align-items: center;
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    z-index: 10;*/
-}
-
-.user-actions {
-	display: flex;
-	align-items: center;
-	gap: 0px; /*mypage와 login 사이 간격*/
-	margin-top: 10px; /*help 영역과의 수직 위치 맞추기*/
-}
-
-/*mypage (얇은 텍스트)*/
-.btn-mypage {
-	font-size: 20px; /*글씨 크기 조정*/
-	font-weight: 400; /*얇기*/
-	padding: 8px 15px; /*login 박스와 높이 맞추기 위해 패딩 추가*/
-	color: #222;
-	background-color: #FFFFFF;
-	border: 1px solid #FFFFFF;
-	margin: 0;
-	border-right: none;
-}
-
-.btn-login {
-	font-size: 20px;
-	font-weight: 400;
-	color: #FFFFFF;
-	background-color: #222;
-	padding: 8px 15px;
-	text-align: center;
-	line-height: 1;
-	margin: 0;
-}
-
-.user-actions a:last-child {
-	/*font-weight: bold;*/
-	border-left: 1px solid #222;
-	padding-left: 15px;
-}
-
-.login-button {
-	font-weight: bold;
-}
-
-.header-nav {
-	display: flex;
-	/*justify-content: flex-start;*/
-	gap: 40px;
-	font-size: 30px;
-	font-weight: 300;
-	padding-left: 20px;
-}
-
-.header-nav a:hover {
-	color: #FFFFFF;
-}
-
-.help-button {
-	font-weight: 300;
-	font-size: 30px;
-	padding: 5px 0;
-	width: auto;
-	text-align: left;
-}
-
-.help-text {
-	display: flex;
-	flex-direction: row;
-	position: absolute;
-	top: 100%; /*help 버튼 바로 아래*/
-	right: 0;
-	z-index: 10;
-	background-color: #FFFFFF;
-	border: 1px solid #222;
-	padding: 5px;
-	box-shadow: 0 2px 5px rgda(0, 0, 0, 0.1);
-	margin-bottom: 5px;
-	font-size: 14px;
-	font-weight: bold;
-	gap: 8px;
-}
-
-.help-search.hidden {
-	display: none
-}
-
-.help-input {
-	width: 100px;
-	height: 20px;
-	border: 1px solid #ccc;
-	margin-bottom: 2px;
-	padding: 2px 5px;
-	font-size: 12px;
-	box-sizing: border-box;
-}
-
-.help-input.small {
-	width: 60px; /* Q&A 폭 좁게 */
-}
-
-/*메인 네비게이션(visit, event, reservation*/
-.header-nav {
-	display: flex;
-	gap: 40px;
-	font-size: 30px;
-	font-weight: 300;
-	padding-left: 20px;
-}
-
-.header-nav a {
-	padding-bottom: 10px;
-	transition: color 0.2s;
-}
-
-.header-nav a:hover {
-	color: #0088ff;
-}
-/* 3. Main Content (qna) 스타일 */
-.main-content {
-	padding-top: 80px;
-}
-
+/* ==== 페이지 타이틀 ==== */
 .page-title {
 	text-align: center;
 	font-size: 30px;
@@ -209,219 +43,287 @@ button {
 	padding-bottom: 10px;
 }
 
-/* 검색창 */
+/* ==== 검색창 ==== */
 .search-bar {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 50px;
-    border:none;  /*테두리 제거*/
-    max-width: 888px;
-    margin: 50px auto;
-    gap: 43px;
+	display: flex;
+	justify-content: center;
+	max-width: 888px;
+	margin: 50px auto;
+	gap: 20px;
 }
 
-/*검색 입력창*/
-.search-input {
-    width: 733px;
-    height: 60px;
-    box-sizing: border-box;
-    padding: 0px 20px;
-    background-color:#CBD4C2;
-    border: 1px solid #222;
-    border-radius: 15px;
-    flex-grow: 0;
-    box-shadow: none;
-    outline: none;
-    font-size: 18px;
-    color:#222 ;
-    opacity: 1;
+.search-bar input[type="text"] {
+	width: 708px;
+	height: 60px;
+	background-color: #CBD4C2;
+	border: 1px solid #222;
+	border-radius: 15px;
+	font-size: 18px;
+	outline: none;
+	margin-right: 43px;
+	padding-left: 14px;
 }
 
-   .search-input::placeholder{
-        color: #888888;
-        opacity: 1;
-    }
-
-/*검색 버튼*/
-.search-btn {
-    width: 112px;
-    height: 60px;
-    box-sizing: border-box;
-    padding: 0px;
-    background-color: #CBD4C2;
-    border: 1px solid #222;
-    border-radius: 15px;
-    font-size: 18px;
-    outline: none;
-    font-weight: bold;
-
-      /* 텍스트 정렬 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    /*버튼 텍스트 색상*/
-    color: #222;
+.search-bar button {
+	width: 112px;
+	height: 60px;
+	background-color: #CBD4C2;
+	border: 1px solid #222;
+	border-radius: 15px;
+	font-size: 18px;
+	font-weight: bold;
+	cursor: pointer;
 }
 
-.qna-header{
-    display: flex;
-    justify-content: space-between;
-    font-weight: bold;
-    font-size: 14px;
-    padding: 0 0px 10px 0; /* 아래쪽 패딩으로 테이블과 간격 조정 */
-    margin: 0 auto;
-    max-width: 888px;
-    border-bottom: none;
-    background-color: transparent;
-}
-.qna-header > div:nth-child(1) { width: 50%; text-align: left; padding-left: 20px; } 
-.qna-header > div:nth-child(2) { width: 15%; text-align: center; } 
-.qna-header > div:nth-child(3) { width: 15%; text-align: center; } 
-.qna-header > div:nth-child(4) { width: 10%; text-align: center; } 
-
-/* ⭐️ Q&A 리스트 박스 컨테이너 (888x584 크기 및 스크롤) */
-.qna-list-container{
-    max-width: 888px;
-    height: 584px; 
-    margin: 10px auto 0 auto; /* 헤더 텍스트와 분리를 위한 상단 마진 */
-    border: 1px solid #AFAFAF; 
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    background-color: white; /* 리스트 배경색을 흰색으로 설정 */
-    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 허용 */
+/* ==== Q&A 헤더 ==== */
+.qna-header-wrapper {
+	max-width: 888px;
+	margin: 0 auto;
+	font-weight: bold;
+	font-size: 14px;
 }
 
-/* ⭐️ 공지사항 테이블 (notice-table CSS를 Q&A 리스트에 맞게 재정의) */
-.notice-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 0; /* 컨테이너 내부에 맞춥니다. */
-    text-align: center;
-}
-/* 테이블 헤더는 HTML에서 제거되었으므로 thead 관련 CSS는 무시됩니다. */
-.notice-table tbody td {
-    padding: 12px 0;
-    border-bottom: 1px solid #AFAFAF;
-    color: #222;
-    font-size: 15px;
-    vertical-align: middle;
-}
-.notice-table tbody tr:last-child td {
-    border-bottom: none; /* 마지막 줄 아래 선 제거 */
+.qna-header {
+	display: flex;
+	justify-content: space-between;
+	border-bottom: 1px solid #AFAFAF;
+	padding-bottom: 10px;
 }
 
-/* 테이블 컬럼 너비 지정 (헤더 너비와 일치) */
-.notice-table td:nth-child(1) { width: 50%; text-align: left; padding-left: 20px; } /* 제목 */
-.notice-table td:nth-child(2) { width: 15%; } /* 작성자 */
-.notice-table td:nth-child(3) { width: 15%; } /* 등록일자 */
-.notice-table td:nth-child(4) { width: 10%; font-weight: bold; } /* 상태 */
-
-/* 질문 제목 링크 스타일 */
-.notice-table td a{
-    display: block; /* 전체 셀 클릭 가능하게 */
-    font-weight: 500;
-    color: #222;
-    padding: 0;
-    text-align: left;
+.qna-header div:nth-child(1) {
+	width: 50%;
+	padding-left: 20px;
 }
-.notice-table td a::before{
-    content: 'Q';
-    margin-right: 10px;
-    font-size: 18px; /* 크기 조정 */
-    color: #888888;
-    font-weight: bold;
-}
-/* 불필요한 P 태그 관련 CSS 제거 */
 
-/* 답변대기 상태 강조 */
+.qna-header div:nth-child(2) {
+	width: 15%;
+	text-align: center;
+}
+
+qna-header div:nth-child(3) {
+	width: 15%;
+	text-align: center;
+}
+
+.qna-header div:nth-child(4) {
+	width: 10%;
+	text-align: center;
+}
+
+/* ==== Q&A 리스트 ==== */
+.qna-list-container {
+	max-width: 888px;
+	margin: 0 auto;
+	background-color: #FAF9F6;
+}
+
+.qna-item {
+	border-bottom: 1px solid #E5E5E5;
+}
+
+.qna-summary {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 12px 0;
+	cursor: pointer;
+}
+
+.qna-summary:hover {
+	background-color: #F8F8F8;
+}
+
+.qna-col {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.qna-col.title {
+	width: 50%;
+	padding-left: 20px;
+	display: flex;
+}
+
+.title-icon {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	padding: 4px;
+	text-align: center;
+	color: white;
+	background-color: #b2c3b3;
+	margin-right: 10px;
+}
+
+.qna-col.writer {
+	width: 15%;
+	text-align: center;
+}
+
+.qna-col.date {
+	width: 15%;
+	text-align: center;
+}
+
+.qna-col.status {
+	width: 10%;
+	text-align: center;
+	font-weight: bold;
+}
+
 .status-waiting {
-    color: #888888; 
-    font-weight: bold;
-}
-/* 답변완료 상태 강조 */
-.status-complete { 
-    color: #0088ff;
-    font-weight: bold;
+	color: #888888;
 }
 
-/* 페이지네이션 */
+.status-complete {
+	color: #0088ff;
+}
+
+/* detail content */
+.qna-content {
+	padding: 20px 40px;
+	background-color: #FDFDFD;
+	border-top: 1px dashed #DDD;
+}
+
 .pagination {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    align-items: center;
-    margin-top: 40px;
+	display: flex;
+	justify-content: center;
+	gap: 15px;
+	align-items: center;
+	color: #888888;
+	font-size: 18px;
+	transition: 0.2s;
 }
-.pagination a{padding: 5px 10px; font-size: 18px; color: #888888; transition: color 0.2s;}
-.pagination a.active{font-weight: bold;}
-.pagination a:hover{color: #222; cursor: pointer;}
 
-/* 4. Footer 영역 스타일 */
-.footer {background-color: #CBD4C2; color: #222; padding: 30px 0; margin-top: 80px; text-align: center;}
-.footer p {margin: 5px 0; font-size: 14px;}
-.footer-hr {display: none;}
-.footer p:last-child {margin-top: 15px; font-weight: bold;} 
+.pagination li {
+	display: inline-block;
+}
+
+.pagination li a {
+	padding: 5px 10px;
+	font-size: 18px;
+	color: #999;
+	display: block;
+	transition: color 0.2s;
+}
+
+.pagination li.active a {
+	font-weight: bold;
+	color: #222;
+}
+f
 </style>
 </head>
+
 <body>
 	<header>
-
-		<jsp:include page="/WEB-INF/views/common/header.jsp" flush="true" />
+		<jsp:include page="/WEB-INF/views/common/header.jsp" />
 	</header>
-	<!--메인 컨테이너-->
+
 	<div class="container">
-		<div class="page-title">Q&A</div>
-		<!--검색창-->
+		<div class="page-title">
+			<a href="/qna">Q&A</a>
+		</div>
+
+		<!-- 검색 영역 -->
 		<div class="search-bar">
-			<input type="text" placeholder="제목/작성자/등록일자 검색">
-			<button>검색</button>
+			<form action="/qna" method="get">
+				<input type="hidden" name="searchType" value="title"> <input
+					type="text" name="keyword" placeholder="제목 검색">
+				<button type="submit">검색🔍️</button>
+			</form>
 		</div>
 	</div>
-	<!--공지사항 테이블-->
-	<table class="notice-table">
-		<thead>
-			<tr>
-				<th>제목</th>
-				<th>작성자</th>
-				<th>등록일자</th>
-				<th>상태</th>
-			</tr>
-		</thead>
-		<tbody>
-			<c:choose>
-				<c:when test="${empty postList}">
-					<tr>
-						<td class="text-center" colspan="6">게시글이 없습니다.</td>
-					</tr>
-				</c:when>
-				<c:otherwise>
-					<c:forEach var="postDTO" items="${postList}">
-						<c:if
-							test="${postDTO.visibility eq 'PUBLIC' and postDTO.category eq 'QNA'}">
-							<tr>
-								<td><a href="/qna/${postDTO.postId}">${postDTO.title}</a></td>
-								<td>${postDTO.userId}</td>
-								<td>${postDTO.createdAt}</td>
-								<c:if test="${postDTO.commentCount >0}">
-									<td style="color: red">답변완료</td>
-								</c:if>
-								<c:if test="${postDTO.commentCount ==0}">
-									<td>답변대기</td>
-								</c:if>
-							</tr>
-						</c:if>
-					</c:forEach>
-				</c:otherwise>
-			</c:choose>
-		</tbody>
-	</table>
-	<!--페이지네이션-->
-	<div class="pagination">
-		<a href="#">&lt;</a> <a href="#">1</a> <a href="#">2</a> <a href="#">3</a>
-		<a href="#">&gt;</a>
+
+	<!-- 헤더 -->
+	<div class="qna-header-wrapper">
+		<div class="qna-header">
+			<div>제목</div>
+			<div>작성자</div>
+			<div>등록일자</div>
+			<div>상태</div>
+		</div>
 	</div>
+
+	<!-- Q&A 리스트 -->
+	<div class="qna-list-container">
+		<c:if test="${not empty postList  }">
+
+
+			<c:forEach var="postDTO" items="${postList}">
+				<c:if
+					test="${postDTO.visibility eq 'PUBLIC' and postDTO.category eq 'QNA'}">
+					<details class="qna-item">
+						<summary class="qna-summary">
+							<div class="qna-col title">
+								<div class="title-icon">Q</div>
+								<strong>${postDTO.title}</strong>
+							</div>
+							<div class="qna-col writer">${postDTO.userId}</div>
+							<div class="qna-col date">
+								<fmt:formatDate value="${postDTO.createdAt}"
+									pattern="yyyy-MM-dd" />
+							</div>
+							<div class="qna-col status">
+								<c:choose>
+									<c:when test="${postDTO.commentCount > 0}">
+										<span class="status-complete">답변완료</span>
+									</c:when>
+									<c:otherwise>
+										<span class="status-waiting">답변대기</span>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</summary>
+						<div class="qna-content">
+							<strong>문의 내용:</strong>
+							<p>${postDTO.title}</p>
+
+							<c:if test="${postDTO.commentCount > 0}">
+								<br>
+								<strong>[답변]</strong>
+								<br>
+								<p>${postDTO.commentContent}</p>
+							</c:if>
+						</div>
+					</details>
+				</c:if>
+			</c:forEach>
+		</c:if>
+		<c:if test="${ empty postList && not empty keyword }">
+			<div class="qna-summary">검색결과가 없습니다.</div>
+		</c:if>
+	</div>
+	<%-- Paging --%>
+	<div class="text-center">
+		<ul class="pagination">
+			<c:if test="${pageVO.prev }">
+				<li><a
+					href="/qna?page=1&searchType=${searchType }&keyword=${keyword }">&laquo;&laquo;</a></li>
+				<li><a
+					href="/qna?page=${pageVO.startPage-1}&searchType=${searchType }&keyword=${keyword }">&laquo;</a></li>
+			</c:if>
+			<c:forEach begin="${pageVO.startPage }" end="${pageVO.endPage }"
+				var="idx">
+				<li
+					class=<c:out value="${pageVO.cri.page==idx? 'active':''}"></c:out>>
+					<a
+					href="/qna?page=${idx }&searchType=${searchType }&keyword=${keyword }">${idx }</a>
+				</li>
+			</c:forEach>
+			<c:if test="${pageVO.next && pageVO.endPage > 0 }">
+				<li><a
+					href="/qna?page=${pageVO.endPage+1 }&searchType=${searchType }&keyword=${keyword }">&raquo;</a></li>
+				<li><a
+					href="/qna?page=${lastPage}&searchType=${searchType }&keyword=${keyword }">&raquo;&raquo;</a></li>
+			</c:if>
+		</ul>
+	</div>
+
 	<footer>
-			<jsp:include page="/WEB-INF/views/common/footer.jsp" flush="true" />
+		<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 	</footer>
 </body>
 </html>

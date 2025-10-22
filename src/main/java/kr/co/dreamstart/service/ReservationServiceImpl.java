@@ -3,6 +3,7 @@ package kr.co.dreamstart.service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.dreamstart.dto.PaymentDTO;
 import kr.co.dreamstart.dto.ReservationDTO;
+import kr.co.dreamstart.dto.ReservationJoinDTO;
 import kr.co.dreamstart.mapper.PaymentMapper;
 import kr.co.dreamstart.mapper.ReservationMapper;
 
@@ -51,18 +53,18 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	public long makeId(long eventId) {
-	    // 현재 날짜
-	    LocalDate today = LocalDate.now();
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
-	    String dateStr = today.format(formatter);
+		// 현재 날짜
+		LocalDate today = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+		String dateStr = today.format(formatter);
 
-	    // 랜덤 4자리 숫자
-	    int random = (int)(Math.random() * 9000) + 1000; // 1000~9999
+		// 랜덤 4자리 숫자
+		int random = (int) (Math.random() * 9000) + 1000; // 1000~9999
 
-	    // 예약번호 = 날짜 + 이벤트ID + 유저ID + 랜덤
-	    String reservationIdStr = dateStr + eventId + random;
+		// 예약번호 = 날짜 + 이벤트ID + 유저ID + 랜덤
+		String reservationIdStr = dateStr + eventId + random;
 
-	    return Long.parseLong(reservationIdStr);
+		return Long.parseLong(reservationIdStr);
 	}
 
 	@Override
@@ -70,5 +72,43 @@ public class ReservationServiceImpl implements ReservationService {
 		return rMapper.select(reservationId);
 	}
 
+	// reservation으로 옯겨야함
+	@Override
+	public List<ReservationJoinDTO> selectJoinPayByUserId(long userId) {
+		return rMapper.selectJoinPayByUserId(userId);
+	}
+
+	@Override
+	public ReservationJoinDTO selectJoinPayById(long reservationId) {
+		return rMapper.selectJoinPayById(reservationId);
+	}
+
+	@Override
+	public Map<String, Object> reservationCancel(long reservationId, String cancelReason) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		int result = -1;
+		result = rMapper.cancel(cancelReason, reservationId);
+		PaymentDTO pDTO = pMapper.selectByReservationId(reservationId);
+		if (result > 0) {
+			if (pDTO != null) {
+				result = pMapper.cancel(reservationId);
+			}
+			map.put("result", "success");
+		} else {
+			map.put("result", "fail");
+		}
+		map.put("resultType", "예약취소");
+		return map;
+	}
+
+	@Override
+	public List<ReservationJoinDTO> adminJoinList() {
+		return rMapper.adminJoinList();
+	}
+
+	@Override
+	public ReservationJoinDTO adminJoinSelect(long reservationId) {
+		return rMapper.adminJoinSelect(reservationId);
+	}
 
 }

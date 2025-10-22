@@ -9,35 +9,19 @@
 <meta charset="UTF-8">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
-
+<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
 <title>resetPassword</title>
 <style>
-body {
-        background-color: #E5E2DB;
-		color: #222222;
-		font-family: 'Montserrat', sans-serif;
-		font-size: medium;
-font-weight: normal;
-		margin: 0;
-		padding: 0 120px 60px; 
-		line-height: 1;
-	}
-	main {
-		margin-top: 0; 
-		padding: 0; 
-	}
-    .container {
-        width: 100%;
+	body {
+	background: #E5E2DB;
 }
-    .section-header h2{
-        font-size: 20px;
-        font-weight: bold;
-        user-select: none;
-        cursor: default;
-        margin-bottom: 40px;
-        padding-top: 40px;
-    }
+.section-header {
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+}
 .resetPassword-section{
     background-color: #FAF9F6;
     border: 1px solid #222222;
@@ -75,7 +59,6 @@ input::placeholder{
     border-radius: 3px;
     padding: 10px 12px;
     font-size: 14px;
-    outline: none;
     transition: border-color 0.2s;
     caret-color: transparent;
 }

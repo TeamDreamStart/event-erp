@@ -2,12 +2,14 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sec"
-uri="http://www.springframework.org/security/tags"%>
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
+<link
+	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap"
+	rel="stylesheet" />
 <title>findPassword</title>
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/findPassword.css">
@@ -15,6 +17,7 @@ uri="http://www.springframework.org/security/tags"%>
 /* 기본 스타일 */
 .tab-radio-group {
 	display: flex;
+	justify-content: space-between;
 }
 
 .tab-btn {
@@ -22,7 +25,6 @@ uri="http://www.springframework.org/security/tags"%>
 	cursor: pointer;
 	border: 1px solid #ccc;
 	background-color: #CBD4C2;
-	margin-right: 2px;
 	border-radius: 10px 10px 0 0;
 	transition: background-color 0.3s;
 	user-select: none;
@@ -107,7 +109,9 @@ input[type="radio"]:checked+label {
 			return true;
 		}
 	</script>
-	<jsp:include page="/WEB-INF/views/common/header.jsp" />
+	<header>
+		<jsp:include page="/WEB-INF/views/common/header.jsp" />
+	</header>
 	<main>
 		<div class="container">
 
@@ -127,7 +131,7 @@ input[type="radio"]:checked+label {
 							placeholder="이메일을 입력해 주세요." required>
 						<div>
 							<button style="height: 45px;" type="submit">인증번호 전송</button>
-							<button type="button" onclick="history.back()">취소</button>
+							<button type="button" onclick="location.href='/login'">취소</button>
 						</div>
 					</div>
 				</form>
@@ -166,7 +170,7 @@ input[type="radio"]:checked+label {
 							name="code" placeholder="인증번호를 입력해 주세요." required>
 						<div>
 							<button type="submit">확인</button>
-							<button type="button" onclick="history.back()">취소</button>
+							<button type="button" onclick="location.href='/login'">취소</button>
 						</div>
 					</div>
 				</form>
