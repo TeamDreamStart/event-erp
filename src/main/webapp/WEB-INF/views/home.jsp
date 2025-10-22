@@ -8,16 +8,19 @@
 <meta charset="UTF-8">
 <title>home</title>
 
+<<<<<<< Updated upstream
+=======
+<!-- 공통 css reset/common -->
+>>>>>>> Stashed changes
 <link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
 <link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
-<link
-	href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
-	rel="stylesheet">
 
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
-<script
-	src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+
+<!-- Swiper CSS & JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
 
 <style>
 body {
@@ -385,7 +388,7 @@ body {
 
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp" flush="true" />
-
+	
 	<main id="main" class="container" role="main">
 		<!-- 메인 비주얼 -->
 		<section class="main-visual" aria-labelledby="mv-heading">

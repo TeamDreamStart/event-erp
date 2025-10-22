@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
@@ -13,21 +12,194 @@
 <meta name="_csrf" content="${_csrf.token}" />
 <meta name="_csrf_header" content="${_csrf.headerName}" />
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
+<!-- 공통 css reset/common -->
+<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+
 <title>join</title>
 <link rel="stylesheet" type="text/css" href="/resources/css/join.css" />
 
 <style>
-.field-msg { display:block; margin-top:4px; font-size:12px; }
-.ok { color:#0a7a0a; }
-.warn { color:#d9534f; }
+/* =======================================================
+   JOIN – WIDE (left aligned, 2-line email, no clipping)
+   - 비반응형, 프로젝트 색(#568ef7) 유지
+   - 카드 폭 키움(960px) · 오버플로우 보이게
+   - HTML/JS 변경 없음
+   ======================================================= */
 
-/* 모달 관련 */
-.modal{ position:fixed; inset:0; background:rgba(0,0,0,.4); display:flex; align-items:center; justify-content:center; z-index:9999; }
-.modal.hidden{ display:none; }
-.modal-content{ background:#fff; padding:24px 28px; border-radius:10px; min-width:280px; text-align:center; }
-.modal-content h3{ margin:0 0 8px; }
+/* 페이지 토큰 */
+.membership-section{
+  --line:#e9eaee;
+  --muted:#747a86;
+  --ok:#10b981;
+  --warn:#e54848;
+  --r:8px;
+  --r-lg:10px;
+  --h:44px;       /* input/버튼 높이 넉넉히 */
+  --fz:15px;      /* 글자 살짝 키움 */
+  --card-w:960px; /* 카드 폭 ↑ (짤림 방지) */
+  --inner-x:24px;
+}
+
+/* 컨테이너/배경은 손대지 않음 */
+main .container > h2{ font-weight:800; font-size:24px; margin:20px 0 10px; }
+
+/* 카드: 좌측 정렬 + 넘침 보이기 */
+.membership-section{
+  width:var(--card-w);
+  margin:0;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  box-shadow:0 1px 8px rgba(17,24,39,.04);
+  overflow:visible; /* 짤림 방지 */
+}
+.membership-section::before{ content:none; }
+
+/* 폼: 2열 고정 */
+.membership-form{
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:14px 18px;
+  padding:20px var(--inner-x);
+}
+.membership-section .form-group{ margin:0; }
+
+/* 전체폭 필드 */
+.membership-form .form-group:nth-child(1),
+.membership-form .form-group:nth-child(2),
+.membership-form .form-group:nth-child(3),
+.membership-form .birth-date-group,
+.membership-form .form-group:nth-child(6){ grid-column:1 / -1; }
+
+/* 라벨 */
+.membership-section label,
+.membership-section .form-label label{
+  display:block; margin:0 0 6px;
+  font-weight:700; font-size:14px; color:#222;
+}
+
+/* 인풋/셀렉트 공통 */
+.membership-section input[type="text"],
+.membership-section input[type="password"],
+.membership-section input[type="tel"],
+.membership-section select{
+  width:100%; height:var(--h);
+  box-sizing:border-box;
+  background:#fff; border:1px solid var(--line);
+  border-radius:var(--r); padding:0 12px;
+  font-size:var(--fz); line-height:1;
+  min-width:0;
+}
+.membership-section input::placeholder{ color:#b3b8c1; }
+.membership-section input:focus,
+.membership-section select:focus{
+  outline:none; border-color:#568ef7;
+  box-shadow:0 0 0 2px rgba(86,142,247,.15);
+}
+
+/* =========================
+   이메일: 2줄 그리드 (넓게, 절대 안 짤림)
+   1행: local @ domain domain-select 중복확인  [여백]
+   2행: 발송 | 인증코드(넓게) | 인증확인       [여백]
+   ========================= */
+.input-with-button{
+  display:grid;
+  grid-template-columns:200px 24px 260px 140px 110px 1fr; /* 총 내부폭 960-48=912px 기준 */
+  grid-template-areas:
+    "local  at domain dsel dup  space"
+    "send   code   code   code vfy  space";
+  grid-auto-rows:var(--h);
+  column-gap:10px; row-gap:10px;
+  align-items:center; min-width:0;
+}
+#email-local     { grid-area:local; }
+.input-with-button .golbang{ grid-area:at; text-align:center; color:var(--muted); user-select:none; height:var(--h); line-height:var(--h); }
+#domain-txt      { grid-area:domain; }
+#domain-list     { grid-area:dsel; }
+#btn-check-email { grid-area:dup; }
+#btn-send-code   { grid-area:send; }
+#email-code      { grid-area:code; min-width:0; }
+#btn-verify-code { grid-area:vfy; }
+
+/* 작은 버튼(중복확인/코드/인증) */
+.input-with-button button{
+  height:var(--h); padding:0 12px;
+  border:1px solid var(--line); border-radius:var(--r);
+  background:#f6f7f9; color:#333; font-weight:700; font-size:13px;
+}
+.input-with-button button:hover{ background:#eef0f3; border-color:#dcdfe3; }
+
+/* 메세지는 다음 줄 전체 폭 */
+.input-with-button + .field-msg{ display:block; grid-column:1 / -1; margin-top:6px; }
+
+/* 라디오 */
+.form-radio{ display:inline-flex; gap:12px; align-items:center; }
+.form-radio input[type="radio"]{ inline-size:16px; block-size:16px; accent-color:#568ef7; }
+
+/* 생년월일 */
+.birth-select-wrapper{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+.birth-select{
+  height:var(--h); padding:0 10px;
+  border:1px solid var(--line); border-radius:var(--r);
+  font-size:var(--fz); background:#fff;
+}
+
+/* 검증 메시지 */
+.field-msg{ margin-top:6px; font-size:12px; color:var(--muted); }
+.field-msg.ok{ color:var(--ok); }
+.field-msg.warn{ color:var(--warn); }
+
+/* 전화번호: 360px로 확대(짤림 방지), 오른쪽은 비워둠 */
+.membership-section > .form-group{ padding:0 var(--inner-x); margin-top:6px; }
+.membership-section > .form-group label[for="phone"]{ display:block; margin-bottom:6px; font-weight:700; }
+#phone{ width:360px; max-width:100%; }
+
+/* 하단 버튼: 좌측 정렬 유지 + 동일 크기 */
+.join-bottom-button{
+  display:flex; justify-content:flex-start; align-items:center; gap:10px;
+  padding:16px var(--inner-x) 20px; border-top:1px solid var(--line);
+}
+.membership-section .btn-cancel,
+.membership-section .btn-next{
+  height:var(--h); min-width:140px;
+  border-radius:10px; font-weight:800; font-size:14px; cursor:pointer;
+}
+.membership-section .btn-cancel{ border:1px solid var(--line); background:#f5f6f7; color:#333; }
+.membership-section .btn-cancel:hover{ background:#eef0f2; }
+.membership-section .btn-next{ border:0; } /* 배경은 기존 정의(#568ef7) 사용 */
+
+/* SNS */
+.sns-login-section{
+  border-top:1px solid var(--line);
+  padding:14px var(--inner-x) 20px; margin:0; text-align:left;
+}
+.sns-login-section .sns-title{ font-size:12px; font-weight:700; color:#6b7280; margin-bottom:8px; }
+.sns-buttons{ display:grid; grid-template-columns:1fr; gap:8px; width:calc(var(--card-w) - var(--inner-x)*2); }
+.sns-buttons a{
+  display:flex; align-items:center; justify-content:center;
+  height:42px; border-radius:999px; background:#fff; border:1px solid var(--line);
+}
+.sns-buttons img{ height:20px; width:auto; display:block; }
+
+/* 모달: 항상 화면 중앙 */
+#join-success-modal.modal{
+  position:fixed !important; inset:0 !important;
+  display:flex !important; align-items:center !important; justify-content:center !important;
+  background:rgba(0,0,0,.45) !important; z-index:2147483000 !important;
+}
+#join-success-modal.modal.hidden{ display:none !important; }
+#join-success-modal .modal-content{
+  width:380px; max-width:90vw; border-radius:10px; padding:18px 20px;
+  background:#fff; box-shadow:0 10px 24px rgba(0,0,0,.12); text-align:center;
+}
+#join-success-modal .modal-content button{
+  height:40px; border-radius:9px; background:#568ef7; color:#fff; border:0; font-weight:800; padding:0 16px;
+}
 </style>
+
 </head>
 <body>
   <jsp:include page="/WEB-INF/views/common/header.jsp" />
@@ -144,10 +316,26 @@
           <!-- 제출 -->
           <div class="join-bottom-button">
             <button type="button" class="btn-cancel">취소</button>
-            <button type="submit" class="btn-next">다음</button>
+            <button type="submit" class="btn-next">가입하기</button>
           </div>
         </form:form>
         <!-- /회원가입 폼 -->
+
+        <!-- ✅ SNS 로그인 (아이콘 경로 너가 올려둔 곳 사용) -->
+        <div class="sns-login-section">
+          <p class="sns-title">간편 로그인</p>
+          <div class="sns-buttons">
+            <a href="/oauth2/authorization/naver" class="sns-btn naver">
+              <img src="/resources/img/naver/btnG_축약형.png" alt="네이버 로그인">
+            </a>
+            <a href="/oauth2/authorization/google" class="sns-btn google">
+              <img src="/resources/img/naver/btnW_축약형.png" alt="구글 로그인">
+            </a>
+            <a href="/oauth2/authorization/kakao" class="sns-btn kakao">
+              <img src="/resources/img/kakao.png" alt="카카오 로그인">
+            </a>
+          </div>
+        </div>
 
         <!-- ✅ 가입 성공 모달 (기본 hidden) -->
         <div id="join-success-modal" class="modal hidden">
@@ -169,6 +357,9 @@
 
   <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
 
+  <!-- =============================
+       ↓↓↓ 네가 보낸 JS 그대로 삽입 ↓↓↓
+       ============================= -->
   <script>
 /* ============================
  * CSRF 헤더 (AJAX용)

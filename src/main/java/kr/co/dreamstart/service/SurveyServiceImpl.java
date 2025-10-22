@@ -326,9 +326,92 @@ public class SurveyServiceImpl implements SurveyService {
 		return (s.getTemplateKey() != null && !s.getTemplateKey().isBlank());
 	}
 
+<<<<<<< Updated upstream
 //	@Override
 //	public int ensureLikert5ForSurvey(Long surveyId) {
 //		// TODO Auto-generated method stub
 //		return 0;
 //	}
+=======
+	@Override
+	public List<Map<String, Object>> openSurveyReservations(Long userId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.openSurveyReservations(userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> adminSurveyReservations(Long surveyId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.adminSurveyReservations(surveyId);
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public boolean saveResponse(Long userId, Long eventId, Map<Long, Long> answers) {
+		// TODO Auto-generated method stub
+		// 1) 이벤트에 연결된 설문 ID 찾기
+		Long surveyId = surveyMapper.findSurveyIdByEvent(eventId);
+		if (surveyId == null) {
+			log.warn("설문이 존재하지 않습니다. eventId={}", eventId);
+			return false;
+		}
+		
+		// 2) 중복 응답 여부 확인
+		int existing = surveyMapper.responseCountByUser(surveyId, userId);
+		if (existing > 0) {
+			log.info("이미 응답한 유저입니다: userId={}, surveyId={}", userId, surveyId);
+			return false;
+		}
+		
+		// 3) 응답 테이블 저장 / SurveyResponseDTO 객체로 insert 수행
+		SurveyResponseDTO dto = new SurveyResponseDTO();
+		dto.setSurveyId(surveyId);
+		dto.setUserId(userId);
+		surveyMapper.insertResponse(dto);
+		
+		Long responseId = dto.getResponseId();	// 자동 생성된 pk바로 가져옴
+		if (responseId == null) {
+			throw new IllegalStateException("responseId 생성 실패 : Mybatis useGeneratedKeys 설정 확인");
+		}
+		
+		log.info("[SURVEY] 신규 응답 등록 완료 - responseId={}", responseId);
+				
+		// 4) 문항별 응답 저장(answer가있을 경우에만 응답 상세 추가)
+		if (answers != null && !answers.isEmpty()) {
+			for (Map.Entry<Long, Long> entry : answers.entrySet()) {
+				surveyMapper.insertAnswer(responseId, entry.getKey(), entry.getValue(), null);
+			}			
+		}
+		
+		log.info("[SURVEY] 설문 응답 저장 완료 - userId={}, eventId={}, surveyId={}, responseId={}", userId, eventId, surveyId, responseId);
+		return true;
+	}
+
+	@Override
+	public Long findSurveyIdByEvent(Long eventId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.findSurveyIdByEvent(eventId);
+	}
+
+	@Override
+	public int responseCountByUser(Long surveyId, Long userId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.responseCountByUser(surveyId, userId);
+	}
+
+	@Override
+	public List<Map<String, Object>> findUnansweredSurveysByUser(Long userId) {
+		// TODO Auto-generated method stub
+		List<Map<String, Object>> unanswered = surveyMapper.findUnansweredSurveysByUser(userId);
+		log.info("[UNANSWERED] userId={} 미응답 설문 {}건", userId, unanswered.size());
+		return unanswered;
+	}
+
+	@Override
+	public String findLatestSurveyStatusByEvent(Long eventId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.findLatestSurveyStatusByEvent(eventId);
+	}
+
+>>>>>>> Stashed changes
 }

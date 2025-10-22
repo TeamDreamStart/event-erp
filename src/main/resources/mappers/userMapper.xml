@@ -355,6 +355,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where `password` IS
 		NULL OR `password` not like '$2%'  <!-- bcrypt 아님 대상 -->
 	</select>
+	
+	<!-- 유저아이디로 이메일 찾기 sns로그인 오류 방지 -->
+	<select id="findUserIdByEmail" parameterType="string" resultType="long">
+		select `user_id`
+		from `user`
+		where `email` = #{email}
+		limit 1
+	</select>
 
 	<update id="updatePasswordById">
 		update `user`
@@ -375,4 +383,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from `user` 
 		where `email` = LOWER (#{email})
 	</select>
+	
+	<!-- 회원탈퇴 -->
+	<delete id="deleteUser" parameterType="long">
+		delete 
+		from `user`
+		where `user_id` = #{userId}
+	</delete>
 </mapper>

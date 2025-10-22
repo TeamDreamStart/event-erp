@@ -72,6 +72,11 @@ public interface UserMapper {
 	// 중복체크
 	public int existsByUserName(@Param("username") String username);
 	public int existsByEmail(@Param("email") String email);
-
+	
+	// 회원탈퇴
+	public int deleteUser(@Param("userId") Long userId);
+	
+	// 아이디로 이메일 찾기
+	public Long findUserIdByEmail(@Param("email") String email);
 
 }

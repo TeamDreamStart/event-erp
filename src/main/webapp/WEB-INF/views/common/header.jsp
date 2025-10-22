@@ -1,47 +1,32 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<title>header</title>
-<link
-	href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
-	rel="stylesheet">
-<style>
-@font-face {
-	font-family: 'Peristiwa';
-	src: url('<c:url value="/resources/font/Peristiwa.otf"/>' )
-		format('opentype');
-	font-display: swap;
-}
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
-.header {
-	background: transparent;
-}
+<header id="header" role="banner">
+  <div class="header-container">
+    <div class="logo">
+      <a href="/" aria-label="DreamStart Home"></a>
+    </div>
 
-.header .container {
-	display: flex;
-	flex-direction: column;
-	padding: 20px 0 0;
-}
+    <div class="user-section">
+      <sec:authorize access="isAuthenticated()">
+        <span class="welcome">
+          <strong><sec:authentication property="principal.name"/></strong>님 환영합니다
+        </span>
+        <a href="/my-info" class="btn mypage">mypage</a>
+        <form method="post" action="/logout" class="logout-form">
+          <sec:csrfInput />
+          <button type="submit" class="btn logout">logout</button>
+        </form>
+      </sec:authorize>
 
-.header-top {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-start;
-	gap: 24px;
-}
-.logo-link {
-	text-decoration: none;
-	color: inherit;
-	display: block;
-	line-height: 1;
-}
+      <sec:authorize access="isAnonymous()">
+        <a href="/join" class="btn join">join</a>
+        <a href="/login" class="btn login">login</a>
+      </sec:authorize>
+    </div>
+  </div>
 
+<<<<<<< Updated upstream
 .logo {
 	font-family: 'Peristiwa', cursive;
 	font-size: 40px;
@@ -138,3 +123,7 @@
 	</header>
 </body>
 </html>
+=======
+  <jsp:include page="/WEB-INF/views/common/nav.jsp" />
+</header>
+>>>>>>> Stashed changes

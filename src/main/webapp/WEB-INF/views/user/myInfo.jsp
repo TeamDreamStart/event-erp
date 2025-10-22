@@ -1,11 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
+<<<<<<< Updated upstream
    pageEncoding="UTF-8"%>
+=======
+	pageEncoding="UTF-8"%>
+>>>>>>> Stashed changes
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<<<<<<< Updated upstream
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link
 	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap"
@@ -594,8 +599,23 @@ body {
 	color: #888888;
 }
 </style>
+=======
+<title>마이페이지</title>
+
+<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
+<link
+	href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
+<script
+	src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+>>>>>>> Stashed changes
 </head>
+
 <body>
+<<<<<<< Updated upstream
    <jsp:include page="/WEB-INF/views/common/header.jsp" />
    <main>
       <div class="container">
@@ -789,5 +809,68 @@ body {
     //     document.getElementById('withdrawalModal').style.display = 'flex';
     // };
   </script>
+=======
+	<jsp:include page="/WEB-INF/views/common/header.jsp" flush="true" />
+
+	<c:if test="${not empty msg}">
+		<div class="alert">${msg}</div>
+	</c:if>
+
+
+	<main id="main" class="container" role="main">
+		<section class="mypage-section" aria-labelledby="mypage-heading">
+			<h2 id="mypage-heading">마이페이지</h2>
+
+			<article>
+				<h4>회원 정보</h4>
+				<p>
+					이름:
+					<c:out value="${user.name}" />
+				</p>
+				<p>
+					이메일:
+					<c:out value="${user.email}" />
+				</p>
+				<p>
+					전화번호:
+					<c:out value="${user.phone}" />
+				</p>
+			</article>
+
+			<hr>
+
+			<c:if test="${not empty unanswered}">
+				<section class="survey-alert">
+					<strong>📢 응답하지 않은 설문이 있습니다!</strong>
+					<ul>
+						<c:forEach var="s" items="${unanswered}">
+							<li><a href="<c:url value='/my-info/survey/${s.event_id}'/>">
+									[${s.event_title}] ${s.survey_title} </a> <span>(${s.open_at}
+									~ ${s.close_at})</span></li>
+						</c:forEach>
+					</ul>
+				</section>
+			</c:if>
+
+			<hr>
+
+			<section class="survey-list">
+				<h4>이벤트 설문 목록</h4>
+				<c:forEach var="s" items="${SurveyList}">
+					<c:if test="${not empty s.event_id}">
+						<div class="survey-item">
+							<p>${s.event_title}(${s.open_at} ~ ${s.close_at})</p>
+							<form action="<c:url value='/my-info/survey/${s.event_id}'/>"
+								method="get">
+								<button type="submit" class="btn">설문 작성</button>
+							</form>
+						</div>
+					</c:if>
+				</c:forEach>
+			</section>
+	</main>
+
+	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
+>>>>>>> Stashed changes
 </body>
 </html>

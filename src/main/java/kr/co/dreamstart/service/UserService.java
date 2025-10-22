@@ -46,6 +46,7 @@ public interface UserService {
 	
 	//username
 	public UserDTO findUserByUserName(String userName);
+<<<<<<< Updated upstream
 	//email
 	public UserDTO findByEmail(String email);
 	//userId
@@ -55,4 +56,15 @@ public interface UserService {
 	public Map<String,Object> userUpdate(UserDTO userDTO);
 	
 	
+=======
+	
+	// db에 있는 userId (자동 생성 번호라 겹치지 않아 더 안정적)
+	public UserDTO findByUserId(Long userId);
+	
+	// 회원탈퇴
+	public int deleteUser(Long userId);
+	
+	// 아이디로 이메일 찾기
+	public Long findUserIdByEmail(String email);
+>>>>>>> Stashed changes
 }

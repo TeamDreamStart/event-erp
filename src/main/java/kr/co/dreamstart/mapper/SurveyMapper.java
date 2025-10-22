@@ -16,6 +16,7 @@ import kr.co.dreamstart.dto.SurveyResponseDTO;
 
 @Mapper
 public interface SurveyMapper {
+	
 	/* ===== surveys(설문목록용) ===== */
 	// 조회/유지보수
 	// 고정템플릿4개
@@ -27,6 +28,7 @@ public interface SurveyMapper {
 	public int surveyCount(@Param("eventId") Long eventId, @Param("keyword") String keyword,
 			@Param("field") String field, @Param("anon") Integer anon);
 	
+	
 	/* ===== surveyDetail(설문상세용) ===== */
 	// 상세조회
 	public String findEventTitleBySurveyId(@Param("surveyId") Long surveyId);
@@ -34,20 +36,53 @@ public interface SurveyMapper {
 	public SurveyDTO findSurvey(@Param("surveyId") Long surveyId);
 	// 템플릿(문항)
 	public List<SurveyQuestionDTO> questionList(@Param("surveyId") Long surveyId);
-	// 응답카운트(설문응답자수:중복제거)
-	public int responseCount(@Param("surveyId") Long surveyId);	
-	// 전체통계(문항별보기)
-	public List<Map<String, Object>> surveyStatus(@Param("surveyId") Long surveyId);
-	// 생성자 userid -> name
-	public String findUserNameById(@Param("userId") Long userId);
 	// 보기
 	public List<SurveyOptionDTO> optionList(@Param("questionId") Long questionId);
+	
+	
+	// ==== 유저 응답 / 통계 ====
+	// 응답카운트(설문응답자수:중복제거)
+	public int responseCount(@Param("surveyId") Long surveyId);	
+	// 유저아이디로 응답 조회 (복수 응답 방지)
+	public int responseCountByUser(@Param("surveyId") Long surveyId,
+			@Param("userId") Long userId);
+	// 응답이력(설문기존 + 페이징)
+	public List<SurveyResponseDTO> responseList(@Param("surveyId") Long surveyId, @Param("cri") Criteria cri);
+	// 개별응답flat
+	public List<Map<String, Object>> responseDetailFlat(@Param("responseId") Long responseId);
+	
+	
+	// ==== 응답 저장 ====
+	// 응답헤더저장
+	public int insertResponse(SurveyResponseDTO response);
+	// 응답상세저장
+	public int insertAnswer(@Param("responseId") Long responseId, @Param("questionId") Long questionId,
+			@Param("optionId") Long optionId, @Param("answerText") String answerText);
+	// 설문제출용 (중복방지 + id조회)
+	public Long findSurveyIdByEvent(@Param("eventId") Long eventId);
+
+	public String findLatestSurveyStatusByEvent(@Param("eventId") Long eventId);
+	
+	
+	// ==== 통계 / 비율 ====	
+	// 전체통계(문항별보기)
+	public List<Map<String, Object>> surveyStatus(@Param("surveyId") Long surveyId);
 	// 이벤트 예약지 카운트 : 설문 -> 이벤트 역참조
 	public int applicantCountBySurvey(@Param("surveyId") Long surveyId);
 	//상단 카드용 응답률
 	public Map<String, Object> topRate(@Param("surveyId") Long surveyId);
 	// 문항별 통계(분모) : 매우나쁨~매우좋음 가로바 + 퍼센트/응답자수, 모수 = 이벤트신청자수
 	public List<Map<String, Object>> surveyStatusAgainstApplicants(@Param("surveyId") Long surveyId);
+
+	
+	// ==== 설문예약뷰 (사용자/관리자) ====
+	// 고객 : 오픈설문만 / 관리자 : 모든 설문
+	public List<Map<String, Object>> openSurveyReservations(@Param("userId") Long userId);
+	public List<Map<String, Object>> adminSurveyReservations(@Param("surveyId") Long surveyId);
+	
+	
+	// 생성자 userid -> name
+	public String findUserNameById(@Param("userId") Long userId);
 	
 	/* ===== 수정/삭제(복제본만가능) ===== */
 	// 업데이트
@@ -75,22 +110,22 @@ public interface SurveyMapper {
 	public int insertOption(SurveyOptionDTO optionDTO);
 	
 	
-	// 응답이력(설문기존 + 페이징)
-	public List<SurveyResponseDTO> responseList(@Param("surveyId") Long surveyId, @Param("cri") Criteria cri);
-	// 개별응답flat
-	public List<Map<String, Object>> responseDetailFlat(@Param("responseId") Long responseId);
 	// 사용자 응답 제출시
+<<<<<<< Updated upstream
 	// 응답헤더저장
 	public int insertResponse(@Param("surveyId") Long surveyId, @Param("userId") Long userId);
 	// 응답상세저장
 	public int insertAnswer(@Param("responseId") Long responseId, @Param("questionId") Long questionId,
 			@Param("optionId") Long optionId, @Param("answerText") String answerText);
+=======
+>>>>>>> Stashed changes
 	// 문항 다건의 보기 일괄 조회
 	public List<SurveyOptionDTO> findOptionsByQuestionIds(@Param("list") List<Long> questionIds);
 
 	// 폼 진입용프리필/사전선택 계산
 	public Map<String, Object> cloneFormPrefill(Long templateId, Long eventId, Long surveyId);
 
+<<<<<<< Updated upstream
 
 	
 	// 응닶상세 원본 (조인x)
@@ -98,6 +133,14 @@ public interface SurveyMapper {
 	// 오프셋용 (JSON)
 //	public int cloneSurveyWithOffsets(Long templateId, Long eventId, Long userId, int openDelayHours,
 //			int closeAfterDays);
+=======
+	public Long findLastResponseId(@Param("surveyId") Long surveyId,
+								@Param("userId") Long userId);
+	
+	// 로그인시 응답안한 설문 보여주기
+	public List<Map<String, Object>> findUnansweredSurveysByUser(@Param("userId") Long userId);
+	
+>>>>>>> Stashed changes
 	
 //	테스트용
 //	설문조회
