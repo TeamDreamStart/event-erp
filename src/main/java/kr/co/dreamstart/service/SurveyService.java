@@ -81,4 +81,8 @@ public interface SurveyService {
 	public List<Map<String, Object>> findUnansweredSurveysByUser(Long userId);
 	
 	public String findLatestSurveyStatusByEvent(Long eventId);
+	
+	// 사용자별 모든 설문 (응답 완료, 작성 가능, 마감 포함)
+	public List<Map<String, Object>> allSurveyReservations(Long userId);
+
 }

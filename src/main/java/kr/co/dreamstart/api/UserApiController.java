@@ -157,4 +157,19 @@ public class UserApiController {
 			this.email = email;
 		}
 	}
+	
+	// 비밀번호 안증 (ajax전용)
+	@PostMapping(value = "/verify-password",
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> verifyPasswordAjax(@RequestBody Map<String, String> body,
+												HttpSession session) {
+		String inputPw = body.get("password");
+		Long userId = (Long) session.getAttribute("userId");
+		if (userId == null) return Map.of("ok", false, "reason", "NO_SESSION");
+		
+		boolean valid = userService.checkPassword(userId, inputPw);
+		log.info("[VERIFY-PW] userId={} valid={}", userId, valid );
+		return Map.of("ok", valid);
+	}
 }

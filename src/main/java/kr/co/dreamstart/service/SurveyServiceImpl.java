@@ -408,4 +408,10 @@ public class SurveyServiceImpl implements SurveyService {
 		return surveyMapper.findLatestSurveyStatusByEvent(eventId);
 	}
 
+	@Override
+	public List<Map<String, Object>> allSurveyReservations(Long userId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.allSurveyReservations(userId);
+	}
+
 }

@@ -747,6 +747,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	  order by (s.`open_at` is null) asc, s.`open_at` desc, s.`survey_id` desc
 	  ]]>
 	</select>
-
-
+	
+	<!-- 사용자별 모든 설문 (응답 완료, 작성 가능, 마감 포함) -->
+	<select id="allSurveyReservations" parameterType="long" resultType="map">
+	  <![CDATA[
+	  select 
+	    e.`event_id`,
+	    e.`title` as `event_title`,
+	    s.`survey_id`,
+	    s.`title` as `survey_title`,
+	    s.`open_at`,
+	    s.`close_at`,
+	    r.`reservation_id`,
+	    r.`user_id`,
+	    r.`status` as `reservation_status`,
+	    r.`reservation_date`,
+	    coalesce(resp_cnt.`cnt`, 0) as `response_count`,
+	    case 
+	      when resp_cnt.`cnt` > 0 then 'RESPONDED'
+	      else 'NOT_RESPONDED'
+	    end as `response_status`
+	  from `event` e
+	  left join `survey` s 
+	    on e.`event_id` = s.`event_id`
+	  left join `reservation` r 
+	    on r.`event_id` = e.`event_id`
+	    and r.`user_id` = #{userId}
+	  left join (
+	    select 
+	      `survey_id`, 
+	      `user_id`, 
+	      count(*) as `cnt`
+	    from `survey_response`
+	    group by `survey_id`, `user_id`
+	  ) resp_cnt 
+	    on resp_cnt.`survey_id` = s.`survey_id`
+	    and resp_cnt.`user_id` = #{userId}
+	  where e.`status` in ('OPEN', 'CLOSED')
+	    and s.`status` in ('OPEN', 'CLOSED')
+	  order by e.`event_id` desc, s.`open_at` desc
+	  ]]>
+	</select>
 </mapper>

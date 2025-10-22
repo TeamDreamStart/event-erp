@@ -13,6 +13,10 @@
    <!-- 포트원 웹훅: 인증/CSRF 모두 제외 (시큐리티 체인 제외) -->
    <security:http pattern="/api/payments/webhook" security="none" />
    
+   <!-- SNS 로그인 콜백도 보안체인 제외 (비로그인 접근 허용용) -->
+   <security:http pattern="/login/naver/**" security="none" />
+   <security:http pattern="/login/kakao/**" security="none" />
+
    <!-- 메서드 단위 권한 체크 활성화 -->
    <security:global-method-security pre-post-annotations="enabled" />
    
@@ -29,7 +33,7 @@
    
        <!-- 2) 비로그인 허용 영역 -->
        <security:intercept-url pattern="/" access="permitAll" />
-      <security:intercept-url pattern="/login" access="permitAll" />
+       <security:intercept-url pattern="/login" access="permitAll" />
        <security:intercept-url pattern="/login.html" access="permitAll" />
        <security:intercept-url pattern="/join" access="permitAll" />
        <security:intercept-url pattern="/find-password" access="permitAll" />

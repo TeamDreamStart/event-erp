@@ -144,6 +144,12 @@ body.login-page main { flex:1; }
 </head>
 
 <body class="login-page">
+<c:if test="${not empty joinSuccess}">
+  <script>
+    alert("${joinSuccess}");
+  </script>
+</c:if>
+
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <c:set var="saved" value="${sessionScope.SPRING_SECURITY_SAVED_REQUEST}" />
 <c:set var="adminBase" value="${ctx}/admin" />

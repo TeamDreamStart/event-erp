@@ -64,4 +64,8 @@ public interface UserService {
 	
 	// 아이디로 이메일 찾기
 	public Long findUserIdByEmail(String email);
+	
+	// 비밀번호 검증 (비밀번호 일치 여부 확인)
+	public boolean checkPassword(Long userId, String inputPassword);
+
 }

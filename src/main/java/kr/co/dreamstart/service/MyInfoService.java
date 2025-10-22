@@ -24,12 +24,18 @@ public class MyInfoService {
 	
 	/* 마이페이지 메인 */
 	public void loadMyInfo(Long userId, Model model) {
+		// 기본 유저 정보
 		model.addAttribute("user", userService.findByUserId(userId));
-		model.addAttribute("SurveyList", surveyService.openSurveyReservations(userId));
 		
-		// 로그인 직후 알림용 (없으면 빈 리스트)
-		model.addAttribute("unanswered", surveyService.findUnansweredSurveysByUser(userId));
-		log.info("[MY-INFO] userId={} 마이페이지 로드 완료", userId);
+		// 나의 예약 목록 
+		List<Map<String, Object>> reservationList = surveyService.openSurveyReservations(userId);
+		model.addAttribute("reservationList", reservationList);
+		
+		// 설문 가능한 목록 (이벤트종료 -> 설문오픈 -> 미응답)
+		List<Map<String, Object>> availableSurveys = surveyService.allSurveyReservations(userId);
+		model.addAttribute("availableSurveys", availableSurveys);
+		log.info("[MY-INFO] 마이페이지 로드 완료 userId={} | 예약 {}건, 설문 가능 {}건", 
+										userId, reservationList.size(), availableSurveys.size());
 	}
 	
 	/* 해당 유저가 참여가능한 설문 보여주기 */
@@ -80,9 +86,9 @@ public class MyInfoService {
 	    }
 		
 		// 해당유저의 이벤트 목록 불러오기 
-		boolean responseAnswer = surveyService.saveResponse(userId, eventId, null);
+		boolean saved = surveyService.saveResponse(userId, eventId, null);
 		
-		if (responseAnswer) {
+		if (saved) {
 			if (ra != null) ra.addFlashAttribute("msg", "설문이 정상적으로 제출되었습니다.");
 			log.info("[SURVEY SUBMIT SUCCESS] userId={}, eventId={}, surveyId={}", userId, eventId, targetSurveyId);
 		} else {

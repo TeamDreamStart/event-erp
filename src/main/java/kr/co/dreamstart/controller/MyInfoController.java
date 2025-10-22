@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,9 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MyInfoController {
 	
-	@Autowired
-	private MyInfoService myInfoService;
-	
+	private final MyInfoService myInfoService;
+	private final UserService userService;
 	
     /**
      * 예약자 설문 작성 폼 진입
@@ -51,9 +51,12 @@ public class MyInfoController {
 			return "redirect:/login";
 		}
 		
+		// 유저 정보 넣는 부분
+	    model.addAttribute("userDTO", userService.findByUserId(userId));
+		
 		// 로그인시 응답해야할 설문이 있을경우
-		List<Map<String, Object>> unanswered = myInfoService.findUnansweredSurveyByUser(userId);
-		model.addAttribute("unanswered", unanswered);
+		List<Map<String, Object>> availableSurveys = myInfoService.findUnansweredSurveyByUser(userId);
+		model.addAttribute("availableSurveys", availableSurveys);
 		
 		// 내정보 + 예약 + 설문목록 로드
 		log.info("[MYINFO] userId={} 마이페이지 데이터 로딩 시작", userId);
@@ -131,11 +134,21 @@ public class MyInfoController {
 			return "redirect:/login";
 		}
 		
-		// 회원 탈퇴 처리
+		// 1) 회원 탈퇴 처리 (db 삭제)
 		myInfoService.withdrawUser(userId, session, ra);
-		log.info("[WITHDRAW] userId={} 회원 탈퇴 완료 세션 종료", userId);
 		
+		// 2) security 인증 정보 제거
+		SecurityContextHolder.clearContext();
+		
+		// 3) 세션 종료
+		session.invalidate();
+		
+		log.info("[WITHDRAW] userId={} 회원 탈퇴 완료 세션/시큐리티 종료", userId);
+		
+		ra.addAttribute("msg", "회원 탈퇴가 완료되었습니다. 이용해 주셔서 감사합니다.");
 		return "redirect:/";
 	}
 	
+	// 회원 정보 수정
+//	@GetMapping("/edit")
 }

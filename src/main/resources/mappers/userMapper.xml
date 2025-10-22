@@ -290,11 +290,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 	<!-- 회원가입시 생성되는 user_id 키 값 -> dto.getUserId() -->
+	<!-- jdbcType=VARCHAR -> mysql 데이터 자동 변환을 위해 -->
 	<insert id="join" parameterType="UserDTO"
 		useGeneratedKeys="true" keyProperty="userId">
 		insert into `user`
-		(`username`,`password`,`name`,`email`, `gender`, `phone`, `created_at`,`is_active`)
-		values(#{username},#{password},#{name},#{email}, #{gender}, #{phone}, now(),1)
+		(`username`,`password`,`name`,`email`, `gender`, `phone`, `birth_date`, `created_at`,`is_active`)
+		values(
+		#{username},
+		#{password},
+		#{name},
+		#{email}, 
+		#{gender}, 
+		#{phone}, 
+		<choose>
+	      <when test="birthDate != null and birthDate != '--' and birthDate != ''">
+	        #{birthDate}
+	      </when>
+	      <otherwise>null</otherwise>
+	    </choose>, 
+	    now(),1
+	    )
 	</insert>
 	<!-- 회원가입시 일반회원 권한 부여 -->
 	<insert id="joinRole" parameterType="long">

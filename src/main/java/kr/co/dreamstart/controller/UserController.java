@@ -8,6 +8,8 @@
 
 package kr.co.dreamstart.controller;
 
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -98,7 +100,7 @@ public class UserController {
 			return "account/join";
 		}
 
-		// 바인딩/검증 에러 -> 플래시에 싵고 PRG
+		// 바인딩/검증 에러 -> 플래시에 싵고 PRG (에러있으면 redirect)
 		if (binding.hasErrors()) {
 			ra.addFlashAttribute("user", form);
 			ra.addFlashAttribute("org.springframework.validation.BindingResult.user", binding);
@@ -124,9 +126,10 @@ public class UserController {
 		session.removeAttribute("ev:" + email);
 		session.removeAttribute("evVerified:" + email);
 
-		// join 페이지에서 모달 띄우도록 플래시 세팅
-		ra.addFlashAttribute("joinSuccess", true);
+		// 로그인 페이지로 이동
+		ra.addFlashAttribute("joinSuccess", "회원가입이 완료되었습니디! 로그인해주세요.");
 
+		log.info("가입 요청 완료 userDTO={}", form);
 		// join으로 리다이렉트 -> 모달 노출 -> 확인 누르면 /login 이동
 		return "redirect:/login";
 	}
@@ -173,6 +176,19 @@ public class UserController {
 		userService.touchLastLogin(user.getUserId());
 
 		return "redirect:/"; // 로그인 후 메인 페이지로
+	}
+	
+	// 네이버 가입시
+	@GetMapping("/login/naver")
+	public void naverLoginRedirect(HttpServletResponse response) throws IOException {
+	    String clientId = "9CN0AyXIHmflebLIalgz"; // 네이버 앱 클라이언트 ID
+	    String redirectURI = URLEncoder.encode("http://localhost:8080/login/naver/callback", "UTF-8");
+	    String state = "RANDOM_STATE"; // 추후 세션으로 관리해도 됨
+	    String apiURL = "https://nid.naver.com/oauth2.0/authorize?response_type=code";
+	    apiURL += "&client_id=" + clientId;
+	    apiURL += "&redirect_uri=" + redirectURI;
+	    apiURL += "&state=" + state;
+	    response.sendRedirect(apiURL);
 	}
 
 	// 이메일 인증 테스트

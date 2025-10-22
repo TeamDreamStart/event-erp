@@ -20,4 +20,18 @@ public class UserDTO {
 	//USER ~ USER_ROLE ~ ROLE / DB에서 테이블 분리되어있음, Join시 UserDTO로 받아올 수 있다
 	private String roleName;
 
+	// 로그 확인용 패스워드 노출 방지
+	@Override
+	public String toString() {
+	    return "UserDTO{" +
+	           "userId=" + userId +
+	           ", username='" + username + '\'' +
+	           ", name='" + name + '\'' +
+	           ", email='" + email + '\'' +
+	           ", phone='" + phone + '\'' +
+	           ", gender=" + gender +
+	           ", birthDate=" + birthDate +
+	           '}';
+	}
+	
 }

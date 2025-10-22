@@ -123,6 +123,9 @@ public interface SurveyMapper {
 	// 로그인시 응답안한 설문 보여주기
 	public List<Map<String, Object>> findUnansweredSurveysByUser(@Param("userId") Long userId);
 	
+	// 사용자별 모든 설문 (응답 완료, 작성 가능, 마감 포함)
+	public List<Map<String, Object>> allSurveyReservations(Long userId);
+	
 	
 //	테스트용
 //	설문조회
