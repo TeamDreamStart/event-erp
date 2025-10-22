@@ -100,10 +100,22 @@
 	}
 	.file-card.dragging{opacity:.4}
 	.file-card img{max-width:100%;max-height:100%;object-fit:contain}
-	.file-card .x{
-	  position:absolute;left:-6px;top:-6px;width:22px;height:22px;border-radius:11px;
-	  background:#ef4444;color:#fff;border:0;line-height:22px;font-weight:700
+	.file-card .x {
+	  position: absolute;
+	  left: -6px;
+	  top: -6px;
+	  width: 22px;
+	  height: 22px;
+	  border-radius: 11px;
+	  background: #ef4444;
+	  color: #fff;
+	  border: 0;
+	  line-height: 22px;
+	  font-weight: 700;
+	  z-index: 20; 
+	  cursor: pointer;
 	}
+	
 	.file-card .label{
 	  position:absolute;left:6px;right:6px;bottom:6px;font-size:12px;
 	  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#374151
@@ -470,17 +482,8 @@ document.addEventListener('DOMContentLoaded', function(){
     function insertTokenOnce(token){
       if(!token) return;
       if(desc.value.indexOf(token) !== -1) return; // 중복 방지
-      const hasSel = Number.isInteger(desc.selectionStart);
-      if(hasSel){
-        const s = desc.selectionStart, e = desc.selectionEnd, v = desc.value;
-        const nl = (v && s>0 && v[s-1] !== '\n') ? '\n' : '';
-        desc.value = v.slice(0,s) + nl + token + '\n' + v.slice(e);
-        const pos = s + nl.length + token.length + 1;
-        desc.selectionStart = desc.selectionEnd = pos;
-      }else{
-        const tailNL = desc.value.endsWith('\n') ? '' : '\n';
-        desc.value = desc.value + tailNL + token + '\n';
-      }
+      const tailNL = desc.value.endsWith('\n') ? '' : '\n';
+      desc.value = desc.value + tailNL + token + '\n';
       desc.dispatchEvent(new Event('input',{bubbles:true}));
     }
 
@@ -491,7 +494,7 @@ document.addEventListener('DOMContentLoaded', function(){
       desc.dispatchEvent(new Event('input',{bubbles:true}));
     }
 
-    /* ---------- 대표 이미지(본문 토큰 삽입 없음, 미리보기만) ---------- */
+    /* ---------- 대표 이미지 ---------- */
     posterFile?.addEventListener('change', () => {
       posterSlot.classList.remove('--filled');
       posterSlot.innerHTML = '<span class="text-muted">썸네일 미리보기</span>';
@@ -511,24 +514,14 @@ document.addEventListener('DOMContentLoaded', function(){
       posterSlot.classList.add('--filled');
     });
 
-    /* ---------- 유틸: 파일명 안전 추출 ---------- */
     function _basename(p){ return String(p||'').split(/[\\/]/).pop(); }
-    function _safeName(file, inputEl){
-      return (file && file.name)
-          || (file && file.webkitRelativePath && _basename(file.webkitRelativePath))
-          || _basename(inputEl && inputEl.value)
-          || '';
-    }
 
-    /* 같은 파일 다시 선택해도 change 트리거되게 */
     filesInput?.addEventListener('click', () => { filesInput.value = ''; });
 
-    /* ---------- 첨부(여러개) change 핸들러 ---------- */
+    /* ---------- 첨부 change 핸들러 ---------- */
     filesInput?.addEventListener('change', function(){
       const inputEl = this;
       let list = Array.from(inputEl.files || []);
-
-      // 드문 환경: files 비고 value만 있는 경우(C:\fakepath\xxx.jpg)
       if(list.length === 0 && inputEl.value){
         const n = _basename(inputEl.value);
         if(n) insertTokenOnce(`[[file:${n}]]`);
@@ -536,23 +529,20 @@ document.addEventListener('DOMContentLoaded', function(){
       }
 
       list.forEach(file=>{
-        const name = _safeName(file, inputEl);
+        const name = _basename(file.name);
         if(!name) return;
 
-        // 중복 방지 키
         const key = [name, file.size||0, file.type||'', file.lastModified||0].join('|');
         if(state.map.has(key)) return;
 
-        // 토큰 생성
-        const token = (file && file.type && file.type.indexOf('image/')===0)
+        // ✅ 파일명 포함된 토큰 생성
+        const token = isImg(file)
           ? `[[img:${name}]]`
           : `[[file:${name}]]`;
 
-        // 본문에 1회 삽입
         insertTokenOnce(token);
 
-        // 카드 생성/등록
-        const card = makeCard(file, key, name);
+        const card = makeCard(file, key, name, token);
         state.map.set(key, {token, el:card, name});
         state.order.push(key);
         filesGrid.appendChild(card);
@@ -560,17 +550,20 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     /* ---------- 첨부 카드 ---------- */
-    function makeCard(file, key, safeName){
+    function makeCard(file, key, name, token){
       const card = document.createElement('div');
       card.className = 'file-card';
       card.draggable = true;
       card.dataset.key = key;
-      card.dataset.name = safeName || (file && file.name) || '';
+      card.dataset.name = name;
 
+      // ✅ X버튼이 항상 이미지 위로 오도록 z-index 추가
       const close = document.createElement('button');
       close.type = 'button';
       close.className = 'x';
       close.textContent = '×';
+      close.style.zIndex = '10'; // ★ 핵심 수정
+      close.style.position = 'absolute';
 
       let body;
       if(isImg(file)){
@@ -585,24 +578,19 @@ document.addEventListener('DOMContentLoaded', function(){
 
       const label = document.createElement('div');
       label.className = 'label';
-      label.textContent = card.dataset.name || '(이름없음)';
+      label.textContent = name;
 
       card.appendChild(body);
       card.appendChild(close);
       card.appendChild(label);
 
-      // 삭제: 토큰 제거 + 상태/DOM + input.files 동기화
+      // ✅ 삭제 시 본문 토큰도 같이 제거
       close.addEventListener('click', () => {
-        const info  = state.map.get(key);
-        const name  = info?.name || card.dataset.name;
-        const token = info?.token || (card.querySelector('img') ? `[[img:${name}]]` : `[[file:${name}]]`);
-
         removeTokenEverywhere(token);
-
         state.map.delete(key);
         state.order = state.order.filter(k => k !== key);
 
-        // input.files에서도 제거
+        // input.files에서 제거
         const dt = new DataTransfer();
         Array.from(filesInput.files || []).forEach(f => {
           const k = [f.name, f.size, f.type, f.lastModified].join('|');
@@ -629,8 +617,7 @@ document.addEventListener('DOMContentLoaded', function(){
         else filesGrid.appendChild(dragging);
       });
       filesGrid.addEventListener('drop', () => {
-        state.order = Array.from(filesGrid.querySelectorAll('.file-card'))
-                      .map(el => el.dataset.key);
+        state.order = Array.from(filesGrid.querySelectorAll('.file-card')).map(el => el.dataset.key);
       });
 
       return card;
@@ -639,13 +626,13 @@ document.addEventListener('DOMContentLoaded', function(){
     function getAfter(container, x, y){
       const els = [...container.querySelectorAll('.file-card:not(.dragging)')];
       return els.reduce((closest, child) => {
-        const r   = child.getBoundingClientRect();
+        const r = child.getBoundingClientRect();
         const off = y - r.top - r.height/2;
         return (off < 0 && off > closest.offset) ? {offset:off, el:child} : closest;
       }, {offset:-Infinity, el:null}).el;
     }
 
-    /* ---------- 카드 순서를 본문 토큰 순서로 반영 ---------- */
+    /* ---------- 카드 순서 본문 반영 ---------- */
     btnSync?.addEventListener('click', () => {
       if(!state.order.length) return;
       const tokens = state.order.map(k => state.map.get(k)?.token).filter(Boolean);

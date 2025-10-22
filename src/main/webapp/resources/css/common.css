@@ -21,17 +21,9 @@
 a { text-decoration:none; color:inherit; }
 img { display:block; max-width:100%; height:auto; vertical-align:top; }
 
-<<<<<<< Updated upstream
-body{
-  margin:0;
-  font:16px/1.5 "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  color:#222;
-  background:#E5E2DB;
-=======
-html, body { 
-  height:100%;
+html, body {
+  height: 100%;
   margin: 0;
->>>>>>> Stashed changes
 }
 
 body {
@@ -70,9 +62,7 @@ hr { margin:0; padding:0; border:0; height:0; background:none; overflow:visible;
 }
 
 /**************************
-
 	HEADER-COMMON-START
-
 ***************************/
 
 /* ✅ JSP include 시 <c:url>이 중복 실행되어 깨지던 부분 수정 */
@@ -159,16 +149,12 @@ hr { margin:0; padding:0; border:0; height:0; background:none; overflow:visible;
 }
 
 /**************************
-
 	HEADER-COMMON-END
-
 ***************************/
 
 
 /**************************
-
 	NAV-COMMON-START
-
 ***************************/
 
 .main-nav {
@@ -247,16 +233,12 @@ hr { margin:0; padding:0; border:0; height:0; background:none; overflow:visible;
 }
 
 /**************************
-
 	NAV-COMMON-END
-
 ***************************/
 
 
 /**************************
-
 	FOOTER-COMMON-START
-
 ***************************/
 
 #footer {
@@ -291,7 +273,5 @@ hr { margin:0; padding:0; border:0; height:0; background:none; overflow:visible;
 }
 
 /**************************
-
 	FOOTER-COMMON-END
-
 ***************************/

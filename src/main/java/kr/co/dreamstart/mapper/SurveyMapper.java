@@ -16,83 +16,127 @@ import kr.co.dreamstart.dto.SurveyResponseDTO;
 
 @Mapper
 public interface SurveyMapper {
+	
+	/* ===== surveys(설문목록용) ===== */
+	// 조회/유지보수
+	// 고정템플릿4개
+	public List<SurveyDTO> fixedTemplates();
+	// 설문목록조회(이벤트필터 + 페이징) + field, keyword, anon
+	public List<SurveyDTO> surveyPage(@Param("eventId") Long eventId, @Param("cri") Criteria cri,
+			@Param("keyword") String keyword, @Param("field") String field, @Param("anon") Integer anon);
+	// 설문개수카운트
+	public int surveyCount(@Param("eventId") Long eventId, @Param("keyword") String keyword,
+			@Param("field") String field, @Param("anon") Integer anon);
+	
+	
+	/* ===== surveyDetail(설문상세용) ===== */
+	// 상세조회
+	public String findEventTitleBySurveyId(@Param("surveyId") Long surveyId);
+	// 상세헤더1건
+	public SurveyDTO findSurvey(@Param("surveyId") Long surveyId);
+	// 템플릿(문항)
+	public List<SurveyQuestionDTO> questionList(@Param("surveyId") Long surveyId);
+	// 보기
+	public List<SurveyOptionDTO> optionList(@Param("questionId") Long questionId);
+	
+	
+	// ==== 유저 응답 / 통계 ====
+	// 응답카운트(설문응답자수:중복제거)
+	public int responseCount(@Param("surveyId") Long surveyId);	
+	// 유저아이디로 응답 조회 (복수 응답 방지)
+	public int responseCountByUser(@Param("surveyId") Long surveyId,
+			@Param("userId") Long userId);
+	// 응답이력(설문기존 + 페이징)
+	public List<SurveyResponseDTO> responseList(@Param("surveyId") Long surveyId, @Param("cri") Criteria cri);
+	// 개별응답flat
+	public List<Map<String, Object>> responseDetailFlat(@Param("responseId") Long responseId);
+	
+	
+	// ==== 응답 저장 ====
+	// 응답헤더저장
+	public int insertResponse(SurveyResponseDTO response);
+	// 응답상세저장
+	public int insertAnswer(@Param("responseId") Long responseId, @Param("questionId") Long questionId,
+			@Param("optionId") Long optionId, @Param("answerText") String answerText);
+	// 설문제출용 (중복방지 + id조회)
+	public Long findSurveyIdByEvent(@Param("eventId") Long eventId);
 
-    /* ===== surveys(설문목록용) ===== */
-    public List<SurveyDTO> fixedTemplates();
-    public List<SurveyDTO> surveyPage(@Param("eventId") Long eventId,
-                                      @Param("cri") Criteria cri,
-                                      @Param("keyword") String keyword,
-                                      @Param("field") String field,
-                                      @Param("anon") Integer anon);
-    public int surveyCount(@Param("eventId") Long eventId,
-                           @Param("keyword") String keyword,
-                           @Param("field") String field,
-                           @Param("anon") Integer anon);
+	public String findLatestSurveyStatusByEvent(@Param("eventId") Long eventId);
+	
+	
+	// ==== 통계 / 비율 ====	
+	// 전체통계(문항별보기)
+	public List<Map<String, Object>> surveyStatus(@Param("surveyId") Long surveyId);
+	// 이벤트 예약지 카운트 : 설문 -> 이벤트 역참조
+	public int applicantCountBySurvey(@Param("surveyId") Long surveyId);
+	//상단 카드용 응답률
+	public Map<String, Object> topRate(@Param("surveyId") Long surveyId);
+	// 문항별 통계(분모) : 매우나쁨~매우좋음 가로바 + 퍼센트/응답자수, 모수 = 이벤트신청자수
+	public List<Map<String, Object>> surveyStatusAgainstApplicants(@Param("surveyId") Long surveyId);
 
-    /* ===== surveyDetail(설문상세용) ===== */
-    public String findEventTitleBySurveyId(@Param("surveyId") Long surveyId);
-    public SurveyDTO findSurvey(@Param("surveyId") Long surveyId);
-    public List<SurveyQuestionDTO> questionList(@Param("surveyId") Long surveyId);
-    public List<SurveyOptionDTO> optionList(@Param("questionId") Long questionId);
+	
+	// ==== 설문예약뷰 (사용자/관리자) ====
+	// 고객 : 오픈설문만 / 관리자 : 모든 설문
+	public List<Map<String, Object>> openSurveyReservations(@Param("userId") Long userId);
+	public List<Map<String, Object>> adminSurveyReservations(@Param("surveyId") Long surveyId);
+	
+	
+	// 생성자 userid -> name
+	public String findUserNameById(@Param("userId") Long userId);
+	
+	/* ===== 수정/삭제(복제본만가능) ===== */
+	// 업데이트
+	public int updateSurveyHeader(@Param("surveyId") Long surveyId, @Param("title") String title,
+			@Param("description") String description, @Param("isAnonymous") Integer isAnonymous);	
+	// 응답없고, 클론이 설문만 삭제
+	public int deleteCloneOptions(Long surveyId);
+	public int deleteCloneQuestions(Long surveyId);
+	public int deleteCloneSurvey(Long surveyId);
 
-    /* ==== 유저 응답 / 통계 ==== */
-    public int responseCount(@Param("surveyId") Long surveyId);
-    public int responseCountByUser(@Param("surveyId") Long surveyId, @Param("userId") Long userId);
-    public List<SurveyResponseDTO> responseList(@Param("surveyId") Long surveyId, @Param("cri") Criteria cri);
-    public List<Map<String, Object>> responseDetailFlat(@Param("responseId") Long responseId);
+	
+	/* ===== surveyCloneForm(설문복제하기폼) ===== */
+	// 설문 단위로 'type=scale_5' 문항들에 5점 옵션 보충
+	public int ensureLikert5ForSurvey(@Param("surveyId") Long surveyId);
+	// 특정 문항에 5점 기본옵션(1~5) 없으면 보충
+	public int ensureLikert5ForQuestion(@Param("questionId") Long questionId);	
+	// 클론용
+	// 템플릿을 특정 이벤트용 설문으로 클론(기본 규칙: 이벤트 종료 즉시 오픈, 7일 뒤 종료)
+	public int cloneSurvey(CloneInlineReqDTO req);
+	// 인라인 클론 : 헤더만 생성
+	public int insertSurveyHeaderFromInline(CloneInlineReqDTO req);	
+	// 새 문항 insert (깊은 복제용) - 템플릿 클론시 문항이랑 같이 가져오기
+	public int insertQuestion(SurveyQuestionDTO questionDTO);
+	// 새 보기 insert (깊은 복제용) - 템플릿 클론시 보기랑 같이 가져오기
+	public int insertOption(SurveyOptionDTO optionDTO);
+	
+	
+	// 사용자 응답 제출시
+	// 문항 다건의 보기 일괄 조회
+	public List<SurveyOptionDTO> findOptionsByQuestionIds(@Param("list") List<Long> questionIds);
 
-    /* ==== 응답 저장 ==== */
-    public int insertResponse(SurveyResponseDTO response);
-    public int insertAnswer(@Param("responseId") Long responseId,
-                            @Param("questionId") Long questionId,
-                            @Param("optionId") Long optionId,
-                            @Param("answerText") String answerText);
-    public Long findSurveyIdByEvent(@Param("eventId") Long eventId);
-    public String findLatestSurveyStatusByEvent(@Param("eventId") Long eventId);
+	// 폼 진입용프리필/사전선택 계산
+	public Map<String, Object> cloneFormPrefill(Long templateId, Long eventId, Long surveyId);
 
-    /* ==== 통계 / 비율 ==== */
-    public List<Map<String, Object>> surveyStatus(@Param("surveyId") Long surveyId);
-    public int applicantCountBySurvey(@Param("surveyId") Long surveyId);
-    public Map<String, Object> topRate(@Param("surveyId") Long surveyId);
-    public List<Map<String, Object>> surveyStatusAgainstApplicants(@Param("surveyId") Long surveyId);
+	public Long findLastResponseId(@Param("surveyId") Long surveyId,
+								@Param("userId") Long userId);
+	
+	// 로그인시 응답안한 설문 보여주기
+	public List<Map<String, Object>> findUnansweredSurveysByUser(@Param("userId") Long userId);
+	
+	
+//	테스트용
+//	설문조회
+	public List<SurveyDTO> surveyAll();
 
-    /* ==== 설문예약뷰 ==== */
-    public List<Map<String, Object>> openSurveyReservations(@Param("userId") Long userId);
-    public List<Map<String, Object>> adminSurveyReservations(@Param("surveyId") Long surveyId);
+//	응답결과
+	public List<SurveyAnswerDTO> answerAll();
 
-    /* ==== 생성자 ==== */
-    public String findUserNameById(@Param("userId") Long userId);
+//	설문보기
+	public List<SurveyOptionDTO> optionAll();
 
-    /* ===== 수정/삭제(복제본만가능) ===== */
-    public int updateSurveyHeader(@Param("surveyId") Long surveyId,
-                                  @Param("title") String title,
-                                  @Param("description") String description,
-                                  @Param("isAnonymous") Integer isAnonymous);
-    public int deleteCloneOptions(Long surveyId);
-    public int deleteCloneQuestions(Long surveyId);
-    public int deleteCloneSurvey(Long surveyId);
+//	설문문항
+	public List<SurveyQuestionDTO> questionAll();
 
-    /* ===== surveyCloneForm(설문복제하기폼) ===== */
-    public int ensureLikert5ForSurvey(@Param("surveyId") Long surveyId);
-    public int ensureLikert5ForQuestion(@Param("questionId") Long questionId);
-    public int cloneSurvey(CloneInlineReqDTO req);
-    public int insertSurveyHeaderFromInline(CloneInlineReqDTO req);
-    public int insertQuestion(SurveyQuestionDTO questionDTO);
-    public int insertOption(SurveyOptionDTO optionDTO);
-
-    /* ===== 보조 쿼리 ===== */
-    public List<SurveyOptionDTO> findOptionsByQuestionIds(@Param("list") List<Long> questionIds);
-    public Map<String, Object> cloneFormPrefill(@Param("templateId") Long templateId,
-                                                @Param("eventId") Long eventId,
-                                                @Param("surveyId") Long surveyId);
-    public Long findLastResponseId(@Param("surveyId") Long surveyId,
-                                   @Param("userId") Long userId);
-    public List<Map<String, Object>> findUnansweredSurveysByUser(@Param("userId") Long userId);
-
-    /* ===== 테스트용 ===== */
-    public List<SurveyDTO> surveyAll();
-    public List<SurveyAnswerDTO> answerAll();
-    public List<SurveyOptionDTO> optionAll();
-    public List<SurveyQuestionDTO> questionAll();
-    public List<SurveyResponseDTO> responseAll();
+//	응답이력
+	public List<SurveyResponseDTO> responseAll();
 }

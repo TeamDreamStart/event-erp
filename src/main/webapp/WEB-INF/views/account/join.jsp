@@ -6,8 +6,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
-<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
+
 <!-- CSRF for AJAX -->
 <meta name="_csrf" content="${_csrf.token}" />
 <meta name="_csrf_header" content="${_csrf.headerName}" />
@@ -17,19 +16,12 @@
 <link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 
 <!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
 
 <title>join</title>
 <link rel="stylesheet" type="text/css" href="/resources/css/join.css" />
 
 <style>
-/* =======================================================
-   JOIN – WIDE (left aligned, 2-line email, no clipping)
-   - 비반응형, 프로젝트 색(#568ef7) 유지
-   - 카드 폭 키움(960px) · 오버플로우 보이게
-   - HTML/JS 변경 없음
-   ======================================================= */
-
 /* 페이지 토큰 */
 .membership-section{
   --line:#e9eaee;

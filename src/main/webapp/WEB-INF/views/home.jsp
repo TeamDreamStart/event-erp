@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-   pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
@@ -13,7 +13,9 @@
 <link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 
 <!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
 <!-- Swiper CSS & JS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
@@ -21,537 +23,537 @@
 
 <style>
 body {
-   background: #E5E2DB;
+	background: #E5E2DB;
 }
 
 .main-visual figure {
-   margin: 0;
-   line-height: 0;
+	margin: 0;
+	line-height: 0;
 }
 
 .museum-status {
-   text-align: right;
-   margin: 20px 0 0 ;
-   font-size: 20px;
-   user-select: none;
+	text-align: right;
+	margin: 20px 0 0 ;
+	font-size: 20px;
+	user-select: none;
 }
 
 .visual-hr {
-   width: 100%;
-   height: 1px;
-   margin-top: 62px;
-   background-color: #222;
+	width: 100%;
+	height: 1px;
+	margin-top: 62px;
+	background-color: #222;
 }
 
 .section-header {
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   margin-bottom: 16px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 16px;
 }
 
 .section-header h2 {
-   font-size: 30px;
-   font-weight: 700;
-   line-height: 40px;
+	font-size: 30px;
+	font-weight: 700;
+	line-height: 40px;
 }
 
 /* ===== Event 캐러셀 ===== */
 .swiper {
-   width: 100%;
+	width: 100%;
 }
 
 .swiper-wrapper {
-   align-items: stretch;
+	align-items: stretch;
 }
 
 .swiper-slide {
-   width: 310px;
+	width: 310px;
 } /* 카드 폭 고정 */
 .event-card {
-   position: relative;
-   background: transparent;
-   height: 100%;
+	position: relative;
+	background: transparent;
+	height: 100%;
 }
 
 .event-card figure {
-   margin: 0;
+	margin: 0;
 }
 
 .event-card img {
-   width: 310px;
-   height: 438px;
-   object-fit: cover;
-   display: block;
+	width: 310px;
+	height: 438px;
+	object-fit: cover;
+	display: block;
 }
 
 .event-card .overlay {
-   position: absolute;
-   inset: 0;
-   background: rgba(0, 0, 0, .55);
-   color: #fff;
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
-   gap: 10px;
-   padding: 18px;
-   text-align: center;
-   opacity: 0;
-   transition: opacity .18s;
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, .55);
+	color: #fff;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	padding: 18px;
+	text-align: center;
+	opacity: 0;
+	transition: opacity .18s;
 }
 
 .event-card:hover .overlay, .event-card:focus-within .overlay {
-   opacity: 1;
+	opacity: 1;
 }
 
 .overlay .ov-title {
-   font-size: 16px;
-   font-weight: 700;
+	font-size: 16px;
+	font-weight: 700;
 }
 
 .overlay .ov-meta {
-   font-size: 12px;
-   opacity: .9;
+	font-size: 12px;
+	opacity: .9;
 }
 
 .overlay .btn {
-   display: inline-flex;
-   align-items: center;
-   justify-content: center;
-   height: 32px;
-   padding: 0 14px;
-   border: 1px solid #fff;
-   color: #fff;
-   background: transparent;
-   font-size: 12px;
-   cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	height: 32px;
+	padding: 0 14px;
+	border: 1px solid #fff;
+	color: #fff;
+	background: transparent;
+	font-size: 12px;
+	cursor: pointer;
 }
 
 .overlay .btn:hover {
-   background: #fff;
-   color: #000;
+	background: #fff;
+	color: #000;
 }
 
 /* 커스텀 내비게이션(important 없이) */
 .events-prev, .events-next {
-   appearance: none;
-   background: none;
-   border: 0;
-   cursor: pointer;
-   font-size: 30px;
-   line-height: 40px;
-   color: #222;
+	appearance: none;
+	background: none;
+	border: 0;
+	cursor: pointer;
+	font-size: 30px;
+	line-height: 40px;
+	color: #222;
 }
 
 .events-prev[disabled], .events-next[disabled] {
-   opacity: .35;
-   cursor: default;
+	opacity: .35;
+	cursor: default;
 }
 
 .nav-btns {
-   display: flex;
-   gap: 46px;
-   align-items: center;
+	display: flex;
+	gap: 46px;
+	align-items: center;
 }
 
 /* ===== Calendar & Notice  레이아웃 ===== */
 /* 마지막 섹션 에서 푸터 밀기 140px */
 .calendar-section {
-   position: relative;
-   margin-bottom: 140px;
+	position: relative;
+	margin-bottom: 140px;
 }
 
 .two-col {
-   display: grid;
-   grid-template-columns: 860px 480px; /* Calendar / Notice */
-   gap: 94px;
-   align-items: start;
+	display: grid;
+	grid-template-columns: 860px 480px; /* Calendar / Notice */
+	gap: 94px;
+	align-items: start;
 }
 
 .two-col < asid{
-   width: 486px;
-   position: absolute;
-   top: 0; right: 0;
+	width: 486px;
+	position: absolute;
+	top: 0; right: 0;
 }
 
 .notice-heading {
-   
+	
 }
 
 .notice-wrap .item {
-   display: flex;
-   align-items: center;
-   gap: 10px;
-   padding: 12px 0;
-   border-top: 1px solid #ddd;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 12px 0;
+	border-top: 1px solid #ddd;
 }
 
 .notice-wrap .item:first-child {
-   border-top: none;
+	border-top: none;
 }
 
 .notice-wrap .thumb {
-   width: 76px;
-   height: 76px;
-   background: #d9d9d9;
-   flex: none;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   font-size: 12px;
+	width: 76px;
+	height: 76px;
+	background: #d9d9d9;
+	flex: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 12px;
 }
 
 .notice-wrap .meta {
-   font-size: 14px;
-   line-height: 1.3;
+	font-size: 14px;
+	line-height: 1.3;
 }
 
 .notice-wrap .meta .title {
-   font-weight: 600;
-   margin-bottom: 2px;
+	font-weight: 600;
+	margin-bottom: 2px;
 }
 
 /* ============ 캘린더 (디자인1) ============ */
 @font-face {
-   font-family: 'Peristiwa';
-   src: url('<c:url value="/resources/font/Peristiwa.otf"/>' )
-      format('opentype');
-   font-display: swap;
+	font-family: 'Peristiwa';
+	src: url('<c:url value="/resources/font/Peristiwa.otf"/>' )
+		format('opentype');
+	font-display: swap;
 }
 
 .s-cal {
-   width: 860px;
-   border: 1px solid #c7c7c7;
-   background: #fff;
-   padding: 24px 24px 28px;
-   position: relative;
+	width: 860px;
+	border: 1px solid #c7c7c7;
+	background: #fff;
+	padding: 24px 24px 28px;
+	position: relative;
 }
 
 .s-cal__head {
-   display: grid;
-   grid-template-columns: 110px 100px 1fr;
-   align-items: center;
-   column-gap: 12px;
-   margin-bottom: 14px;
+	display: grid;
+	grid-template-columns: 110px 100px 1fr;
+	align-items: center;
+	column-gap: 12px;
+	margin-bottom: 14px;
 }
 
 .s-cal__mnum {
-   font-weight: 800;
-   font-size: 96px;
-   line-height: 1;
-   color: #111;
+	font-weight: 800;
+	font-size: 96px;
+	line-height: 1;
+	color: #111;
 }
 
 .s-cal__midnav {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   gap: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
 }
 
 .s-cal__midnav button {
-   width: 28px;
-   height: 28px;
-   border: 1px solid #bdbdbd;
-   background: #fff;
-   border-radius: 6px;
-   font-size: 18px;
-   color: #222;
-   cursor: pointer;
+	width: 28px;
+	height: 28px;
+	border: 1px solid #bdbdbd;
+	background: #fff;
+	border-radius: 6px;
+	font-size: 18px;
+	color: #222;
+	cursor: pointer;
 }
 
 .s-cal__midnav .dots {
-   font-size: 18px;
-   color: #999;
+	font-size: 18px;
+	color: #999;
 }
 
 .s-cal__mname span {
-   font-family: 'Peristiwa', cursive;
-   font-size: 56px;
-   font-weight: 400;
-   line-height: .95;
+	font-family: 'Peristiwa', cursive;
+	font-size: 56px;
+	font-weight: 400;
+	line-height: .95;
 }
 
 .s-cal__mname small {
-   display: block;
-   font-size: 18px;
-   margin-top: 6px;
-   color: #444;
+	display: block;
+	font-size: 18px;
+	margin-top: 6px;
+	color: #444;
 }
 
 .s-cal__grid {
-   width: 100%;
-   border: 1px solid #d1d1d1;
-   border-collapse: collapse;
-   table-layout: fixed;
+	width: 100%;
+	border: 1px solid #d1d1d1;
+	border-collapse: collapse;
+	table-layout: fixed;
 }
 
 .s-cal__grid th, .s-cal__grid td {
-   border: 1px solid #d8d8d8;
-   vertical-align: top;
+	border: 1px solid #d8d8d8;
+	vertical-align: top;
 }
 
 .s-cal__grid th {
-   height: 44px;
-   font-weight: 700;
-   color: #222;
+	height: 44px;
+	font-weight: 700;
+	color: #222;
 }
 
 .s-cal__grid td {
-   height: 120px;
-   padding: 8px 10px 6px;
+	height: 120px;
+	padding: 8px 10px 6px;
 }
 
 .s-cal__num {
-   font-size: 14px;
+	font-size: 14px;
 }
 
 .s-cal__dots {
-   display: flex;
-   gap: 6px;
-   margin-top: 6px;
-   flex-wrap: wrap;
+	display: flex;
+	gap: 6px;
+	margin-top: 6px;
+	flex-wrap: wrap;
 }
 
 .s-cal__dot {
-   width: 6px;
-   height: 6px;
-   border-radius: 50%;
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
 }
 
 /* 카테고리별 도트 색 */
 .dot-SHOW {
-   background: #d84b47;
+	background: #d84b47;
 } /* 공연/Show → 레드 */
 .dot-SPEECH {
-   background: #2b90d9;
+	background: #2b90d9;
 } /* 강연/Speech → 블루 */
 .dot-WORKSHOP {
-   background: #3aa167;
+	background: #3aa167;
 } /* 워크숍 → 그린 */
 .dot-MARKET {
-   background: #666;
+	background: #666;
 } /* 마켓 → 그레이 */
 
 /* 상태 */
 .is-today {
-   background: rgba(255, 235, 59, .34);
+	background: rgba(255, 235, 59, .34);
 }
 
 .s-cal__cell.is-hover {
-   background: #fff7cc;
+	background: #fff7cc;
 }
 
 /* 팝업 */
 .s-cal__pop {
-   position: absolute;
-   min-width: 360px;
-   background: #fff;
-   border: 1px solid #2b2b2b;
-   box-shadow: 0 8px 18px rgba(0, 0, 0, .12);
-   padding: 16px 18px;
-   font-size: 14px;
-   color: #222;
-   z-index: 5;
-   pointer-events: auto;
+	position: absolute;
+	min-width: 360px;
+	background: #fff;
+	border: 1px solid #2b2b2b;
+	box-shadow: 0 8px 18px rgba(0, 0, 0, .12);
+	padding: 16px 18px;
+	font-size: 14px;
+	color: #222;
+	z-index: 5;
+	pointer-events: auto;
 }
 
 .s-cal__pop .row {
-   display: flex;
-   align-items: center;
-   gap: 10px;
-   padding: 8px 0;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 0;
 }
 
 .s-cal__pop .dot {
-   width: 10px;
-   height: 10px;
-   border-radius: 50%;
-   display: inline-block;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	display: inline-block;
 }
 
 .s-cal__pop .title {
-   font-weight: 600;
+	font-weight: 600;
 }
 
 .s-cal__pop .empty {
-   color: #888;
-   padding: 6px 0;
+	color: #888;
+	padding: 6px 0;
 }
 
 </style>
 </head>
 
 <body>
-   <jsp:include page="/WEB-INF/views/common/header.jsp" flush="true" />
-   
-   <main id="main" class="container" role="main">
-      <!-- 메인 비주얼 -->
-      <section class="main-visual" aria-labelledby="mv-heading">
-         <h2 id="mv-heading" class="sr-only">메인 소개</h2>
-         <figure>
-            <img src="<c:url value='/resources/img/main-visual-2.jpg'/>"
-               alt="박물관 내부 전시관을 관람하는 모습 (운영시간 오전 10:30 ~ 오후 6:00)">
-         </figure>
-         <hr class="visual-hr" aria-hidden="true">
-         <div class="museum-status" aria-label="운영 시간">
-            <span aria-hidden="true">open 10:30 a.m.</span><br>
-            <span aria-hidden="true">close 18:00 p.m.</span>
-         </div>
-      </section>
+	<jsp:include page="/WEB-INF/views/common/header.jsp" flush="true" />
+	
+	<main id="main" class="container" role="main">
+		<!-- 메인 비주얼 -->
+		<section class="main-visual" aria-labelledby="mv-heading">
+			<h2 id="mv-heading" class="sr-only">메인 소개</h2>
+			<figure>
+				<img src="<c:url value='/resources/img/main-visual-2.jpg'/>"
+					alt="박물관 내부 전시관을 관람하는 모습 (운영시간 오전 10:30 ~ 오후 6:00)">
+			</figure>
+			<hr class="visual-hr" aria-hidden="true">
+			<div class="museum-status" aria-label="운영 시간">
+				<span aria-hidden="true">open 10:30 a.m.</span><br>
+				<span aria-hidden="true">close 18:00 p.m.</span>
+			</div>
+		</section>
 
-      <!-- Event -->
-      <section id="events" class="horizontal-scroll-section exhibitions"
-         aria-labelledby="events-heading">
-         <div class="section-header title">
-            <h2 id="events-heading">Event</h2>
-            <div class="nav-btns" role="group" aria-label="이벤트 슬라이드 이동">
-               <button type="button" class="events-prev"
-                  aria-controls="events-carousel" aria-label="이전 슬라이드">←</button>
-               <button type="button" class="events-next"
-                  aria-controls="events-carousel" aria-label="다음 슬라이드">→</button>
-            </div>
-         </div>
+		<!-- Event -->
+		<section id="events" class="horizontal-scroll-section exhibitions"
+			aria-labelledby="events-heading">
+			<div class="section-header title">
+				<h2 id="events-heading">Event</h2>
+				<div class="nav-btns" role="group" aria-label="이벤트 슬라이드 이동">
+					<button type="button" class="events-prev"
+						aria-controls="events-carousel" aria-label="이전 슬라이드">←</button>
+					<button type="button" class="events-next"
+						aria-controls="events-carousel" aria-label="다음 슬라이드">→</button>
+				</div>
+			</div>
 
-         <div id="events-carousel" class="swiper mySwiper" role="region"
-            aria-roledescription="carousel" aria-label="다가오는 이벤트"
-            aria-live="polite">
-            <div class="swiper-wrapper">
-               <c:forEach var="e" items="${events}" varStatus="st">
-                  <c:set var="startStr" value="${e.startDate}" />
-                  <c:set var="dateYmd"
-                     value="${empty startStr ? '' : fn:substring(startStr,0,10)}" />
-                  <c:choose>
-                     <c:when test="${not empty e.posterUrl}">
-                        <c:set var="imgSrc" value="${e.posterUrl}" />
-                     </c:when>
-                     <c:when test="${e.category eq 'SHOW'}">
-                        <c:set var="imgSrc"
-                           value='${pageContext.request.contextPath}/resources/img/events/event1.jpg' />
-                     </c:when>
-                     <c:when test="${e.category eq 'WORKSHOP'}">
-                        <c:set var="imgSrc"
-                           value='${pageContext.request.contextPath}/resources/img/events/event2.jpg' />
-                     </c:when>
-                     <c:when test="${e.category eq 'SPEECH'}">
-                        <c:set var="imgSrc"
-                           value='${pageContext.request.contextPath}/resources/img/events/event3.jpg' />
-                     </c:when>
-                     <c:when test="${e.category eq 'MARKET'}">
-                        <c:set var="imgSrc"
-                           value='${pageContext.request.contextPath}/resources/img/events/event4.jpg' />
-                     </c:when>
-                     <c:otherwise>
-                        <c:set var="imgSrc"
-                           value='${pageContext.request.contextPath}/resources/img/events/event1.jpg' />
-                     </c:otherwise>
-                  </c:choose>
+			<div id="events-carousel" class="swiper mySwiper" role="region"
+				aria-roledescription="carousel" aria-label="다가오는 이벤트"
+				aria-live="polite">
+				<div class="swiper-wrapper">
+					<c:forEach var="e" items="${events}" varStatus="st">
+						<c:set var="startStr" value="${e.startDate}" />
+						<c:set var="dateYmd"
+							value="${empty startStr ? '' : fn:substring(startStr,0,10)}" />
+						<c:choose>
+							<c:when test="${not empty e.posterUrl}">
+								<c:set var="imgSrc" value="${e.posterUrl}" />
+							</c:when>
+							<c:when test="${e.category eq 'SHOW'}">
+								<c:set var="imgSrc"
+									value='${pageContext.request.contextPath}/resources/img/events/event1.jpg' />
+							</c:when>
+							<c:when test="${e.category eq 'WORKSHOP'}">
+								<c:set var="imgSrc"
+									value='${pageContext.request.contextPath}/resources/img/events/event2.jpg' />
+							</c:when>
+							<c:when test="${e.category eq 'SPEECH'}">
+								<c:set var="imgSrc"
+									value='${pageContext.request.contextPath}/resources/img/events/event3.jpg' />
+							</c:when>
+							<c:when test="${e.category eq 'MARKET'}">
+								<c:set var="imgSrc"
+									value='${pageContext.request.contextPath}/resources/img/events/event4.jpg' />
+							</c:when>
+							<c:otherwise>
+								<c:set var="imgSrc"
+									value='${pageContext.request.contextPath}/resources/img/events/event1.jpg' />
+							</c:otherwise>
+						</c:choose>
 
-                  <article class="event-card swiper-slide" role="group"
-                     aria-roledescription="slide"
-                     aria-label="${st.index + 1} / ${fn:length(events)} ${e.title}">
-                     <figure>
-                        <img src="${imgSrc}"
-                           alt="${e.title} — ${dateYmd}<c:if test='${not empty e.location}'> · ${e.location}</c:if> 포스터">
-                        <figcaption class="sr-only">${e.title}<c:if
-                              test="${not empty e.description}"> — ${e.description}</c:if>
-                        </figcaption>
-                     </figure>
-                     <div class="overlay">
-                        <div class="ov-title">
-                           <c:out value='${e.title}' />
-                        </div>
-                        <div class="ov-meta">
-                           <c:out value='${dateYmd}' />
-                           <c:if test="${not empty e.location}"> · <c:out
-                                 value='${e.location}' />
-                           </c:if>
-                        </div>
-                        <a class="btn" href="<c:url value='/events/${e.eventId}'/>"
-                           aria-label="${e.title} 상세보기">자세히보기</a>
-                     </div>
-                  </article>
-               </c:forEach>
-            </div>
-         </div>
-      </section>
+						<article class="event-card swiper-slide" role="group"
+							aria-roledescription="slide"
+							aria-label="${st.index + 1} / ${fn:length(events)} ${e.title}">
+							<figure>
+								<img src="${imgSrc}"
+									alt="${e.title} — ${dateYmd}<c:if test='${not empty e.location}'> · ${e.location}</c:if> 포스터">
+								<figcaption class="sr-only">${e.title}<c:if
+										test="${not empty e.description}"> — ${e.description}</c:if>
+								</figcaption>
+							</figure>
+							<div class="overlay">
+								<div class="ov-title">
+									<c:out value='${e.title}' />
+								</div>
+								<div class="ov-meta">
+									<c:out value='${dateYmd}' />
+									<c:if test="${not empty e.location}"> · <c:out
+											value='${e.location}' />
+									</c:if>
+								</div>
+								<a class="btn" href="<c:url value='/events/${e.eventId}'/>"
+									aria-label="${e.title} 상세보기">자세히보기</a>
+							</div>
+						</article>
+					</c:forEach>
+				</div>
+			</div>
+		</section>
 
-      <!-- Calendar & Notice -->
-      <section class="calendar-section" aria-labelledby="cal-heading">
-         <div class="section-header title">
-            <h2 id="cal-heading">Calendar</h2>
-         </div>
+		<!-- Calendar & Notice -->
+		<section class="calendar-section" aria-labelledby="cal-heading">
+			<div class="section-header title">
+				<h2 id="cal-heading">Calendar</h2>
+			</div>
 
-         <div class="two-col">
-            <!-- 캘린더 (860px 고정) -->
-            <div class="s-cal" id="sejongCal">
-               <div class="s-cal__head">
-                  <div class="s-cal__mnum" id="mNum">09</div>
-                  <div class="s-cal__midnav">
-                     <button type="button" id="prevBtn" aria-label="이전 달">‹</button>
-                     <span aria-hidden="true" class="dots">· ·</span>
-                     <button type="button" id="nextBtn" aria-label="다음 달">›</button>
-                  </div>
-                  <div class="s-cal__mname">
-                     <span id="mName">September</span> <small id="mYear">2025</small>
-                  </div>
-               </div>
+			<div class="two-col">
+				<!-- 캘린더 (860px 고정) -->
+				<div class="s-cal" id="sejongCal">
+					<div class="s-cal__head">
+						<div class="s-cal__mnum" id="mNum">09</div>
+						<div class="s-cal__midnav">
+							<button type="button" id="prevBtn" aria-label="이전 달">‹</button>
+							<span aria-hidden="true" class="dots">· ·</span>
+							<button type="button" id="nextBtn" aria-label="다음 달">›</button>
+						</div>
+						<div class="s-cal__mname">
+							<span id="mName">September</span> <small id="mYear">2025</small>
+						</div>
+					</div>
 
-               <table class="s-cal__grid" aria-label="월간 달력">
-                  <thead>
-                     <tr>
-                        <th scope="col">SUN</th>
-                        <th scope="col">MON</th>
-                        <th scope="col">TUE</th>
-                        <th scope="col">WED</th>
-                        <th scope="col">THU</th>
-                        <th scope="col">FRI</th>
-                        <th scope="col">SAT</th>
-                     </tr>
-                  </thead>
-                  <tbody id="calBody"></tbody>
-               </table>
+					<table class="s-cal__grid" aria-label="월간 달력">
+						<thead>
+							<tr>
+								<th scope="col">SUN</th>
+								<th scope="col">MON</th>
+								<th scope="col">TUE</th>
+								<th scope="col">WED</th>
+								<th scope="col">THU</th>
+								<th scope="col">FRI</th>
+								<th scope="col">SAT</th>
+							</tr>
+						</thead>
+						<tbody id="calBody"></tbody>
+					</table>
 
-               <aside class="s-cal__pop" id="calPop" style="display: none;"></aside>
-            </div>
+					<aside class="s-cal__pop" id="calPop" style="display: none;"></aside>
+				</div>
 
-            <!-- Notice -->
-            <aside aria-labelledby="notice-heading">
-               <div class="section-header">
-                  <h2 id="notice-heading">Notice</h2>
-               </div>
-               <div class="notice-wrap" aria-label="공지 목록">
-                  <div class="item">
-                     <div class="thumb" aria-hidden="true">9/28</div>
-                     <div class="meta">
-                        <div class="title">가을 음악 페스티벌</div>
-                        <div class="desc">올림픽공원</div>
-                     </div>
-                  </div>
-                  <div class="item">
-                     <div class="thumb" aria-hidden="true">9/25</div>
-                     <div class="meta">
-                        <div class="title">사내 워크숍</div>
-                        <div class="desc">오전 9시 (4시간)</div>
-                     </div>
-                  </div>
-                  <div class="item">
-                     <div class="thumb" aria-hidden="true">10/2</div>
-                     <div class="meta">
-                        <div class="title">개발자 컨퍼런스</div>
-                        <div class="desc">오후 2시 (4시간~)</div>
-                     </div>
-                  </div>
-               </div>
-            </aside>
-         </div>
-      </section>
-   </main>
+				<!-- Notice -->
+				<aside aria-labelledby="notice-heading">
+					<div class="section-header">
+						<h2 id="notice-heading">Notice</h2>
+					</div>
+					<div class="notice-wrap" aria-label="공지 목록">
+						<div class="item">
+							<div class="thumb" aria-hidden="true">9/28</div>
+							<div class="meta">
+								<div class="title">가을 음악 페스티벌</div>
+								<div class="desc">올림픽공원</div>
+							</div>
+						</div>
+						<div class="item">
+							<div class="thumb" aria-hidden="true">9/25</div>
+							<div class="meta">
+								<div class="title">사내 워크숍</div>
+								<div class="desc">오전 9시 (4시간)</div>
+							</div>
+						</div>
+						<div class="item">
+							<div class="thumb" aria-hidden="true">10/2</div>
+							<div class="meta">
+								<div class="title">개발자 컨퍼런스</div>
+								<div class="desc">오후 2시 (4시간~)</div>
+							</div>
+						</div>
+					</div>
+				</aside>
+			</div>
+		</section>
+	</main>
 
-   <jsp:include page="/WEB-INF/views/common/footer.jsp" />
+	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
-   <script>
+	<script>
     /* 이벤트 캐러셀: 카드 310px, 간격 65px */
     new Swiper(".mySwiper", {
       slidesPerView: 4,

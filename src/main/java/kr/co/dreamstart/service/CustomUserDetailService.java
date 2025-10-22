@@ -35,7 +35,7 @@ public class CustomUserDetailService implements UserDetailsService {
 		}
 		
 		// 2) 권한 조회 -> GrantedAuthority로 변환 + ROLE_ 접두어 + 대문자 정규화
-		List<String> roles = userService.findRoleNames(u.getUserId()); // ["admin","member"]
+		List<String> roles = userService.findRoleNameByUserId(u.getUserId()); // ["admin","member"]
 		List<SimpleGrantedAuthority> authorities = roles.stream()
 				.map(r -> "ROLE_" + r.toUpperCase()) // "admin" -> "ROLE_ADMIN"
 				.map(SimpleGrantedAuthority::new)

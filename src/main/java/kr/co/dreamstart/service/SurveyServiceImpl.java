@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import kr.co.dreamstart.dto.SurveyDTO;
 import kr.co.dreamstart.dto.SurveyOptionDTO;
 import kr.co.dreamstart.dto.SurveyQuestionDTO;
 import kr.co.dreamstart.dto.SurveyResponseDTO;
+import kr.co.dreamstart.service.SurveyService;
 import kr.co.dreamstart.mapper.EventMapper;
 import kr.co.dreamstart.mapper.SurveyMapper;
 import lombok.RequiredArgsConstructor;
@@ -25,311 +27,385 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SurveyServiceImpl implements SurveyService {
 
-    private final SurveyMapper surveyMapper;
-    private final EventMapper eventMapper;
+	private final SurveyMapper surveyMapper;
+	private final EventMapper eventMapper;
+	
+	// 조회/유지보수
+	@Override
+	public List<SurveyDTO> fixedTemplates() {
+		// TODO Auto-generated method stub
+		return surveyMapper.fixedTemplates();
+	}
 
-    /* ===== 기본 조회 ===== */
-    @Override
-    public List<SurveyDTO> fixedTemplates() {
-        return surveyMapper.fixedTemplates();
-    }
+	@Override
+	public List<SurveyDTO> surveyPage(Long eventId, Criteria cri, String keyword, String field, Integer anon) {
+		// TODO Auto-generated method stub
+		return surveyMapper.surveyPage(eventId, cri, keyword, field, anon);
+	}
 
-    @Override
-    public List<SurveyDTO> surveyPage(Long eventId, Criteria cri, String keyword, String field, Integer anon) {
-        return surveyMapper.surveyPage(eventId, cri, keyword, field, anon);
-    }
+	@Override
+	public int surveyCount(Long eventId, String keyword, String field, Integer anon) {
+		// TODO Auto-generated method stub
+		return surveyMapper.surveyCount(eventId, keyword, field, anon);
+	}
 
-    @Override
-    public int surveyCount(Long eventId, String keyword, String field, Integer anon) {
-        return surveyMapper.surveyCount(eventId, keyword, field, anon);
-    }
+	@Override
+	public SurveyDTO findSurvey(Long surveyId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.findSurvey(surveyId);
+	}
 
-    @Override
-    public SurveyDTO findSurvey(Long surveyId) {
-        return surveyMapper.findSurvey(surveyId);
-    }
+	@Override
+	public List<SurveyQuestionDTO> questionList(Long surveyId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.questionList(surveyId);
+	}
+	
 
-    @Override
-    public List<SurveyQuestionDTO> questionList(Long surveyId) {
-        return surveyMapper.questionList(surveyId);
-    }
+	@Override
+	public List<SurveyOptionDTO> optionsList(Long questionId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.optionList(questionId);
+	}
 
-    @Override
-    public List<SurveyOptionDTO> optionsList(Long questionId) {
-        return surveyMapper.optionList(questionId);
-    }
+	@Override
+	public Map<Long, List<SurveyOptionDTO>> optionsByQuestion(Long surveyId) {
+		// TODO Auto-generated method stub
+		Map<Long, List<SurveyOptionDTO>> map = new LinkedHashMap<>();
+		
+		for (SurveyQuestionDTO q : questionList(surveyId)) {
+			map.put(q.getQuestionId(), surveyMapper.optionList(q.getQuestionId()));
+		}
+		return map;
+	}
 
-    @Override
-    public Map<Long, List<SurveyOptionDTO>> optionsByQuestion(Long surveyId) {
-        Map<Long, List<SurveyOptionDTO>> map = new LinkedHashMap<>();
-        for (SurveyQuestionDTO q : questionList(surveyId)) {
-            map.put(q.getQuestionId(), surveyMapper.optionList(q.getQuestionId()));
-        }
-        return map;
-    }
+	// 응답
+	@Override
+	public List<SurveyResponseDTO> responseList(Long surveyId, Criteria cri) {
+		// TODO Auto-generated method stub
+		return surveyMapper.responseList(surveyId, cri);
+	}
 
-    /* ===== 응답 ===== */
-    @Override
-    public List<SurveyResponseDTO> responseList(Long surveyId, Criteria cri) {
-        return surveyMapper.responseList(surveyId, cri);
-    }
+	@Override
+	public int responseCount(Long surveyId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.responseCount(surveyId);
+	}
 
-    @Override
-    public int responseCount(Long surveyId) {
-        return surveyMapper.responseCount(surveyId);
-    }
+	@Override
+	public List<Map<String, Object>> responseDetailFlat(Long responseId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.responseDetailFlat(responseId);
+	}
 
-    @Override
-    public int responseCountByUser(Long surveyId, Long userId) {
-        return surveyMapper.responseCountByUser(surveyId, userId);
-    }
+	// 유지보수
+	@Override
+	public int updateSurveyHeader(Long surveyId, String title, String description, Integer isAnonymous) {
+		// TODO Auto-generated method stub
+		return surveyMapper.updateSurveyHeader(surveyId, title, description, isAnonymous);
+	}
 
-    @Override
-    public List<Map<String, Object>> responseDetailFlat(Long responseId) {
-        return surveyMapper.responseDetailFlat(responseId);
-    }
+	// 클론1 - 템플릿 전체 복제(헤더 + 문항 + 보기)
+	@Override
+	@Transactional(rollbackFor = Exception.class) // 정상 종료 = 커밋, 예외 = 롤백
+	public Long cloneFromTemplate(Long templateId, Long eventId, Long userId, CloneInlineReqDTO.SurveyStatus status) {
+		// TODO Auto-generated method stub
 
-    /* ===== 수정 / 유지보수 ===== */
-    @Override
-    public int updateSurveyHeader(Long surveyId, String title, String description, Integer isAnonymous) {
-        return surveyMapper.updateSurveyHeader(surveyId, title, description, isAnonymous);
-    }
+		// 1) 헤더복제
+		CloneInlineReqDTO req = new CloneInlineReqDTO();
+		req.setTemplateId(templateId);
+		req.setEventId(eventId);
+		req.setUserId(userId);
+		req.setStatus(status == null ? CloneInlineReqDTO.SurveyStatus.OPEN : status);
+		
+		int header = surveyMapper.cloneSurvey(req);
+		if (header != 1) throw new IllegalStateException("설문 헤더 클론 실패!"); 
+		
+		// 2) new survey_id
+		Long newSurveyId = req.getNewSurveyId();
+		if (newSurveyId == null || newSurveyId <= 0) {
+			throw new IllegalStateException("신규 설문 id 조회 실패 !");
+		}
+		log.info("[cloneFromTemplate] newSurveyId={}", newSurveyId);
+		
+		// 3) 원본 템플릿 문항 조회
+		List<SurveyQuestionDTO> questionDTO = surveyMapper.questionList(templateId);
 
-    /* ===== 설문 복제 ===== */
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public Long cloneFromTemplate(Long templateId, Long eventId, Long userId, CloneInlineReqDTO.SurveyStatus status) {
-        CloneInlineReqDTO req = new CloneInlineReqDTO();
-        req.setTemplateId(templateId);
-        req.setEventId(eventId);
-        req.setUserId(userId);
-        req.setStatus(status == null ? CloneInlineReqDTO.SurveyStatus.OPEN : status);
+		// 4) 문항/보기 복제
+		for (SurveyQuestionDTO q : questionDTO) {
+			// 새문항
+			SurveyQuestionDTO nq = new SurveyQuestionDTO();
+			nq.setSurveyId(newSurveyId);
+			nq.setQuestion(q.getQuestion());
+			nq.setType(q.getType());
+			surveyMapper.insertQuestion(nq); // useGeneratedKeys 로 questionId 채워짐
+			Long newQuestionId = nq.getQuestionId();
 
-        int header = surveyMapper.cloneSurvey(req);
-        if (header != 1) throw new IllegalStateException("설문 헤더 클론 실패!");
+			// 보기복제
+			List<SurveyOptionDTO> options = surveyMapper.optionList(q.getQuestionId());
+			for (SurveyOptionDTO o : options) {
+				SurveyOptionDTO nop = new SurveyOptionDTO();
+				nop.setQuestionId(newQuestionId);
+				nop.setLabel(o.getLabel());
+				nop.setOptValue(o.getOptValue());
+				surveyMapper.insertOption(nop);
+			}
+		}
 
-        Long newSurveyId = req.getNewSurveyId();
-        if (newSurveyId == null || newSurveyId <= 0)
-            throw new IllegalStateException("신규 설문 ID 조회 실패!");
-        log.info("[cloneFromTemplate] newSurveyId={}", newSurveyId);
+		// 복제 성공 -> 모달로 성공 보여주고 목록으로 이동 시킴
+		return newSurveyId;
 
-        List<SurveyQuestionDTO> questionDTO = surveyMapper.questionList(templateId);
-        for (SurveyQuestionDTO q : questionDTO) {
-            SurveyQuestionDTO nq = new SurveyQuestionDTO();
-            nq.setSurveyId(newSurveyId);
-            nq.setQuestion(q.getQuestion());
-            nq.setType(q.getType());
-            surveyMapper.insertQuestion(nq);
-            Long newQuestionId = nq.getQuestionId();
+	}
 
-            List<SurveyOptionDTO> options = surveyMapper.optionList(q.getQuestionId());
-            for (SurveyOptionDTO o : options) {
-                SurveyOptionDTO nop = new SurveyOptionDTO();
-                nop.setQuestionId(newQuestionId);
-                nop.setLabel(o.getLabel());
-                nop.setOptValue(o.getOptValue());
-                surveyMapper.insertOption(nop);
-            }
-        }
-        return newSurveyId;
-    }
+	// 클론2 - 인라인 JSON을 새 설문으로 복제
+	// controller에서 json을 dto들로 변환해 넘겨줌
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public Long cloneInline(CloneInlineReqDTO req, Long userId) {
+		// TODO Auto-generated method stub
+		// 0) 작성자
+		req.setUserId(userId != null ? userId : 1L);
+		
+		// 1) 이벤트 종료시각 조회 (eventMapper or surveyMapper에서)
+		LocalDateTime eventEnd = eventMapper.findEndDateByEventId(req.getEventId());
+		if (eventEnd == null) throw new IllegalStateException("이벤트 시각이 없습니다.");
+		
+		// 2) open/close 계산
+		if ("offset".equalsIgnoreCase(req.getScheduleMode())) {
+			int h = (req.getOpenDelayHours() == null ? 0 : req.getOpenDelayHours());
+			int d = (req.getCloseAfterDays() == null ? 7 : req.getCloseAfterDays());
+			req.setOpenAt(eventEnd.plusHours(h));
+			req.setCloseAt(req.getOpenAt().plusDays(d));
+		} else {
+			// deflut : 종료 즉시 오픈, 7일후 종료
+			req.setOpenAt(eventEnd);
+			req.setCloseAt(eventEnd.plusDays(7));
+		}
+		
+		// 3) status 기본값
+		if (req.getStatus() == null) req.setStatus(CloneInlineReqDTO.SurveyStatus.DRAFT);
+		
+		// 4) 헤더복제
+		int header = surveyMapper.insertSurveyHeaderFromInline(req);
+		if (header != 1) throw new IllegalStateException("설문 헤더 클론 실패");
+		
+		// 5) new sueveyId
+		Long newSurveyId = req.getNewSurveyId();
+		if (newSurveyId == null || newSurveyId <= 0) {
+			throw new IllegalStateException("신규 설문 id 조회 실패");
+		}
+		log.info("[cloneInline] newSurveyId={}", newSurveyId);
+		
+		// 6) 문항/보기 insert (newSurveyId 사용)
+		if (req.getQuestions() != null) {
+			for (QuestionPayLoadDTO q : req.getQuestions()) {
+				// 요청용 DTO(QuestionPayLoadDTO) -> 저장용DTO(SurveyQuestionDTO)
+				SurveyQuestionDTO nq = new SurveyQuestionDTO();
+				nq.setSurveyId(newSurveyId);
+				nq.setQuestion(q.getQuestion());
+				// 타입 기본/정규화
+				SurveyQuestionDTO.QuestionType type = 
+						(q.getType() == null ? SurveyQuestionDTO.QuestionType.SCALE_5 : q.getType());
+				nq.setType(type);
+				
+				// required 기본값을 Boolean으로 명시
+				// 제약(chk_required_vs_type) 회피: null 금지, TEXT도 false 허용으로 처리
+				Boolean reqRequired = (type != SurveyQuestionDTO.QuestionType.TEXT);
+ 				nq.setRequired(Boolean.valueOf(reqRequired));
+				
+				surveyMapper.insertQuestion(nq);
+				Long newQuestionId = nq.getQuestionId();
+				
+				// 옵션
+				if (q.getOptions() != null) {
+					for (SurveyOptionDTO o : q.getOptions()) {
+						SurveyOptionDTO nop = new SurveyOptionDTO();
+						nop.setQuestionId(newQuestionId);	// 새 문항 ID로 매핑
+						nop.setLabel(o.getLabel());
+						nop.setOptValue(o.getOptValue());
+						surveyMapper.insertOption(nop);
+					}
+				}
+			}
+		}
+		
+		return newSurveyId;
+	}
 
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public Long cloneInline(CloneInlineReqDTO req, Long userId) {
-        req.setUserId(userId != null ? userId : 1L);
-        LocalDateTime eventEnd = eventMapper.findEndDateByEventId(req.getEventId());
-        if (eventEnd == null) throw new IllegalStateException("이벤트 종료시각이 없습니다.");
+	// 설문삭제
+	@Override
+	public int deleteCloneSurvey(Long surveyId) {
+		// TODO Auto-generated method stub
+		// 응답이 있으면 0, 없으면 삭제
+		int d1 = surveyMapper.deleteCloneOptions(surveyId);
+		int d2 = surveyMapper.deleteCloneQuestions(surveyId);
+		int d3 = surveyMapper.deleteCloneSurvey(surveyId);
+		
+		return d1 + d2 + d3;
+	}
 
-        if ("offset".equalsIgnoreCase(req.getScheduleMode())) {
-            int h = (req.getOpenDelayHours() == null ? 0 : req.getOpenDelayHours());
-            int d = (req.getCloseAfterDays() == null ? 7 : req.getCloseAfterDays());
-            req.setOpenAt(eventEnd.plusHours(h));
-            req.setCloseAt(req.getOpenAt().plusDays(d));
-        } else {
-            req.setOpenAt(eventEnd);
-            req.setCloseAt(eventEnd.plusDays(7));
-        }
+	// 설문상세(이벤트제목포함용)
+	@Override
+	public String findEventTitleBySurveyId(Long surveyId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.findEventTitleBySurveyId(surveyId);
+	}
 
-        if (req.getStatus() == null)
-            req.setStatus(CloneInlineReqDTO.SurveyStatus.DRAFT);
+	// 문항/옵션 통계용 (응답자수 + 퍼센트지화)
+	@Override
+	public List<Map<String, Object>> surveyStatus(Long surveyId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.surveyStatus(surveyId);
+	}
 
-        int header = surveyMapper.insertSurveyHeaderFromInline(req);
-        if (header != 1) throw new IllegalStateException("설문 헤더 클론 실패");
+	@Override
+	public String findUserNameById(Long useeId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.findUserNameById(useeId);
+	}
 
-        Long newSurveyId = req.getNewSurveyId();
-        if (newSurveyId == null || newSurveyId <= 0)
-            throw new IllegalStateException("신규 설문 ID 조회 실패");
-        log.info("[cloneInline] newSurveyId={}", newSurveyId);
+	@Override
+	public int applicantCountBySurvey(Long surveyId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.applicantCountBySurvey(surveyId);
+	}
 
-        if (req.getQuestions() != null) {
-            for (QuestionPayLoadDTO q : req.getQuestions()) {
-                SurveyQuestionDTO nq = new SurveyQuestionDTO();
-                nq.setSurveyId(newSurveyId);
-                nq.setQuestion(q.getQuestion());
-                SurveyQuestionDTO.QuestionType type =
-                        (q.getType() == null ? SurveyQuestionDTO.QuestionType.SCALE_5 : q.getType());
-                nq.setType(type);
-                nq.setRequired(type != SurveyQuestionDTO.QuestionType.TEXT);
-                surveyMapper.insertQuestion(nq);
-                Long newQuestionId = nq.getQuestionId();
+	@Override
+	public Map<String, Object> topRate(Long surveyId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.topRate(surveyId);
+	}
 
-                if (q.getOptions() != null) {
-                    for (SurveyOptionDTO o : q.getOptions()) {
-                        SurveyOptionDTO nop = new SurveyOptionDTO();
-                        nop.setQuestionId(newQuestionId);
-                        nop.setLabel(o.getLabel());
-                        nop.setOptValue(o.getOptValue());
-                        surveyMapper.insertOption(nop);
-                    }
-                }
-            }
-        }
-        return newSurveyId;
-    }
+	@Override
+	public List<Map<String, Object>> surveyStatusAgainstApplicants(Long surveyId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.surveyStatusAgainstApplicants(surveyId);
+	}
 
-    /* ===== 삭제 ===== */
-    @Override
-    public int deleteCloneSurvey(Long surveyId) {
-        int d1 = surveyMapper.deleteCloneOptions(surveyId);
-        int d2 = surveyMapper.deleteCloneQuestions(surveyId);
-        int d3 = surveyMapper.deleteCloneSurvey(surveyId);
-        return d1 + d2 + d3;
-    }
+	@Override
+	public Map<String, Object> cloneFormPrefill(Long templateId, Long eventId, Long surveyId) {
+		// TODO Auto-generated method stub
+		Long selectedTemplateId = templateId;
+		Long selectedEventId = eventId;
+		String prefillTitle = "";	// 템플릿 제목
+		String prefillDesc = "";	// 템플릿 설명
+		
+		if (surveyId != null) {
+			// 상세->수정 진입 :  해당 설문 정보로 프리필/선택 세팅
+			SurveyDTO s = findSurvey(surveyId);
+			if (s != null) {
+				if (s.getEventId() != null) selectedEventId = s.getEventId();
+				// 원본 템플릿 id가 있으면 사용(없으면 그대로 둠)
+				if (s.getCloneFromSurveyId() != null) selectedTemplateId = s.getCloneFromSurveyId();
+				prefillTitle = s.getTitle();
+				prefillDesc = s.getDescription();
+			}
+		}
+		
+		Map<String, Object> out = new LinkedHashMap<>();
+		out.put("selectedTemplateId", selectedTemplateId);
+		out.put("selectedEventId", selectedEventId );
+		out.put("prefillTitle", prefillTitle);
+		out.put("prefillDesc", prefillDesc);
+		
+		return out;
+	}
 
-    /* ===== 통계 / 조회 ===== */
-    @Override
-    public String findEventTitleBySurveyId(Long surveyId) {
-        return surveyMapper.findEventTitleBySurveyId(surveyId);
-    }
+	@Override
+	public boolean isTemplate(Long surveyId) {
+		// TODO Auto-generated method stub
+		if (surveyId == null) return false;
+		
+		// 1) 고정텐플릿 1~4번 range
+		if (surveyId >= 1 && surveyId <= 4) return true;
+		
+		// 2) DB 플래그/키
+		SurveyDTO s = findSurvey(surveyId);
+		if (s == null) return false;
+		
+		if (s.getIsTemplate() != null && s.getIsTemplate() == 1) return true;
+		
+		return (s.getTemplateKey() != null && !s.getTemplateKey().isBlank());
+	}
 
-    @Override
-    public List<Map<String, Object>> surveyStatus(Long surveyId) {
-        return surveyMapper.surveyStatus(surveyId);
-    }
+	@Override
+	public List<Map<String, Object>> openSurveyReservations(Long userId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.openSurveyReservations(userId);
+	}
 
-    @Override
-    public String findUserNameById(Long userId) {
-        return surveyMapper.findUserNameById(userId);
-    }
+	@Override
+	public List<Map<String, Object>> adminSurveyReservations(Long surveyId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.adminSurveyReservations(surveyId);
+	}
 
-    @Override
-    public int applicantCountBySurvey(Long surveyId) {
-        return surveyMapper.applicantCountBySurvey(surveyId);
-    }
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public boolean saveResponse(Long userId, Long eventId, Map<Long, Long> answers) {
+		// TODO Auto-generated method stub
+		// 1) 이벤트에 연결된 설문 ID 찾기
+		Long surveyId = surveyMapper.findSurveyIdByEvent(eventId);
+		if (surveyId == null) {
+			log.warn("설문이 존재하지 않습니다. eventId={}", eventId);
+			return false;
+		}
+		
+		// 2) 중복 응답 여부 확인
+		int existing = surveyMapper.responseCountByUser(surveyId, userId);
+		if (existing > 0) {
+			log.info("이미 응답한 유저입니다: userId={}, surveyId={}", userId, surveyId);
+			return false;
+		}
+		
+		// 3) 응답 테이블 저장 / SurveyResponseDTO 객체로 insert 수행
+		SurveyResponseDTO dto = new SurveyResponseDTO();
+		dto.setSurveyId(surveyId);
+		dto.setUserId(userId);
+		surveyMapper.insertResponse(dto);
+		
+		Long responseId = dto.getResponseId();	// 자동 생성된 pk바로 가져옴
+		if (responseId == null) {
+			throw new IllegalStateException("responseId 생성 실패 : Mybatis useGeneratedKeys 설정 확인");
+		}
+		
+		log.info("[SURVEY] 신규 응답 등록 완료 - responseId={}", responseId);
+				
+		// 4) 문항별 응답 저장(answer가있을 경우에만 응답 상세 추가)
+		if (answers != null && !answers.isEmpty()) {
+			for (Map.Entry<Long, Long> entry : answers.entrySet()) {
+				surveyMapper.insertAnswer(responseId, entry.getKey(), entry.getValue(), null);
+			}			
+		}
+		
+		log.info("[SURVEY] 설문 응답 저장 완료 - userId={}, eventId={}, surveyId={}, responseId={}", userId, eventId, surveyId, responseId);
+		return true;
+	}
 
-    @Override
-    public Map<String, Object> topRate(Long surveyId) {
-        return surveyMapper.topRate(surveyId);
-    }
+	@Override
+	public Long findSurveyIdByEvent(Long eventId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.findSurveyIdByEvent(eventId);
+	}
 
-    @Override
-    public List<Map<String, Object>> surveyStatusAgainstApplicants(Long surveyId) {
-        return surveyMapper.surveyStatusAgainstApplicants(surveyId);
-    }
+	@Override
+	public int responseCountByUser(Long surveyId, Long userId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.responseCountByUser(surveyId, userId);
+	}
 
-    /* ===== 프리필 ===== */
-    @Override
-    public Map<String, Object> cloneFormPrefill(Long templateId, Long eventId, Long surveyId) {
-        Long selectedTemplateId = templateId;
-        Long selectedEventId = eventId;
-        String prefillTitle = "";
-        String prefillDesc = "";
+	@Override
+	public List<Map<String, Object>> findUnansweredSurveysByUser(Long userId) {
+		// TODO Auto-generated method stub
+		List<Map<String, Object>> unanswered = surveyMapper.findUnansweredSurveysByUser(userId);
+		log.info("[UNANSWERED] userId={} 미응답 설문 {}건", userId, unanswered.size());
+		return unanswered;
+	}
 
-        if (surveyId != null) {
-            SurveyDTO s = findSurvey(surveyId);
-            if (s != null) {
-                if (s.getEventId() != null) selectedEventId = s.getEventId();
-                if (s.getCloneFromSurveyId() != null) selectedTemplateId = s.getCloneFromSurveyId();
-                prefillTitle = s.getTitle();
-                prefillDesc = s.getDescription();
-            }
-        }
+	@Override
+	public String findLatestSurveyStatusByEvent(Long eventId) {
+		// TODO Auto-generated method stub
+		return surveyMapper.findLatestSurveyStatusByEvent(eventId);
+	}
 
-        Map<String, Object> out = new LinkedHashMap<>();
-        out.put("selectedTemplateId", selectedTemplateId);
-        out.put("selectedEventId", selectedEventId);
-        out.put("prefillTitle", prefillTitle);
-        out.put("prefillDesc", prefillDesc);
-        return out;
-    }
-
-    @Override
-    public boolean isTemplate(Long surveyId) {
-        if (surveyId == null) return false;
-        if (surveyId >= 1 && surveyId <= 4) return true;
-
-        SurveyDTO s = findSurvey(surveyId);
-        if (s == null) return false;
-        if (s.getIsTemplate() != null && s.getIsTemplate() == 1) return true;
-
-        return (s.getTemplateKey() != null && !s.getTemplateKey().isBlank());
-    }
-
-    /* ===== 설문 예약 ===== */
-    @Override
-    public List<Map<String, Object>> openSurveyReservations(Long userId) {
-        return surveyMapper.openSurveyReservations(userId);
-    }
-
-    @Override
-    public List<Map<String, Object>> adminSurveyReservations(Long surveyId) {
-        return surveyMapper.adminSurveyReservations(surveyId);
-    }
-
-    /* ===== 응답 저장 ===== */
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public boolean saveResponse(Long userId, Long eventId, Map<Long, Long> answers) {
-        Long surveyId = surveyMapper.findSurveyIdByEvent(eventId);
-        if (surveyId == null) {
-            log.warn("설문이 존재하지 않습니다. eventId={}", eventId);
-            return false;
-        }
-
-        int existing = surveyMapper.responseCountByUser(surveyId, userId);
-        if (existing > 0) {
-            log.info("이미 응답한 유저입니다: userId={}, surveyId={}", userId, surveyId);
-            return false;
-        }
-
-        SurveyResponseDTO dto = new SurveyResponseDTO();
-        dto.setSurveyId(surveyId);
-        dto.setUserId(userId);
-        surveyMapper.insertResponse(dto);
-
-        Long responseId = dto.getResponseId();
-        if (responseId == null)
-            throw new IllegalStateException("responseId 생성 실패 (MyBatis useGeneratedKeys 확인)");
-
-        log.info("[SURVEY] 신규 응답 등록 완료 - responseId={}", responseId);
-
-        if (answers != null && !answers.isEmpty()) {
-            for (Map.Entry<Long, Long> entry : answers.entrySet()) {
-                surveyMapper.insertAnswer(responseId, entry.getKey(), entry.getValue(), null);
-            }
-        }
-
-        log.info("[SURVEY] 응답 저장 완료 - userId={}, eventId={}, surveyId={}, responseId={}",
-                userId, eventId, surveyId, responseId);
-        return true;
-    }
-
-    /* ===== 기타 ===== */
-    @Override
-    public Long findSurveyIdByEvent(Long eventId) {
-        return surveyMapper.findSurveyIdByEvent(eventId);
-    }
-
-    @Override
-    public List<Map<String, Object>> findUnansweredSurveysByUser(Long userId) {
-        List<Map<String, Object>> unanswered = surveyMapper.findUnansweredSurveysByUser(userId);
-        log.info("[UNANSWERED] userId={} 미응답 설문 {}건", userId, unanswered.size());
-        return unanswered;
-    }
-
-    @Override
-    public String findLatestSurveyStatusByEvent(Long eventId) {
-        return surveyMapper.findLatestSurveyStatusByEvent(eventId);
-    }
 }

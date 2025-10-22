@@ -271,7 +271,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<String> findRoleNames(Long userId) {
+	public List<String> findRoleNameByUserId(Long userId) {
 		return userMapper.findRoleNameByUserId(userId);
 	}
 

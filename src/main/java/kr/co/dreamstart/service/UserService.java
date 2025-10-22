@@ -29,7 +29,7 @@ public interface UserService {
 	// 아이디/이메일 단건 조회
 	public UserDTO findByLogin(String login);
 	// user_role_name(admin, member)
-	public List<String> findRoleNames(Long userId);
+	public List<String> findRoleNameByUserId(Long userId);
 	// 마지막 로그인 시간 업데이트
 	public void touchLastLogin(Long userId);
 
