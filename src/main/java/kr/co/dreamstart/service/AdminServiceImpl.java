@@ -17,6 +17,8 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private AdminMapper adminMapper;
 	
+	
+	//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	@Override
 	public void recordAdminLog(AdminActionLogDTO adminActionLogDTO) {
 		int result = -1;

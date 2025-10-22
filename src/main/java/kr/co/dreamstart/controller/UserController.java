@@ -224,7 +224,7 @@ public class UserController {
 
 	// userInfo Detail
 	// 로그인한 사용자의 ID와 URL 경로의 userId가 같을 때만 접근 허용해야함
-	@PreAuthorize("#userId == principal.userId")
+	@PreAuthorize("#email == principal.email")
 	@GetMapping("/my-info/{userId}")
 	public String myInfo(@PathVariable("userId") long userId, Model model) {
 		UserDTO userDTO = userService.findByUserId(userId);
@@ -241,7 +241,7 @@ public class UserController {
 
 	// 회원정보 수정
 	// 로그인한 사용자의 ID와 URL 경로의 userId가 같을 때만 접근 허용해야함 안먹음;; 프론트에서 막아야되낭@@@@@@@@@@@@@@@@@@@@@@
-	@PreAuthorize("#userId == authentication.principal.userId")
+	@PreAuthorize("#email == principal.email")
 	@GetMapping("/my-info/{userId}/edit")
 	public String myInfoForm(@PathVariable("userId") long userId, Model model) {
 		UserDTO userDTO = userService.findByUserId(userId);
