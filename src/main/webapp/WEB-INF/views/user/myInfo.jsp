@@ -723,7 +723,7 @@ body {
                   <div class="survey-text"> <div class="event-title">가을 음악 페스티벌 2025</div>
 										<div class="event-date">이벤트 일시: 2025-09-28</div>
 									</div>
-										<a class="survey-btn" href="#">설문 작성</a>
+										<a class="survey-btn" href="/test-survey">설문 작성</a>
 									</div>
             </div>
       </div>
@@ -734,7 +734,7 @@ body {
             </div>
 			</div>
    </main>
-   <jsp:include page="../common/footer.jsp" />
+   <jsp:include page="../common/footer.jsp"/>
 <!--수정버튼 비번 확인창 모달-->
 <!--${passwordError}랑 ${!passwordError}는 프론트에서 임의로 넣어놓음-->
 <div id="passwordConfirmModal" class="modal-backdrop"
