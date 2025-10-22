@@ -11,7 +11,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
 	<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
 <link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
-<link rel="stylesheet" href="/webapp/resources/css/noticeList.css">
 <style>
 body {
  background: #E5E2DB;
@@ -113,7 +112,7 @@ button {
 }
 
 .notice-table tbody tr:hover {
- background-color: #FFFFFF;
+ background-color: #d9d9d9;
  cursor: pointer;
 }
 
@@ -164,19 +163,19 @@ button {
 .pagination li a {
  padding: 5px 10px;
  font-size: 18px;
- color: #999;
+ color: #888888;
  display: block;
  transition: color 0.2s;
 }
 
 .pagination li.active a {
  font-weight: bold;
- color: #222;
+ color: #222222;
 }
 
 .nav-arrow {
  font-size: 20px;
- color: #999;
+ color: #222222;
 }
 
 .page-number {
@@ -192,7 +191,7 @@ button {
 }
 
 .pagination a:hover{
- color: #222;
+ color: #222222;
   background-color: transparent;
   cursor: pointer;
 }
