@@ -5,6 +5,8 @@ pageEncoding="UTF-8"%>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
 <link href="https://fonts.cdnfonts.com/css/peristiwa" rel="stylesheet">

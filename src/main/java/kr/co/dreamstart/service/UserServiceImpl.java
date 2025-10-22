@@ -271,7 +271,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<String> findRoleNames(Long userId) {
+	public List<String> findRoleNameByUserId(Long userId) {
 		return userMapper.findRoleNameByUserId(userId);
 	}
 
@@ -328,7 +328,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDTO findByUserId(long userId) {
+	public UserDTO findByUserId(Long userId) {
 		return userMapper.findByUserId(userId);
 	}
 
@@ -338,13 +338,29 @@ public class UserServiceImpl implements UserService {
 		// 기본정보 업데이트
 		int result = -1;
 		result = userMapper.adminUserUpdate(userDTO);
-		if(result>0) {
-			map.put("result","success");			
-		}else {
-			map.put("result","fail");			
+		if (result > 0) {
+			map.put("result", "success");
+		} else {
+			map.put("result", "fail");
 		}
-		map.put("resultType","회원정보 수정");
+		map.put("resultType", "회원정보 수정");
 		return map;
+	}
+
+	@Override
+	public int deleteUser(Long userId) {
+		return userMapper.deleteUser(userId);
+	}
+
+	@Override
+	public Long findUserIdByEmail(String email) {
+		return userMapper.findUserIdByEmail(email);
+	}
+
+	@Override
+	public UserDTO findByUserId(long userId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

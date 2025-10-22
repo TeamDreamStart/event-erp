@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,8 +32,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class UserApiController {
-	private final UserService userService;
-	private final EmailSenderService emailSenderService;
+	
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private EmailSenderService emailSenderService;
 	
 	// 아이디가 존재하는지 체크
 	@GetMapping(value = "/check-username", produces = MediaType.APPLICATION_JSON_VALUE)

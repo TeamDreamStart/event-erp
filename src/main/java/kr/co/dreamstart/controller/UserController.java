@@ -135,7 +135,7 @@ public class UserController {
 	@GetMapping("/login")
 	public String loginForm() {
 		log.info("GET /login - 로그인 폼 진입");
-		return "test/loginTest";
+		return "account/login";
 	}
 
 	// 정적템플릿 (login.html) 요청이 오면 시큐리티 로그인 페이지로 넘김 (어드민용)
@@ -163,6 +163,14 @@ public class UserController {
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+		
+		// 세션에 유저정보 저장 (세션에 저장할 값이 없어서 못받아옴)
+		session.setAttribute("userId", user.getUserId());
+		session.setAttribute("name", user.getName());
+		session.setAttribute("email", user.getEmail());
+		
+		// 마지막 로그인 시간 갱신
+		userService.touchLastLogin(user.getUserId());
 
 		return "redirect:/"; // 로그인 후 메인 페이지로
 	}

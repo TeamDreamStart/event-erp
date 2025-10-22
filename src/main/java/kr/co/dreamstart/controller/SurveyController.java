@@ -111,6 +111,9 @@ public class SurveyController {
 			createdName = surveyService.findUserNameById(survey.getCreatedBy());
 		}
 		
+		// 관리자용 상세 (응답 상태 포함)
+		List<Map<String, Object>> adminList = surveyService.adminSurveyReservations(surveyId);
+		
 		model.addAttribute("survey", survey);
 		model.addAttribute("eventTitle", eventTitle);
 		model.addAttribute("openAtStr", openAtStr);
@@ -122,6 +125,7 @@ public class SurveyController {
 		model.addAttribute("rows", rows);
 		model.addAttribute("top", top);
 		model.addAttribute("createdName", createdName);
+		model.addAttribute("adminList", adminList);
 		
 		log.info("[GET /admin/surveys/{}] isTemplate={}, responses={}", surveyId, isTemplate, responses);
 		return "/admin/surveyDetail";

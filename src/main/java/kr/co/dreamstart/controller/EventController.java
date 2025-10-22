@@ -1,5 +1,7 @@
 package kr.co.dreamstart.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import kr.co.dreamstart.dto.Criteria;
+import kr.co.dreamstart.dto.EventDTO;
 import kr.co.dreamstart.service.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +32,7 @@ public class EventController {
 	}
 	
 	@GetMapping()
-	public String list() {
+	public String list(Criteria cri, Model model) {
 		log.info("GET event/list 호출");
 		return "event/eventList";
 	}

@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.EventDTO;
 import kr.co.dreamstart.dto.PageVO;
+import kr.co.dreamstart.mapper.UserMapper;
 import kr.co.dreamstart.security.CustomUserDetails;
 import kr.co.dreamstart.service.EventService;
 import lombok.RequiredArgsConstructor;
@@ -39,10 +40,8 @@ public class EventAdminController {
 	private EventService eventService;
 	//카카오 api js key
 	private final String KAKAOKEY = "ee21816e3b6c14b1f71c1db0b4fbc881";
-	
-	// 화면용 포맷터
-//	private final DateTimeFormatter VIEW_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-//	private final DateTimeFormatter HTML_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+	@Autowired
+	private UserMapper userMapper;
 
 	// 목록(페이징)
 	@GetMapping
@@ -56,6 +55,8 @@ public class EventAdminController {
 
 		model.addAttribute("list", list);
 		model.addAttribute("pageVO", pageVO);
+		model.addAttribute("total", total);
+		model.addAttribute("isAdmin", true);
 		return "admin/eventList";
 	}
 
@@ -66,57 +67,43 @@ public class EventAdminController {
 		
 		model.addAttribute("event", e);
 		model.addAttribute("kakaoKey",KAKAOKEY);
-//		model.addAttribute("startView", e.getStartDate() == null ? "" : e.getStartDate().format(VIEW_FMT));
-//		model.addAttribute("endView", e.getEndDate() == null ? "" : e.getEndDate().format(VIEW_FMT));
-//		model.addAttribute("createdView", e.getCreatedAt() == null ? "" : e.getCreatedAt().format(VIEW_FMT));
-//	    model.addAttribute("updatedView", e.getUpdatedAt() == null ? "" : e.getUpdatedAt().format(VIEW_FMT));
 		return "admin/eventDetail";
 	}
 
 	// 폼(등록/수정 공용)
 	@GetMapping("/form")
 	public String form(@RequestParam(value = "id", required = false) Long id, 
-						Model model) {
+					@AuthenticationPrincipal(expression = "userId") Long loginUserId,
+					@AuthenticationPrincipal(expression = "name") String loginUserName,
+					Model model) {
 		EventDTO e = (id != null) ? eventService.findById(id) : new EventDTO();
+		// name이 비어있으면 db에서 보완
+		if (loginUserId != null && (loginUserName == null || loginUserName.isBlank())) {
+			loginUserName = userMapper.findNameById(loginUserId);
+		}
+				
 		model.addAttribute("event", e);
 		model.addAttribute("kakaoKey",KAKAOKEY);
-//		model.addAttribute("startHtml", e.getStartDate() == null ? "" : e.getStartDate().format(HTML_FMT));
-//		model.addAttribute("endHtml", e.getEndDate() == null ? "" : e.getEndDate().format(HTML_FMT));
-//		model.addAttribute("createdView", e.getCreatedAt() == null ? "" : e.getCreatedAt().format(VIEW_FMT));
-//	    model.addAttribute("updatedView", e.getUpdatedAt() == null ? "" : e.getUpdatedAt().format(VIEW_FMT));
-		
+		// form에서 name, id 표시용, 히든값으로 사용
+		model.addAttribute("loginUserId", loginUserId);
+		model.addAttribute("loginUserName", loginUserName);
 		return "admin/eventForm";
 	}
-
-	// 저장(등록/수정)
-//	@PostMapping("/admin/events/save")
-//	public String save(@ModelAttribute EventDTO event,
-//					BindingResult binding,
-//					@AuthenticationPrincipal(expression = "userId") Long userId,
-//					@RequestParam(defaultValue = "1") int page, 
-//					RedirectAttributes ra, Model model) {
-//		
-//		if (binding.hasErrors()) {
-//			model.addAttribute("startHtml", event.getStartDate() == null ? "" : event.getStartDate().format(HTML_FMT));
-//			model.addAttribute("endHtml", event.getEndDate() == null ? "" : event.getEndDate().format(HTML_FMT));
-//			return "admin/eventForm";
-//		}
-//		
-//		Long newId = eventService.save(event, userId);
-//		ra.addFlashAttribute("msg",
-//						(event.getEventId() == null ? "이벤트 생성 완료 (ID : " : "이벤트 수정 완료 (ID : ") + newId + ")");
-//		return "redirect:/admin/events?page=" + page;
-//	}
 	
 	// 저장(등록/수정) - 일반 폼 전송 (파일없음)
 	@PostMapping(path="/save", consumes = "application/x-www-form-urlencoded")
 	public String saveUrlEncoded(@Valid @ModelAttribute("event") EventDTO event,
 								BindingResult binding,
-								@AuthenticationPrincipal(expression = "userId") Long userId,
+								@AuthenticationPrincipal(expression = "userId") Long loginUserId,
 								@RequestParam(defaultValue = "1") int page,
-								RedirectAttributes ra, Model model) {
+								RedirectAttributes ra) {
 		if (binding.hasErrors()) return "admin/eventForm";
-		Long newId = eventService.save(event, userId);
+		
+		// 신규면 작성자, 수정자는 로그인 사용자
+		if (event.getEventId() == null) event.setCreatedBy(loginUserId);
+		event.setUpdatedBy(loginUserId);
+		
+		Long newId = eventService.save(event, loginUserId);
 		ra.addFlashAttribute("msg", (event.getEventId()== null? "이벤트 생성 완료 (ID : ":"이벤트 수정 완료 (ID : ")+newId+")");
 		return "redirect:/admin/events?page=" + page;
 	}
