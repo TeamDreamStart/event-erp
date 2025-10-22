@@ -8,44 +8,43 @@ uri="http://www.springframework.org/security/tags"%>
 <head>
 <meta charset="UTF-8">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 <title>accessDenied</title>
 <style>
     body {
-        background-color: #E5E2DB;
-        color: #222222;
-        font-family: 'Montserrat', sans-serif;
-        font-size: medium;
-        margin: 0;
-        padding: 0 120px 60px; 
-        line-height: 1;
-    }
-    main {
-        margin-top: 0; 
-        padding: 0; 
-    }
+ background: #E5E2DB;
+}
     .error-main {
         /* 전체 콘텐츠를 중앙 정렬 */
         text-align: center; 
         margin-bottom: 140px;
     }
     .error-text h1{
-        font-weight: bold;
-        font-size: 60px;
-        line-height: 80px;
-    }
+    font-weight: 900;
+    font-size: 60px;
+    line-height: 80px;
+    margin-bottom: 40px;
+  }
     .error-text p {
-        font-size: 20px;
-        line-height: 30px;
-    }
-    .error-text .text2 {
-        margin-bottom: 50px;
+    font-size: 20px;
+    line-height: 30px;
+    color: #444444;
+   }
+   .error-text .text1{
+    font-size: 30px;
+   }
+   .error-text .text2 {
+    font-size: 30px;
+    margin-bottom: 54px;
 
-    }
-    .error-img {
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* 가로 중앙 정렬 */
-    }
+  }
+  .error-img {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 가로 중앙 정렬 */
+    margin-bottom: 140px;
+  }
     
     .error-img button {
         margin-top: 50px;
@@ -81,7 +80,7 @@ uri="http://www.springframework.org/security/tags"%>
 		<div class="error-text">
 			<h1>Oops!</h1>
 			<p class="text1">요청하신 페이지에 접근할 수 없습니다.</p>
-			<p class="text2">접근 권한이 없어 읽을 수 없습니다. 홈으로 돌아가세요.</p>
+			<p class="text2">권한이 없어 읽을 수 없습니다. 홈으로 돌아가세요.</p>
 		</div>
 		<article class="error-img">
 			<img id="error-icon" src="/resources/img/noAccess.png" alt="오류 아이콘" style="width: 100px;">

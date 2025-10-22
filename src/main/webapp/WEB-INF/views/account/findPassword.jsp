@@ -106,7 +106,7 @@ input[type="radio"]:checked+label {
 		}
 	</script>
 	<header>
-		<jsp:include page="/WEB-INF/views/common/header.jsp" />
+		<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 	</header>
 	<main>
 		<div class="container">
