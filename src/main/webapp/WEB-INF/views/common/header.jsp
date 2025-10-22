@@ -26,7 +26,6 @@
     </div>
   </div>
 
-<<<<<<< Updated upstream
 .logo {
 	font-family: 'Peristiwa', cursive;
 	font-size: 40px;

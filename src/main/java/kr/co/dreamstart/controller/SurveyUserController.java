@@ -36,9 +36,10 @@ public class SurveyUserController {
 	public String surveyForm(@PathVariable Long userId,
 							@PathVariable Long eventId,
 							Model model) {
-		Map<String, Object> survey = surveyService.findSurveyIdByEvent(eventId);
-		model.addAttribute(survey);
-		log.info("[SURVEY FORM] userId={}, eventId={}, surveyId", userId, eventId, survey.get("survey_id"));
+		//@@@@@@@@@@@@@@@ 경고때문에 임의로 고쳐놓음
+		List<Map<String, Object>> survey = surveyService.findUnansweredSurveysByUser(userId);/* surveyService.findSurveyIdByEvent(eventId); */
+		model.addAttribute("surveyList",survey);
+//		log.info("[SURVEY FORM] userId={}, eventId={}, surveyId", userId, eventId, survey.get("survey_id"));
 		return "/user/surveyForm";
 	}
 	

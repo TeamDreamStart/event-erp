@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%-- <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -661,7 +661,7 @@ body {
 										class="tmp-span">예약번호 : ${rDTO.reservationId}</span> <span
 										class="tmp-span"><fmt:formatDate pattern="yyyy-MM-dd"
 											value="${rDTO.reservationDate}" /> </span>
-									<%-- <span>${rDTO.location}</span> --%>
+									<span>${rDTO.location}</span>
 									<span class="tmp-span">건물이름</span>
 
 									<c:if test="${rDTO.reservationStatus eq 'CONFIRMED'}">
@@ -818,7 +818,6 @@ body {
 		//     document.getElementById('withdrawalModal').style.display = 'flex';
 		// };
 	</script>
-	=======
 	<jsp:include page="/WEB-INF/views/common/header.jsp" flush="true" />
 
 	<c:if test="${not empty msg}">
@@ -880,6 +879,6 @@ body {
 	</main>
 
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
-	>>>>>>> Stashed changes
 </body>
 </html>
+ --%>
