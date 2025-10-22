@@ -199,14 +199,9 @@ button {
 <title>noticelist</title>
 </head>
 <body>
-	
 	<header>
-	
 			<jsp:include page="/WEB-INF/views/common/header.jsp" flush="true" />
 	</header>
-	
-
-
 	<main class="main-content">
 		<h1 class="page-title">Notice</h1>
 
