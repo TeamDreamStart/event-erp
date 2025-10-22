@@ -18,7 +18,12 @@
 body {
    background: #E5E2DB;
 }
-
+.btn-area{
+   width: 896px;
+   display: flex;
+   margin: 0 auto;
+   justify-content: flex-end;
+}
 .section-header {
    display: flex;
    align-items: center;
@@ -138,36 +143,61 @@ body {
 
 /* 나의 예약 정보용 임시 CSS */
 .tmpWrap {
-   display: grid;
-   grid-template-columns: repeat(3, 1fr);
-   gap: 72px;
-   margin-left: 21px; /* 72px - 패딩값(51px) */
+ display: grid;
+ grid-template-columns: repeat(3, 1fr);
+ gap: 72px;
+ margin-left: 21px; /* 72px - 패딩값(51px) */
 }
 
 .tmp {
-   width: 202px;
-   height: 195px;
-   border: 2px solid #D9D9D9;
-   border-radius: 3px;
-   cursor: pointer;
-	 padding: 16px 13px;
+    /* 기존 스타일 유지 */
+ width: 202px;
+ height: 195px;
+ border: 2px solid #D9D9D9;
+ border-radius: 3px;
+ cursor: pointer;
+  padding: 16px 13px;
 }
-
 .tmp:hover {
    background-color: #D9D9D9;
 }
-
+.tmp-span-title{
+   display: block;
+   font-weight: 700;
+   margin-bottom: 5px;
+}
 .tmp-span {
    display: block;
+   font-weight: 500;
+}
+.tmp-details{
+   margin-left: 15px;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
 }
 .tmp-span-radius {
    border: 1px solid #8FAFED;
-   border-radius: 12px;
-   background-color: #8FAFED;
+   border-radius: 15px;
+   background-color: #BFD4F9;
    display: inline-block;
-   height: 25px; width : 68px;
+   /* height: 25px; */
    text-align: center;
-   width: 68px;
+   /* width: 68px; */
+   padding: 1px 8px;
+}
+.reservation-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    width: 100%;
+    margin-bottom: 0;
+}
+.tmp-middle{
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   height: 82%;
 }
 
 .dashboard-container {
@@ -629,29 +659,41 @@ body {
                   <div class="tmpWrap">
 
                      <c:forEach var="rDTO" items="${reservationList}">
-                        <div class="tmp"
-                           onclick="location.href='/reservations/${rDTO.reservationId}'">
-                           <span class="tmp-span">${rDTO.eventTitle}</span> <span
-                              class="tmp-span">예약번호 : ${rDTO.reservationId}</span>  <span
-                              class="tmp-span"><fmt:formatDate pattern="yyyy-MM-dd"
-                                 value="${rDTO.reservationDate}" /> </span>
-                           <%-- <span>${rDTO.location}</span> --%>
-                           <span class="tmp-span">건물이름</span> 
-                           
-                           <c:if test="${rDTO.reservationStatus eq 'CONFIRMED'}">
-                              <span class="tmp-span-radius">예약확정</span>
-                           </c:if>
-                           <c:if test="${rDTO.reservationStatus eq 'CANCELLED'}">
-                              <span class="tmp-span-radius"
-                                 style="background-color: red; border: 1px solid red;">취소됨</span>
-                           </c:if>
-                          <c:if
-                              test="${rDTO.paymentAmount>0 || not empty rDTO.paymentAmount}">
-                              <span><fmt:formatNumber type="number"
-                                    maxFractionDigits="3" value="${rDTO.paymentAmount}" />원</span>
-                           </c:if>
-                        </div>
-                     </c:forEach>
+    <div class="tmp"
+        onclick="location.href='/reservations/${rDTO.reservationId}'">
+        
+        <span class="tmp-span-title">${rDTO.eventTitle}</span> 
+        <div class="tmp-middle">
+        <div class="tmp-details"> 
+            <span class="tmp-span">예약번호 : ${rDTO.reservationId}</span> 
+            <span class="tmp-span">
+                <fmt:formatDate pattern="yyyy-MM-dd"
+                    value="${rDTO.reservationDate}" /> 
+            </span>
+            <%-- <span>${rDTO.location}</span> --%>
+            <span class="tmp-span">건물이름</span> 
+        </div>
+
+        <div class="reservation-bottom">
+            <div> <c:if test="${rDTO.reservationStatus eq 'CONFIRMED'}">
+                    <span class="tmp-span-radius" style="margin-left: 7px; font-weight: 500;">예약확정</span>
+                </c:if>
+                <c:if test="${rDTO.reservationStatus eq 'CANCELLED'}">
+                    <span class="tmp-span-radius"
+                        style="background-color: red; border: 1px solid red;">취소됨</span>
+                </c:if>
+            </div>
+            
+            <c:if test="${rDTO.paymentAmount>0 || not empty rDTO.paymentAmount}">
+                <span>
+                    <fmt:formatNumber type="number"
+                        maxFractionDigits="3" value="${rDTO.paymentAmount}"/>원
+                </span>
+            </c:if>
+        </div>
+        </div>
+    </div>
+</c:forEach>
 
                   </div>
 
@@ -669,69 +711,69 @@ body {
             이벤트 설문조사
             설문 작성 가능한 이벤트
          </div>-->
-				 <div class="survey-box">
-        <h3>이벤트 설문조사</h3>
-        
-        <div class="survey-list">
+				<div class="survey-box">
+      <h3>이벤트 설문조사</h3>
+               
+         <div class="survey-list">
             <p>설문 작성 가능한 이벤트</p>
             <!--이 부분은 아직 DB연결 안함-->
             <div class="survey-item">
-                <div class="survey-info">
-                    <div class="survey-text"> <div class="event-title">가을 음악 페스티벌 2025</div>
+               <div class="survey-info">
+                  <div class="survey-text"> <div class="event-title">가을 음악 페스티벌 2025</div>
 										<div class="event-date">이벤트 일시: 2025-09-28</div>
 									</div>
 										<button class="survey-btn">설문 작성</button>
 									</div>
             </div>
-        </div>
+      </div>
          </div>
 				</div>
-				<button type="button" onclick="" style="margin-bottom: 140px">회원탈퇴</button>
+            <div class="btn-area">
+               <button type="button" onclick="openWithdrawalModal()" style="margin-bottom: 140px; background-color: #D9D9D9; color: #222222; padding: 5px 22px;border-radius: 3px; font-size: 14px; cursor: pointer; border: none; font-weight: 700; display: flex;">회원탈퇴</button>
+            </div>
 			</div>
    </main>
    <jsp:include page="../common/footer.jsp" />
-	 <div id="withdrawalModal" class="modal-backdrop">
-    </div>
 <!--수정버튼 비번 확인창 모달-->
 <!--${passwordError}랑 ${!passwordError}는 프론트에서 임의로 넣어놓음-->
 <div id="passwordConfirmModal" class="modal-backdrop"
-    <c:if test="${passwordError}">style="display: flex;"</c:if>
-    <c:if test="${!passwordError}">style="display: none;"</c:if>
+   <c:if test="${passwordError}">style="display: flex;"</c:if>
+   <c:if test="${!passwordError}">style="display: none;"</c:if>
 >
-    <div class="password-modal-content">
-        <h3 class="modal-title <c:if test="${passwordError}">error-color</c:if>">
+   <div class="password-modal-content">
+   <h3 class="modal-title <c:if test="${passwordError}">error-color</c:if>">
 					<c:choose>
-        <c:when test="${passwordError}">
-          ⚠️비밀번호 재확인
-        </c:when>
-        <c:otherwise>
-          비밀번호 확인
-        </c:otherwise>
+   <c:when test="${passwordError}">
+         ⚠️비밀번호 재확인
+      </c:when>
+      <c:otherwise>
+         비밀번호 확인
+      </c:otherwise>
       </c:choose>
 				</h3>
 
-        <p class="modal-instruction <c:if test="${passwordError}">error-color</c:if>">
+      <p class="modal-instruction <c:if test="${passwordError}">error-color</c:if>">
       <c:choose>
-        <c:when test="${passwordError}">
-          회원님의 비밀번호와 일치하지 않습니다.
-        </c:when>
-        <c:otherwise>
-          정보 수정을 위해 비밀번호를 입력해주세요.
-        </c:otherwise>
+      <c:when test="${passwordError}">
+         회원님의 비밀번호와 일치하지 않습니다.
+      </c:when>
+      <c:otherwise>
+         정보 수정을 위해 비밀번호를 입력해주세요.
+      </c:otherwise>
       </c:choose>
-    </p>
+   </p>
 
-        <form id="passwordConfirmForm" action="/my-info/${userDTO.userId}/confirmPassword" method="POST">
+      <form id="passwordConfirmForm" action="/my-info/${userDTO.userId}/confirmPassword" method="POST">
             <label for="confirmPassword" class="label-text">비밀번호</label>
             <input type="password" id="confirmPassword" name="password" 
                   placeholder="비밀번호를 입력하세요." class="password-input" required>
             
             <div class="modal-actions">
-                <button type="button" class="btn btn-cancel" onclick="closePasswordModal()">취소</button>
-                <button type="submit" class="btn btn-confirm">확인</button>
+               <button type="button" class="btn btn-cancel" onclick="closePasswordModal()">취소</button>
+               <button type="submit" class="btn btn-confirm">확인</button>
             </div>
-        </form>
-    </div>
+      </form>
+   </div>
 </div>
 <!--회원탈퇴 모달-->
    <div id="withdrawalModal" class="modal-backdrop">
@@ -764,30 +806,72 @@ body {
       </div>
    </div>
    <script>
-      // 모달을 닫는 JavaScript 함수 (취소 버튼용)
-      function closeModal() {
-         document.getElementById('withdrawalModal').style.display = 'none';
-      }
-			// 새로운 비밀번호 확인 모달을 여는 함수
-    function openPasswordModal() {
-        // 모달을 보이게 설정
-        document.getElementById('passwordConfirmModal').style.display = 'flex';
-        // 입력 필드에 포커스
-        document.getElementById('confirmPassword').focus();
-				document.querySelector('main').classList.add('blurred');
+    /**
+     * 회원탈퇴 모달을 여는 함수 (버튼 클릭 시 호출)
+     */
+ function openWithdrawalModal() {
+    const withdrawalModal = document.getElementById('withdrawalModal');
+    const mainContent = document.querySelector('main');
+    
+    if (withdrawalModal) {
+      withdrawalModal.style.display = 'flex'; 
     }
-
-    // 새로운 비밀번호 확인 모달을 닫는 함수
-    function closePasswordModal() {
-        document.getElementById('passwordConfirmModal').style.display = 'none';
-        // 입력 필드 초기화
-        document.getElementById('confirmPassword').value = '';
-        document.querySelector('main').classList.remove('blurred');
+    if (mainContent) {
+      mainContent.classList.add('blurred');
     }
+  }
+  
+    /**
+     * 회원탈퇴 모달을 닫는 함수 (취소 버튼 클릭 시 호출)
+     */
+  function closeModal() {
+    const withdrawalModal = document.getElementById('withdrawalModal');
+    const mainContent = document.querySelector('main');
+    
+    if (withdrawalModal) {
+      withdrawalModal.style.display = 'none';
+      // 입력 필드 초기화
+      // document.getElementById('password')가 탈퇴 모달 내 비밀번호 input입니다.
+      const passwordInput = document.getElementById('password');
+             if(passwordInput) {
+                 passwordInput.value = '';
+             }
+    }
+    if (mainContent) {
+      mainContent.classList.remove('blurred');
+    }
+  }
+    
+    /**
+     * 비밀번호 확인 모달을 여는 함수 (수정 버튼 클릭 시 호출)
+     */
+ function openPasswordModal() {
+    const passwordConfirmModal = document.getElementById('passwordConfirmModal');
+        const mainContent = document.querySelector('main');
+        
+    // 모달을 보이게 설정
+        if(passwordConfirmModal) {
+            passwordConfirmModal.style.display = 'flex';
+        }
+    // 입력 필드에 포커스
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        if(confirmPasswordInput) {
+            confirmPasswordInput.focus();
+        }
+    if(mainContent) {
+      document.querySelector('main').classList.add('blurred');
+        }
+ }
 
-		// window.onload = function() {
-    //     document.getElementById('withdrawalModal').style.display = 'flex';
-    // };
-  </script>
+    /**
+     * 비밀번호 확인 모달을 닫는 함수 (취소 버튼 클릭 시 호출)
+     */
+ function closePasswordModal() {
+   document.getElementById('passwordConfirmModal').style.display = 'none';
+    // 입력 필드 초기화
+   document.getElementById('confirmPassword').value = '';
+   document.querySelector('main').classList.remove('blurred');
+ }
+</script>
 </body>
 </html>
