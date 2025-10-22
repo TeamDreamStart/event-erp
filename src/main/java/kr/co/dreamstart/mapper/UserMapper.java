@@ -61,7 +61,7 @@ public interface UserMapper {
 	// 해시가 필요한 사용자 목록 (비밀번호가 bcrypt 형태가 아님)
 	public List<UserDTO> findUsersNeedingHash();
 
-	// 사용자 비번 업데이트
+	// 사용자 비밀번호 업데이트(회원정보수정/비밀번호 찾기)
 	public int updatePasswordById(@Param("userId") long userId, @Param("password") String password);
 
 	// 이메일로 사용자 단건

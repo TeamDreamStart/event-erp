@@ -19,7 +19,7 @@ public interface UserService {
 	
 	public Map<String,Object> adminUserUpdate(UserDTO userDTO, int roleId);
 	
-	//naver
+	// naver 회원
 	public Map<String, String> getNaverUser(String accessToken);
 	public UserDTO saveOrUpdateNaverUser(Map<String, String> naverUser);
 	public String getAccessToken(String code, String state);
@@ -35,6 +35,7 @@ public interface UserService {
 
 	public String findUserNameByEmail(String email);
 	
+	// 비밀번호 재설정 ( 비밀번호 찾기/내 정보 수정에서 비밀번호 수정시) 이메일로 userId 찾아서 해당 회원 정보 update
 	public int resetPassword(String email,String newPass);
 	
 	// 중복체크 관련
@@ -49,6 +50,9 @@ public interface UserService {
 	public UserDTO findByEmail(String email);
 	//userId
 	public UserDTO findByUserId(long userId);
+	
+	//회원정보 수정 - 기본정보 수정 
+	public Map<String,Object> userUpdate(UserDTO userDTO);
 	
 	
 }

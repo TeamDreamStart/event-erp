@@ -252,7 +252,7 @@ main {
 						무료
 					</c:if>
 						</p>
-					<a href="/reservations/form" class="reserve-btn">바로 예약하기</a>
+					<a href="/events/${event.eventId }/reservations" class="reserve-btn">바로 예약하기</a>
 				</div>
 
 				<div class="main-event-poster">
