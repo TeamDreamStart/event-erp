@@ -119,7 +119,6 @@ body {
 .tab-btn.active {
 	background: #FAF9F6;
 	color: #222;
-	border-bottom: none;
 }
 
 .tab-panel {
@@ -284,10 +283,7 @@ body {
 						apiURL += "&state=" + state;
 						session.setAttribute("state", state);
 						%>
-							<a class="google"
-								href="${empty googleAuthUrl ? '#' : googleAuthUrl}">Google로
-								로그인</a> <a class="kakao"
-								href="${empty kakaoAuthUrl  ? '#' : kakaoAuthUrl}">카카오로 로그인</a>
+							
 							<a class="naver"
 								href="<%=apiURL%>">네이버로
 								로그인</a>

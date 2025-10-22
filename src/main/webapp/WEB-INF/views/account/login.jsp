@@ -71,7 +71,6 @@ h2 {
 		border: 1px solid #222222;
 		color: #222222;
         font-weight: bold;
-		border-bottom: none;
 		margin-bottom: -1px;
 		font-family: 'Montserrat', sans-serif;
 		font-size: 14px;

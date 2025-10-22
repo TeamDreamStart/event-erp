@@ -444,7 +444,7 @@ body {
 							</c:when>
 							<c:otherwise>
 								<c:set var="imgSrc"
-									value='${pageContext.request.contextPath}/resources/img/events/event1.jpg' />
+									value='${pageContext.request.contextPath}/resources/img/events/event8.jpg' />
 							</c:otherwise>
 						</c:choose>
 
