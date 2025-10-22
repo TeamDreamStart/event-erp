@@ -8,384 +8,195 @@
 <head>
 <meta charset="UTF-8">
 <link href="https://www.dafont.com/peristiwa.font" rel="stylesheet">
-<link href="https://fonts.google.com/specimen/Montserrat"
-	rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
+	<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 <link rel="stylesheet" href="/webapp/resources/css/noticeList.css">
-
 <style>
 body {
-	font-family: 'Montserrat';
-	margin: 0;
-	padding: 0;
-	background-color: #E5E2DB;
-	color: #222;
-	line-height: 1.6;
+ background: #E5E2DB;
 }
-
 .main-content{
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #E5E2DB;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #E5E2DB;
+  margin-bottom: 140px;
 }
 
 a {
-	text-decoration: none;
-	color: inherit;
+ text-decoration: none;
+ color: inherit;
 }
 
 ul {
-	list-style: none;
-	padding: 0;
-	margin: 0;
+ list-style: none;
+ padding: 0;
+ margin: 0;
 }
 
 button {
-	cursor: pointer;
-	background: none;
-	border: none;
-	padding: 0;
-	font-family: inherit;
-	color: inherit;
-}
-
-.header {
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 20px;
-	position: relative;
-	border-bottom: 1px solid #222;
-	background-color: white;
-}
-
-.header-top {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-start;
-	position: relative; /*자식 요소의 absoulute 기준점*/
-	margin-bottom: 20px;
-}
-
-.logo-link{
-    font-family:'Peristiwa', sans-serif;
-    font-size: 64px;
-    font-style: italic;
-    color: #222;
-    display: inline-block;
-    margin-left: 20px;
-}
-
-.header-right {
-	display: flex;
-	gap: 0px;
-	/*align-items: center;
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    z-index: 10;*/
-}
-
-.user-actions {
-	display: flex;
-	align-items: center;
-	gap: 0px; /*mypage와 login 사이 간격*/
-	margin-top: 10px; /*help 영역과의 수직 위치 맞추기*/
-}
-
-/*mypage (얇은 텍스트)*/
-.btn-mypage {
-	font-size: 20px; /*글씨 크기 조정*/
-	font-weight: 400; /*얇기*/
-	padding: 8px 15px; /*login 박스와 높이 맞추기 위해 패딩 추가*/
-	color: #222;
-	background-color: #FFFFFF;
-	border: 1px solid #FFFFFF;
-	margin: 0;
-	border-right: none;
-}
-
-.btn-login {
-	font-size: 20px;
-	font-weight: 400;
-	color: #FFFFFF;
-	background-color: #222;
-	padding: 8px 15px;
-	text-align: center;
-	line-height: 1;
-	margin: 0;
-}
-
-.user-actions a:last-child {
-	/*font-weight: bold;*/
-	border-left: 1px solid #222;
-	padding-left: 15px;
-}
-
-.login-button {
-	font-weight: bold;
-}
-
-.header-nav {
-	display: flex;
-	/*justify-content: flex-start;*/
-	gap: 40px;
-	font-size: 30px;
-	font-weight: 300;
-	padding-left: 20px;
-}
-
-.header-nav a:hover {
-	color: #FFFFFF;
-}
-
-.help-area {
-	position: absolute;
-	top: 140px;
-	right: 20px;
-	z-index: 5;
-	text-align: right;
-	width: auto;
-	/*padding: 8px 15px; /*mypage와 login과 같은 높이 확보*/
-}
-
-.help-button {
-	font-weight: 300;
-	font-size: 30px;
-	padding: 5px 0;
-	width: auto;
-	text-align: left;
-}
-
-.help-text {
-	display: flex;
-	flex-direction: row;
-	position: absolute;
-	top: 100%; /*help 버튼 바로 아래*/
-	right: 0;
-	z-index: 10;
-	background-color: #FFFFFF;
-	border: 1px solid #222;
-	padding: 5px;
-	box-shadow: 0 2px 5px rgda(0, 0, 0, 0.1);
-	margin-bottom: 5px;
-	font-size: 14px;
-	font-weight: bold;
-	gap: 8px;
-}
-
-.help-search.hidden {
-	display: none
-}
-
-.help-input {
-	width: 100px;
-	height: 20px;
-	border: 1px solid #ccc;
-	margin-bottom: 2px;
-	padding: 2px 5px;
-	font-size: 12px;
-	box-sizing: border-box;
-}
-
-.help-input.small {
-	width: 60px; /* Q&A 폭 좁게 */
-}
-
-/*메인 네비게이션(visit, event, reservation*/
-.header-nav {
-	display: flex;
-	gap: 40px;
-	font-size: 30px;
-	font-weight: 300;
-	padding-left: 20px;
-}
-
-.header-nav a {
-	padding-bottom: 10px;
-	transition: color 0.2s;
-}
-
-.header-nav a:hover {
-	color: #0088ff;
-}
-/* 3. Main Content (Notice) 스타일 */
-.main-content {
-	padding-top: 80px;
+ cursor: pointer;
+ background: none;
+ border: none;
+ padding: 0;
+ font-family: inherit;
+ color: inherit;
 }
 
 .page-title {
-	text-align: center;
-	font-size: 30px;
-	font-weight: bold;
-	margin: 80px 0 40px 0;
-	position: relative;
-	padding-bottom: 10px;
+ text-align: center;
+ font-size: 30px;
+ font-weight: bold;
+ margin: 0px 0 89px 0;
+ position: relative;
+ padding-bottom: 10px;
 }
 
 .search-bar {
-	display: flex;
-	justify-content: center;
-	max-width: 888px;
-	margin: 50px auto;
-	gap: 20px;
+ display: flex;
+ justify-content: center;
+ max-width: 888px;
+ margin: 0px auto 98px auto;
+ gap: 43px;
 }
 
 .search-bar input[type="text"] {
-	width: 708px;
-	height: 60px;
-	background-color: #CBD4C2;
-	border: 1px solid #222;
-	border-radius: 15px;
-	font-size: 18px;
-	outline: none;
-	margin-right: 43px;
-	padding-left: 14px;
+ width: 708px;
+ height: 60px;
+ background-color: #CBD4C2;
+ border: 1px solid #222;
+ border-radius: 15px;
+ font-size: 18px;
+ outline: none;
+ margin-right: 43px;
+ padding-left: 14px;
 }
 
 .search-bar button {
-	width: 112px;
-	height: 60px;
-	background-color: #CBD4C2;
-	border: 1px solid #222;
-	border-radius: 15px;
-	font-size: 18px;
-	font-weight: bold;
-	cursor: pointer;
+ width: 112px;
+ height: 60px;
+ background-color: #CBD4C2;
+ border: 1px solid #222;
+ border-radius: 15px;
+ font-size: 18px;
+ font-weight: bold;
+ cursor: pointer;
 }
 
 /* 게시판 테이블 */
 .notice-table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-bottom: 40px;
-	text-align: center;
+ width: 100%;
+ border-collapse: collapse;
+ margin-bottom: 40px;
+ text-align: center;
+ background-color: #FAF9F6;
 }
 
 .notice-table thead th {
-	font-weight: bold;
-	padding: 15px 0;
-	/*border-top: 1px solid #222; /* 상단 굵은 선 */
-	border-bottom: 1px solid #222; /* 하단 얇은 선 */
+ font-weight: bold;
+ padding: 15px 0;
+ /*border-top: 1px solid #222; /* 상단 굵은 선 */
+ border-bottom: 1px solid #222; /* 하단 얇은 선 */
 }
 
 .notice-table tbody td {
-	padding: 12px 0;
-	border-bottom: 1px solid #AFAFAF;
-	color: #222;
-	font-size: 15px;
+ padding: 12px 0;
+ border-bottom: 1px solid #AFAFAF;
+ color: #222;
+ font-size: 15px;
 }
 
 .notice-table tbody td:first-child {
-	text-align: center;
-	width: 5%;
-	padding-left: 0px;
+ text-align: center;
+ width: 5%;
+ padding-left: 0;
 }
 
 .notice-table tbody tr:hover {
-	background-color: #FFFFFF;
-	cursor: pointer;
+ background-color: #FFFFFF;
+ cursor: pointer;
 }
 
-/* 제목 셀은 왼쪽 정렬 */
-.notice-table td:first-child {
-	text-align: left;
-	padding-left: 10px;
-	/* 제목 링크가 td 전체를 덮도록 처리 (A 태그의 href에 내용을 넣지 않고 텍스트를 따로 추가해야 함) */
+/* 글번호 셀 중앙 정렬 */
+.notice-table td:first-child { 
+ text-align: center;
+ padding-left: 0px; 
+}
+
+/* 제목 셀 중앙 정렬 */
+.notice-table td:nth-child(2) {
+    text-align: center;
 }
 
 .notice-table td a {
-	display: block; /* 링크가 셀 전체를 덮도록 */
+ display: block;
 }
 
 /* 조회수와 등록일자는 폭을 좁게 */
-.notice-table th:nth-child(2), .notice-table td:nth-child(2) {
-	width: 15%; /* 등록일자 */
+.notice-table th:nth-child(3), .notice-table td:nth-child(3) {
+ width: 10%; /* 조회수 */
 }
 
-.notice-table th:nth-child(3), .notice-table td:nth-child(3) {
-	width: 10%; /* 조회수 */
+.notice-table th:nth-child(4), .notice-table td:nth-child(4) {
+ width: 15%; /* 등록일자 */
 }
 
 /* 페이지네이션 */
 .pagination-container {
-	text-align: center;
-	margin-top: 40px;
+ text-align: center;
+ margin-top: 40px;
 }
 
 .pagination {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    align-items: center;
-	color: #888888;
-	font-size: 18px;
-	transition: 0.2s;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  align-items: center;
+ color: #888888;
+ font-size: 18px;
+ transition: 0.2s;
 }
 
 .pagination li {
-	display: inline-block;
+ display: inline-block;
 }
 
 .pagination li a {
-	padding: 5px 10px;
-	font-size: 18px;
-	color: #999;
-	display: block;
-	transition: color 0.2s;
+ padding: 5px 10px;
+ font-size: 18px;
+ color: #999;
+ display: block;
+ transition: color 0.2s;
 }
 
 .pagination li.active a {
-	font-weight: bold;
-	color: #222;
+ font-weight: bold;
+ color: #222;
 }
 
 .nav-arrow {
-	font-size: 20px;
-	color: #999;
+ font-size: 20px;
+ color: #999;
 }
 
 .page-number {
-	padding: 5px 10px;
-	font-size: 16px;
-	border: 1px solid transparent;
-	transition: all 0.2s;
+ padding: 5px 10px;
+ font-size: 16px;
+ border: 1px solid transparent;
+ transition: all 0.2s;
 }
 
 .page-number.active {
-	font-weight: bold;
-	border-bottom: 2px solid #333; /* 현재 페이지 강조 */
+ font-weight: bold;
+ border-bottom: 2px solid #333;
 }
 
 .pagination a:hover{
-	color: #222; /* 텍스트를 검은색으로 변경 */
-    background-color: transparent; /* 배경색 변경 없음 */
-    cursor: pointer;
-}
-
-/* 4. Footer 영역 스타일 */
-.footer {
-	background-color: #CBD4C2; /* 연한 녹색 계열 배경 */
-	color: #222;
-	padding: 30px 0;
-	margin-top: 80px;
-	text-align: center;
-}
-
-.footer-content p {
-	margin: 5px 0;
-	font-size: 14px;
-}
-
-.footer-hr {
-	display: none; /* 디자인에 hr이 없으므로 숨김 처리 */
-}
-
-.footer p:last-child {
-	margin-top: 15px;
-	font-weight: bold;
+ color: #222;
+  background-color: transparent;
+  cursor: pointer;
 }
 </style>
-
 <title>noticelist</title>
 </head>
 <body>
@@ -408,7 +219,7 @@ button {
 		</div>
 
 		<table class="notice-table">
-			<thead>
+			<thead style="background-color: #E5E2DB;">
 				<tr>
 					<th>글번호</th>
 					<th>제목</th>

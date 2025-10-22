@@ -12,6 +12,7 @@
 <!-- CSRF for AJAX -->
 <meta name="_csrf" content="${_csrf.token}" />
 <meta name="_csrf_header" content="${_csrf.headerName}" />
+
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
 <title>join</title>
 <link rel="stylesheet" type="text/css" href="/resources/css/join.css" />
