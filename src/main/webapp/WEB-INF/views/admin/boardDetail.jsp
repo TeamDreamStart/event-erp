@@ -45,7 +45,7 @@
 		<div class="container-fluid">
 
 			<!-- Page Heading -->
-			<h1 class="h3 mb-2 text-gray-800">${boardType } Detail</h1>
+			<h1 class="h3 mb-2 text-gray-800">${boardType }Detail</h1>
 
 			<!-- DataTales Example -->
 			<div class="card shadow mb-4">
@@ -81,25 +81,31 @@
 							<tr>
 								<th rowspan="2">내용</th>
 								<c:if test="${boardType eq 'notices' }">
-								<td colspan="3"><c:if test="${not empty fileList }">
-										<c:forEach var="fileDTO" items="${fileList}">
-											<img style="width:100%"
-												src="${pageContext.request.contextPath}/resources/uploadTemp/${fileDTO.storedPath}/${fileDTO.uuid}_${fileDTO.originalName}"
-												alt="${fileDTO.originalName}">
+									<td colspan="3"><c:if test="${not empty fileList }">
+											<c:forEach var="fileDTO" items="${fileList}">
+												<img style="width: 80%"
+													src="${pageContext.request.contextPath}/resources/uploadTemp/${fileDTO.storedPath}/${fileDTO.uuid}_${fileDTO.originalName}"
+													alt="${fileDTO.originalName}">
 
-										</c:forEach>
-									</c:if>
-									<c:if test="${empty fileList }">
-										<span>첨부된 사진이 없습니다.</span>
-									</c:if>
-									</td>
-									</c:if>
+											</c:forEach>
+										</c:if> <c:if test="${empty fileList }">
+											<span>첨부된 사진이 없습니다.</span>
+										</c:if></td>
+								</c:if>
 							</tr>
 							<tr>
 								<td colspan="3">${postDTO.content}</td>
 							</tr>
 						</table>
-
+						<!-- 버튼 그룹 -->
+						<div class="text-right">
+							<a href="${pageContext.request.contextPath}/admin/${boardType}"
+								class="btn btn-default" style="border:1px solid lightgray">목록</a> <a
+								href="${pageContext.request.contextPath}/admin/${boardType}/${postDTO.postId}/update"
+								class="btn btn-primary">수정</a> <a
+								href="${pageContext.request.contextPath}/admin/${boardType}/${postDTO.postId}/delete"
+								class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+						</div>
 						<!-- 이전글/다음글 -->
 						<table class="table table-bordered">
 							<tr>
@@ -120,15 +126,7 @@
 							</tr>
 						</table>
 
-						<!-- 버튼 그룹 -->
-						<div class="text-right">
-							<a href="${pageContext.request.contextPath}/admin/${boardType}"
-								class="btn btn-default">목록</a> <a
-								href="${pageContext.request.contextPath}/admin/${boardType}/${postDTO.postId}/update"
-								class="btn btn-primary">수정</a> <a
-								href="${pageContext.request.contextPath}/admin/${boardType}/${postDTO.postId}/delete"
-								class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
-						</div>
+
 
 
 
