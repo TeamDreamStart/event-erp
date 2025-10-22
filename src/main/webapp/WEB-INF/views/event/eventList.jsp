@@ -22,7 +22,9 @@ pageEncoding="UTF-8"%>
 		align-items: center;
 		margin-bottom: 20px; /* 제목과 내용 사이 간격 */
 	}
-	
+	.main-section{
+		width: 100%;
+	}
 	
 .main-event-container {
 display: flex; /* 자식 요소(텍스트, 포스터)를 가로로 배치 */
@@ -377,6 +379,7 @@ line-height: 1.1;
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
 <main>
 <div class="container">
+	<div class="main-section">
 <section class="event-section present-event horizontal-scroll-section events-swiper">
 
 <div class="main-event-container">
@@ -534,6 +537,7 @@ line-height: 1.1;
 </div>
 </div>
 </section>
+</div>
 </div>
 </main>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

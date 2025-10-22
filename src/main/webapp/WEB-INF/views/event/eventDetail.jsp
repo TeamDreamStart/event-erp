@@ -7,44 +7,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link
-	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap"
-	rel="stylesheet" />
+   href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap"
+   rel="stylesheet" />
+
+<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
 
 <title>eventDetail</title>
-<link rel="stylesheet" type="text/css" href="/resources/css/login.css">
-<style>
-body {
-	background-color: #E5E2DB;
-	color: #222222;
-	font-family: 'Montserrat', sans-serif;
-	font-size: 16px;
-	font-weight: normal;
-	margin: 0;
-	padding: 0 120px 60px;
-	line-height: 1;
-}
-
-main {
-	margin-top: 0;
-	padding: 0;
-}
-
-.content-container {
-	width: 100%;
-	margin: 0 auto;
-	padding: 0;
-	margin-bottom: 140px;
-}
-
+<style>body {
+   background: #E5E2DB;}
 .section-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 20px;
+   display: flex;
+   align-items: center;
+   margin-bottom: 20px; /* 제목과 내용 사이 간격 */
 }
-
 .section-header h2 {
 	font-size: 30px;
 	font-weight: 700;
@@ -228,7 +206,7 @@ main {
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 	<main>
-		<div class="content-container">
+		<div class="container">
 			<div class="section-header">
 				<h2>Present Event</h2>
 			</div>
@@ -260,7 +238,7 @@ main {
 				</div>
 			</div>
 
-			<div class="add-more-detail">
+			<div class="add-more-detail" style="margin-bottom: 140px;">
 				<article class="detail-1">
 					<h4>행사 역사</h4>
 					<p>본 행사는 오랜 전통을 바탕으로 매년 지역 사회에 활력을 불어넣는 중요한 축제로 자리매김하고 있습니다.

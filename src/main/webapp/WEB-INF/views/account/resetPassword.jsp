@@ -22,19 +22,25 @@
 	align-items: center;
 	margin-bottom: 20px;
 }
+.section-header h2{
+	font-size: 30px;
+   font-weight: 700;
+   line-height: 40px;
+}
 .resetPassword-section{
     background-color: #FAF9F6;
     border: 1px solid #222222;
     border-radius: 12px;
     margin: 0 auto;
     margin-bottom: 60px;
-    width: 40%;
-    max-width: 400px;
-    padding: 48px 104px;
+    width: 620px;
+		height: 373px;
+    padding: 48px 114px 45px;
 		font-family: 'Montserrat', sans-serif;
         font-size: 14px;
         display: block;
         text-align: center;
+				margin-bottom: 140px;
 }
 .resetPassword-form label{
     display: block;
