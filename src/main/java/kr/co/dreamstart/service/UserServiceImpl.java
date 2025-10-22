@@ -323,45 +323,44 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-<<<<<<< Updated upstream
 	public UserDTO findByEmail(String email) {
 		return userMapper.findByEmail(email);
 	}
 
 	@Override
-	public UserDTO findByUserId(long userId) {
-=======
 	public UserDTO findByUserId(Long userId) {
-		// TODO Auto-generated method stub
->>>>>>> Stashed changes
 		return userMapper.findByUserId(userId);
 	}
 
 	@Override
-<<<<<<< Updated upstream
 	public Map<String, Object> userUpdate(UserDTO userDTO) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 기본정보 업데이트
 		int result = -1;
 		result = userMapper.adminUserUpdate(userDTO);
-		if(result>0) {
-			map.put("result","success");			
-		}else {
-			map.put("result","fail");			
+		if (result > 0) {
+			map.put("result", "success");
+		} else {
+			map.put("result", "fail");
 		}
-		map.put("resultType","회원정보 수정");
+		map.put("resultType", "회원정보 수정");
 		return map;
-=======
+	}
+
+	@Override
 	public int deleteUser(Long userId) {
-		// TODO Auto-generated method stub
 		return userMapper.deleteUser(userId);
 	}
 
 	@Override
 	public Long findUserIdByEmail(String email) {
-		// TODO Auto-generated method stub
 		return userMapper.findUserIdByEmail(email);
->>>>>>> Stashed changes
+	}
+
+	@Override
+	public UserDTO findByUserId(long userId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
