@@ -1,6 +1,7 @@
 package kr.co.dreamstart.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -41,14 +42,6 @@ public interface UserMapper {
 	// 회원가입시 일반회원 권한 부여
 	public int joinRole(@Param("userId") long userId);
 
-	/* 
-	 * // 회원 정보 수정 public int updateUser(UserDTO userDTO); // 회원 비밀번호 변경 public int
-	 * updateUserPass(String password);
-	 * 
-	 * //회원 탈퇴 (is_active 상태 변경) public int stopActivityUser(int userName); //회원
-	 * 탈퇴(실제 정보 삭제) public int deleteUser(int userName);
-	 */
-
 	// 로그인(아이디 또는 이메일로 사용자 조회)
 	public UserDTO findByLogin(@Param("login") String login);
 
@@ -62,7 +55,9 @@ public interface UserMapper {
 	public List<UserDTO> findUsersNeedingHash();
 
 	// 사용자 비밀번호 업데이트(회원정보수정/비밀번호 찾기)
-	public int updatePasswordById(@Param("userId") long userId, @Param("password") String password);
+	// UserMapper.java
+	public int updatePasswordById(@Param("userId") long userId, 
+								@Param("password") String password);
 
 	// 이메일로 사용자 단건
 	public UserDTO findByEmail(String email);
@@ -77,9 +72,12 @@ public interface UserMapper {
 	public int existsByEmail(@Param("email") String email);
 	
 	// 회원탈퇴
-	public int deleteUser(@Param("userId") Long userId);
+	public int stopActivityUser(@Param("userId") Long userId);
 	
 	// 아이디로 이메일 찾기
 	public Long findUserIdByEmail(@Param("email") String email);
+	
+	// 회원정보수정
+	public int updateUserInfo(UserDTO user);
 
 }

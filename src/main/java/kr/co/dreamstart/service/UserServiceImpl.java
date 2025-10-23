@@ -356,21 +356,10 @@ public class UserServiceImpl implements UserService {
 		map.put("resultType", "회원정보 수정");
 		return map;
 	}
-
-	@Override
-	public int deleteUser(Long userId) {
-		return userMapper.deleteUser(userId);
-	}
-
+	
 	@Override
 	public Long findUserIdByEmail(String email) {
 		return userMapper.findUserIdByEmail(email);
-	}
-
-	@Override
-	public UserDTO findByUserId(long userId) {
-		// TODO Auto-generated method stub
-		return userMapper.findByUserId(userId);
 	}
 
 	@Override
@@ -381,6 +370,34 @@ public class UserServiceImpl implements UserService {
 		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		return encoder.matches(inputPassword, user.getPassword());
+	}
+
+	@Override
+	public int stopActivityUser(Long userId) {
+		// TODO Auto-generated method stub
+		return userMapper.stopActivityUser(userId);
+	}
+
+	@Override
+	public int updateUserInfo(UserDTO user) {
+		// TODO Auto-generated method stub
+		if (user.getPhone() != null) {
+	        String d = user.getPhone().replaceAll("\\D", "");
+	        if (d.length() == 10)      user.setPhone(d.replaceFirst("(\\d{3})(\\d{3})(\\d{4})", "$1-$2-$3"));
+	        else if (d.length() >= 11) user.setPhone(d.substring(0,11).replaceFirst("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3"));
+	    }
+	    // birthDate가 "--" 같은 값이면 null 처리 (폼에서 올 수 있음)
+	    if (user.getBirthDate() != null && user.getBirthDate().trim().equals("--")) {
+	        user.setBirthDate(null);
+	    }
+	    return userMapper.updateUserInfo(user);
+	}
+
+	@Override
+	public int updatePasswordById(Long userId, String newPassword) {
+		// TODO Auto-generated method stub
+		String encoded = passwordEncoder.encode(newPassword);
+		return userMapper.updatePasswordById(userId, encoded);
 	}
 
 }

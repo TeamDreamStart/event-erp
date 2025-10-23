@@ -7,7 +7,11 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>home</title>
+<title>DreamStart</title>
+
+<link rel="icon" type="image/x-icon" href="<c:url value='/resources/img/favicons/favicon.ico'/>">
+<link rel="icon" type="image/png" sizes="16x16" href="<c:url value='/resources/img/favicons/favicon-16x16.png'/>">
+
 
 <!-- 공통 css reset/common -->
 <link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">

@@ -5,12 +5,14 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.dreamstart.dto.SurveyOptionDTO;
 import kr.co.dreamstart.dto.SurveyQuestionDTO;
+import kr.co.dreamstart.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -99,15 +101,29 @@ public class MyInfoService {
 	
 	/* 회원탈퇴 */
 	public void withdrawUser(Long userId, HttpSession session, RedirectAttributes ra) {
-		int deleted = userService.deleteUser(userId);
 		
-		if (deleted > 0) {
-			session.invalidate();
-			ra.addFlashAttribute("msg", "회원 탈퇴가 완료되었습니다.");
-			log.info("[WITHDRAW SUCCESS] userId={}", userId);
-		} else {
-			ra.addFlashAttribute("msg", "회원 탈퇴에 실패했습니다.");
-			log.info("[WITHDRAW FAIL], userId={}", userId);
+		try {
+			int updated = userService.stopActivityUser(userId);
+			
+			if (updated > 0) {
+				// 1) 시큐리티 인증 정보 제거
+				SecurityContextHolder.clearContext();
+				
+				// 2) 세션만료
+				session.invalidate();
+				
+				// 3) 메시지 설정
+				ra.addFlashAttribute("msg", "회원 탈퇴가 완료되었습니다. 이용해주셔서 감사합니다. (계정이 비활성 상태로 전환됩니다.)");
+				log.info("[WITHDRAW SUCCESS] userId={} -> is_active=0", userId);
+			} else {
+				ra.addFlashAttribute("msg", "회원 탈퇴에 실패했습니다.");
+				log.info("[WITHDRAW FAIL], userId={}", userId);
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error("[WITHDRAW ERROR] userId={}, message={}", userId, e.getMessage());
+			ra.addFlashAttribute("msg", "시스템 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
 		}
 	}
 	
@@ -117,4 +133,99 @@ public class MyInfoService {
 		log.info("[MY-INFO] userId={} 미응답 설문 {}건", userId, unanswered.size());
 		return unanswered;
 	}
+	
+	/* === 회원정보수정 === */
+	public void editForm(HttpSession session, Model model) {
+		Object userIdObj = session.getAttribute("userId");
+		
+		// 세션 검증
+		if (!(userIdObj instanceof Long)) {
+			log.warn("[MYINFO EDIT] 세션에 userId 없음 -> 로그인으로 리다이렉트");
+			model.addAttribute("msg", "세션이 만료되었습니다. 다시 로그인해주세요!");
+			return;
+		} 
+		
+		Long userId = (long) userIdObj;
+		log.info("[MYINFO EDIT] userId={}", userId);
+		
+		// 유저 정보 조회
+		UserDTO dto = userService.findByUserId(userId);
+		if (dto == null) {
+			log.warn("[MYINFO EDIT] userId={}에 해당하는 유저 정보 없음", userId);
+			model.addAttribute("msg", "회원 정보를 불러오지 못했습니다. 다시 로그인해주세요!");
+			return;
+		}
+		
+		// jsp로 넘길 모델 등록
+		model.addAttribute("userDTO", dto);
+		log.info("[MYINFO EDIT] userId={} 정보 로드 완료", userId);
+	}
+	
+	// 수정 정보 저장
+	public void updateUserInfo(Long userId,
+								UserDTO form,
+								HttpSession session,
+								RedirectAttributes ra) {
+		Object userIdObj = session.getAttribute("userId");
+		
+		// 세션검증
+		if (!(userIdObj instanceof Long) || !userIdObj.equals(userId)) {
+			log.warn("[UPDATE INFO] 세션 불일치 or userId 없음 (session={), path={}", userIdObj, userId);
+			ra.addFlashAttribute("msg", "세션이 만료되었습니다. 다시 로그인해주세요.");
+			return;	
+		}
+		
+		try {
+			form.setUserId(userId);
+			// update 실행
+			int updated = userService.updateUserInfo(form);
+			
+			if (updated > 0) {
+				ra.addFlashAttribute("msg", "회원 정보가 성공적으로 수정되었습니다.");
+				log.info("[UPDATED INFO SUCCESS] userId={}", userId);
+			} else {
+				ra.addFlashAttribute("msg", "회원 수정이 실패했습니다.");
+				log.info("[UPDATED INFO FAIL] userId={}", userId);
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			log.error("[UPDATE INFO ERROR] userId={}, msg={}", userId, e.getMessage());
+			ra.addFlashAttribute("msg", "시스템 오류가 발생했습니다.");
+		}
+	}
+	
+	// 비밀번호 변경
+	public boolean changePassword(Long userId, 
+								String newPassword, 
+								String confirmPassword,
+								HttpSession session,
+								RedirectAttributes ra) {
+		Object userIdObj = session.getAttribute("userId");
+		
+		// 세션 만료 또는 세션 사용자 불일치
+		if (!(userIdObj instanceof Long) || !userIdObj.equals(userId)) {
+			ra.addFlashAttribute("msg", "세션이 만료되었습니다. 다시 로그인해주세요.");
+			return false;
+		}
+		
+		// 새 비밀번호와 확인 비밀번호 불일치
+		if (newPassword == null || !newPassword.equals(confirmPassword)) {
+			ra.addFlashAttribute("msg", "비밀번호 확인이 일치하지 않습니다.");
+			return false;
+		}
+		
+		// 비밀번호 변경 로직
+		int result = userService.updatePasswordById(userId, newPassword);
+		if (result > 0) {
+			ra.addFlashAttribute("msg", "비밀번호가 변경되었습니다.");
+			log.info("[PASSWORD CHAGE SUCCESS] userId={}", userId);
+			return true; //성공
+		} else {
+			ra.addFlashAttribute("msg", "비밀번호 변경에 실패했습니다.");
+			log.warn("[PASSWORD CHANGE FAIL] userId={}", userId);
+			return false; // 실패
+		}
+	}
+		
 }
