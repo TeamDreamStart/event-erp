@@ -12,7 +12,7 @@
         <span class="welcome">
           <strong><sec:authentication property="principal.name"/></strong>님 환영합니다
         </span>
-        <a href="/my-info" class="btn mypage">mypage</a>
+        <a href="/my-info/<sec:authentication property="principal.userId"/>" class="btn mypage">mypage</a>
         <form method="post" action="/logout" class="logout-form">
           <sec:csrfInput />
           <button type="submit" class="btn logout">logout</button>

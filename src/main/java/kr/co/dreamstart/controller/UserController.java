@@ -10,6 +10,7 @@ package kr.co.dreamstart.controller;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -258,6 +259,19 @@ public class UserController {
 		List<BoardPostDTO> postList = boardService.listWithCommentCountByUserId(userId);
 		model.addAttribute("postList", postList);
 		return "/user/myInfo";
+	}
+	
+	
+	// 내 정보 수정 전 비밀번호 확인@@@@@@@@@@ 일단 그냥 넘어감 ㅋ
+	@PostMapping("/my-info/{userId}/confirmPassword")
+	public String confirmPass(@PathVariable("userId")String userId,@RequestParam("password") String password,Principal principal,RedirectAttributes rttr) {
+		UserDTO userDTO = userService.findByEmail(principal.getName());
+	    if (passwordEncoder.matches(password, userDTO.getPassword())) {
+	        return "redirect:/my-info/" + userId + "/edit";
+	    }
+		rttr.addFlashAttribute("resultType", "회원정보 수정에 접근");
+		rttr.addFlashAttribute("result", "fail");
+		return "redirect:/my-info/"+userId;
 	}
 
 	// 회원정보 수정

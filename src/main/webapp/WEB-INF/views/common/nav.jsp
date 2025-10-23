@@ -3,9 +3,9 @@
 
 <nav class="main-nav">
   <ul class="menu">
-    <li><a href="/visit">Visit</a></li>
+    <!-- <li><a href="/visit">Visit</a></li> -->
     <li><a href="/events">Event</a></li>
-    <li><a href="/reservations">Reservation</a></li>
+    <li><a href="/my-info/258">Reservation</a></li>
     <li class="dropdown">
       <a href="#">Board</a>
       <ul class="dropdown-menu">

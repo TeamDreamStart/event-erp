@@ -645,6 +645,16 @@ background-color
 	color: #888888;
 }
 </style>
+<script>
+    const result = '${empty result ? "" : result}';
+    const resultType = '${empty resultType ? "" : resultType}';
+
+    if (result === 'success') {
+        alert(`성공적으로 ${resultType}되었습니다.`);
+    } else if (result === 'fail') {
+        alert(`${resultType}이(가) 실패하였습니다.`);
+    }
+</script>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp" />
@@ -808,6 +818,7 @@ background-color
 
 			<form id="passwordConfirmForm"
 				action="/my-info/${userDTO.userId}/confirmPassword" method="POST">
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 				<label for="confirmPassword" class="label-text">비밀번호</label> <input
 					type="password" id="confirmPassword" name="password"
 					placeholder="비밀번호를 입력하세요." class="password-input" required>

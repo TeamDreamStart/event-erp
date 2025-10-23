@@ -117,7 +117,7 @@
 	gap: 60px;
 	width: 100%;
 	background-color: #FAF9F6;
-	padding: 60px 38px;
+	/* padding: 60px 38px;  포스터 샘플 이미지 넣어서 잠시 없앰*/
 	align-items: center; /* 세로 공간 중앙 정렬 */
 	width: 80%;
 	align-items: center; /* 세로 공간 중앙 정렬 */
@@ -239,7 +239,7 @@
 			</div>
 
 			<div class="add-more-detail" style="margin-bottom: 140px;">
-				<article class="detail-1">
+				<!-- <article class="detail-1">
 					<h4>행사 역사</h4>
 					<p>본 행사는 오랜 전통을 바탕으로 매년 지역 사회에 활력을 불어넣는 중요한 축제로 자리매김하고 있습니다.
 						과거의 성공적인 경험을 토대로 더욱 풍성한 프로그램으로 관람객을 맞이합니다.</p>
@@ -250,10 +250,10 @@
 						소개하는 것을 주 목적으로 합니다.</p>
 				</article>
 				<article class="detail-3">
-					<!-- <figure class="add-detail-3">
+					<figure class="add-detail-3">
 <img src="#" alt="자리를 빛내줄 게스트 관련">
 <figcaption class="explain">어쩌구저쩌구</figcaption>
-</figure> -->
+</figure>
 					<h4>주요 게스트</h4>
 					<p>올해는 특히 국내외에서 활발하게 활동 중인 유명 밴드와 아티스트를 초청하여 더욱 수준 높은 공연을 제공할
 						예정입니다. 출연진 정보는 추후 공지됩니다.</p>
@@ -262,7 +262,8 @@
 					<h4>후원 및 감사</h4>
 					<p>본 행사는 다수의 기업과 개인 후원자 덕분에 성공적으로 개최될 수 있었습니다. 후원해주신 모든 분들께
 						진심으로 감사드립니다. 여러분의 성원에 보답하겠습니다.</p>
-				</article>
+				</article> -->
+				<img src="/resources/img/events/event1_detail.jpg" alt="행사 상세 포스터">
 			</div>
 
 		</div>

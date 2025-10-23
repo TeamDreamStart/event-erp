@@ -7,7 +7,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>home</title>
+<title>Dream Start!</title>
 
 <!-- 공통 css reset/common -->
 <link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
@@ -16,11 +16,15 @@
 <!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link
+	href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+	rel="stylesheet">
 
 <!-- Swiper CSS & JS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
-<script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
+<script
+	src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
 
 <style>
 body {
@@ -388,7 +392,7 @@ body {
 
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp" flush="true" />
-	
+
 	<main id="main" class="container" role="main">
 		<!-- 메인 비주얼 -->
 		<section class="main-visual" aria-labelledby="mv-heading">
@@ -425,7 +429,8 @@ body {
 						<c:set var="startStr" value="${e.startDate}" />
 						<c:set var="dateYmd"
 							value="${empty startStr ? '' : fn:substring(startStr,0,10)}" />
-						<c:choose>
+
+						<%-- <c:choose>
 							<c:when test="${not empty e.posterUrl}">
 								<c:set var="imgSrc" value="${e.posterUrl}" />
 							</c:when>
@@ -449,14 +454,30 @@ body {
 								<c:set var="imgSrc"
 									value='${pageContext.request.contextPath}/resources/img/events/event8.jpg' />
 							</c:otherwise>
-						</c:choose>
+						</c:choose> --%>
 
 						<article class="event-card swiper-slide" role="group"
 							aria-roledescription="slide"
 							aria-label="${st.index + 1} / ${fn:length(events)} ${e.title}">
 							<figure>
-								<img src="${imgSrc}"
-									alt="${e.title} — ${dateYmd}<c:if test='${not empty e.location}'> · ${e.location}</c:if> 포스터">
+								<%-- <img src="${imgSrc}"
+									alt="${e.title} — ${dateYmd}<c:if test='${not empty e.location}'> · ${e.location}</c:if> 포스터"> --%>
+
+								<c:if test="${not empty eventsFileList }">
+									<c:forEach var="fileList" items="${eventsFileList}">
+										<c:forEach var="fileDTO" items="${fileList}">
+											<c:if
+												test="${fileDTO.ownerId eq e.eventId && fileDTO.ownerType eq 'event'}">
+												<img
+													src="${pageContext.request.contextPath}/resources/uploadTemp/${fileDTO.storedPath}/${fileDTO.uuid}_${fileDTO.originalName}"
+													alt="${fileDTO.originalName}">
+											</c:if>
+										</c:forEach>
+									</c:forEach>
+								</c:if>
+								<c:if test="${ empty eventsFileList }">
+									<img src="/resources/img/events/events20.jpg" alt="대체이미지">
+								</c:if>
 								<figcaption class="sr-only">${e.title}<c:if
 										test="${not empty e.description}"> — ${e.description}</c:if>
 								</figcaption>

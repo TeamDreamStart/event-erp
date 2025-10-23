@@ -119,6 +119,12 @@ public class EventAdminController {
 								RedirectAttributes ra,
 								HttpServletRequest request) {
 		if (binding.hasErrors()) return "admin/eventForm";
+		
+		//test start
+		System.out.println("image: " + (image != null ? image.getOriginalFilename() : "null"));
+		System.out.println("files count: " + (files != null ? files.length : 0));
+		//test end
+		
 		//임시값@@@@@@@@@@
 		event.setCreatedBy(event.getCreatedBy());
 		Long newId = eventService.saveWithFiles(event, image, files, userId, request);

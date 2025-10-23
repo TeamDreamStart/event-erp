@@ -123,6 +123,6 @@
       }
    </script>
    <!-- location 값은 그냥 지도에 표시되는 이름임, 사용자 직관성을 위해 location으로 넣었습니다 -->
-   <a href="https://map.kakao.com/link/map/${location },${latitude},${longitude}">카카오맵보기</a>
+   <a href="https://map.kakao.com/link/map/${e.location },${e.latitude},${e.longitude}">카카오맵보기</a>
 </body>
 </html>
