@@ -60,11 +60,11 @@
         <i class="fas fa-fw fa-table"></i> <span>Reservation Manage</span>
       </a>
     </li>
-    <li class="nav-item">
+    <%-- <li class="nav-item">
       <a class="nav-link" href="/admin/payment-manage">
         <i class="fas fa-fw fa-table"></i> <span>Payment Manage</span>
       </a>
-    </li>
+    </li> --%>
 
     <%-- ===== Survey Manage ===== --%>
     <c:set var="isSurvey" value="${fn:startsWith(uri, ctx.concat('/admin/surveys'))}" />

@@ -330,7 +330,7 @@ body {
 				<div class="event-info">
 					<h4>이벤트 정보</h4>
 					<div class="event-poster">
-						<img src="/resources/img/events/event11.jpg"
+						<img src="/resources/img/events/event1.jpg"
 							alt="Autumn Music Festival Poster" />
 					</div>
 

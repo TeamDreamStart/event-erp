@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -23,6 +24,7 @@ public class MyInfoService {
 	
 	private final UserService userService;
 	private final SurveyService surveyService;
+	private final PasswordEncoder passwordEncoder;
 	
 	/* 마이페이지 메인 */
 	public void loadMyInfo(Long userId, Model model) {
@@ -215,8 +217,11 @@ public class MyInfoService {
 			return false;
 		}
 		
+		// 비밀번호 암호화
+		String encodedPw = passwordEncoder.encode(newPassword);
+		
 		// 비밀번호 변경 로직
-		int result = userService.updatePasswordById(userId, newPassword);
+		int result = userService.updatePasswordById(userId, encodedPw);
 		if (result > 0) {
 			ra.addFlashAttribute("msg", "비밀번호가 변경되었습니다.");
 			log.info("[PASSWORD CHAGE SUCCESS] userId={}", userId);

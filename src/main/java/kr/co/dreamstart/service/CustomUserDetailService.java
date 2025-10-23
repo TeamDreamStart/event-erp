@@ -43,11 +43,16 @@ public class CustomUserDetailService implements UserDetailsService {
 		
 		boolean enabled = u.getIsActive() == 1;
 		
+		String email = u.getEmail();
+		if (email == null || email.isBlank()) {
+		    email = u.getUsername(); // fallback
+		}
+		
 		// UserDetails 생성 후 반환
 		return new CustomUserDetails(
 				u.getUserId(),
 				u.getName(),	// name(표시용)
-				u.getEmail(),	// =username
+				email,	// =username
 				u.getPassword(),
 				enabled,
 				authorities
