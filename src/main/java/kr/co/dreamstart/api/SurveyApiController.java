@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,7 +35,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor // Lombot 라이브러리에서 제공하는 어느테이션/필수 인자를 가진 생성자를 자동 생성
 @RequestMapping("/admin/api/surveys")
 public class SurveyApiController {
-	private final SurveyService surveyService;
+	@Autowired
+	private SurveyService surveyService;
 
 	// 문항+보기 묶음 조회(JSON)
 	@GetMapping(value = "/template-qa", produces = "application/json; charset=UTF-8") // ★ JSON으로 못 박기

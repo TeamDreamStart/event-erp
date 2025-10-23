@@ -3,7 +3,9 @@ package kr.co.dreamstart;
 import static org.junit.Assert.*; // ���� ����ҰŶ� static����
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.UUID;
@@ -45,6 +47,7 @@ import kr.co.dreamstart.mapper.ReservationMapper;
 import kr.co.dreamstart.mapper.SurveyMapper;
 import kr.co.dreamstart.mapper.UserMapper;
 import kr.co.dreamstart.service.EventService;
+import kr.co.dreamstart.service.SurveyService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/spring/root-context.xml" })
@@ -68,6 +71,7 @@ public class MybatisTest {
 	private AdminMapper adminMapper;
 	
 	@Autowired
+	private SurveyService surveyService;
 	private ReservationMapper reservationMapper;
 	
 	@Test
@@ -432,6 +436,20 @@ public class MybatisTest {
 		int cnt = userMapper.existsByEmail(notExisting);
 		assertEquals("non-existing email should be 0", 0, cnt);
 		log.info("[NOT EXISTS-EMAIL] {} -> {}", notExisting, cnt);
+	}
+	
+	@Test
+	public void saveResponseTest() {
+		Long userId = 268L;	// 신규유저 (응답기록없음)
+		Long eventId = 9L;	// survey_id = 22 연결된 이벤트
+		Map<Long, Long> answers = new LinkedHashMap<>();
+		answers.put(10126L, 1131L);	 // 만족     // 질문ID=11, 보기ID=51 
+		answers.put(10127L, 1135L);	 // 만족
+		answers.put(10128L, 1139L);  // 보통
+		
+		boolean result = surveyService.saveResponse(userId, eventId, answers);
+		assertTrue(result);
+		log.info("응답 저장 테스트 통과");
 	}
 	
 }

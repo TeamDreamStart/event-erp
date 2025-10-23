@@ -20,14 +20,25 @@
 .clearfix::after { content:""; display:block; clear:both; }
 a { text-decoration:none; color:inherit; }
 img { display:block; max-width:100%; height:auto; vertical-align:top; }
-html, body { height:100%; }
 
-body{
-  margin:0;
-  font:16px/1.5 "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  color:#222;
-  background:#E5E2DB;
+html, body {
+  height: 100%;
+  margin: 0;
 }
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font: 16px/1.5 "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color: #222;
+  background: #E5E2DB !important;
+}
+
+main {
+  flex: 1; /* 메인이 남은 영역 채워서 푸터 밀기 */
+}
+
 a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
   outline:2px solid #1a73e8; outline-offset:2px;
 }
@@ -41,3 +52,226 @@ hr { margin:0; padding:0; border:0; height:0; background:none; overflow:visible;
 /* 5) 타이틀 간격 공통 (섹션 헤더에 class="section-header title"로 사용) */
 :root { --space-title: 150px; }
 .section-header.title { margin-top: var(--space-title); }
+
+/* footer 영역 밀기용 gap */
+.footer-gap {
+  width: 100%;
+  height: 140px;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+/**************************
+	HEADER-COMMON-START
+***************************/
+
+/* ✅ JSP include 시 <c:url>이 중복 실행되어 깨지던 부분 수정 */
+@font-face {
+  font-family: 'Peristiwa';
+  src: url("/resources/font/Peristiwa.otf") format("opentype");
+  font-display: swap;
+}
+
+/* ✅ header 영역 */
+#header {
+  width: 1440px;
+  margin: 0 auto;
+  background-color: #E5E2DB;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.header-container {
+  margin-top: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.logo a {
+  display: block;
+  width: 70px;
+  height: 60px;
+  background: url("/resources/img/logo.svg") no-repeat center;
+}
+
+.user-section {
+  padding: 9px 0 17px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.welcome {
+  font-size: 18px;
+  color: #000;
+}
+
+/* ✅ btn 클래스: 중복 충돌 방지 위해 header 내에서만 적용되도록 세분화 */
+#header .btn {
+  width: 128px;
+  height: 42px;
+  border: none;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-size: 18px;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 42px;
+  text-decoration: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#header .btn.mypage {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+}
+#header .btn.logout {
+  background-color: #000;
+  color: #fff;
+}
+#header .btn.join {
+  background-color: #fff;
+  color: #222;
+}
+#header .btn.login {
+  background-color: #000;
+  color: #fff;
+}
+#header .btn:hover {
+  opacity: 0.8;
+}
+
+.logout-form {
+  display: inline;
+  margin: 0;
+}
+
+/**************************
+	HEADER-COMMON-END
+***************************/
+
+
+/**************************
+	NAV-COMMON-START
+***************************/
+
+.main-nav {
+  height: 65px;
+	margin-bottom: 63px;
+  background-color: #E5E2DB;
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+}
+.main-nav::after {
+	content: "";
+	display: block;
+	width: 100%;
+	height: 1px;
+	background-color: #222;
+}
+.menu {
+  display: flex;
+  gap: 100px;
+  list-style: none;
+  align-items: center;
+}
+.menu > li {
+  position: relative;
+}
+.menu > li:last-child {
+  margin-left: auto;
+}
+.menu a {
+  line-height: 65px;
+  text-decoration: none;
+  color: #222;
+  font-size: 20px;
+  transition: color 0.2s ease;
+}
+.menu a:hover {
+  color: #555;
+}
+.dropdown {
+  position: relative;
+}
+.dropdown-menu {
+  display: none;
+  width: 166px;
+  height: 100px;
+  position: absolute;
+  top: 65px; right: 0px;
+  background-color: #fff;
+  border: 1px solid #000;
+  padding: 17px 59px 17px 58px;
+  text-align: center;
+  text-decoration: underline; 
+  z-index: 10;
+}
+.dropdown-menu li:first-child {
+  margin-bottom: 12px;
+  text-align: center;
+}
+.dropdown-menu a {
+  color: #222;
+  font-size: 14px;
+  line-height: 26px;
+}
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+.dropdown-menu:hover li a {
+  color: #aaa;
+  font-style: normal;
+  font-weight: 400;
+}
+.dropdown-menu li:hover a {
+  color: #222;
+  font-weight: 600;
+  font-style: italic;
+}
+
+/**************************
+	NAV-COMMON-END
+***************************/
+
+
+/**************************
+	FOOTER-COMMON-START
+***************************/
+
+#footer {
+  height: 360px;
+  padding: 128px 62px 27px 62px;
+  border: 1px solid #222;
+  background: #CBD4C2;
+  color: #888;
+  line-height: 40px;
+  font-size: 16px;
+}
+
+#footer .footer_addr {
+  margin-bottom: 48px;
+  position: relative; 
+}
+#footer .footer_addr span:last-child {
+  position: absolute; top: 46px; left: 0;
+}
+
+#footer hr {
+  width: 1320px; height: 1px;
+  margin: 88px 0 28px;
+  background-color: #222;
+}
+
+.footer .address {
+  margin: 64px 0 16px;
+}
+.footer-spacer {
+  margin-top: 140px;
+}
+
+/**************************
+	FOOTER-COMMON-END
+***************************/

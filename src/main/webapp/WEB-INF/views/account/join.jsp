@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
@@ -7,169 +6,508 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
-<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
-<!-- CSRF for AJAX -->
+
+<!-- CSRF -->
 <meta name="_csrf" content="${_csrf.token}" />
 <meta name="_csrf_header" content="${_csrf.headerName}" />
 
+<!-- Reset & Common -->
+<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
+
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
-<title>join</title>
-<link rel="stylesheet" type="text/css" href="/resources/css/join.css" />
+
+<title>회원가입</title>
 
 <style>
-.field-msg { display:block; margin-top:4px; font-size:12px; }
-.ok { color:#0a7a0a; }
-.warn { color:#d9534f; }
+body {
+  background: #f9fafb;
+  font-family: 'Pretendard', 'Montserrat', sans-serif;
+  color: #222;
+}
 
-/* 모달 관련 */
-.modal{ position:fixed; inset:0; background:rgba(0,0,0,.4); display:flex; align-items:center; justify-content:center; z-index:9999; }
-.modal.hidden{ display:none; }
-.modal-content{ background:#fff; padding:24px 28px; border-radius:10px; min-width:280px; text-align:center; }
-.modal-content h3{ margin:0 0 8px; }
+/* 메인 영역 */
+.memberArea {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 60px 0 140px;
+}
+
+/* 가운데 컨테이너 */
+.memberArea .contents {
+  width: 100%;
+  max-width: 900px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 50px 70px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* 타이틀 */
+.contents h2 {
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  color: #1f2937;
+  margin-bottom: 40px;
+}
+
+/* 섹션 헤더 */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 8px;
+}
+.section-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111;
+}
+.section-header .required-note {
+  font-size: 13px;
+  color: #568ef7;
+}
+.section-divider {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin-bottom: 24px;
+}
+
+/* 필드 그룹 */
+.form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.form-group label {
+  width: 140px;
+  font-weight: 600;
+  color: #111;
+  font-size: 15px;
+}
+.form-group input,
+.form-group select {
+  flex: 1;
+  height: 46px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0 12px;
+  font-size: 15px;
+  background: #fff;
+  box-sizing: border-box;
+}
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #568ef7;
+  outline: none;
+}
+
+/* 이메일 */
+.email-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.email-inputs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.email-inputs input[type="text"],
+.email-inputs select {
+  height: 46px;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 15px;
+  flex: none;
+}
+
+.email-inputs input#email-local { width: 175px; }
+.email-inputs input#domain-txt { width: 175px; }
+.email-inputs select { width: 140px; }
+
+.email-inputs span {
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.email-inputs button {
+  height: 46px;
+  padding: 0 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #f6f7f9;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.email-inputs button:hover {
+  background: #eef0f3;
+}
+
+#email-msg {
+  margin-top: 4px;
+  margin-left: 0;
+}
+
+
+/* 필수표시 */
+label.required::after {
+  content: " *";
+  color: #568ef7;
+  font-weight: 600;
+}
+
+/* 버튼 있는 입력 */
+.input-with-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.input-with-button button {
+  height: 46px;
+  padding: 0 16px;
+  background: #f6f7f9;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.input-with-button button:hover {
+  background: #eef0f3;
+}
+
+/* 비밀번호 */
+/* 비밀번호 구역 전용 */
+.password-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.password-group .field-msg {
+  order: 3;
+  flex-basis: 100%;
+  margin-left: 140px;
+  margin-top: 4px;
+  color: #e54848;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* 성별 */
+.form-radio {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+.form-radio label {
+  width: auto;
+  font-weight: 500;
+  color: #333;
+}
+
+/* 생년월일 */
+.birth-select-wrapper {
+  display: flex;
+  gap: 8px;
+}
+.birth-select-wrapper select {
+  flex: 1;
+}
+
+/* 메시지 */
+.field-msg {
+  font-size: 12px;
+  margin-left: 140px;
+  margin-bottom: 20px;
+  color: #888;
+  height: 0;              /* 높이 0으로 기본 줄 맞춤 */
+  overflow: hidden;       /* 내용 숨기기 */
+  transition: all .2s ease;
+}
+.field-msg.show {
+  height: auto;           /* 메시지가 생기면 높이 복원 */
+  margin-top: 4px;
+  overflow: visible;
+}
+.field-msg.ok { color: #0e7a4a; }
+.field-msg.warn { color: #c62828; }
+
+/* 버튼 라인 */
+.join-bottom-button {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 50px;
+}
+.btn-cancel,
+.btn-next {
+  width: 220px;
+  height: 48px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-cancel {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  color: #333;
+}
+.btn-cancel:hover { background: #e5e7eb; }
+.btn-next {
+  background: #568ef7;
+  color: #fff;
+}
+.btn-next:hover { background: #4177e6; }
+
+/* 전화번호 */
+.phone-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.phone-inputs select,
+.phone-inputs input {
+  width: 120px;
+  height: 46px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0 10px;
+  font-size: 15px;
+}
+
+/* SNS */
+.sns-join-section {
+  margin-top: 60px;
+  text-align: center;
+}
+.sns-join-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+}
+.sns-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 360px;
+  height: 70px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  padding: 0 20px;
+  transition: background 0.2s ease, transform 0.1s;
+  text-decoration: none;
+}
+.sns-btn:hover {
+  background: #f3f4f6;
+  transform: scale(1.02);
+}
+.sns-btn img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  border-radius: 50%;
+  margin-right: 18px;
+}
+.sns-btn span {
+  color: #444;
+  font-size: 16px;
+  font-weight: 600;
+}
+.sns-info {
+  margin-top: 16px;
+  color: #e54848;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+.sns-info i {
+  font-style: normal;
+  font-weight: 700;
+  color: #e54848;
+  margin-right: 4px;
+}
 </style>
 </head>
+
 <body>
-  <jsp:include page="/WEB-INF/views/common/header.jsp" />
+<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 
-  <main>
-    <div class="container">
-      <h2>join membership</h2>
-      <div class="membership-section">
+<main class="memberArea">
+  <div class="contents">
+    <h2>회원가입</h2>
 
-        <!-- 회원가입 폼 -->
-        <form:form id="joinForm" modelAttribute="user" action="/join" method="post" autocomplete="off">
-          <!-- ✅ CSRF for form POST -->
-          <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-
-          <div class="membership-form">
-            <!-- 아이디 -->
-            <div class="form-group">
-              <label for="username">아이디</label>
-              <div class="input-with-button">
-                <input type="text" name="username" id="username" placeholder="아이디를 입력하세요." required autocomplete="off" autocapitalize="off" spellcheck="false" />
-                <button type="button" id="btn-check-username">중복확인</button>
-              </div>
-              <small id="username-msg" class="field-msg"></small>
-            </div>
-
-            <!-- 비밀번호 -->
-            <div class="form-group">
-              <label for="password">비밀번호</label>
-              <input type="password" name="password" id="password" placeholder="비밀번호를 입력하세요." required autocomplete="new-password" />
-              <small id="password-msg" class="field-msg"></small>
-            </div>
-
-            <!-- 비밀번호 확인 -->
-            <div class="form-group">
-              <label for="password-check">비밀번호 확인</label>
-              <input type="password" name="password-check" id="password-check" placeholder="비밀번호를 확인하세요." required autocomplete="new-password" />
-              <small id="password2-msg" class="field-msg"></small>
-            </div>
-
-            <!-- 이름 -->
-            <div class="form-group">
-              <label for="name">이름</label>
-              <input type="text" name="name" id="name" required />
-            </div>
-
-            <!-- 성별 -->
-            <div class="form-group">
-              <div class="form-label"><label for="gender">성별</label></div>
-              <div class="form-radio">
-                <form:radiobutton path="gender" id="male" value="0" />
-                <label for="male">남</label>
-                <form:radiobutton path="gender" id="female" value="1" />
-                <label for="female">여</label>
-                <form:errors path="gender" cssClass="field-msg warn" />
-              </div>
-            </div>
-
-            <!-- 생년월일 -->
-            <div class="form-group birth-date-group">
-              <label for="birth_year">생년월일</label>
-              <div class="birth-select-wrapper">
-                <select class="birth-select" id="birth_year" name="birth_year">
-                  <option value="" disabled selected>출생 연도</option>
-                </select>
-                <select class="birth-select" id="birth_month" name="birth_month">
-                  <option value="" disabled selected>월</option>
-                </select>
-                <select class="birth-select" id="birth_day" name="birth_day">
-                  <option value="" disabled selected>일</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- 이메일 -->
-            <div class="form-group">
-              <label for="email">이메일</label>
-              <div class="input-with-button">
-                <input type="text" id="email-local" placeholder="아이디" required autocomplete="off" autocapitalize="off" spellcheck="false" />
-                <span class="golbang">@</span>
-                <input class="box" id="domain-txt" type="text" placeholder="도메인 입력" autocomplete="off" autocapitalize="off" spellcheck="false" />
-                <select class="box" id="domain-list">
-                  <option value="type">직접 입력</option>
-                  <option value="naver.com">naver.com</option>
-                  <option value="gmail.com">gmail.com</option>
-                  <option value="hanmail.net">hanmail.net</option>
-                  <option value="nate.com">nate.com</option>
-                  <option value="kakao.com">kakao.com</option>
-                </select>
-                <button type="button" id="btn-check-email">중복확인</button>
-              </div>
-              <small id="email-msg" class="field-msg"></small>
-            </div>
-
-            <!-- ✅ 서버로 보낼 실제 email 바인딩 -->
-            <form:hidden path="email" id="email-hidden" />
-
-            <!-- 이메일 인증 -->
-            <div class="form-group">
-              <div class="input-with-button">
-                <button type="button" id="btn-send-code">인증번호 발송</button>
-                <input type="text" id="email-code" placeholder="인증번호 입력" autocomplete="one-time-code" inputmode="text" />
-                <button type="button" id="btn-verify-code">인증 확인</button>
-              </div>
-              <small id="email-verify-msg" class="field-msg"></small>
-            </div>
-          </div>
-
-          <!-- 전화번호 -->
-          <div class="form-group">
-            <label for="phone">전화번호</label>
-            <form:input path="phone" id="phone" type="tel" required="required" />
-          </div>
-
-          <!-- 제출 -->
-          <div class="join-bottom-button">
-            <button type="button" class="btn-cancel">취소</button>
-            <button type="submit" class="btn-next">다음</button>
-          </div>
-        </form:form>
-        <!-- /회원가입 폼 -->
-
-        <!-- ✅ 가입 성공 모달 (기본 hidden) -->
-        <div id="join-success-modal" class="modal hidden">
-          <div class="modal-content">
-            <h3>회원가입을 성공하셨습니다.</h3>
-            <p>로그인 해주세요.</p>
-            <button id="close-join-success" type="button">확인</button>
-          </div>
-        </div>
-
-        <!-- 서버 플래그 전달: joinSuccess(권장) 또는 msg 둘 중 하나만 있어도 모달 오픈 -->
-        <c:if test="${not empty joinSuccess or not empty msg}">
-          <script>window.__JOIN_SUCCESS__ = true;</script>
-        </c:if>
-
-      </div>
+    <div class="section-header">
+      <h3>회원 정보</h3>
+      <span class="required-note">*필수입력사항</span>
     </div>
-  </main>
+    <hr class="section-divider">
 
-  <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
+    <form:form id="joinForm" modelAttribute="user" action="/join" method="post" autocomplete="off">
+      <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
-  <script>
+      <!-- 아이디 -->
+      <div class="form-group">
+        <label for="username" class="required">아이디</label>
+        <div class="input-with-button">
+          <input type="text" id="username" name="username" placeholder="아이디를 입력하세요." required />
+          <button type="button" id="btn-check-username">중복확인</button>
+        </div>
+      </div>
+      <!-- 아이디 중복 메시지 -->
+	  <div id="username-msg" class="field-msg"></div>
+      
+
+      <!-- 비밀번호 -->
+	  <div class="form-group password-group">
+	    <label for="password" class="required">비밀번호</label>
+	    <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요." required>
+	    <div id="password-msg" class="field-msg warn">
+	    	(영문 대소문자/숫자/특수문자 중 2가지 이상 조합, 10자~16자)
+	    </div>
+	  </div>
+
+	
+	  <!-- 비밀번호 확인 -->
+	  <div class="form-group">
+	    <label for="password-check" class="required">비밀번호 확인</label>
+	    <input type="password" id="password-check" name="password-check" placeholder="비밀번호를 확인하세요." required />
+	  </div>
+	  <div id="password2-msg" class="field-msg"></div>
+
+      <!-- 이름 -->
+      <div class="form-group">
+        <label for="name" class="required">이름</label>
+        <input type="text" id="name" name="name" required />
+      </div>
+
+      <!-- 성별 -->
+      <div class="form-group">
+        <label class="required">성별</label>
+        <div class="form-radio">
+          <form:radiobutton path="gender" id="male" value="1" />
+          <label for="male">남</label>
+          <form:radiobutton path="gender" id="female" value="0" />
+          <label for="female">여</label>
+        </div>
+      </div>
+
+      <!-- 생년월일 -->
+      <div class="form-group">
+        <label for="birth_year" class="required">생년월일</label>
+        <div class="birth-select-wrapper">
+          <select id="birth_year" name="birth_year"><option value="" disabled selected>연도</option></select>
+          <select id="birth_month" name="birth_month"><option value="" disabled selected>월</option></select>
+          <select id="birth_day" name="birth_day"><option value="" disabled selected>일</option></select>
+        </div>
+      </div>
+      <input type="hidden" id="birthDate" name="birthDate">
+
+      <!-- 이메일 -->
+	  <div class="form-group">
+	    <label for="email-local" class="required">이메일</label>
+	    <div class="email-wrap">
+	      <div class="email-inputs">
+	        <input type="text" id="email-local" placeholder="이메일 아이디" required>
+	        <span>@</span>
+	        <input type="text" id="domain-txt" placeholder="직접입력" required>
+	        <select id="domain-list">
+	          <option value="type">직접입력</option>
+	          <option value="gmail.com">gmail.com</option>
+	          <option value="naver.com">naver.com</option>
+	          <option value="daum.net">daum.net</option>
+	          <option value="kakao.com">kakao.com</option>
+	        </select>
+	        <button type="button" id="btn-check-email">중복확인</button>
+	      </div>
+	      <div id="email-msg" class="field-msg"></div>
+	    </div>
+	  </div>
+	
+	  <!-- 이메일 인증 -->
+	  <div class="form-group">
+	    <label for="email-code" class="required">이메일 인증</label>
+	    <div class="input-with-button">
+	      <button type="button" id="btn-send-code">인증번호 발송</button>
+	      <input type="text" id="email-code" placeholder="인증번호 입력" />
+	      <button type="button" id="btn-verify-code">인증 확인</button>
+	    </div>
+	  </div>
+	  <div id="email-verify-msg" class="field-msg"></div>
+	
+	  <!-- 실제 전송용 hidden -->
+	  <input type="hidden" id="email-hidden" name="email">
+
+      <!-- 전화번호 -->
+      <div class="form-group">
+	    <label for="phone1" class="required">휴대전화</label>
+	    <div class="phone-inputs">
+	      <select id="phone1" name="phone1" required>
+	        <option value="010" selected>010</option>
+	        <option value="011">011</option>
+	        <option value="016">016</option>
+	        <option value="017">017</option>
+	        <option value="018">018</option>
+	        <option value="019">019</option>
+	      </select>
+	      <input type="text" id="phone2" maxlength="4" required>
+	      <input type="text" id="phone3" maxlength="4" required>
+	      <!-- 실제 전송용 hidden -->
+	      <input type="hidden" id="phone-hidden" name="phone">
+	    </div>
+	  </div>
+	  <div id="phone-msg" class="field-msg"></div>
+
+      <!-- 버튼 -->
+      <div class="join-bottom-button">
+        <button type="button" class="btn-cancel" onclick="history.back()">취소하기</button>
+        <button type="submit" class="btn-next">가입하기</button>
+      </div>
+    </form:form>
+
+    <!-- SNS 회원가입 -->
+	<div class="sns-join-section">
+	  <h3 style="font-size:18px; font-weight:700; margin-bottom:18px;">SNS 간편회원가입</h3>
+	  
+	  <div class="sns-join-buttons">
+	    <!-- 네이버 로그인/가입 -->
+	    <a href="${pageContext.request.contextPath}/login/naver" class="sns-btn naver">
+	      <img src="<c:url value='/resources/img/naver/btnW_아이콘원형.png'/>" alt="네이버 아이디 회원가입">
+	      <span>네이버 아이디로 가입하기</span>
+	    </a>
+	    
+	    <!-- 카카오 로그인/가입 (추후 연결 예정) -->
+	    <a href="${pageContext.request.contextPath}/login/kakao" class="sns-btn kakao">
+	      <img src="<c:url value='/resources/img/kakao_round_logo.png'/>" alt="카카오 아이디 회원가입">
+	      <span>카카오 아이디로 가입하기</span>
+	    </a>
+	  </div>
+	
+	  <p class="sns-info">
+	    <i>!</i> SNS 계정을 통해 안전하게 회원가입 후, 자동으로 회원정보가 연동됩니다.<br/>
+	    인증 절차는 기존 회원가입과 동일하게 보호됩니다.
+	  </p>
+	</div>
+
+
+  </div>
+</main>
+
+<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
+
+<script>
 /* ============================
  * CSRF 헤더 (AJAX용)
  * ============================ */
@@ -192,11 +530,13 @@ let expireAt    = 0;
 
 const $ = sel => document.querySelector(sel);
 const setMsg = (sel, text, ok) => {
-  const el = $(sel);
-  el.textContent = text || '';
-  el.classList.remove('ok','warn');
-  if (text) el.classList.add(ok ? 'ok' : 'warn');
-};
+	  const el = document.querySelector(sel);
+	  el.textContent = text || '';
+	  el.classList.remove('ok', 'warn', 'show');
+	  if (text) {
+	    el.classList.add(ok ? 'ok' : 'warn', 'show');
+	  }
+ };
 
 /* ============================
  * 생년월일 옵션
@@ -353,7 +693,7 @@ btnVerify.addEventListener('click', ()=>{
 /* ============================
  * 전화번호 자동 하이픈 (10~11자리만 대상)
  * ============================ */
-(function(){
+/*(function(){
   const tel = document.getElementById('phone');
   if (!tel) return;
   function formatPhone(v){
@@ -366,38 +706,77 @@ btnVerify.addEventListener('click', ()=>{
   tel.addEventListener('input', () => {
     tel.value = formatPhone(tel.value);
   });
-})();
+})(); 
+*/
 
 /* ============================
  * 제출 검증
  * ============================ */
-const form = document.getElementById('joinForm');
-form.addEventListener('submit', (e) => {
-  const ok1 = validatePwd(), ok2 = validatePwd2();
-  if (!ok1 || !ok2) { e.preventDefault(); return; }
+ const form = document.getElementById('joinForm');
 
-  if (!isUsernameChecked || !isEmailChecked) {
-    alert('아이디/이메일 중복확인을 완료해 주세요.');
-    e.preventDefault();
-    return;
-  }
+ form.addEventListener('submit', (e) => {
+   e.preventDefault(); // ✅ 일단 전송 멈추고 모든 값 검증 후 수동 전송
 
-  const finalEmail = buildEmail();
-  if (!finalEmail) {
-    setMsg('#email-msg','유효한 이메일을 입력하세요.', false);
-    e.preventDefault();
-    return;
-  }
+   // 비밀번호 검증
+   const ok1 = validatePwd(), ok2 = validatePwd2();
+   if (!ok1 || !ok2) return;
 
-  if (!isEmailVerified || finalEmail.toLowerCase() !== (verifiedEmail || '').toLowerCase()) {
-    alert('이메일 인증을 완료해 주세요. (인증 후 이메일을 변경하면 다시 인증해야 합니다)');
-    e.preventDefault();
-    return;
-  }
+   // 아이디 / 이메일 중복 체크
+   if (!isUsernameChecked || !isEmailChecked) {
+     alert('아이디/이메일 중복확인을 완료해 주세요.');
+     return;
+   }
 
-  // ✅ 스프링 form:hidden에 값 주입
-  document.getElementById('email-hidden').value = finalEmail.toLowerCase();
-});
+   // 이메일 최종 검증
+   const finalEmail = buildEmail();
+   if (!finalEmail) {
+     setMsg('#email-msg','유효한 이메일을 입력하세요.', false);
+     return;
+   }
+   if (!isEmailVerified || finalEmail.toLowerCase() !== (verifiedEmail || '').toLowerCase()) {
+     alert('이메일 인증을 완료해 주세요. (인증 후 이메일을 변경하면 다시 인증해야 합니다)');
+     return;
+   }
+
+   // 성별 체크
+   const genderChecked = document.querySelector('input[name="gender"]:checked');
+   if (!genderChecked) {
+     alert('성별을 선택해주세요.');
+     return;
+   }
+
+   // 생년월일 병합
+   const year  = document.getElementById('birth_year').value;
+   const month = document.getElementById('birth_month').value;
+   const day   = document.getElementById('birth_day').value;
+
+   let fullBirth = null;
+
+   if (year && month && day) {
+     fullBirth = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+   } else {
+     fullBirth = ''; // null처럼 처리되어 DB insert 시 오류 안남
+   }
+
+   document.querySelector('input[name="birthDate"]').value = fullBirth;
+
+
+   // 전화번호 병합
+   const p1 = $('#phone1').value.trim();
+   const p2 = $('#phone2').value.trim();
+   const p3 = $('#phone3').value.trim();
+   if (!(p1 && p2 && p3)) {
+     alert('전화번호를 모두 입력해주세요.');
+     return;
+   }
+   const fullPhone = `${p1}-${p2}-${p3}`;
+   document.getElementById('phone-hidden').value = fullPhone;
+
+   // 이메일 hidden 세팅
+   document.getElementById('email-hidden').value = buildEmail().toLowerCase();
+
+   form.submit();
+ });
 
 /* ============================
  * 초기 바인딩 + BFCache 케어
@@ -442,3 +821,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
   </script>
 </body>
 </html>
+
+
+

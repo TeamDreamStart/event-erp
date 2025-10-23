@@ -154,7 +154,12 @@
 							</c:if>
 							<c:if test="${boardType eq 'qna' }">
 								<input type="hidden" name="pinned" value="0">
-								<input type="hidden" name="visibility" value="PUBLIC">
+								<select name="visibility">
+									<option value="PUBLIC"
+										<c:if test="${postDTO.visibility eq 'PUBLIC'}">selected</c:if>>공개</option>
+									<option value="PRIVATE"
+										<c:if test="${postDTO.visibility eq 'PRIVATE'}">selected</c:if>>비공개</option>
+								</select>
 							</c:if>
 
 							<!-- security에서 받아와용 -->

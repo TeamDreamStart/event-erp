@@ -64,7 +64,7 @@ public class ReservationController {
 	@Transactional
 	@PostMapping("/events/{eventId}/reservations")
 	public String reservationPOST(@PathVariable("eventId") long eventId,
-			@RequestParam(required = false, defaultValue = "0") long userId, @RequestParam("headCount") int headCount,
+			@RequestParam(required = false) long userId, @RequestParam("headCount") int headCount,
 			RedirectAttributes rttr) {
 		// 주문번호 생성
 		long reservationId = rService.makeId(eventId);

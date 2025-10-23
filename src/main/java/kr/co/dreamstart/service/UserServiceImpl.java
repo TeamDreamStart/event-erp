@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
 		String clientSecret = "3Hs13ybfZB";
 		String redirectURI = null;
 		try {
-			redirectURI = URLEncoder.encode("http://localhost:8080/naver/callback", "UTF-8");
+			redirectURI = URLEncoder.encode("http://localhost:8080/login/naver/callback", "UTF-8");
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();
 		}
@@ -237,13 +237,23 @@ public class UserServiceImpl implements UserService {
 		form.setEmail(normalizeEmail(form.getEmail()));
 		// 2) 전화번호 하이픈 형태로
 		form.setPhone(formatPhone(form.getPhone()));
-		// 3) 비밀번호 인코딩 / 새로 가입한 가입자의 비밀번호 -> 해시로 바꿔치기
+		// 3) 비밀번호 인코딩 / 새로 가입한 가입자의 비밀번호 -> 해시로 바꿔치기 (암호화)
 		form.setPassword(passwordEncoder.encode(form.getPassword()));
+		//4) 생년월일 값 검증
+		String birth = form.getBirthDate();
+		if (birth == null || birth.isBlank() || birth.trim().equals("--") || birth.trim().isEmpty()) {
+			form.setBirthDate(null);
+		}
 
+		// 활성화 기본세팅
+		if (form.getIsActive() == 0)form.setIsActive(1);
+		
 		int result = userMapper.join(form);
+		log.info("회원 데이터={}", form);
 		if (result != 1)
 			throw new IllegalStateException("회원가입 실패");
 		userMapper.joinRole(form.getUserId());
+		log.info("회원가입 완료 userId={}",form.getUserId());
 		return form.getUserId();
 	}
 
@@ -271,7 +281,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<String> findRoleNames(Long userId) {
+	public List<String> findRoleNameByUserId(Long userId) {
 		return userMapper.findRoleNameByUserId(userId);
 	}
 
@@ -328,7 +338,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDTO findByUserId(long userId) {
+	public UserDTO findByUserId(Long userId) {
 		return userMapper.findByUserId(userId);
 	}
 
@@ -338,13 +348,39 @@ public class UserServiceImpl implements UserService {
 		// 기본정보 업데이트
 		int result = -1;
 		result = userMapper.adminUserUpdate(userDTO);
-		if(result>0) {
-			map.put("result","success");			
-		}else {
-			map.put("result","fail");			
+		if (result > 0) {
+			map.put("result", "success");
+		} else {
+			map.put("result", "fail");
 		}
-		map.put("resultType","회원정보 수정");
+		map.put("resultType", "회원정보 수정");
 		return map;
+	}
+
+	@Override
+	public int deleteUser(Long userId) {
+		return userMapper.deleteUser(userId);
+	}
+
+	@Override
+	public Long findUserIdByEmail(String email) {
+		return userMapper.findUserIdByEmail(email);
+	}
+
+	@Override
+	public UserDTO findByUserId(long userId) {
+		// TODO Auto-generated method stub
+		return userMapper.findByUserId(userId);
+	}
+
+	@Override
+	public boolean checkPassword(Long userId, String inputPassword) {
+		// TODO Auto-generated method stub
+		UserDTO user = userMapper.findByUserId(userId);
+		if (user == null || user.getPassword() == null) return false;
+		
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		return encoder.matches(inputPassword, user.getPassword());
 	}
 
 }

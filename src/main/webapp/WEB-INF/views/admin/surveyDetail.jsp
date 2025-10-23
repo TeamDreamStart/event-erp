@@ -106,6 +106,7 @@
           </span>
         </div>
 
+
         <div class="ml-auto d-flex" style="gap:.5rem;">
           <c:if test="${isTemplate}">
             <a class="sd-btn" href="<c:url value='/admin/surveys/form?templateId=${survey.surveyId}'/>">템플릿 복제하기</a>
@@ -123,11 +124,13 @@
     <div class="card shadow mb-3">
       <div class="card-body">
         <div class="kv-grid">
+          <!-- 설문 번호 -->
+	      <div class="kv">
+	        <span class="k">설문 번호</span>
+	        <span class="v"><c:out value="${survey.surveyId}" /></span>
+	      </div>
           <div class="kv"><span class="k">설문 제목</span><span class="v"><c:out value="${empty survey.title ? '-' : survey.title}"/></span></div>
           <div class="kv"><span class="k">이벤트명</span><span class="v"><c:out value="${empty eventTitle ? '-' : eventTitle}"/></span></div>
-          <div class="kv"><span class="k">오픈 일시</span><span class="v"><c:out value="${empty openAtStr ? '-' : openAtStr}"/></span></div>
-          <div class="kv"><span class="k">마감 일시</span><span class="v"><c:out value="${empty closeAtStr ? '-' : closeAtStr}"/></span></div>
-
           <div class="kv">
             <span class="k">생성자</span>
             <span class="v">
@@ -137,6 +140,25 @@
               </c:choose>
             </span>
           </div>
+          <div class="kv"><span class="k">오픈 일시</span><span class="v"><c:out value="${empty openAtStr ? '-' : openAtStr}"/></span></div>
+          <div class="kv"><span class="k">마감 일시</span><span class="v"><c:out value="${empty closeAtStr ? '-' : closeAtStr}"/></span></div>
+          <div class="kv"><span class="k">템플릿키</span><span class="v"><c:out value="${empty survey.templateKey ? '-' : survey.templateKey}"/></span></div>
+          <div class="kv"><span class="k">복제 원본ID</span><span class="v"><c:out value="${empty survey.cloneFromSurveyId ? '-' : survey.cloneFromSurveyId}"/></span></div>
+
+		<!-- ✅ 관리자 전용 응답 현황 -->
+          <div class="kv">
+			  <span class="k">응답 상태</span>
+			  <span class="v">
+			    <c:out value="${empty adminList[0].response_status ? '-' : adminList[0].response_status}"/>
+			  </span>
+		</div>
+		  <div class="kv">
+		    <span class="k">응답 개수</span>
+		    <span class="v">
+		      <c:out value="${empty adminList[0].response_count ? '-' : adminList[0].response_count}"/>
+		    </span>
+		  </div>  
+		  
           <div class="kv">
             <span class="k">응답률</span>
             <span class="v">
@@ -144,8 +166,7 @@
               <span class="sub">(<c:out value="${top.responders}"/>/<c:out value="${top.applicants}"/>)</span>
             </span>
           </div>
-          <div class="kv"><span class="k">템플릿키</span><span class="v"><c:out value="${empty survey.templateKey ? '-' : survey.templateKey}"/></span></div>
-          <div class="kv"><span class="k">복제 원본ID</span><span class="v"><c:out value="${empty survey.cloneFromSurveyId ? '-' : survey.cloneFromSurveyId}"/></span></div>
+		
         </div>
       </div>
     </div>

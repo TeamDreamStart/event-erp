@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
- pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
@@ -10,379 +10,416 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
+<link
+	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap"
+	rel="stylesheet" />
 
 <link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
 <link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 <title>reservation Form</title>
 <style>
-  body {
- background: #E5E2DB;
+body {
+	background: #E5E2DB;
 }
- 
- .section-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
- }
+
+.section-header {
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+}
 
 .section-header h2 {
- font-size: 30px;
- font-weight: 700;
- line-height: 40px;
+	font-size: 30px;
+	font-weight: 700;
+	line-height: 40px;
 }
 
 .reservation-form {
- display: grid;
- grid-template-columns: 1fr 1fr;
- gap: 1px;
- max-width: 1000px;
- margin: 0 auto;
- background-color: #FAF9F6;
- border: 1px solid #D9D9D9;
- color: #222222;
- overflow: hidden;
- margin-bottom: 140px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1px;
+	max-width: 1000px;
+	margin: 0 auto;
+	background-color: #FAF9F6;
+	border: 1px solid #D9D9D9;
+	color: #222222;
+	overflow: hidden;
+	margin-bottom: 140px;
 }
 
 .event-info {
- padding: 30px;
- min-height: 600px;
- display: flex;
- flex-direction: column;
- position: relative;
- caret-color: transparent;
-}
-.event-info::after {
- content: '';
- position: absolute;
- top: 50%;
- right: 0;
- transform: translateY(-50%);
- width: 1px;
- height: 95%;
- background-color: #222222;
- z-index: 1;
-}
-.form-input {
- padding: 30px;
- background-color: #FAF9F6;
- min-height: 600px;
- display: flex;
- flex-direction: column;
+	padding: 30px;
+	min-height: 600px;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	caret-color: transparent;
 }
 
-.event-info h4,
-.form-input h4 {
- font-size: 16px;
- font-weight: bold;
- margin-top: 0;
- margin-bottom: 32px;
- caret-color: transparent;
+.event-info::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	right: 0;
+	transform: translateY(-50%);
+	width: 1px;
+	height: 95%;
+	background-color: #222222;
+	z-index: 1;
+}
+
+.form-input {
+	padding: 30px;
+	background-color: #FAF9F6;
+	min-height: 600px;
+	display: flex;
+	flex-direction: column;
+}
+
+.event-info h4, .form-input h4 {
+	font-size: 16px;
+	font-weight: bold;
+	margin-top: 0;
+	margin-bottom: 32px;
+	caret-color: transparent;
 }
 
 .event-poster {
- width: 100%;
- text-align: left;
- margin-bottom: 20px;
+	width: 100%;
+	text-align: left;
+	margin-bottom: 20px;
 }
+
 .event-poster img {
- max-width: 200px;
- height: auto;
- box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+	max-width: 200px;
+	height: auto;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .event-details {
- margin-bottom: 20px;
+	margin-bottom: 20px;
 }
+
 .event-details p {
- font-size: 14px;
- line-height: 1.4;
- margin-bottom: 8px;
- display: flex;
- align-items: center;
+	font-size: 14px;
+	line-height: 1.4;
+	margin-bottom: 8px;
+	display: flex;
+	align-items: center;
 }
+
 .event-details p i {
- margin-right: 8px;
- font-size: 14px;
+	margin-right: 8px;
+	font-size: 14px;
 }
+
 .event-details .event-title {
- font-size: 14px;
- font-weight: bold;
- margin-top: 10px;
- margin-bottom: 15px;
+	font-size: 14px;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 15px;
 }
 
 .form-group {
- margin-bottom: 12px;
+	margin-bottom: 12px;
 }
-.form-group #name{
-  margin-bottom: 20px;
+
+.form-group #name {
+	margin-bottom: 20px;
 }
+
 .form-group label {
- display: block;
- font-size: 14px;
- font-weight: bold;
- margin-bottom: 4px;
- caret-color: transparent;
+	display: block;
+	font-size: 14px;
+	font-weight: bold;
+	margin-bottom: 4px;
+	caret-color: transparent;
 }
+
 .form-group input, .form-group select {
- width: 100%;
- padding: 8px 10px;
- box-sizing: border-box;
- font-size: 14px;
- border-radius: 3px;
- border: 1px solid #D9D9D9;
- background-color: #D9D9D9;
+	width: 100%;
+	padding: 8px 10px;
+	box-sizing: border-box;
+	font-size: 14px;
+	border-radius: 3px;
+	border: 1px solid #D9D9D9;
+	background-color: #D9D9D9;
 }
 
 .member-info-box {
- background-color: #BFD4F9;
- border: 1px solid #8FAFED;
- border-radius: 12px;
- padding: 8px 20px;
- font-size: 14px;
- line-height: 1.0;
- margin-bottom: 44px;
- caret-color: transparent;
- font-weight: bold;
+	background-color: #BFD4F9;
+	border: 1px solid #8FAFED;
+	border-radius: 12px;
+	padding: 8px 20px;
+	font-size: 14px;
+	line-height: 1.0;
+	margin-bottom: 44px;
+	caret-color: transparent;
+	font-weight: bold;
 }
+
 .member-info-box2 {
- background-color: #FFFFC5;
- border: 1px solid #FAFA8B;
- border-radius: 12px;
- padding: 8px 8px;
- font-size: 14px;
- line-height: 1.0;
- margin-bottom: 44px;
- caret-color: transparent;
+	background-color: #FFFFC5;
+	border: 1px solid #FAFA8B;
+	border-radius: 12px;
+	padding: 8px 8px;
+	font-size: 14px;
+	line-height: 1.0;
+	margin-bottom: 44px;
+	caret-color: transparent;
 }
 
 .total-price {
- display: flex;
- justify-content: space-between;
- font-weight: bold;
- margin-top: 20px;
- padding-top: 20px;
- border-top: 1px dashed #ccc;
- font-size: 14px;
- caret-color: transparent;
+	display: flex;
+	justify-content: space-between;
+	font-weight: bold;
+	margin-top: 20px;
+	padding-top: 20px;
+	border-top: 1px dashed #ccc;
+	font-size: 14px;
+	caret-color: transparent;
 }
 
 .agreement {
- margin-top: 30px;
- caret-color: transparent;
+	margin-top: 30px;
+	caret-color: transparent;
 }
 
 /* ---------------------------------------------------- */
 /* 사용자 정의 체크박스 스타일 */
-
 .agreement input[type="checkbox"] {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
 }
 
 .agreement label {
-    display: block;
-    position: relative;
-    padding-left: 25px; /* 네모 공간 확보 */
-    cursor: pointer;
-    line-height: 17px; 
-    font-size: 12px;
-    margin-bottom: 10px;
-    font-weight: bold;
+	display: block;
+	position: relative;
+	padding-left: 25px; /* 네모 공간 확보 */
+	cursor: pointer;
+	line-height: 17px;
+	font-size: 12px;
+	margin-bottom: 10px;
+	font-weight: bold;
 }
 
 /* 네모 테두리 (체크 안 됨) */
 .agreement label::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0; 
-    width: 17px; 
-    height: 17px; 
-    border: 1px solid #222222;
-    border-radius: 2px; 
-    background-color: #FFFFFF; 
-    box-sizing: border-box;
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 17px;
+	height: 17px;
+	border: 1px solid #222222;
+	border-radius: 2px;
+	background-color: #FFFFFF;
+	box-sizing: border-box;
 }
 
 /* 체크되었을 때 내부 채우기 (회색 사각형) */
-.agreement input[type="checkbox"]:checked + label::after {
-    content: "";
-    position: absolute;
-    left: 4px; 
-    top: 4px; 
-    width: 9px; 
-    height: 9px;
-    background-color: #AFAFAF; 
-    border-radius: 1px; 
-    z-index: 1;
+.agreement input[type="checkbox"]:checked+label::after {
+	content: "";
+	position: absolute;
+	left: 4px;
+	top: 4px;
+	width: 9px;
+	height: 9px;
+	background-color: #AFAFAF;
+	border-radius: 1px;
+	z-index: 1;
 }
 
 /* ---------------------------------------------------- */
-
 .submit-btn {
- text-align: right;
- margin-top: 20px;
+	text-align: right;
+	margin-top: 20px;
 }
+
 .submit-btn button {
- padding: 8px 8px;
- background-color: #BFD4F9;
- border: 1px solid #8FAFED;
- color: #222222;
- font-weight: bold;
- cursor: pointer;
- border-radius: 3px;
+	padding: 8px 8px;
+	background-color: #BFD4F9;
+	border: 1px solid #8FAFED;
+	color: #222222;
+	font-weight: bold;
+	cursor: pointer;
+	border-radius: 3px;
 }
 /* 추가된 에러 메시지 스타일 */
 .error-message {
-  display: block;
-  color: red;
-  font-size: 11px;
-  margin-top: 4px;
-  height: 15px;
-  text-align: left; 
-  user-select: none;
-  cursor: default;
-  visibility: hidden;
+	display: block;
+	color: red;
+	font-size: 11px;
+	margin-top: 4px;
+	height: 15px;
+	text-align: left;
+	user-select: none;
+	cursor: default;
+	visibility: hidden;
 }
+
 .modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
+	display: none;
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
 }
+
 .modal-content {
-  background-color: #FAF9F6; 
-  margin: 20% auto;
-  padding: 20px;
-  width: 90%;
-  max-width: 450px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  position: relative;
-  text-align: left;
+	background-color: #FAF9F6;
+	margin: 20% auto;
+	padding: 20px;
+	width: 90%;
+	max-width: 450px;
+	border-radius: 12px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+	position: relative;
+	text-align: left;
 }
+
 .modal-body {
-  padding: 10px 0;
+	padding: 10px 0;
 }
+
 .modal-body p {
-  font-size: 16px;
-  color: #222222;
-  margin-bottom: 8px;
-  line-height: 1.4;
+	font-size: 16px;
+	color: #222222;
+	margin-bottom: 8px;
+	line-height: 1.4;
 }
+
 .modal-btn {
-  float: right;
-  padding: 5px 10px;
-  background-color: transparent;
-  border: none; 
-  color: #08f;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 4px;
-  margin-top: 10px;
-  font-size: 14px;
+	float: right;
+	padding: 5px 10px;
+	background-color: transparent;
+	border: none;
+	color: #08f;
+	font-weight: bold;
+	cursor: pointer;
+	border-radius: 4px;
+	margin-top: 10px;
+	font-size: 14px;
 }
+
 .modal-body::after {
-  content: "";
-  display: table;
-  clear: both;
+	content: "";
+	display: table;
+	clear: both;
 }
+
 .close-btn {
-  display: none;
+	display: none;
 }
 </style>
 </head>
 
 <body>
- <jsp:include page="/WEB-INF/views/common/header.jsp" />
- <main>
-  <div class="container">
-   <div class="section-header">
-    <h2>Reservation</h2>
-   </div>
-   <div class="reservation-form">
-    <div class="event-info">
-     <h4>이벤트 정보</h4>
-     <div class="event-poster">
-      <img src="/resources/img/events/event11.jpg"
-       alt="Autumn Music Festival Poster" />
-     </div>
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
+	<main>
+		<div class="container">
+			<div class="section-header">
+				<h2>Reservation</h2>
+			</div>
+			<div class="reservation-form">
+				<div class="event-info">
+					<h4>이벤트 정보</h4>
+					<div class="event-poster">
+						<img src="/resources/img/events/event11.jpg"
+							alt="Autumn Music Festival Poster" />
+					</div>
 
-     <div class="event-details">
-      <p class="event-title">${eventDTO.title }</p>
-      <p>
-       <i class="fas fa-calendar-alt"></i>• ${eventDTO.startDate } ~
-       ${eventDTO.endDate }
-      </p>
-      <p>
-       <i class="fas fa-map-marker-alt"></i>• ${eventDTO.location }
-      </p>
-      <p>
-       <i class="fas fa-won-sign"></i>• <fmt:formatNumber value="${eventDTO.price }" pattern="###,###,###"/>원
-      </p>
-     </div>
-    </div>
-    <div class="form-input">
-     <h4>예약 정보 입력</h4>
+					<div class="event-details">
+						<p class="event-title">${eventDTO.title }</p>
+						<p>
+							<i class="fas fa-calendar-alt"></i>• ${eventDTO.startDate } ~
+							${eventDTO.endDate }
+						</p>
+						<p>
+							<i class="fas fa-map-marker-alt"></i>• ${eventDTO.location }
+						</p>
+						<c:if test="${eventDTO.price >0}">
+						<p>
+							<i class="fas fa-won-sign"></i>•
+							<fmt:formatNumber value="${eventDTO.price }"
+								pattern="###,###,###" />
+							원
+						</p>
+						</c:if>
+					</div>
+				</div>
+				<div class="form-input">
+					<h4>예약 정보 입력</h4>
 
-     <div class="member-info-box">
-      <p>회원 정보로 예약</p>
-      <p>로그인된 회원 정보를 사용하여 예약합니다.</p>
-     </div>
-          <form action="/events/${eventDTO.eventId }/reservations/payment"
-      method="get" id="paymentForm">
-      <div class="form-group">
-       <label for="people">인원수*</label> <input type="number" id="people" min="1" max="10"
-        value="1" name="headCount" style=" margin-bottom: 20px;" required readonly>
-      </div>
-      <div class="form-group">
-       <label for="name">이름*</label> <input type="text" id="name"
-        value="${userDTO.name }" required readonly>
-      </div>
-      <div class="form-group">
-       <label for="email">이메일*</label> <input type="text" id="email"
-        value="${userDTO.email }" required readonly> <span
-        id="email-message" class="error-message"></span>
-      </div>
-      <div class="form-group">
-       <label for="phone">전화번호*</label> <input type="text" id="phone"
-        value="${userDTO.phone }" required maxlength="13" readonly>
-       <span id="phone-message" class="error-message"></span>
-      </div>
-      <div class="total-price">
-       <span>총 결제 금액</span> <span id="totalAmount"><fmt:formatNumber value="${eventDTO.price }" pattern="###,###,###"/>원</span>
-      </div>
+					<div class="member-info-box">
+						<p>회원 정보로 예약</p>
+						<p>로그인된 회원 정보를 사용하여 예약합니다.</p>
+					</div>
+					<form
+						action="/events/${eventDTO.eventId }/reservations<c:if test="${eventDTO.price >0}">/payment</c:if>"
+						method="get" id="paymentForm">
 
-      <div class="agreement">
-       <input type="checkbox" id="agree1" required>
-       <label for="agree1">개인정보 수집 및 이용에 동의합니다. (필수)</label>
-              
-       <input type="checkbox" id="agree2" required>
-       <label for="agree2">예약 취소 및 환불 정책에 동의합니다. (필수)</label>
-      </div>
 
-            <div class="submit-btn">
-       <button type="button" onclick="requestPay()">결제하기</button>
-      </div>
+						<div class="form-group">
+							<label for="people">인원수*</label> <input type="number" id="people"
+								min="1" max="10" value="1" name="headCount"
+								style="margin-bottom: 20px;" required readonly>
+						</div>
+						<div class="form-group">
+							<label for="name">이름*</label> <input type="text" id="name"
+								value="${userDTO.name }" required readonly>
+						</div>
+						<div class="form-group">
+							<label for="email">이메일*</label> <input type="text" id="email"
+								value="${userDTO.email }" required readonly> <span
+								id="email-message" class="error-message"></span>
+						</div>
+						<div class="form-group">
+							<label for="phone">전화번호*</label> <input type="text" id="phone"
+								value="${userDTO.phone }" required maxlength="13" readonly>
+							<span id="phone-message" class="error-message"></span>
+						</div>
+						<c:if test="${eventDTO.price >0}">
+							<div class="total-price">
+								<span>총 결제 금액</span> <span id="totalAmount"><fmt:formatNumber
+										value="${eventDTO.price }" pattern="###,###,###" />원</span>
+							</div>
+						</c:if>
 
-            <input type="hidden" name="userId" value="${userDTO.userId }">
-            <input type="hidden" id="impUid" name="impUid" /> <input
-       type="hidden" id="method" name="method" /> <input type="hidden"
-       id="status" name="status" /> <input type="hidden" id="amount"
-       name="amount" /> <input type="hidden" id="approveNo"
-       name="approveNo" /> <input type="hidden" id="pgTid" name="pgTid" />
-      <input type="hidden" id="memo" name="memo" />
-     </form>
-          <script>
+						<div class="agreement">
+							<input type="checkbox" id="agree1" required> <label
+								for="agree1">개인정보 수집 및 이용에 동의합니다. (필수)</label> <input
+								type="checkbox" id="agree2" required> <label
+								for="agree2">예약 취소 및 환불 정책에 동의합니다. (필수)</label>
+						</div>
+						<c:if test="${eventDTO.price >0}">
+							<div class="submit-btn">
+								<button type="button" onclick="requestPay()">결제하기</button>
+							</div>
+						</c:if>
+						<c:if test="${eventDTO.price ==0 || empty eventDTO.price}">
+							<div class="submit-btn">
+								<button type="submit">예약하기</button>
+							</div>
+						</c:if>
+
+
+					</form>
+
+					<input type="hidden" name="userId" value="${userDTO.userId }">
+					<input type="hidden" id="impUid" name="impUid" /> <input
+						type="hidden" id="method" name="method" /> <input type="hidden"
+						id="status" name="status" /> <input type="hidden" id="amount"
+						name="amount" /> <input type="hidden" id="approveNo"
+						name="approveNo" /> <input type="hidden" id="pgTid" name="pgTid" />
+					<input type="hidden" id="memo" name="memo" />
+					</form>
+					<script>
      const headCountInput = document.querySelector('input[name="headCount"]');
      const totalAmountSpan = document.getElementById('totalAmount');
      const pricePerPerson = ${eventDTO.price};
@@ -466,23 +503,23 @@ function requestPay() {
  });
 }
 </script>
-    </div>
-   </div>
-  </div>
- </main>
- <jsp:include page="/WEB-INF/views/common/footer.jsp" />
- <div id="reservation-modal" class="modal">
-  <div class="modal-content">
-   <span class="close-btn">&times;</span>
-   <div class="modal-body">
-    <h4>예약이 완료되었습니다!</h4>
-    <p>예약번호: G186194572605</p>
-    <p>비회원 예약 조회 시 예약번호와 전화번호를 입력해 주세요.</p>
-    <button id="modal-confirm-btn" class="modal-btn">닫기</button>
-   </div>
-  </div>
- </div>
- <script>
+				</div>
+			</div>
+		</div>
+	</main>
+	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
+	<div id="reservation-modal" class="modal">
+		<div class="modal-content">
+			<span class="close-btn">&times;</span>
+			<div class="modal-body">
+				<h4>예약이 완료되었습니다!</h4>
+				<p>예약번호: G186194572605</p>
+				<p>비회원 예약 조회 시 예약번호와 전화번호를 입력해 주세요.</p>
+				<button id="modal-confirm-btn" class="modal-btn">닫기</button>
+			</div>
+		</div>
+	</div>
+	<script>
  document.addEventListener('DOMContentLoaded', function() {
   const form = document.querySelector('.form-input form');
   const emailInput = document.getElementById('email');

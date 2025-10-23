@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,8 +32,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class UserApiController {
-	private final UserService userService;
-	private final EmailSenderService emailSenderService;
+	
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private EmailSenderService emailSenderService;
 	
 	// 아이디가 존재하는지 체크
 	@GetMapping(value = "/check-username", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -152,5 +156,20 @@ public class UserApiController {
 			this.attempts = attempts;
 			this.email = email;
 		}
+	}
+	
+	// 비밀번호 안증 (ajax전용)
+	@PostMapping(value = "/verify-password",
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Object> verifyPasswordAjax(@RequestBody Map<String, String> body,
+												HttpSession session) {
+		String inputPw = body.get("password");
+		Long userId = (Long) session.getAttribute("userId");
+		if (userId == null) return Map.of("ok", false, "reason", "NO_SESSION");
+		
+		boolean valid = userService.checkPassword(userId, inputPw);
+		log.info("[VERIFY-PW] userId={} valid={}", userId, valid );
+		return Map.of("ok", valid);
 	}
 }

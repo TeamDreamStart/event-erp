@@ -2,22 +2,25 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <title>home</title>
 
+<!-- 공통 css reset/common -->
 <link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
 <link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
-<link
-	href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
-	rel="stylesheet">
 
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
-<script
-	src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+<!-- Swiper CSS & JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
 
 <style>
 body {
@@ -31,7 +34,7 @@ body {
 
 .museum-status {
 	text-align: right;
-	margin: 20px 0 0 ;
+	margin: 20px 0 0;
 	font-size: 20px;
 	user-select: none;
 }
@@ -169,10 +172,11 @@ body {
 	align-items: start;
 }
 
-.two-col < asid{
+.two-col < asid {
 	width: 486px;
 	position: absolute;
-	top: 0; right: 0;
+	top: 0;
+	right: 0;
 }
 
 .notice-heading {
@@ -379,13 +383,12 @@ body {
 	color: #888;
 	padding: 6px 0;
 }
-
 </style>
 </head>
 
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp" flush="true" />
-
+	
 	<main id="main" class="container" role="main">
 		<!-- 메인 비주얼 -->
 		<section class="main-visual" aria-labelledby="mv-heading">
@@ -396,8 +399,8 @@ body {
 			</figure>
 			<hr class="visual-hr" aria-hidden="true">
 			<div class="museum-status" aria-label="운영 시간">
-				<span aria-hidden="true">open 10:30 a.m.</span><br>
-				<span aria-hidden="true">close 18:00 p.m.</span>
+				<span aria-hidden="true">open 10:30 a.m.</span><br> <span
+					aria-hidden="true">close 18:00 p.m.</span>
 			</div>
 		</section>
 
@@ -444,7 +447,7 @@ body {
 							</c:when>
 							<c:otherwise>
 								<c:set var="imgSrc"
-									value='${pageContext.request.contextPath}/resources/img/events/event1.jpg' />
+									value='${pageContext.request.contextPath}/resources/img/events/event8.jpg' />
 							</c:otherwise>
 						</c:choose>
 
@@ -522,7 +525,31 @@ body {
 						<h2 id="notice-heading">Notice</h2>
 					</div>
 					<div class="notice-wrap" aria-label="공지 목록">
-						<div class="item">
+
+						<c:forEach var="noticeDTO" items="${noticeList}" begin="1" end="5">
+							<div class="item">
+								<div class="thumb" aria-hidden="true">
+									<fmt:formatDate value="${noticeDTO.createdAt}"
+										pattern="yyyy-MM-dd" />
+								</div>
+								<div class="meta">
+									<div class="title">
+										<a href="/notices/${noticeDTO.postId }">${noticeDTO.title}</a>
+									</div>
+									<div class="desc">
+										<c:choose>
+											<c:when test="${fn:length(noticeDTO.content) > 10}">
+                        ${fn:substring(noticeDTO.content, 0, 10)}...
+                    </c:when>
+											<c:otherwise>
+                        ${noticeDTO.content}
+                    </c:otherwise>
+										</c:choose>
+									</div>
+								</div>
+							</div>
+						</c:forEach>
+						<!-- <div class="item">
 							<div class="thumb" aria-hidden="true">9/28</div>
 							<div class="meta">
 								<div class="title">가을 음악 페스티벌</div>
@@ -542,7 +569,7 @@ body {
 								<div class="title">개발자 컨퍼런스</div>
 								<div class="desc">오후 2시 (4시간~)</div>
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</aside>
 			</div>

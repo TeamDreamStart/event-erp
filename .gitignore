@@ -1,37 +1,37 @@
 # Maven
-target/
-!.mvn/wrapper/maven-wrapper.jar
+/target/
+/.mvn/wrapper/maven-wrapper.jar
 
 # Eclipse / STS
-.classpath
-.project
-.settings/
-.factorypath
-.springBeans
+/.classpath
+/.project
+/.settings/
+/.factorypath
+/.springBeans
+/.externalToolBuilders/
 
-# IntelliJ IDEA
-.idea/
+# STS Servers & outputs
+/Servers/
+/bin/
+/was-logs/
+/APP_LOG_DIR_IS_UNDEFINED/
+
+# apt-generated
+/.apt_generated/
+/.apt_generated_tests/
+
+# IDEs
+/.idea/
 *.iml
-out/
+/.vscode/
 
-# VS Code
-.vscode/
-
-# OS
+# OS junk
 .DS_Store
 Thumbs.db
 
-# 로그/임시
+# Logs & temp
 *.log
 *.tmp
-target/m2e-wtp/web-resources/META-INF/MANIFEST.MF
 
-# WAS 로그
-/was-logs/
-/was-logs/*.log
-/was-logs/*.txt
-
-*.txt
-*.txt
-/target
-/was-logs
+# 🚫 절대 프로젝트에 포함되면 안 됨(워크스페이스 전용)
+/.metadata/

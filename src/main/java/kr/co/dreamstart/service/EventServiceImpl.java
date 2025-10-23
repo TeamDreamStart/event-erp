@@ -14,6 +14,7 @@ import kr.co.dreamstart.dto.Criteria;
 import kr.co.dreamstart.dto.EventDTO;
 import kr.co.dreamstart.dto.FileAssetDTO;
 import kr.co.dreamstart.mapper.EventMapper;
+import kr.co.dreamstart.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +25,7 @@ public class EventServiceImpl implements EventService {
 
 	private final EventMapper eventMapper;
 	private final FileService fileService;
+	private final UserMapper userMapper;
 
 	@Override
 	public List<EventDTO> page(Criteria cri) {
@@ -64,14 +66,20 @@ public class EventServiceImpl implements EventService {
 			throw new IllegalArgumentException("EndDate가 StartDate보다 빠릅니다.");
 		}
 		
+		// 로그인 사용자 이름
+		String loginName = (userId == null) ? null : userMapper.findNameById(userId);
+		
 		// 등록
 		if (dto.getEventId() == null) { // 신규
 			if (dto.getCreatedBy() == null) dto.setCreatedBy(userId);
+			dto.setCreatedByName(loginName);
 			dto.setUpdatedBy(null);
+			dto.setUpdatedByName(null);
 			return create(dto);
 		} else {
 			// 수정
 			dto.setUpdatedBy(userId);
+			dto.setUpdatedByName(loginName);			
 			update(dto);
 			return dto.getEventId();
 		}

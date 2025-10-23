@@ -29,7 +29,7 @@ public interface UserService {
 	// 아이디/이메일 단건 조회
 	public UserDTO findByLogin(String login);
 	// user_role_name(admin, member)
-	public List<String> findRoleNames(Long userId);
+	public List<String> findRoleNameByUserId(Long userId);
 	// 마지막 로그인 시간 업데이트
 	public void touchLastLogin(Long userId);
 
@@ -55,4 +55,17 @@ public interface UserService {
 	public Map<String,Object> userUpdate(UserDTO userDTO);
 	
 	
+	
+	// db에 있는 userId (자동 생성 번호라 겹치지 않아 더 안정적)
+	public UserDTO findByUserId(Long userId);
+	
+	// 회원탈퇴
+	public int deleteUser(Long userId);
+	
+	// 아이디로 이메일 찾기
+	public Long findUserIdByEmail(String email);
+	
+	// 비밀번호 검증 (비밀번호 일치 여부 확인)
+	public boolean checkPassword(Long userId, String inputPassword);
+
 }

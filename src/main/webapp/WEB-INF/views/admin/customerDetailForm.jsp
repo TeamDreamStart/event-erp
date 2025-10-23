@@ -271,10 +271,15 @@
 									<td>${r.eventTitle}</td>
 									<td>${r.reservationDate}</td>
 									<td>${r.reservationStatus}</td>
-									<td>${r.headcount}</td>
+									<td>${r.headCount}</td>
+									<c:if test="${not empty r.paymentAmount ||r.paymentAmount == 0}">
 									<td>${r.paymentAmount}</td>
 									<td>${r.paymentStatus}</td>
 									<td>${r.paymentMethod}</td>
+									</c:if>
+									<c:if test="${empty r.paymentAmount }">
+										<td colspan="3">결제 정보가 없습니다.</td>
+									</c:if>
 								</tr>
 							</c:forEach>
 							<c:if test="${empty reservationList}">

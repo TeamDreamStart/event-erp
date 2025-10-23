@@ -168,7 +168,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				<when test="searchType == 'email'">
 					AND u.email LIKE CONCAT('%', #{keyword}, '%')
 				</when>
-				<when test="searchType == 'phone'">f
+				<when test="searchType == 'phone'">
 					AND u.phone LIKE CONCAT('%', #{keyword}, '%')
 				</when>
 				<when test="searchType == 'gender'">
@@ -290,11 +290,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 	<!-- 회원가입시 생성되는 user_id 키 값 -> dto.getUserId() -->
+	<!-- jdbcType=VARCHAR -> mysql 데이터 자동 변환을 위해 -->
 	<insert id="join" parameterType="UserDTO"
 		useGeneratedKeys="true" keyProperty="userId">
 		insert into `user`
-		(`username`,`password`,`name`,`email`, `gender`, `phone`, `created_at`,`is_active`)
-		values(#{username},#{password},#{name},#{email}, #{gender}, #{phone}, now(),1)
+		(`username`,`password`,`name`,`email`, `gender`, `phone`, `birth_date`, `created_at`,`is_active`)
+		values(
+		#{username},
+		#{password},
+		#{name},
+		#{email}, 
+		#{gender}, 
+		#{phone}, 
+		<choose>
+	      <when test="birthDate != null and birthDate != '--' and birthDate != ''">
+	        #{birthDate}
+	      </when>
+	      <otherwise>null</otherwise>
+	    </choose>, 
+	    now(),1
+	    )
 	</insert>
 	<!-- 회원가입시 일반회원 권한 부여 -->
 	<insert id="joinRole" parameterType="long">
@@ -328,6 +343,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		= #{login}
 		limit 1
 	</select>
+	
+	<!-- 이름만가져오기 (sns : 관리자 대응) -->
+	<select id="findNameById" parameterType="long" resultType="string">
+		select `name`
+		from `user`
+		where `user_id` = #{userId} limit 1
+	</select>
 
 	<!-- 로그인 - 권한 이름 리스트(ROLE_USER/ROLE_ADMIN) -->
 	<select id="findRoleNameByUserId" parameterType="long"
@@ -355,6 +377,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where `password` IS
 		NULL OR `password` not like '$2%'  <!-- bcrypt 아님 대상 -->
 	</select>
+	
+	<!-- 유저아이디로 이메일 찾기 sns로그인 오류 방지 -->
+	<select id="findUserIdByEmail" parameterType="string" resultType="long">
+		select `user_id`
+		from `user`
+		where `email` = #{email}
+		limit 1
+	</select>
 
 	<update id="updatePasswordById">
 		update `user`
@@ -375,4 +405,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from `user` 
 		where `email` = LOWER (#{email})
 	</select>
+	
+	<!-- 회원탈퇴 -->
+	<delete id="deleteUser" parameterType="long">
+		delete 
+		from `user`
+		where `user_id` = #{userId}
+	</delete>
 </mapper>
