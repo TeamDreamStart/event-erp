@@ -7,21 +7,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
+<link
+	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap"
+	rel="stylesheet" />
 
 <link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
 <link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
-<title>마이페이지 - 예약 상세</title>
+<title>예약 상세</title>
 <style>
-		body {
+body {
 	background: #E5E2DB;
 }
-	
-	.section-header {
-		display: flex;
-		align-items: center;
-		margin-bottom: 20px; /* 제목과 내용 사이 간격 */
-	}
+
+.section-header {
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px; /* 제목과 내용 사이 간격 */
+}
 
 .section-header h2 {
 	font-size: 30px;
@@ -143,6 +145,16 @@
 	}
 }
 </style>
+<script>
+	const result = '${empty result ? "" : result}';
+	const resultType = '${empty resultType ? "" : resultType}';
+
+	if (result === 'success') {
+		alert(`성공적으로 ${resultType}되었습니다.`);
+	} else if (result === 'fail') {
+		alert(`${resultType}이(가) 실패하였습니다.`);
+	}
+</script>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp" />
@@ -163,7 +175,7 @@
 						<span class="info-label">이벤트명</span> <span class="info-value">${reservationDTO.eventTitle}</span>
 					</div>
 					<div class="info-row">
-						<span class="info-label">예약자</span> <span class="info-value">DTO수정필요
+						<span class="info-label">예약자</span> <span class="info-value">${reservationDTO.userName }
 							<%-- ${reservationDTO.userName} --%>
 						</span>
 					</div>
@@ -191,30 +203,38 @@
 
 				<div class="info-box">
 					<h3>결제 정보</h3>
-					<div class="info-row">
-						<span class="info-label">결제 방법</span> <span class="info-value">${reservationDTO.paymentMethod}</span>
-					</div>
-					<div class="info-row">
-						<span class="info-label">결제 상태</span> <span class="info-value">
-							<span class="status-button status-payment-complete">${reservationDTO.paymentStatus}</span>
-						</span>
-					</div>
-					<div class="info-row">
-						<span class="info-label">결제 금액</span> <span class="info-value"><fmt:formatNumber
-								value="${reservationDTO.paymentAmount}" pattern="###,###,###" />
-							원</span>
-					</div>
-					<div class="info-row">
-						<span class="info-label">결제 일시</span> <span class="info-value"><fmt:formatDate
-								value="${reservationDTO.reservationDate}"
-								pattern="yyyy-MM-dd HH:mm:ss" /></span>
-					</div>
+					<c:if test="${not empty reservationDTO.paymentMethod }">
 
+						<div class="info-row">
+							<span class="info-label">결제 방법</span> <span class="info-value">${reservationDTO.paymentMethod}</span>
+						</div>
+						<div class="info-row">
+							<span class="info-label">결제 상태</span> <span class="info-value">
+								<span class="status-button status-payment-complete">${reservationDTO.paymentStatus}</span>
+							</span>
+						</div>
+						<div class="info-row">
+							<span class="info-label">결제 금액</span> <span class="info-value"><fmt:formatNumber
+									value="${reservationDTO.paymentAmount}" pattern="###,###,###" />
+								원</span>
+						</div>
+						<div class="info-row">
+							<span class="info-label">결제 일시</span> <span class="info-value"><fmt:formatDate
+									value="${reservationDTO.reservationDate}"
+									pattern="yyyy-MM-dd HH:mm:ss" /></span>
+						</div>
+
+					</c:if>
+					<c:if test="${empty reservationDTO.paymentMethod }">
+						결제 정보가 없습니다.
+					</c:if>
 					<div class="action-buttons">
 						<c:if test="${reservationDTO.reservationStatus eq 'CANCELLED'}">
     	취소된 예약입니다.
     </c:if>
-						<button onclick="history.back()" class="btn-move">이전으로</button>
+						<button
+							onclick="location.href='/my-info/${reservationDTO.userId}'"
+							class="btn-move">나의예약목록</button>
 						<c:if test="${reservationDTO.reservationStatus ne 'CANCELLED'}">
 							<button type="submit" class="btn-cancel">예약 취소</button>
 						</c:if>

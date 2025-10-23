@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,38 +44,41 @@ public class ReservationController {
 
 	@Autowired
 	private UserService uService;
-	
+
 	@Autowired
 	private AdminService aService;
 
-	//예약폼
+	// 예약폼
 	// eventDetail -> 예약/결제정보 입력폼으로 이동
 	@GetMapping("/events/{eventId}/reservations")
 	public String reservationForm(@PathVariable("eventId") long eventId, Model model, Principal principal) {
+		String email = principal.getName();
 		// 로그인한 사용자 정보
-		UserDTO userDTO = uService.findUserByUserName(principal.getName()); // sns 사용일경우 어떻게 하지
+		UserDTO userDTO = uService.findByEmail(email);
 		model.addAttribute("userDTO", userDTO);
 		EventDTO eventDTO = eService.findById(eventId);
 		model.addAttribute("eventDTO", eventDTO);
 		return "/reservation/reservationForm";
 	}
 
-	// reservation headCount만큼 event 정원수에서 빼야함 @@@@@@@@@@@@@@@@@@@@
-	//예약폼
-	@Transactional
+	
+	// 예약폼 결제금액 XX
 	@PostMapping("/events/{eventId}/reservations")
 	public String reservationPOST(@PathVariable("eventId") long eventId,
-			@RequestParam(required = false) long userId, @RequestParam("headCount") int headCount,
-			RedirectAttributes rttr) {
+			@RequestParam("headCount") int headCount, RedirectAttributes rttr, Principal principal) {
+		String email = principal.getName();
+		// 로그인한 사용자 정보
+		UserDTO userDTO = uService.findByEmail(email);
+		System.out.println(userDTO);
 		// 주문번호 생성
 		long reservationId = rService.makeId(eventId);
 		ReservationDTO rDTO = new ReservationDTO();
 		// eventId,UserId,headCount 값만 받아옴
 		rDTO.setReservationId(reservationId);
-		rDTO.setUserId(userId);
+		rDTO.setUserId(userDTO.getUserId());
 		rDTO.setEventId(eventId);
 		rDTO.setHeadCount(headCount);
-		int result = rService.reservation(rDTO);
+		int result = rService.reservation(rDTO); //예약정보 DB 저장
 		if (result > 0) {
 			rttr.addFlashAttribute("result", "success");
 			rttr.addFlashAttribute("resultType", "예약");
@@ -86,19 +90,21 @@ public class ReservationController {
 	}
 
 	// 예약 폼 + 결제
-	@Transactional
-	@GetMapping("/events/{eventId}/reservations/payment")//get으로 해야 오류가 안 나는 이상한 마법
+	@GetMapping("/events/{eventId}/reservations/payment") // get으로 해야 오류가 안 나는 이상한 마법
 	public String reservationWithPay(@PathVariable("eventId") long eventId, @RequestParam("headCount") int headCount,
 			PaymentDTO paymentDTO, RedirectAttributes rttr, Principal principal) {
+		String email = principal.getName();
 		// 로그인한 사용자 정보
-		UserDTO userDTO = uService.findUserByUserName(principal.getName());
+		UserDTO userDTO = uService.findByEmail(email);
+		System.out.println(userDTO);
+		
 		System.out.println(paymentDTO);
 		// 주문번호 생성
 		long reservationId = rService.makeId(eventId);
 		ReservationDTO rDTO = new ReservationDTO();
 		// eventId,UserId,headCount 값만 받아옴
 		rDTO.setReservationId(reservationId);
-		System.out.println("reservationId : "+reservationId);
+		System.out.println("reservationId : " + reservationId);
 		rDTO.setUserId(userDTO.getUserId());
 		rDTO.setEventId(eventId);
 		rDTO.setHeadCount(headCount);
@@ -109,34 +115,35 @@ public class ReservationController {
 		rttr.addFlashAttribute("result", map.get("result"));
 		rttr.addFlashAttribute("resultType", map.get("resultType"));
 
-		return "redirect:/reservations/" + rDTO.getReservationId(); // 결제완료페이지 - 간단한 예약정보
+		return "redirect:/reservations/" + rDTO.getReservationId(); // 결제완료페이지 - 예약정보 Detail
 	}
 
 	// 예약 후 상세보기로 이동
-	//reservation detail
+	// reservation detail
 	@GetMapping("/reservations/{reservationId}")
-	public String reservationDetail(@PathVariable("reservationId")long reservationId,Model model) {
+	public String reservationDetail(@PathVariable("reservationId") long reservationId, Model model) {
 		ReservationJoinDTO rDTO = rService.selectJoinPayById(reservationId);
 		System.out.println(rDTO);
 		model.addAttribute("reservationDTO", rDTO);
 		return "/reservation/reservationDetail";
 	}
-	
+
 	// detail -> 예약 취소 폼
 	@GetMapping("/reservations/{reservationId}/cancel")
-	public String reservationCencelForm(@PathVariable("reservationId")long reservationId,Model model) {
+	public String reservationCencelForm(@PathVariable("reservationId") long reservationId, Model model) {
 		ReservationJoinDTO rDTO = rService.selectJoinPayById(reservationId);
 		model.addAttribute("reservationDTO", rDTO);
 		return "/reservation/reservationCancel";
 	}
-	
+
 	// 포트원 Api 환불(카드취소) 구현 해야함@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	@PostMapping("/reservations/{reservationId}/cancel")
-	public String reservationCencel(@PathVariable("reservationId")long reservationId,RedirectAttributes rttr,@RequestParam("cancelReason")String cancelReason) {
-		Map<String,Object> map = rService.reservationCancel(reservationId, cancelReason);
-		rttr.addFlashAttribute("resultType",map.get("resultType"));
-		rttr.addFlashAttribute("result",map.get("result"));
-		return "redirect:/reservations/"+reservationId;
+	public String reservationCencel(@PathVariable("reservationId") long reservationId, RedirectAttributes rttr,
+			@RequestParam("cancelReason") String cancelReason) {
+		Map<String, Object> map = rService.reservationCancel(reservationId, cancelReason);
+		rttr.addFlashAttribute("resultType", map.get("resultType"));
+		rttr.addFlashAttribute("result", map.get("result"));
+		return "redirect:/reservations/" + reservationId;
 	}
 
 //	@GetMapping()

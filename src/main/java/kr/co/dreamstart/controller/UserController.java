@@ -254,9 +254,6 @@ public class UserController {
 		UserDTO userDTO = userService.findByUserId(userId);
 		model.addAttribute("userDTO", userDTO);
 		List<ReservationJoinDTO> reservationList = rService.selectJoinPayByUserId(userId); // 예약 및 결제정보
-		for(ReservationJoinDTO dto : reservationList) {
-			System.out.println(dto);
-		}
 		model.addAttribute("reservationList", reservationList);
 		List<BoardPostDTO> postList = boardService.listWithCommentCountByUserId(userId);
 		model.addAttribute("postList", postList);

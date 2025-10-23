@@ -344,12 +344,12 @@ body {
 							<i class="fas fa-map-marker-alt"></i>• ${eventDTO.location }
 						</p>
 						<c:if test="${eventDTO.price >0}">
-						<p>
-							<i class="fas fa-won-sign"></i>•
-							<fmt:formatNumber value="${eventDTO.price }"
-								pattern="###,###,###" />
-							원
-						</p>
+							<p>
+								<i class="fas fa-won-sign"></i>•
+								<fmt:formatNumber value="${eventDTO.price }"
+									pattern="###,###,###" />
+								원
+							</p>
 						</c:if>
 					</div>
 				</div>
@@ -360,64 +360,85 @@ body {
 						<p>회원 정보로 예약</p>
 						<p>로그인된 회원 정보를 사용하여 예약합니다.</p>
 					</div>
-					<form
-						action="/events/${eventDTO.eventId }/reservations<c:if test="${eventDTO.price >0}">/payment</c:if>"
-						method="get" id="paymentForm">
+
+					<c:if test="${eventDTO.price >0  || not empty eventDTO.price}">
+						<form action="/events/${eventDTO.eventId }/reservations/payment"
+							method="get" id="paymentForm">
+					</c:if>
+
+					<c:if test="${eventDTO.price == 0  || empty eventDTO.price}">
+						<form action="/events/${eventDTO.eventId }/reservations"
+							method="post" id="paymentForm">
+							<input type="hidden" name="${_csrf.parameterName}"
+								value="${_csrf.token}" />
+					</c:if>
 
 
-						<div class="form-group">
-							<label for="people">인원수*</label> <input type="number" id="people"
-								min="1" max="10" value="1" name="headCount"
-								style="margin-bottom: 20px;" required readonly>
+					<div class="form-group">
+						<label for="people">인원수*</label> <input type="number" id="people"
+							min="1" max="10" value="1" name="headCount"
+							style="margin-bottom: 20px;" required readonly>
+					</div>
+					<div class="form-group">
+						<label for="name">이름*</label> <input type="text" id="name"
+							value="${userDTO.name }" required readonly>
+					</div>
+					<div class="form-group">
+						<label for="email">이메일*</label> <input type="text" id="email"
+							value="${userDTO.email }" required readonly> <span
+							id="email-message" class="error-message"></span>
+					</div>
+					<div class="form-group">
+						<label for="phone">전화번호*</label> <input type="text" id="phone"
+							value="${userDTO.phone }" required maxlength="13" readonly>
+						<span id="phone-message" class="error-message"></span>
+					</div>
+					<c:if test="${eventDTO.price >0}">
+						<div class="total-price">
+							<span>총 결제 금액</span> <span id="totalAmount"><fmt:formatNumber
+									value="${eventDTO.price }" pattern="###,###,###" />원</span>
 						</div>
-						<div class="form-group">
-							<label for="name">이름*</label> <input type="text" id="name"
-								value="${userDTO.name }" required readonly>
-						</div>
-						<div class="form-group">
-							<label for="email">이메일*</label> <input type="text" id="email"
-								value="${userDTO.email }" required readonly> <span
-								id="email-message" class="error-message"></span>
-						</div>
-						<div class="form-group">
-							<label for="phone">전화번호*</label> <input type="text" id="phone"
-								value="${userDTO.phone }" required maxlength="13" readonly>
-							<span id="phone-message" class="error-message"></span>
-						</div>
-						<c:if test="${eventDTO.price >0}">
-							<div class="total-price">
-								<span>총 결제 금액</span> <span id="totalAmount"><fmt:formatNumber
-										value="${eventDTO.price }" pattern="###,###,###" />원</span>
-							</div>
-						</c:if>
+					</c:if>
 
-						<div class="agreement">
-							<input type="checkbox" id="agree1" required> <label
-								for="agree1">개인정보 수집 및 이용에 동의합니다. (필수)</label> <input
-								type="checkbox" id="agree2" required> <label
-								for="agree2">예약 취소 및 환불 정책에 동의합니다. (필수)</label>
+					<div class="agreement">
+						<input type="checkbox" id="agree1" required> <label
+							for="agree1">개인정보 수집 및 이용에 동의합니다. (필수)</label> <input
+							type="checkbox" id="agree2" required> <label for="agree2">예약
+							취소 및 환불 정책에 동의합니다. (필수)</label>
+					</div>
+					<c:if test="${eventDTO.price >0}">
+						<div class="submit-btn">
+							<button type="button" onclick="requestPay()">결제하기</button>
 						</div>
-						<c:if test="${eventDTO.price >0}">
-							<div class="submit-btn">
-								<button type="button" onclick="requestPay()">결제하기</button>
-							</div>
-						</c:if>
-						<c:if test="${eventDTO.price ==0 || empty eventDTO.price}">
-							<div class="submit-btn">
-								<button type="submit">예약하기</button>
-							</div>
-						</c:if>
+					</c:if>
+					<c:if test="${eventDTO.price ==0 || empty eventDTO.price}">
+						<div class="submit-btn">
+							<button type="submit" id="reservationBtn">예약하기</button>
+						</div>
+						<script>
+document.getElementById('reservationBtn').addEventListener('click', function(e){
+    const proceed = confirm('해당 이벤트는 결제 없이 바로 예약됩니다.\n바로 예약하시겠습니까?'); //확인 -> 예약 / 취소 -> 이벤트디테일
+    if(!proceed){
+        e.preventDefault(); // 폼 제출 막기
+        alert("예약이 취소되었습니다.");
+        window.location.href = "/events/"+${eventDTO.eventId}; //이벤트 디테일 페이지로 이동
+    }
+});
+</script>
+					</c:if>
 
 
-					</form>
-
-					<input type="hidden" name="userId" value="${userDTO.userId }">
-					<input type="hidden" id="impUid" name="impUid" /> <input
-						type="hidden" id="method" name="method" /> <input type="hidden"
-						id="status" name="status" /> <input type="hidden" id="amount"
-						name="amount" /> <input type="hidden" id="approveNo"
-						name="approveNo" /> <input type="hidden" id="pgTid" name="pgTid" />
-					<input type="hidden" id="memo" name="memo" />
+					<!-- 결제시 -->
+					<c:if test="${eventDTO.price >0  || not empty eventDTO.price}">
+						<input type="hidden" name="userId" value="${userDTO.userId }">
+						<input type="hidden" id="impUid" name="impUid" />
+						<input type="hidden" id="method" name="method" />
+						<input type="hidden" id="status" name="status" />
+						<input type="hidden" id="amount" name="amount" />
+						<input type="hidden" id="approveNo" name="approveNo" />
+						<input type="hidden" id="pgTid" name="pgTid" />
+						<input type="hidden" id="memo" name="memo" />
+					</c:if>
 					</form>
 					<script>
      const headCountInput = document.querySelector('input[name="headCount"]');

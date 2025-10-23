@@ -50,8 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{headCount})
 	</insert>
 
-	<resultMap id="reservationJoinMap"
-		type="ReservationJoinDTO">
+	<resultMap id="reservationJoinMap" type="ReservationJoinDTO">
 		<id column="reservationId" property="reservationId" />
 
 		<!-- EVENT -->
@@ -67,7 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="reservationStatus" property="reservationStatus" />
 		<result column="headCount" property="headCount" />
 		<result column="userType" property="userType" />
-		<result column="location" property="location"/>
+		<result column="location" property="location" />
 		<result column="qrCode" property="qrCode" />
 		<result column="cancelReason" property="cancelReason" />
 		<result column="reservationCancelledAt"
@@ -93,6 +92,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectJoinPayByUserId"
 		resultMap="reservationJoinMap" parameterType="long">
 		SELECT
+		e.event_id AS
+		eventId,
+
+
 		r.reservation_id AS
 		reservationId,
 		e.title AS eventTitle,
@@ -103,25 +106,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		headCount,
 		e.location AS location,
 		p.amount AS paymentAmount,
-		p.status AS paymentStatus,
+		p.status AS
+		paymentStatus,
 		p.method AS paymentMethod
 		FROM reservation r
-		JOIN event e ON r.event_id
+		JOIN event e
+		ON r.event_id
 		= e.event_id
-		LEFT JOIN payment p ON r.reservation_id = p.reservation_id
-		WHERE r.user_id = #{userId} order by r.reservation_date desc
+		LEFT JOIN payment p ON r.reservation_id =
+		p.reservation_id
+		WHERE r.user_id = #{userId} order by
+		r.reservation_date desc
 	</select>
 
-
+	<!-- 예약자명 필요 -->
 	<select id="selectJoinPayById" resultMap="reservationJoinMap"
 		parameterType="long">
 		SELECT
 		r.reservation_id AS reservationId,
-		e.title AS
-		eventTitle,
+		r.user_id AS userId,
+		u.name AS userName,
+		e.title AS eventTitle,
 		r.reservation_date AS reservationDate,
-		r.status AS
-		reservationStatus,
+		r.status AS reservationStatus,
 		r.headcount AS headCount,
 		e.location AS location,
 		p.amount AS paymentAmount,
@@ -130,13 +137,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM reservation r
 		JOIN event e
 		ON r.event_id = e.event_id
+		JOIN user u
+		ON r.user_id = u.user_id
 		LEFT JOIN payment p
-		ON
-		r.reservation_id = p.reservation_id
-		WHERE r.reservation_id =
-		#{reservationId}
+		ON r.reservation_id = p.reservation_id
+		WHERE r.reservation_id = #{reservationId}
 	</select>
-	
+
+
 	<update id="cancel">
 		update reservation set status='CANCELLED',
 		cancel_reason = #{cancelReason}, cancelled_at = now() where
@@ -160,23 +168,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		headCount,
 		e.location AS location,
 		r.user_type AS userType,
-		r.qr_code AS qrCode,
+		r.qr_code AS
+		qrCode,
 		r.cancel_reason
 		AS cancelReason,
-		r.cancelled_at AS reservationCancelledAt,
+		r.cancelled_at AS
+		reservationCancelledAt,
 
 		p.payment_id
 		AS paymentId,
-		p.amount AS paymentAmount,
+		p.amount AS
+		paymentAmount,
 		p.status AS paymentStatus,
 		p.method AS paymentMethod,
 		p.refund_amount AS refundAmount,
 		p.approve_no AS approveNo,
-		p.pg_tid AS pgTid,
+		p.pg_tid AS
+		pgTid,
 		p.memo AS memo,
 		p.paid_at
 		AS paidAt,
-		p.cancelled_at AS paymentCancelledAt,
+		p.cancelled_at AS
+		paymentCancelledAt,
 		p.created_at AS
 		paymentCreatedAt,
 		p.imp_uid AS impUid
@@ -186,10 +199,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		ON
 		r.user_id = u.user_id
 		JOIN event e
-		ON r.event_id = e.event_id
+		ON
+		r.event_id = e.event_id
 		LEFT JOIN
 		payment p
-		ON p.reservation_id = r.reservation_id
+		ON p.reservation_id =
+		r.reservation_id
 
 		ORDER BY
 		r.reservation_date DESC
@@ -215,17 +230,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		e.location AS location,
 		r.user_type AS userType,
 		r.qr_code AS qrCode,
-		r.cancel_reason AS cancelReason,
+		r.cancel_reason AS
+		cancelReason,
 		r.cancelled_at AS
 		reservationCancelledAt,
 
-		p.payment_id AS paymentId,
+		p.payment_id AS
+		paymentId,
 		p.amount AS
 		paymentAmount,
 		p.status AS paymentStatus,
-		p.method AS paymentMethod,
+		p.method
+		AS paymentMethod,
 		p.refund_amount AS refundAmount,
-		p.approve_no AS approveNo,
+		p.approve_no AS
+		approveNo,
 		p.pg_tid AS
 		pgTid,
 		p.memo AS memo,
@@ -238,14 +257,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 		FROM reservation r
 		JOIN user u
-		ON r.user_id = u.user_id
+		ON r.user_id =
+		u.user_id
 		JOIN event
 		e
 		ON r.event_id = e.event_id
 		LEFT JOIN payment p
-		ON p.reservation_id =
+		ON
+		p.reservation_id =
 		r.reservation_id
-		WHERE r.reservation_id = #{reservationId};
+		WHERE r.reservation_id =
+		#{reservationId};
 	</select>
 
 </mapper>

@@ -20,7 +20,7 @@ public class CustomUserDetails extends User {
 							Collection<? extends GrantedAuthority> authorities) {
 		// 부모(User) 생성자: enabled, accountNonExpired, credentialsNonExpired, accountNonLocked
 		super(
-				email, 
+				email,//getName시 첫번째 인자인 이메일을 받아옴 
 				password, 
 				enabled, 
 				true, true, true, 

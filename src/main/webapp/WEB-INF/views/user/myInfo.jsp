@@ -1,300 +1,924 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MyPage · DreamStart</title>
+<link
+	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap"
+	rel="stylesheet" />
 
-<!-- 공통 리소스 -->
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
 <link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
-
+<title>MyPage</title>
 <style>
 body {
-  background: #E5E2DB;
-  font-family: 'Montserrat', 'Pretendard', sans-serif;
-  color: #222;
+	background: #E5E2DB;
 }
 
-/* 레이아웃 */
-.container {
-  max-width: 896px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  padding: 40px 0 120px 0;
+.btn-area {
+	width: 896px;
+	display: flex;
+	margin: 0 auto;
+	justify-content: flex-end;
 }
 
-.section-header { margin-bottom: 12px; }
+.section-header {
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px; /* 제목과 내용 사이 간격 */
+}
+
+.page-title {
+	display: flex;
+	align-items: center;
+}
+
 .page-title h2 {
-  font-size: 30px; font-weight: 800; color: #1f1f1f;
+	font-size: 30px;
+	font-weight: 700;
+	line-height: 40px;
 }
 
-/* 카드 공통 */
-.member-info-box, .my-reservation-box, .survey-box {
-  background: #fff; border: 1px solid #d9d9d9;
-  border-radius: 12px; padding: 32px 48px;
+/* --- 회원 정보 섹션 --- */
+.member-info-box {
+	width: 896px; /* 이미지에 따라 적절한 너비 설정 */
+	background-color: #FFFFFF;
+	padding: 32px 51px;
+	border: 1px solid #D9D9D9;
+	border-radius: 12px;
+	position: relative;
+	font-size: 14px;
+	max-height: 163;
+	margin: 0 auto 40 auto;
 }
 
-/* 나의 정보 */
 .info-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 24px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 39px;
 }
+
+.info-header p {
+	font-weight: bold;
+	margin: 0;
+}
+
 .modify-btn {
-  background: #d9d9d9; color: #222;
-  padding: 6px 22px; border-radius: 6px;
-  font-weight: 700; border: none; cursor: pointer;
-  transition: 0.15s;
+	background-color: #D9D9D9;
+	color: #222222;
+	padding: 5px 22px;
+	border-radius: 3px;
+	font-size: 14px;
+	cursor: pointer;
+	border: none;
+	font-weight: 700;
 }
-.modify-btn:hover { background: #cfcfcf; }
-.withdraw-btn {
-  background: #FFD8D8; color: #A03030;
-  padding: 6px 22px; border-radius: 6px;
-  font-weight: 700; border: 1px solid #E37A7A;
-  cursor: pointer; transition: 0.15s;
-}
-.withdraw-btn:hover { background: #F8BFBF; }
 
 .info-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  text-align: center;
-  font-size: 15px; color: #333;
-  row-gap: 12px;
+	display: grid;
+	grid-template-columns: 1fr 2fr 2fr; /* 항목명 | 이메일 | 전화번호 */
+	gap: 12px 0;
+	font-size: 14px;
 }
-.info-label { font-weight: 700; color: #555; }
 
-/* 탈퇴 모달 */
-.modal-overlay {
-  position: fixed; top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.4);
-  display: flex; justify-content: center; align-items: center;
-  z-index: 9999;
+.info-label {
+	font-weight: 700;
+	color: #222222;
 }
-.modal-content {
-  background: #fff;
-  border-radius: 10px;
-  padding: 30px 40px;
-  text-align: center;
-  max-width: 360px;
-  width: 90%;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-}
-.modal-content h3 {
-  font-size: 20px; font-weight: 800; margin-bottom: 14px;
-}
-.modal-content p {
-  font-size: 14px; color: #444; margin-bottom: 24px;
-  line-height: 1.6;
-}
-.modal-buttons {
-  display: flex; justify-content: center; gap: 10px;
-}
-.withdraw-confirm {
-  background: #FFD8D8; color: #A03030;
-  border: 1px solid #E37A7A;
-  padding: 8px 20px; border-radius: 6px;
-  font-weight: 700; cursor: pointer; transition: 0.15s;
-}
-.withdraw-confirm:hover { background: #F8BFBF; }
-.withdraw-cancel {
-  background: #d9d9d9; color: #222;
-  border: none; padding: 8px 20px;
-  border-radius: 6px; font-weight: 700;
-  cursor: pointer; transition: 0.15s;
-}
-.withdraw-cancel:hover { background: #cfcfcf; }
 
-/* 예약 영역 */
-.my-reservation-box h3 { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
-.no-reservation-content { text-align: center; padding: 40px 0; }
-.no-reservation-content p { margin: 6px 0; font-size: 15px; }
+/* --- 나의 예약 섹션 (예약 없음 상태) --- */
+.my-reservation-box {
+	background-color: #FFFFFF;
+	padding: 32px 51px;
+	border: 1px solid #D9D9D9;
+	border-radius: 12px;
+	min-height: 218px;
+	width: 896px;
+	display: flex;
+	align-items: center;
+	margin: 40px 0px 0px 0px;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.my-reservation-box h3 {
+	font-size: 14px;
+	font-weight: bold;
+	margin: 0 0 43px 0;
+	width: 100%;
+}
+
+.no-reservation-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	flex-grow: 1; /* 중앙 정렬을 위해 남은 공간 차지 */
+	text-align: center;
+}
+
+.no-reservation-content p {
+	font-size: 14px;
+	margin: 0 0 11px 0;
+	color: #222222;
+}
+
 .event-button {
-  background: #BFD4F9; color: #222;
-  padding: 10px 20px; border-radius: 4px;
-  font-weight: 700; border: 1px solid #8FAFED;
-  display: inline-block; margin-top: 12px;
-  transition: 0.2s;
+	text-decoration: none;
+	background-color: #BFD4F9;
+	color: #222222;
+	padding: 10px;
+	margin-top: 17px;
+	border: 1px solid #8FAFED;
+	border-radius: 3px;
+	font-size: 14px;
+	font-weight: 700;
+	cursor: pointer;
+	display: inline-block;
 }
-.event-button:hover { background: #AFC6F4; }
 
-/* 예약 카드 */
-.tmpWrap { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 28px; }
+/* 나의 예약 정보용 임시 CSS */
+.tmpWrap {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 72px;
+	margin-left: 21px; /* 72px - 패딩값(51px) */
+}
+
 .tmp {
-  border: 1px solid #d9d9d9; border-radius: 8px;
-  padding: 18px 14px; cursor: pointer; transition: background 0.2s;
+	/* 기존 스타일 유지 */
+	width: 202px;
+	height: 195px;
+	border: 1px solid #D9D9D9;
+	border-radius: 3px;
+	cursor: pointer;
+	padding: 16px 13px;
+	font-size: 14px;
 }
-.tmp:hover { background: #f8f8f8; }
-.tmp-span-title { font-weight: 700; display: block; margin-bottom: 6px; }
-.tmp-span { display: block; font-size: 14px; color: #555; }
-.tmp-span-radius {
-  display: inline-block; padding: 4px 10px;
-  border-radius: 12px; font-size: 13px;
-  font-weight: 700; margin-top: 8px;
-}
-.tmp-span-radius.CONFIRMED { background: #BFD4F9; border: 1px solid #8FAFED; color: #222; }
-.tmp-span-radius.CANCELLED { background: #FFD8D8; border: 1px solid #E37A7A; color: #A03030; }
-.tmp-span-radius.PENDING_PAYMENT { background: #FFF4D1; border: 1px solid #EBC561; color: #8A6A00; }
-.tmp.expired { opacity: 0.6; filter: grayscale(30%); cursor: default; }
 
-/* 설문 */
-.survey-box h3 { font-size: 18px; font-weight: 700; margin-bottom: 14px; }
-.survey-list p { font-size: 15px; color: #666; margin-bottom: 24px; }
+background-color
+:
+ 
+#D9D9D9
+;
+
+
+}
+.tmp-span-title {
+	display: block;
+	font-weight: 700;
+	margin-bottom: 5px;
+}
+
+.tmp-span {
+	display: block;
+	font-weight: 500;
+	margin-top: 8px;
+}
+
+.tmp-details {
+	margin-left: 15px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.tmp-span-radius {
+	border: 1px solid #8FAFED;
+	border-radius: 15px;
+	background-color: #BFD4F9;
+	display: inline-block;
+	/* height: 25px; */
+	text-align: center;
+	/* width: 68px; */
+	padding: 1px 8px;
+}
+
+.reservation-bottom {
+	display: flex;
+	align-items: center;
+	gap: 44px;
+}
+
+.tmp-middle {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 82%;
+}
+
+.dashboard-container {
+	/* 최대 너비 (max-w-4xl) 및 중앙 정렬 (mx-auto) */
+	max-width: 56rem; /* 896px */
+	margin-left: auto;
+	margin-right: auto;
+	/* 섹션 간 수직 간격 (space-y-8) */
+	display: flex;
+	flex-direction: column;
+	gap: 2rem; /* 32px */
+}
+
+.card {
+	background-color: #ffffff;
+	border-radius: 0.75rem; /* rounded-xl */
+	/* 기본 패딩 (p-6) */
+	padding: 1.5rem; /* 24px */
+	/* 그림자 (shadow-soft) */
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px
+		rgba(0, 0, 0, 0.03);
+}
+
+/* 태블릿 이상에서의 큰 패딩 (sm:p-8) */
+@media ( min-width : 640px) {
+	.card {
+		padding: 2rem; /* 32px */
+	}
+}
+
+.card-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	/* 하단 구분선 (border-b) */
+	border-bottom: 1px solid #F3F4F6; /* border-gray-100 */
+	/* 구분선 아래 패딩 (pb-3) */
+	padding-bottom: 0.75rem; /* 12px */
+	/* 제목 아래 마진 (mb-6) */
+	margin-bottom: 1.5rem; /* 24px */
+}
+
+.card-header h2 {
+	font-size: 1.25rem; /* text-xl */
+	font-weight: 700; /* font-bold */
+	color: #333333; /* text-dark */
+	margin: 0;
+}
+
+.card-header button {
+	font-size: 0.875rem; /* text-sm */
+	color: #6B7280; /* text-gray-500 */
+	cursor: pointer;
+	transition: color 0.15s ease-in-out;
+	padding: 0.5rem 0.75rem; /* 버튼 패딩 추가 */
+	border: 1px solid #D1D5DB;
+	background-color: #F9FAFB;
+	border-radius: 0.375rem;
+}
+
+.card-header button:hover {
+	color: #3B82F6; /* primary-blue */
+	border-color: #3B82F6;
+}
+
+.data-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 1rem; /* mt-4 역할 */
+	border-radius: 0.5rem; /* 전체 테이블에 둥근 모서리 적용 */
+	overflow: hidden; /* 둥근 모서리를 위해 필수 */
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* 테이블에 가벼운 그림자 */
+}
+
+.data-table thead tr {
+	background-color: #F9FAFB; /* th 배경색, f9f9f9 대신 밝은 회색 */
+	color: #333333;
+	font-size: 0.875rem;
+	font-weight: 600;
+}
+
+.data-table th, .data-table td {
+	padding: 1rem 1.25rem; /* 충분한 패딩 */
+	text-align: left;
+	border-bottom: 1px solid #E5E7EB; /* border-gray-200 */
+	font-size: 0.875rem; /* text-sm */
+	line-height: 1.5;
+}
+
+.data-table td {
+	color: #4B5563; /* text-gray-600 */
+}
+
+/* 마지막 행 하단선 제거 */
+.data-table tbody tr:last-child td {
+	border-bottom: none;
+}
+
+/* 테이블 내부 버튼 스타일 */
+.data-table button, .data-table a {
+	display: inline-block;
+	background-color: #3B82F6; /* primary-blue */
+	color: white;
+	padding: 0.375rem 0.75rem;
+	border-radius: 0.375rem; /* rounded-md */
+	font-size: 0.875rem;
+	border: none;
+	cursor: pointer;
+	text-decoration: none;
+	transition: background-color 0.15s ease-in-out;
+}
+
+.data-table button:hover, .data-table a:hover {
+	background-color: #2563EB;
+}
+
+.data-table .center {
+	text-align: center;
+	color: #9CA3AF; /* text-gray-400 */
+}
+
+.info-label {
+	display: inline-block;
+	width: 10rem; /* 96px, 기존 120px보다 약간 작게 조정 */
+	font-weight: 700;
+	color: #6B7280;
+	margin-right: 0.5rem;
+}
+
+.info-row {
+	margin: 0.6rem 0; /* 6px 0 역할 */
+	font-size: 0.875rem;
+	color: #333333;
+}
+
+.modal-backdrop {
+	background-color: rgba(0, 0, 0, 0.85); /* 짙은 배경 */
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+	display: none;
+}
+
+/* 모달 컨텐츠 박스 (하얀색 박스) */
+.modal-content {
+	background-color: #FAF9F6;
+	border-radius: 12px;
+	padding: 32px 31px;
+	width: 455px;
+	min-height: 355px;
+}
+
+/* 제목 스타일 */
+.modal-title {
+	font-size: 14px;
+	font-weight: 700;
+	color: #222222;
+	margin-bottom: 10px;
+}
+
+/* 주의사항 박스 (빨간색 경고 박스) */
+.warning-box {
+	background-color: #FFE1DD; /* 연한 빨간색 배경 */
+	border: 1px solid #FDBCB4; /* 경계선 */
+	padding: 8px;
+	border-radius: 3px;
+	margin-bottom: 15px;
+	width: 85%;
+}
+
+.warning-header {
+	color: #C42006;
+	font-weight: 900;
+	margin-bottom: 18px;
+	font-size: 14px;
+}
+
+.warning-icon {
+	margin-right: 5px;
+	font-size: 14px;
+}
+
+.warning-list {
+	padding-left: 0;
+	margin-top: 10px;
+	margin-bottom: 0;
+	font-weight: 700;
+}
+
+.warning-list li {
+	color: #C42006; /* 진한 빨간색 리스트 텍스트 */
+	font-size: 14px;
+	line-height: 1.6;
+}
+
+/* 비밀번호 입력 안내 텍스트 */
+.input-instruction {
+	font-size: 14px;
+	color: #222222;
+	margin-bottom: 15px;
+}
+
+/* 레이블 텍스트 */
+.label-text {
+	display: block;
+	font-weight: 700;
+	font-size: 14px;
+	color: #222222;
+	margin-bottom: 8px;
+}
+
+/* 비밀번호 입력 필드 */
+.password-input {
+	width: 85%;
+	padding: 9px;
+	border: 1px solid #AFAFAF;
+	border-radius: 4px;
+	box-sizing: border-box;
+	outline: none;
+	background-color: #F2F0EF;
+}
+
+.password-input:focus {
+	border: 1px solid #007FFF;
+	outline: none;
+}
+
+.modal-hr {
+	border: 1px solid #222222;
+	margin-top: 12px;
+}
+/* 버튼 영역 */
+.modal-actions {
+	display: flex;
+	justify-content: flex-end; /* 오른쪽 정렬 */
+	gap: 14px; /* 버튼 사이 간격 */
+	margin-top: 12px;
+}
+
+/* 공통 버튼 스타일 */
+.btn {
+	border: none;
+	border-radius: 12px;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: 700;
+	transition: background-color 0.2s;
+	width: 52px;
+	height: 34px;
+}
+
+/* 탈퇴 버튼 (빨간색) */
+.btn-withdraw {
+	background-color: #ED2100; /* 진한 빨간색 */
+	color: #222222;
+}
+
+.btn-withdraw:hover {
+	background-color: #cc2900;
+}
+
+/* 취소 버튼 (옅은 회색) */
+.btn-cancel {
+	background-color: #F2F0EF; /* 옅은 회색 */
+	color: #222222;
+	border: 1px solid #AFAFAF;
+}
+
+.btn-cancel:hover {
+	background-color: #e0e0e0;
+}
+
+.info-box {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.password-modal-content {
+	background-color: #FAF9F6;
+	border-radius: 12px;
+	padding: 32px 31px 12px 31px;
+	width: 455px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	border: none;
+	box-sizing: border-box;
+}
+/* 비밀번호 확인 모달 제목 스타일 */
+.password-modal-content .modal-title {
+	font-size: 14px;
+	font-weight: bold;
+	color: #222222;
+	margin-bottom: 16px;
+}
+
+/* 비밀번호 확인 입력 안내 문구 스타일 */
+.password-modal-content .modal-instruction {
+	font-size: 14px;
+	color: #222222;
+	margin-bottom: 17px;
+}
+
+/* 비밀번호 입력 필드 */
+.password-modal-content .password-input {
+	width: 85%;
+	padding: 9px;
+	background-color: #F2F0EF;
+	border: 1px solid #AFAFAF;
+	border-radius: 3px;
+	box-sizing: border-box;
+	margin-bottom: 12px;
+	outline: none;
+}
+
+.password-modal-content .password-input:focus {
+	border-color: #007bff;
+	background-color: #F2F0EF;
+}
+
+/* 비밀번호 확인 버튼 스타일 */
+.btn-confirm {
+	background-color: #BFD4F9;
+	border: 1px solid #8FAFED;
+	color: #222222;
+	width: 52px;
+	height: 34px;
+}
+
+.btn-confirm:hover {
+	background-color: #8da0e6;
+}
+/* 모달 액션 영역 (탈퇴 모달과 구분하기 위해 버튼 간격 등 조절 가능) */
+.password-modal-content .modal-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 14px;
+	border-top: 1px solid #222222;
+	padding-top: 12px;
+}
+
+.container-box {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+/*비밀번호 확인모달창 에러 색상*/
+.error-color {
+	color: #ED2100 !important;
+}
+/* --- 이벤트 설문 조사 섹션 --- */
+.survey-box {
+	width: 896px;
+	background-color: #FFFFFF;
+	padding: 32px 51px;
+	border: 1px solid #D9D9D9;
+	border-radius: 12px;
+	position: relative;
+	font-size: 14px;
+	margin: 40px 0;
+}
+
+.survey-box h3 {
+	display: flex;
+	align-items: left;
+	margin-bottom: 22px;
+	font-weight: 700;
+}
+
+.survey-list p {
+	display: flex;
+	align-items: left;
+	margin-bottom: 45px;
+}
+
 .survey-item {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 14px 18px; border: 1px solid #d9d9d9;
-  border-radius: 8px; margin-bottom: 12px;
-  background: #fff; transition: 0.2s;
+	display: flex;
+	align-items: center;
 }
-.survey-item:hover { background: #f8f8f8; }
-.survey-text .event-title { font-weight: 700; margin-bottom: 6px; }
-.survey-text .event-date { font-size: 14px; color: #888; }
+
+.survey-info {
+	font-size: 14px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	border: 1px solid #D9D9D9;
+	padding: 18px 11px;
+	text-align: left;
+	border-radius: 3px;
+}
+
+.survey-text {
+	display: flex;
+	flex-direction: column; /* 수직 정렬 */
+	margin-right: auto; /* 버튼을 오른쪽으로 밀어냄 */
+}
+
+.survey-info .event-title {
+	font-weight: 700;
+	margin-bottom: 12px;
+}
+
+.survey-info .event-date {
+	color: #888888;
+}
+
 .survey-btn {
-  background: #d9d9d9; color: #222;
-  padding: 6px 16px; border-radius: 6px;
-  font-size: 14px; font-weight: 700;
-  border: none; cursor: pointer; transition: 0.2s;
+	background-color: #D9D9D9;
+	color: #222222;
+	padding: 5px 22px;
+	border-radius: 3px;
+	font-size: 14px;
+	cursor: pointer;
+	border: none;
+	font-weight: 700;
+	display: flex;
 }
-.survey-btn:hover { background: #cfcfcf; }
-.survey-status {
-  padding: 4px 12px; border-radius: 10px;
-  font-size: 13px; font-weight: 700;
+
+.survey-info {
+	border: 1px solid #D9D9D9;
+	padding: 18px 11px;
+	text-align: left;
+	border-radius: 3px;
 }
-.survey-status.done { background: #BFD4F9; color: #222; }
-.survey-status.closed { background: #F2F0EF; color: #888; }
-.survey-item.closed { opacity: 0.6; pointer-events: none; }
+
+.survey-info .event-date {
+	color: #888888;
+}
 </style>
 </head>
-
 <body>
-<jsp:include page="/WEB-INF/views/common/header.jsp" />
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
+	<main>
+		<div class="container">
 
-<main>
-<div class="container">
-  <div class="section-header">
-    <div class="page-title"><h2>MyPage</h2></div>
-  </div>
+			<div class="section-header">
+				<div class="page-title">
+					<h2>MyPage</h2>
+				</div>
+			</div>
+			<div class="info-box">
+				<div class="container-box">
+					<div class="member-info-box">
+						<div class="info-header">
+							<p>나의 정보</p>
+							<!-- <button class="modify-btn"
+                        onclick="location.href='/my-info/${userDTO.userId}/edit'">수정</button> -->
+							<button type="button" class="modify-btn"
+								onclick="openPasswordModal()">수정</button>
+						</div>
 
-  <!-- 나의 정보 -->
-  <div class="member-info-box">
-    <div class="info-header">
-      <p>나의 정보</p>
-      <div style="display:flex; gap:10px;">
-        <button type="button" class="modify-btn" onclick="location.href='/my-info/edit'">수정</button>
-        <button type="button" class="withdraw-btn" onclick="openWithdrawModal()">탈퇴하기</button>
-      </div>
-    </div>
-    <div class="info-grid">
-      <span class="info-label">이름</span>
-      <span class="info-label">이메일</span>
-      <span class="info-label">전화번호</span>
-      <span>${userDTO.name}</span>
-      <span>${userDTO.email}</span>
-      <span>${userDTO.phone}</span>
-    </div>
-  </div>
+						<div class="info-grid">
+							<span class="info-label">이름</span> <span class="info-label">이메일</span>
+							<span class="info-label">전화번호</span> <span>${userDTO.name}</span>
+							<span>${userDTO.email}</span> <span>${userDTO.phone}</span>
+						</div>
+					</div>
+				</div>
 
-  <!-- 탈퇴 확인 모달 -->
-  <div id="withdrawModal" class="modal-overlay" style="display:none;">
-    <div class="modal-content">
-      <h3>회원 탈퇴</h3>
-      <p>정말 탈퇴하시겠습니까?<br>탈퇴 후에는 모든 정보가 영구 삭제됩니다.</p>
-      <form id="withdrawForm" action="<c:url value='/my-info/withdraw'/>" method="post">
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        <div class="modal-buttons">
-          <button type="submit" class="withdraw-confirm">탈퇴</button>
-          <button type="button" class="withdraw-cancel" onclick="closeWithdrawModal()">취소</button>
-        </div>
-      </form>
-    </div>
-  </div>
+				<div class="my-reservation-box">
+					<h3>나의 예약</h3>
+					<c:if test="${not empty reservationList}">
+						<div class="tmpWrap">
 
-  <!-- 예약 목록 -->
-  <div class="my-reservation-box">
-    <h3>나의 예약</h3>
-    <c:if test="${empty reservationList}">
-      <div class="no-reservation-content">
-        <p>예약 내역이 없습니다.</p>
-        <p>새로운 이벤트를 예약해 보세요!</p>
-        <a href="/events" class="event-button">이벤트 둘러보기</a>
-      </div>
-    </c:if>
+							<c:forEach var="rDTO" items="${reservationList}">
+								<div class="tmp"
+									onclick="location.href='/reservations/${rDTO.reservationId}'">
 
-    <c:if test="${not empty reservationList}">
-      <div class="tmpWrap">
-        <c:forEach var="rDTO" items="${reservationList}">
-          <div class="tmp ${rDTO.eventDate lt now ? 'expired' : ''}" onclick="location.href='/reservations/${rDTO.reservationId}'">
-            <span class="tmp-span-title">${rDTO.eventTitle}</span>
-            <span class="tmp-span">예약번호 : ${rDTO.reservationId}</span>
-            <span class="tmp-span">
-              <fmt:formatDate pattern="yyyy-MM-dd" value="${rDTO.reservationDate}" />
-            </span>
-            <span class="tmp-span-radius ${rDTO.reservationStatus}">
-              <c:choose>
-                <c:when test="${rDTO.reservationStatus eq 'CONFIRMED'}">예약확정</c:when>
-                <c:when test="${rDTO.reservationStatus eq 'CANCELLED'}">취소됨</c:when>
-                <c:when test="${rDTO.reservationStatus eq 'PENDING_PAYMENT'}">결제대기</c:when>
-                <c:otherwise>기타</c:otherwise>
-              </c:choose>
-            </span>
-            <c:if test="${rDTO.paymentAmount > 0}">
-              <span style="display:block; margin-top:4px;">
-                <fmt:formatNumber type="number" maxFractionDigits="3" value="${rDTO.paymentAmount}" />원
-              </span>
-            </c:if>
-          </div>
-        </c:forEach>
-      </div>
-    </c:if>
-  </div>
+									<span class="tmp-span-title"><strong>${rDTO.eventTitle}</strong></span>
+									<div class="tmp-middle">
+										<div class="tmp-details">
+											<span class="tmp-span">예약번호 : ${rDTO.reservationId}</span> <span
+												class="tmp-span"> <fmt:formatDate
+													pattern="yyyy-MM-dd" value="${rDTO.reservationDate}" />
+											</span>
+											<%-- <span>${rDTO.location}</span> --%>
+											<span class="tmp-span">${rDTO.location }</span>
+										</div>
 
-  <!-- 설문 섹션 -->
-  <div class="survey-box">
-    <h3>이벤트 설문조사</h3>
-    <div class="survey-list">
-      <p>설문 작성 가능 또는 응답 완료한 이벤트</p>
-      <c:forEach var="survey" items="${surveyList}">
-        <div class="survey-item ${survey.openStatus eq 'CLOSED' ? 'closed' : ''}">
-          <div class="survey-text">
-            <div class="event-title">${survey.eventTitle}</div>
-            <div class="event-date">이벤트 일시:
-              <fmt:formatDate value="${survey.eventDate}" pattern="yyyy-MM-dd"/>
-            </div>
-          </div>
-          <c:choose>
-            <c:when test="${survey.responseStatus eq 'RESPONDED'}">
-              <span class="survey-status done">응답 완료</span>
-            </c:when>
-            <c:when test="${survey.openStatus eq 'CLOSED'}">
-              <span class="survey-status closed">마감됨</span>
-            </c:when>
-            <c:otherwise>
-              <a href="/my-info/survey/${survey.eventId}" class="survey-btn">설문 작성</a>
-            </c:otherwise>
-          </c:choose>
-        </div>
-      </c:forEach>
-    </div>
-  </div>
-</div>
-</main>
+										<div class="reservation-bottom">
+											<div>
+												<c:if test="${rDTO.reservationStatus eq 'CONFIRMED'}">
+													<span class="tmp-span-radius"
+														style="margin-left: 7px; font-weight: 500;">예약확정</span>
+												</c:if>
+												<c:if test="${rDTO.reservationStatus eq 'CANCELLED'}">
+													<span class="tmp-span-radius"
+														style="background-color: red; border: 1px solid red;">취소됨</span>
+												</c:if>
+											</div>
 
-<jsp:include page="/WEB-INF/views/common/footer.jsp" />
+											<c:if
+												test="${rDTO.paymentAmount>0 || not empty rDTO.paymentAmount}">
+												<span> <fmt:formatNumber type="number"
+														maxFractionDigits="3" value="${rDTO.paymentAmount}" />원
+												</span>
+											</c:if>
+											<c:if
+												test="${rDTO.paymentAmount==0 || empty rDTO.paymentAmount}">
+												<span> - </span>
+											</c:if>
+										</div>
+									</div>
+								</div>
+							</c:forEach>
 
-<script>
-function openWithdrawModal() {
-  document.getElementById('withdrawModal').style.display = 'flex';
-}
-function closeWithdrawModal() {
-  document.getElementById('withdrawModal').style.display = 'none';
-}
-</script>
+						</div>
+
+					</c:if>
+					<c:if test="${empty reservationList}">
+						<div class="no-reservation-content">
+							<p>예약 내역이 없습니다.</p>
+							<p>새로운 이벤트를 예약해 보세요!</p>
+							<a href="/events" class="event-button">이벤트 둘러보기</a>
+						</div>
+					</c:if>
+				</div>
+
+				<!-- 설문 섹션 -->
+				<div class="survey-box">
+					<h3>이벤트 설문조사</h3>
+					<div class="survey-list">
+						<p>설문 작성 가능 또는 응답 완료한 이벤트</p>
+						<c:forEach var="survey" items="${surveyList}">
+							<div
+								class="survey-item ${survey.openStatus eq 'CLOSED' ? 'closed' : ''}">
+								<div class="survey-text">
+									<div class="event-title">${survey.eventTitle}</div>
+									<div class="event-date">
+										이벤트 일시:
+										<fmt:formatDate value="${survey.eventDate}"
+											pattern="yyyy-MM-dd" />
+									</div>
+								</div>
+								<c:choose>
+									<c:when test="${survey.responseStatus eq 'RESPONDED'}">
+										<span class="survey-status done">응답 완료</span>
+									</c:when>
+									<c:when test="${survey.openStatus eq 'CLOSED'}">
+										<span class="survey-status closed">마감됨</span>
+									</c:when>
+									<c:otherwise>
+										<a href="/my-info/survey/${survey.eventId}" class="survey-btn">설문
+											작성</a>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</c:forEach>
+					</div>
+				</div>
+				<!-- 설문 섹션 종료 -->
+
+			</div>
+			<div class="btn-area">
+				<button type="button" onclick="openWithdrawalModal()"
+					style="margin-bottom: 140px; background-color: #D9D9D9; color: #222222; padding: 5px 22px; border-radius: 3px; font-size: 14px; cursor: pointer; border: none; font-weight: 700; display: flex;">회원탈퇴</button>
+			</div>
+		</div>
+	</main>
+	<jsp:include page="../common/footer.jsp" />
+	<!--수정버튼 비번 확인창 모달-->
+	<!--${passwordError}랑 ${!passwordError}는 프론트에서 임의로 넣어놓음-->
+	<div id="passwordConfirmModal" class="modal-backdrop"
+		<c:if test="${passwordError}">style="display: flex;"</c:if>
+		<c:if test="${!passwordError}">style="display: none;"</c:if>>
+		<div class="password-modal-content">
+			<h3
+				class="modal-title <c:if test="${passwordError}">error-color</c:if>">
+				<c:choose>
+					<c:when test="${passwordError}">
+         ⚠️비밀번호 재확인
+      </c:when>
+					<c:otherwise>
+         비밀번호 확인
+      </c:otherwise>
+				</c:choose>
+			</h3>
+
+			<p
+				class="modal-instruction <c:if test="${passwordError}">error-color</c:if>">
+				<c:choose>
+					<c:when test="${passwordError}">
+         회원님의 비밀번호와 일치하지 않습니다.
+      </c:when>
+					<c:otherwise>
+         정보 수정을 위해 비밀번호를 입력해주세요.
+      </c:otherwise>
+				</c:choose>
+			</p>
+
+			<form id="passwordConfirmForm"
+				action="/my-info/${userDTO.userId}/confirmPassword" method="POST">
+				<label for="confirmPassword" class="label-text">비밀번호</label> <input
+					type="password" id="confirmPassword" name="password"
+					placeholder="비밀번호를 입력하세요." class="password-input" required>
+
+				<div class="modal-actions">
+					<button type="button" class="btn btn-cancel"
+						onclick="closePasswordModal()">취소</button>
+					<button type="submit" class="btn btn-confirm">확인</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<!--회원탈퇴 모달-->
+	<div id="withdrawalModal" class="modal-backdrop">
+		<div class="modal-content">
+			<h2 class="modal-title">회원탈퇴</h2>
+
+			<div class="warning-box">
+				<p class="warning-header">
+					<span class="warning-icon">⚠️</span> 주의사항
+				</p>
+				<ul class="warning-list">
+					<li>• 회원님의 모든 정보가 삭제됩니다.</li>
+					<li>• 예약 내역이 모두 삭제됩니다.</li>
+					<li>• 삭제된 정보는 복구할 수 없습니다.</li>
+				</ul>
+			</div>
+
+			<p class="input-instruction">탈퇴를 진행하시려면 비밀번호를 입력해 주세요.</p>
+
+			<form id="withdrawalForm" action="#" method="POST">
+				<label for="password" class="label-text">비밀번호</label> <input
+					type="password" id="password" name="password"
+					placeholder="비밀번호를 입력하세요." class="password-input" required>
+				<hr class="modal-hr">
+				<div class="modal-actions">
+					<button type="submit" class="btn btn-withdraw">탈퇴</button>
+					<button type="button" class="btn btn-cancel" onclick="closeModal()">취소</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script>
+		/**
+		 * 회원탈퇴 모달을 여는 함수 (버튼 클릭 시 호출)
+		 */
+		function openWithdrawalModal() {
+			const withdrawalModal = document.getElementById('withdrawalModal');
+			const mainContent = document.querySelector('main');
+
+			if (withdrawalModal) {
+				withdrawalModal.style.display = 'flex';
+			}
+			if (mainContent) {
+				mainContent.classList.add('blurred');
+			}
+		}
+
+		/**
+		 * 회원탈퇴 모달을 닫는 함수 (취소 버튼 클릭 시 호출)
+		 */
+		function closeModal() {
+			const withdrawalModal = document.getElementById('withdrawalModal');
+			const mainContent = document.querySelector('main');
+
+			if (withdrawalModal) {
+				withdrawalModal.style.display = 'none';
+				// 입력 필드 초기화
+				// document.getElementById('password')가 탈퇴 모달 내 비밀번호 input입니다.
+				const passwordInput = document.getElementById('password');
+				if (passwordInput) {
+					passwordInput.value = '';
+				}
+			}
+			if (mainContent) {
+				mainContent.classList.remove('blurred');
+			}
+		}
+
+		/**
+		 * 비밀번호 확인 모달을 여는 함수 (수정 버튼 클릭 시 호출)
+		 */
+		function openPasswordModal() {
+			const passwordConfirmModal = document
+					.getElementById('passwordConfirmModal');
+			const mainContent = document.querySelector('main');
+
+			// 모달을 보이게 설정
+			if (passwordConfirmModal) {
+				passwordConfirmModal.style.display = 'flex';
+			}
+			// 입력 필드에 포커스
+			const confirmPasswordInput = document
+					.getElementById('confirmPassword');
+			if (confirmPasswordInput) {
+				confirmPasswordInput.focus();
+			}
+			if (mainContent) {
+				document.querySelector('main').classList.add('blurred');
+			}
+		}
+
+		/**
+		 * 비밀번호 확인 모달을 닫는 함수 (취소 버튼 클릭 시 호출)
+		 */
+		function closePasswordModal() {
+			document.getElementById('passwordConfirmModal').style.display = 'none';
+			// 입력 필드 초기화
+			document.getElementById('confirmPassword').value = '';
+			document.querySelector('main').classList.remove('blurred');
+		}
+	</script>
 </body>
 </html>
