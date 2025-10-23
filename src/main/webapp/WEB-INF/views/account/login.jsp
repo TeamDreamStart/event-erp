@@ -234,8 +234,8 @@ body.login-page main { flex:1; }
              apiURL += "&state=" + state;
              session.setAttribute("state", state);
           %>
-          <a class="google" href="${empty googleAuthUrl ? '#' : googleAuthUrl}">Google로 로그인</a>
-          <a class="kakao" href="${empty kakaoAuthUrl ? '#' : kakaoAuthUrl}">카카오로 로그인</a>
+          <%-- <a class="google" href="${empty googleAuthUrl ? '#' : googleAuthUrl}">Google로 로그인</a>
+          <a class="kakao" href="${empty kakaoAuthUrl ? '#' : kakaoAuthUrl}">카카오로 로그인</a> --%>
           <a class="naver" href="<%=apiURL%>">네이버로 로그인</a>
         </div>
       </section>
