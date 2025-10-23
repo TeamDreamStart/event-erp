@@ -16,6 +16,7 @@
 <style>
 body {
 	background: #E5E2DB;
+	font-size: 14px;
 }
 
 a {
@@ -89,7 +90,7 @@ a {
 }
 
 .qna-header div:nth-child(1) {
-	width: 50%;
+	width: 45%;
 	text-align: center;
 }
 
@@ -273,7 +274,7 @@ qna-header div:nth-child(3) {
 								<summary class="qna-summary">
 									<div class="qna-col title">
 										<div class="title-icon">Q</div>
-										<strong>${postDTO.title}</strong>
+										<span style="font-weight: 700;">${postDTO.title}</span>
 									</div>
 									<div class="qna-col writer">${postDTO.userId}</div>
 									<div class="qna-col date">

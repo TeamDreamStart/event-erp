@@ -7,16 +7,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link href="https://www.dafont.com/peristiwa.font" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet"/>
-	<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="<c:url value='/resources/css/reset.css'/>">
 <link rel="stylesheet" href="<c:url value='/resources/css/common.css'/>">
 <style>
 body {
  background: #E5E2DB;
 }
 .main-content{
-  max-width: 1200px;
+	max-width: 1200px;
+	font-size: 14px;
   margin: 0 auto;
   background-color: #E5E2DB;
   margin-bottom: 140px;
@@ -102,7 +104,6 @@ button {
  padding: 12px 0;
  border-bottom: 1px solid #AFAFAF;
  color: #222;
- font-size: 15px;
 }
 
 .notice-table tbody td:first-child {
@@ -195,6 +196,32 @@ button {
   background-color: transparent;
   cursor: pointer;
 }
+.notice-table tbody tr.pinned-post{
+	background-color: #d9d9d9;
+	font-weight: 700;
+}
+.notice-table tbody tr.pinned-post:hover{
+	background-color: #AFAFAF;
+}
+.notice-table .pinned-icon {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	background-color: #CBD4C2;
+	border-radius: 50%;
+	position: relative;
+	overflow: hidden;
+}
+.notice-table .pinned-icon::before {
+    content: '\2605'; 
+    font-size: 10px;
+    color: #FFFFFF;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1;
+}
 </style>
 <title>noticelist</title>
 </head>
@@ -202,9 +229,9 @@ button {
 	<header>
 			<jsp:include page="/WEB-INF/views/common/header.jsp" flush="true" />
 	</header>
-	<main class="main-content">
+	<main class="container">
 		<h1 class="page-title">Notice</h1>
-
+		<div class="main-content">
 		<div class="search-bar">
 			<form action="/notices" method="get">
 				<input type="text" placeholder="제목을 검색하세요." name="keyword" class="search-input" value="${keyword }">
@@ -232,8 +259,8 @@ button {
 						<c:forEach var="postDTO" items="${postList}">
 							<c:if
 								test="${postDTO.visibility eq 'PUBLIC' and postDTO.category eq 'NOTICE'}">
-								<tr>
-									<td>${postDTO.postId}</td>
+												<td>${postDTO.postId}</td>
+											
 									<td><a href="/notices/${postDTO.postId}">${postDTO.title}</a></td>
 									<td>${postDTO.viewCount}</td>
 									<td><fmt:formatDate value="${postDTO.createdAt}" pattern="yyyy-MM-dd"/></td>
@@ -264,6 +291,7 @@ button {
 					<li><a href="/notices?page=${lastPage}&keyword=${keyword }">&raquo;&raquo;</a></li>
 				</c:if>
 			</ul>
+		</div>
 		</div>
 	</main>
 	<footer>

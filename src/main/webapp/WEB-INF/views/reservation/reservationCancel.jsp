@@ -179,9 +179,9 @@ input[type="radio"].custom-radio:checked + label::after {
       <h3>예약정보</h3>
       <p>이벤트명 : ${reservationDTO.eventTitle }</p>
       <p>예약일자 : ${reservationDTO.reservationDate }</p>
-      <p>상태 : ${reservationDTO.reservationStatus }</p>
+      <p>상태 : <span style="font-weight: 700;">${reservationDTO.reservationStatus }</span></p>
      </article>
-     <article class="cancle-reason" aria-required="true">
+     <article class="cancle-reason" aria-required="true" style="font-size: 14px;">
      <c:if test="${reservationDTO.reservationStatus eq 'CANCELLED'}">
       이미 취소된 예약입니다.
      </c:if>

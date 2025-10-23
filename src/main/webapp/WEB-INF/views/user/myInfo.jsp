@@ -27,7 +27,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 40px;
-  padding: 40px 0 120px 0;
+  padding: 40px 0 140px 0;
 }
 
 .section-header { margin-bottom: 12px; }
@@ -118,7 +118,7 @@ body {
 .no-reservation-content p { margin: 6px 0; font-size: 15px; }
 .event-button {
   background: #BFD4F9; color: #222;
-  padding: 10px 20px; border-radius: 4px;
+  padding: 5px 10px; height: 34px; border-radius: 4px;
   font-weight: 700; border: 1px solid #8FAFED;
   display: inline-block; margin-top: 12px;
   transition: 0.2s;
