@@ -114,7 +114,7 @@
                         <div class="col-md-4">
                             <label class="custom-label">이벤트 바로가기</label>
                             <button class="form-control btn btn-outline-primary"
-                                onclick="location.href='/admin/event-manage/${reservationDTO.eventId}'">바로가기</button>
+                                onclick="location.href='/admin/events/${reservationDTO.eventId}'">바로가기</button>
                         </div>
                     </div>
 
