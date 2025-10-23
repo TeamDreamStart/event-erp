@@ -49,23 +49,24 @@ public interface UserService {
 	//email
 	public UserDTO findByEmail(String email);
 	//userId
-	public UserDTO findByUserId(long userId);
+	public UserDTO findByUserId(Long userId);
 	
 	//회원정보 수정 - 기본정보 수정 
 	public Map<String,Object> userUpdate(UserDTO userDTO);
 	
-	
-	
-	// db에 있는 userId (자동 생성 번호라 겹치지 않아 더 안정적)
-	public UserDTO findByUserId(Long userId);
-	
 	// 회원탈퇴
-	public int deleteUser(Long userId);
+	public int stopActivityUser(Long userId);
 	
 	// 아이디로 이메일 찾기
 	public Long findUserIdByEmail(String email);
 	
 	// 비밀번호 검증 (비밀번호 일치 여부 확인)
 	public boolean checkPassword(Long userId, String inputPassword);
+	
+	// 회원정보수정
+	public int updateUserInfo(UserDTO userDTO);
+	
+	// 비밀번호 수정
+	public int updatePasswordById(Long userId, String newPassword);
 
 }

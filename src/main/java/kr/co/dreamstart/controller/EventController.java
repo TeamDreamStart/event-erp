@@ -21,8 +21,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EventController {
 	
-	@Autowired
-	private EventService eventService;
+	private final EventService eventService;
+	
+	//카카오 api js key
+	private final String KAKAOKEY = "ee21816e3b6c14b1f71c1db0b4fbc881";
 	
 	@GetMapping("/main")
 	public String main() {
@@ -43,7 +45,7 @@ public class EventController {
 		model.addAttribute("event", eventService.findById(id));
 		
 		//해당 이벤트 fileList 전달해야함
-		
+		model.addAttribute("kakaoKey", KAKAOKEY);
 		
 		return "event/eventDetail";
 	}

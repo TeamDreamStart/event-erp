@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import kr.co.dreamstart.dto.UserDTO;
 import kr.co.dreamstart.service.MyInfoService;
 import kr.co.dreamstart.service.SurveyService;
 import kr.co.dreamstart.service.UserService;
@@ -124,31 +125,55 @@ public class MyInfoController {
 	@PostMapping("/withdraw")
 	public String withdraw(HttpSession session, RedirectAttributes ra) {
 		Object userIdObj = session.getAttribute("userId");
-		Long userId = null;
-		
-		if (userIdObj instanceof Long) {
-			userId = (Long) userIdObj;
-			log.info("[WITHDRAW] 세션 userId={} / eventId={}", userId);
-		} else {
+		if (userIdObj == null) {
 			log.warn("[WITHDRAW] 세션에 userId 없음 - 로그인 상태를 확인해주세요.");
 			return "redirect:/login";
 		}
 		
-		// 1) 회원 탈퇴 처리 (db 삭제)
+		Long userId = (Long) userIdObj;
+		log.info("[WITHDRAW] 요청 userId={}", userId);
+		
 		myInfoService.withdrawUser(userId, session, ra);
-		
-		// 2) security 인증 정보 제거
-		SecurityContextHolder.clearContext();
-		
-		// 3) 세션 종료
-		session.invalidate();
-		
 		log.info("[WITHDRAW] userId={} 회원 탈퇴 완료 세션/시큐리티 종료", userId);
 		
-		ra.addAttribute("msg", "회원 탈퇴가 완료되었습니다. 이용해 주셔서 감사합니다.");
 		return "redirect:/";
 	}
 	
-	// 회원 정보 수정
-//	@GetMapping("/edit")
+	// ==== 회원 정보 수정 ====
+	// 수정폼
+	@GetMapping("/edit")
+	public String editForm(HttpSession session, Model model) {
+		myInfoService.editForm(session, model);
+		return "user/myInfoForm";
+	}
+	
+	// 회원정보저장
+	@PostMapping("/{userId}/edit/info")
+	public String updateInfo(@PathVariable Long userId,
+							UserDTO form,
+							HttpSession session,
+							RedirectAttributes ra) {
+		myInfoService.updateUserInfo(userId, form, session, ra);
+		return "redirect:/my-info";
+	}
+	
+	// 비밀번호변경 -> 재로그인하기
+	@PostMapping("/{userId}/edit/pass")
+	public String changePassword(@PathVariable Long userId,
+								String newPassword,
+								String confirmPassword,
+								HttpSession session,
+								RedirectAttributes ra) {
+		boolean changed = myInfoService.changePassword(userId, newPassword, confirmPassword, session, ra);
+		
+		if (changed) {
+			// 변경 성공 -> 세션 초기화 + 로그인ㄴ 페이지로 고고씽
+			session.invalidate();
+			ra.addFlashAttribute("msg", "비밀번호가 변경되었습니다. 다시 로그인해주세요!");
+			return "redirect:/login";
+		} else {
+			// 실패시 다시 수정 페이지로
+			return "redirect:/my-info/edit";			
+		}
+	}
 }
