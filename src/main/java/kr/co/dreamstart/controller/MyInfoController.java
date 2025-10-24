@@ -38,35 +38,35 @@ public class MyInfoController {
      */
 
 	// 마이페이지 메인
-	@GetMapping
-	public String myInfo(Model model, HttpSession session) {
-		// 현재 로그인 유저 id 세션 가져오기
-		Object userIdObj = session.getAttribute("userId");  // 세션에서 userId 가져오기
-		Long userId = null; // 기본값 null 세팅 (세션에서 가져온 userId 형변환용)
-		
-		if (userIdObj instanceof Long) { // Long 타입 일경우
-			userId = (Long) userIdObj;	// 형변환하여 대입
-			log.info("[MYINFO] 세션에서 userId 확인 : {}", userId);
-		} else {
-			log.warn("userId가 없거나 타입이 다릅니다. (현재 userId : {})", userIdObj);
-			return "redirect:/login";
-		}
-		
-		// 유저 정보 넣는 부분
-	    model.addAttribute("userDTO", userService.findByUserId(userId));
-		
-		// 로그인시 응답해야할 설문이 있을경우
-		List<Map<String, Object>> availableSurveys = myInfoService.findUnansweredSurveyByUser(userId);
-		model.addAttribute("availableSurveys", availableSurveys);
-		
-		// 내정보 + 예약 + 설문목록 로드
-		log.info("[MYINFO] userId={} 마이페이지 데이터 로딩 시작", userId);
-		myInfoService.loadMyInfo(userId, model);
-		log.info("[MYINFO] userId={} 마이페이지 데이터 로딩 완료", userId);
-		
-		return "/user/myInfo";
-		
-	}
+//	@GetMapping("/")
+//	public String myInfo(Model model, HttpSession session) {
+//		// 현재 로그인 유저 id 세션 가져오기
+//		Object userIdObj = session.getAttribute("userId");  // 세션에서 userId 가져오기
+//		Long userId = null; // 기본값 null 세팅 (세션에서 가져온 userId 형변환용)
+//		
+//		if (userIdObj instanceof Long) { // Long 타입 일경우
+//			userId = (Long) userIdObj;	// 형변환하여 대입
+//			log.info("[MYINFO] 세션에서 userId 확인 : {}", userId);
+//		} else {
+//			log.warn("userId가 없거나 타입이 다릅니다. (현재 userId : {})", userIdObj);
+//			return "redirect:/login";
+//		}
+//		
+//		// 유저 정보 넣는 부분
+//	    model.addAttribute("userDTO", userService.findByUserId(userId));
+//		
+//		// 로그인시 응답해야할 설문이 있을경우
+//		List<Map<String, Object>> availableSurveys = myInfoService.findUnansweredSurveyByUser(userId);
+//		model.addAttribute("availableSurveys", availableSurveys);
+//		
+//		// 내정보 + 예약 + 설문목록 로드
+//		log.info("[MYINFO] userId={} 마이페이지 데이터 로딩 시작", userId);
+//		myInfoService.loadMyInfo(userId, model);
+//		log.info("[MYINFO] userId={} 마이페이지 데이터 로딩 완료", userId);
+//		
+//		return "/user/myInfo";
+//		
+//	}
 
 	// 사용자 설문 작성 폼
 	@GetMapping("/survey/{eventId}")
@@ -140,40 +140,40 @@ public class MyInfoController {
 	}
 	
 	// ==== 회원 정보 수정 ====
-	// 수정폼
-	@GetMapping("/edit")
-	public String editForm(HttpSession session, Model model) {
-		myInfoService.editForm(session, model);
-		return "user/myInfoForm";
-	}
+//	// 수정폼
+//	@GetMapping("/edit")
+//	public String editForm(HttpSession session, Model model) {
+//		myInfoService.editForm(session, model);
+//		return "user/myInfoForm";
+//	}
+//	
+//	// 회원정보저장
+//	@PostMapping("/{userId}/edit/info")
+//	public String updateInfo(@PathVariable Long userId,
+//							UserDTO form,
+//							HttpSession session,
+//							RedirectAttributes ra) {
+//		myInfoService.updateUserInfo(userId, form, session, ra);
+//		return "redirect:/my-info";
+//	}
 	
-	// 회원정보저장
-	@PostMapping("/{userId}/edit/info")
-	public String updateInfo(@PathVariable Long userId,
-							UserDTO form,
-							HttpSession session,
-							RedirectAttributes ra) {
-		myInfoService.updateUserInfo(userId, form, session, ra);
-		return "redirect:/my-info";
-	}
-	
-	// 비밀번호변경 -> 재로그인하기
-	@PostMapping("/{userId}/edit/pass")
-	public String changePassword(@PathVariable Long userId,
-								String newPassword,
-								String confirmPassword,
-								HttpSession session,
-								RedirectAttributes ra) {
-		boolean changed = myInfoService.changePassword(userId, newPassword, confirmPassword, session, ra);
-		
-		if (changed) {
-			// 변경 성공 -> 세션 초기화 + 로그인ㄴ 페이지로 고고씽
-			session.invalidate();
-			ra.addFlashAttribute("msg", "비밀번호가 변경되었습니다. 다시 로그인해주세요!");
-			return "redirect:/login";
-		} else {
-			// 실패시 다시 수정 페이지로
-			return "redirect:/my-info/edit";			
-		}
-	}
+//	// 비밀번호변경 -> 재로그인하기
+//	@PostMapping("/{userId}/edit/pass")
+//	public String changePassword(@PathVariable Long userId,
+//								String newPassword,
+//								String confirmPassword,
+//								HttpSession session,
+//								RedirectAttributes ra) {
+//		boolean changed = myInfoService.changePassword(userId, newPassword, confirmPassword, session, ra);
+//		
+//		if (changed) {
+//			// 변경 성공 -> 세션 초기화 + 로그인ㄴ 페이지로 고고씽
+//			session.invalidate();
+//			ra.addFlashAttribute("msg", "비밀번호가 변경되었습니다. 다시 로그인해주세요!");
+//			return "redirect:/login";
+//		} else {
+//			// 실패시 다시 수정 페이지로
+//			return "redirect:/my-info/edit";			
+//		}
+//	}
 }

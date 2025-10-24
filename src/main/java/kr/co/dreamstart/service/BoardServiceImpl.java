@@ -110,7 +110,7 @@ public class BoardServiceImpl implements BoardService {
 		}
 		return map;
 	}
-
+   
 	public Map<String, Object> postUpdate(HttpServletRequest request, @ModelAttribute BoardPostDTO postDTO,
 			@RequestParam(value = "uploadFile", required = false) MultipartFile[] uploadFile) {
 		Map<String, Object> map = new HashMap<String, Object>();
