@@ -609,6 +609,7 @@ body {
       slidesPerView: 4,
       spaceBetween: 65,
       allowTouchMove: false,
+      loop : true,
       navigation: { nextEl: ".events-next", prevEl: ".events-prev" }
     });
 

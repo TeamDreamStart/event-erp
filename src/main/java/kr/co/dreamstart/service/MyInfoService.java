@@ -37,7 +37,7 @@ public class MyInfoService {
 		
 		// 설문 가능한 목록 (이벤트종료 -> 설문오픈 -> 미응답)
 		List<Map<String, Object>> availableSurveys = surveyService.allSurveyReservations(userId);
-		model.addAttribute("availableSurveys", availableSurveys);
+		model.addAttribute("availableSurveys", surveyService.allSurveyReservations(userId));
 		log.info("[MY-INFO] 마이페이지 로드 완료 userId={} | 예약 {}건, 설문 가능 {}건", 
 										userId, reservationList.size(), availableSurveys.size());
 	}
@@ -166,17 +166,8 @@ public class MyInfoService {
 	// 수정 정보 저장
 	public void updateUserInfo(Long userId,
 								UserDTO form,
-								HttpSession session,
 								RedirectAttributes ra) {
-		Object userIdObj = session.getAttribute("userId");
-		
-		// 세션검증
-		if (!(userIdObj instanceof Long) || !userIdObj.equals(userId)) {
-			log.warn("[UPDATE INFO] 세션 불일치 or userId 없음 (session={), path={}", userIdObj, userId);
-			ra.addFlashAttribute("msg", "세션이 만료되었습니다. 다시 로그인해주세요.");
-			return;	
-		}
-		
+
 		try {
 			form.setUserId(userId);
 			// update 실행
@@ -199,37 +190,52 @@ public class MyInfoService {
 	
 	// 비밀번호 변경
 	public boolean changePassword(Long userId, 
+								String currentPassword,
 								String newPassword, 
-								String confirmPassword,
-								HttpSession session,
 								RedirectAttributes ra) {
-		Object userIdObj = session.getAttribute("userId");
 		
-		// 세션 만료 또는 세션 사용자 불일치
-		if (!(userIdObj instanceof Long) || !userIdObj.equals(userId)) {
-			ra.addFlashAttribute("msg", "세션이 만료되었습니다. 다시 로그인해주세요.");
-			return false;
-		}
-		
-		// 새 비밀번호와 확인 비밀번호 불일치
-		if (newPassword == null || !newPassword.equals(confirmPassword)) {
-			ra.addFlashAttribute("msg", "비밀번호 확인이 일치하지 않습니다.");
-			return false;
-		}
-		
-		// 비밀번호 암호화
-		String encodedPw = passwordEncoder.encode(newPassword);
-		
-		// 비밀번호 변경 로직
-		int result = userService.updatePasswordById(userId, encodedPw);
-		if (result > 0) {
+		try {
+			// 1) 사용자 조회
+			UserDTO dto = userService.findByUserId(userId);
+			if (dto == null) {
+				ra.addFlashAttribute("msg", "사용자를 찾을 수 없습니다.");
+				log.warn("[PASSWORD CHANGE FAIL] userId={} not found", userId);
+				return false;
+			}
+			
+			// 2) 입력값 검증
+			if (currentPassword == null || newPassword == null || newPassword.isBlank()) {
+				ra.addFlashAttribute("msg", "비밀번호 값이 올바르지 않습니다.");
+				log.warn("[PASSWORD CHAGE FAIL] userId={}, invalid args", userId);
+				return false;
+			}
+			
+			// 3) 현재 비밀번호 검증
+			if (!passwordEncoder.matches(currentPassword, dto.getPassword())) {
+				ra.addFlashAttribute("msg", "현재 비밀번호가 일치하지 않습니다.");
+				log.warn("[PASSWORD CHAGE FAIL] userId={}, current password missmatch", userId);
+				return false;
+			}
+			
+			// 4) 비밀번호 암호화
+			String encoded = passwordEncoder.encode(newPassword);
+			// 비밀번호 변경 로직
+			int update = userService.updatePasswordById(userId, encoded);
+			if (update != 1) {
+				ra.addFlashAttribute("msg", "비밀번호가 변경 중 오료가 발생했습니다.");
+				log.warn("[PASSWORD CHANGE FAIL] userId={}", userId);
+				return false; //성공
+			}
+			
 			ra.addFlashAttribute("msg", "비밀번호가 변경되었습니다.");
 			log.info("[PASSWORD CHAGE SUCCESS] userId={}", userId);
-			return true; //성공
-		} else {
-			ra.addFlashAttribute("msg", "비밀번호 변경에 실패했습니다.");
-			log.warn("[PASSWORD CHANGE FAIL] userId={}", userId);
-			return false; // 실패
+			return true;
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			ra.addFlashAttribute("msg", "비밀번호 변경에 실패했습니다." + e.getMessage());
+			log.error("[PASSWORD CHAGE ERROR] userId={}, ex={}", userId, e.toString() );
+			return false;
 		}
 	}
 		

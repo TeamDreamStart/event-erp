@@ -41,13 +41,21 @@ public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSu
 			CustomUserDetails me = (CustomUserDetails) authentication.getPrincipal();
 			
 			// 세션 저장
-            request.getSession().setAttribute("userId", me.getUserId());
+            request.getSession(true).setAttribute("userId", me.getUserId());
             request.getSession().setAttribute("username", me.getName());
             request.getSession().setAttribute("email", me.getEmail());
 
             // 마지막 로그인 시각 갱신
-            userService.touchLastLogin(me.getUserId());
+            try {
+            	userService.touchLastLogin(me.getUserId());            	
+            } catch (Exception e) {
+            	// TODO: handle exception
+            	log.warn("[LOGIN] lastLogin 업데이트 실패 userId={}", me.getUserId(),e);
+            }
+           log.info("[LOGIN] success userId= {}, emil= {}, roles= {}",
+        		   me.getUserId(), me.getEmail(), authentication.getAuthorities());
 		}
+		
 		
 		// saveRequest 있으면 원래 가려던 곳으로 (super 호츌)
 		SavedRequest saved = requestCache.getRequest(request, response);

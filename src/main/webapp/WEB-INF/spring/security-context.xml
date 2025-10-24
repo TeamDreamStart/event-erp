@@ -2,12 +2,18 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xmlns:security="http://www.springframework.org/schema/security"
+   xmlns:context="http://www.springframework.org/schema/context"
    xsi:schemaLocation="
          http://www.springframework.org/schema/beans
          http://www.springframework.org/schema/beans/spring-beans.xsd
          http://www.springframework.org/schema/security
-         http://www.springframework.org/schema/security/spring-security.xsd">
+         http://www.springframework.org/schema/security/spring-security.xsd
+         http://www.springframework.org/schema/context  
+         http://www.springframework.org/schema/context/spring-context.xsd">
 
+   <!-- 컴포넌트 스캔 : 핸들러/엔트리포인트 @Component 자동 등록 -->
+   <context:component-scan base-package="kr.co.dreamstart.security"/>
+	
    <!-- 리소스파일/PG사 웹훅 등은 보안 필터 제외(CSRF 이슈 방지) -->
    <security:http pattern="/resources/**" security="none" />
    <!-- 포트원 웹훅: 인증/CSRF 모두 제외 (시큐리티 체인 제외) -->
@@ -22,7 +28,8 @@
    
    <!-- 애플리케이션의 HTTP 보안을 구성 - use-expressions="true"속성을 사용하면 보안 구성에서 Spring 
       Expression Language(SpEL)를 사용할 수 있으므로 더욱 유연하고 동적인 권한 부여 규칙을 구현 -->
-   <security:http use-expressions="true">
+      <!-- 미인증(401) : restAuthenticationEntryPoint = AJAX면 JSON 401, 비동기면 /LOGIN -> redirect -->
+   <security:http use-expressions="true" entry-point-ref="restAuthenticationEntryPoint">
       <security:csrf /> <!-- CSRF(Cross-Site Request Forgery) 보호와 관련 -->
       
       <!-- 0) 가입/중복체크 API는 전체 허용 -->
@@ -87,8 +94,8 @@
             delete-cookies="JSESSIONID"
             success-handler-ref="customLogoutSuccessHandler" />
 
-   <!-- 권한없음 403페이지 -->
-   <security:access-denied-handler error-page="/error/403" />
+   <!-- 권한없음 403페이지 : AJAJ=JSON 동기 = 403.jsp forward -->
+   <security:access-denied-handler ref="customAccessDeniedHandler" />
    </security:http>
    
    
