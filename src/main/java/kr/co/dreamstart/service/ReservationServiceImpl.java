@@ -1,14 +1,24 @@
 package kr.co.dreamstart.service;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 
 import kr.co.dreamstart.dto.PaymentDTO;
 import kr.co.dreamstart.dto.ReservationDTO;
@@ -109,6 +119,35 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public ReservationJoinDTO adminJoinSelect(long reservationId) {
 		return rMapper.adminJoinSelect(reservationId);
+	}
+
+	@Override
+	public String makeQR(long reservationId) {
+		//reservation 정보를 담은 QR코드 생성, DB에 경로 저장
+		ReservationDTO rDTO = rMapper.select(reservationId);
+		long eventId = rDTO.getEventId();
+		int headCount = rDTO.getHeadCount();
+		String status = rDTO.getStatus();
+		//예약정보
+		String info = "이벤트:"+eventId+", 예약번호: "+reservationId+", 상태:"+status+", 인원: "+headCount;
+		String fileName = reservationId+".png";
+		int width = 300;
+		int height = 300;
+		try {
+			BitMatrix bitMatrix = new QRCodeWriter().encode(info,BarcodeFormat.QR_CODE,width,height);
+			BufferedImage qrImage = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
+			for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    qrImage.setRGB(x, y, bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF);
+                }
+			}
+			File qrFile = new File("/resources/img/tmp/"+ fileName);
+			ImageIO.write(qrImage, "png", qrFile);
+		} catch (WriterException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return fileName;
 	}
 
 }

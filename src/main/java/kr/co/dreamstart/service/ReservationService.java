@@ -29,4 +29,6 @@ public interface ReservationService {
 	public List<ReservationJoinDTO> adminJoinList();
 	// 관리자 - 예약관리(디테일)
 	public ReservationJoinDTO adminJoinSelect(long reservationId);
+	
+	public String makeQR(long reservationId);
 }
